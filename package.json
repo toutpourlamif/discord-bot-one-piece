@@ -5,7 +5,11 @@
   "packageManager": "pnpm@10.32.1",
   "scripts": {
     "dev": "pnpm -F @one-piece/bot dev",
-    "typecheck": "pnpm -r typecheck"
+    "typecheck": "pnpm -r typecheck",
+    "env:run": "docker compose up",
+    "db:generate": "pnpm -F @one-piece/db generate",
+    "db:migrate": "pnpm -F @one-piece/db migrate",
+    "db:studio": "pnpm -F @one-piece/db studio"
   },
   "devDependencies": {
     "@types/node": "^25.6.0",

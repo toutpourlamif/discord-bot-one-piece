@@ -32,4 +32,3 @@ D'autres domaines viendront s'ajouter quand le besoin apparaîtra (crew, combat,
 - Un domaine n'importe **jamais** un autre domaine directement. Les interactions passent par des interfaces claires.
 - La couche `discord` est la seule à parler à `discord.js`.
 - Pas de logique métier dans `discord/` — uniquement du routage et du formatage.
-ça
