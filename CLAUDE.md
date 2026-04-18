@@ -22,6 +22,7 @@ Bot Discord autour de l'univers One Piece. Le joueur recrute un équipage, amél
 - Pas de commentaires qui décrivent **ce que** fait le code — uniquement **pourquoi** quand le « pourquoi » est non évident
 - Pas d'abstractions spéculatives : 3 lignes similaires valent mieux qu'un helper prématuré
 - Les erreurs : gérer aux frontières (entrée Discord, APIs externes, DB). Faire confiance au code interne.
+- **TODO** : tout code temporaire (test manuel, stub, placeholder, hack) doit être marqué `// TODO: <raison>`. Permet de le retrouver facilement (`rg TODO`) et de nettoyer avant merge.
 
 ## Structure
 
