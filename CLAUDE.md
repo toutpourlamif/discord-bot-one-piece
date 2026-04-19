@@ -42,7 +42,7 @@ Les **domaines** prévus sont listés dans `docs/architecture.md`. On en ouvre u
 ## Workflow
 
 - Git : un commit = un changement cohérent. Messages et descriptions de PR en **français** (quelques mots anglais tolérés pour les termes techniques).
-- **Jamais de commit direct sur `main`**. Toute modification passe par une PR **approuvée par au moins une autre personne** avant merge.
+- **Jamais de commit direct sur `main`**. Toute modification passe par une PR **approuvée par au moins 2 autres personnes** avant merge.
 
 ## Où trouver quoi
 
