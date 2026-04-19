@@ -32,7 +32,7 @@ client.on(Events.MessageCreate, async (message) => {
   if (!content.startsWith(prefix)) return;
   const command = content.slice(prefix.length).trim().toLowerCase();
   if (command === 'one piece') {
-    await message.reply('hello world');
+    await message.reply('hello everyone');
   }
 });
 
