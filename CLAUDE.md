@@ -9,6 +9,7 @@ Bot Discord autour de l'univers One Piece. Le joueur recrute un équipage, amél
 ## Stack
 
 À confirmer au premier commit de code :
+
 - Runtime : Node.js (dernière LTS)
 - Langage : TypeScript
 - Package manager : pnpm
@@ -20,7 +21,7 @@ Bot Discord autour de l'univers One Piece. Le joueur recrute un équipage, amél
 - `type`, jamais `interface`
 - N'exporter un `type` que s'il est importé ailleurs
 - Pas de commentaires qui décrivent **ce que** fait le code — uniquement **pourquoi** quand le « pourquoi » est non évident
-- **YAGNI** (*You Aren't Gonna Need It*) : on n'ajoute pas une feature, une dep, un helper, un validator tant qu'un code actuel ne l'utilise pas. Pas d'abstractions spéculatives — 3 lignes similaires valent mieux qu'un helper prématuré.
+- **YAGNI** (_You Aren't Gonna Need It_) : on n'ajoute pas une feature, une dep, un helper, un validator tant qu'un code actuel ne l'utilise pas. Pas d'abstractions spéculatives — 3 lignes similaires valent mieux qu'un helper prématuré.
 - Les erreurs : gérer aux frontières (entrée Discord, APIs externes, DB). Faire confiance au code interne.
 - **TODO** : tout code temporaire (test manuel, stub, placeholder, hack) doit être marqué `// TODO: <raison>`. Permet de le retrouver facilement (`rg TODO`) et de nettoyer avant merge.
 
