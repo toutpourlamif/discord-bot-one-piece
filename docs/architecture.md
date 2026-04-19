@@ -26,6 +26,12 @@ D'autres domaines viendront s'ajouter quand le besoin apparaîtra (crew, combat,
 | --------- | --------------------------------------------------------- |
 | `discord` | Couche Discord : slash commands, boutons, selects, embeds |
 
+## Persistance
+
+Tout ce qui touche à la base de données vit dans `packages/db/` : les tables, les migrations, la connexion. Les apps l'utilisent comme une bibliothèque.
+
+Les domaines **ne parlent pas directement à la base**. Ils passent par des petites fonctions dédiées (ex: `findPlayer(id)`, `saveShip(ship)`). Ça garde le code métier propre et permet de changer de base plus tard sans tout réécrire.
+
 ## Règles d'or
 
 - Un domaine possède son propre **langage ubiquitaire**, documenté dans `docs/domains/<nom>.md`.

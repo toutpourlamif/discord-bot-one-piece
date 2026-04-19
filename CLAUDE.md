@@ -8,13 +8,12 @@ Bot Discord autour de l'univers One Piece. Le joueur recrute un équipage, amél
 
 ## Stack
 
-À confirmer au premier commit de code :
-
-- Runtime : Node.js (dernière LTS)
-- Langage : TypeScript
-- Package manager : pnpm
-- Discord : _à décider (discord.js v14 par défaut)_
-- Persistance : _à décider_
+- Runtime : Node.js (dernière LTS), exécution TS via `tsx` (pas de build)
+- Langage : TypeScript strict (`noUncheckedIndexedAccess`)
+- Package manager : pnpm (monorepo `apps/*` + `packages/*`)
+- Discord : discord.js v14
+- Persistance : PostgreSQL 16 + Drizzle ORM
+- Container local : Docker Compose (`pnpm docker:run`)
 
 ## Conventions
 
@@ -28,14 +27,15 @@ Bot Discord autour de l'univers One Piece. Le joueur recrute un équipage, amél
 ## Structure
 
 ```
-CLAUDE.md              ← ce fichier
-README.md              ← pitch + quickstart
+apps/
+  bot/                 ← app Discord (discord.js)
+    src/domains/       ← code métier groupé par domaine
+packages/
+  db/                  ← schéma Drizzle + client DB partagé
+docker-compose.yml     ← Postgres local
 docs/
   architecture.md      ← vue d'ensemble + liste des domaines
-  domains/             ← une doc par domaine métier (à créer au fur et à mesure)
-src/
-  domains/             ← code métier groupé par domaine
-  ...
+  domains/             ← une doc par domaine (à créer au fur et à mesure)
 ```
 
 Les **domaines** prévus sont listés dans `docs/architecture.md`. On en ouvre un nouveau uniquement quand on commence à coder dedans — pas d'étages vides.
@@ -44,6 +44,10 @@ Les **domaines** prévus sont listés dans `docs/architecture.md`. On en ouvre u
 
 - Git : un commit = un changement cohérent. Messages et descriptions de PR en **français** (quelques mots anglais tolérés pour les termes techniques).
 - **Jamais de commit direct sur `main`**. Toute modification passe par une PR **approuvée par au moins 2 autres personnes** avant merge.
+
+## Qualité
+
+- Hook pre-commit (`husky` + `lint-staged`) : eslint + prettier seulement sur les fichiers touchées, puis typecheck sur toute la codebase.
 
 ## Où trouver quoi
 
