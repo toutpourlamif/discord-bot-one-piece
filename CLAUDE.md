@@ -20,7 +20,7 @@ Bot Discord autour de l'univers One Piece. Le joueur recrute un équipage, amél
 - `type`, jamais `interface`
 - N'exporter un `type` que s'il est importé ailleurs
 - Pas de commentaires qui décrivent **ce que** fait le code — uniquement **pourquoi** quand le « pourquoi » est non évident
-- Pas d'abstractions spéculatives : 3 lignes similaires valent mieux qu'un helper prématuré
+- **YAGNI** (*You Aren't Gonna Need It*) : on n'ajoute pas une feature, une dep, un helper, un validator tant qu'un code actuel ne l'utilise pas. Pas d'abstractions spéculatives — 3 lignes similaires valent mieux qu'un helper prématuré.
 - Les erreurs : gérer aux frontières (entrée Discord, APIs externes, DB). Faire confiance au code interne.
 - **TODO** : tout code temporaire (test manuel, stub, placeholder, hack) doit être marqué `// TODO: <raison>`. Permet de le retrouver facilement (`rg TODO`) et de nettoyer avant merge.
 
@@ -42,7 +42,7 @@ Les **domaines** prévus sont listés dans `docs/architecture.md`. On en ouvre u
 ## Workflow
 
 - Git : un commit = un changement cohérent. Messages et descriptions de PR en **français** (quelques mots anglais tolérés pour les termes techniques).
-- **Jamais de commit direct sur `main`**. Toute modification passe par une PR **approuvée par au moins une autre personne** avant merge.
+- **Jamais de commit direct sur `main`**. Toute modification passe par une PR **approuvée par au moins 2 autres personnes** avant merge.
 
 ## Où trouver quoi
 
