@@ -27,19 +27,13 @@ export default defineConfig({
     '@typescript-eslint/consistent-type-imports': 'error',
 
     '@typescript-eslint/no-floating-promises': 'error',
-    '@typescript-eslint/no-misused-promises': [
-      'error',
-      { checksVoidReturn: { arguments: false } },
-    ],
+    '@typescript-eslint/no-misused-promises': ['error', { checksVoidReturn: { arguments: false } }],
     '@typescript-eslint/no-unnecessary-condition': 'error',
     '@typescript-eslint/no-explicit-any': 'error',
 
     '@typescript-eslint/no-unused-vars': 'off',
     'unused-imports/no-unused-imports': 'error',
-    'unused-imports/no-unused-vars': [
-      'warn',
-      { argsIgnorePattern: '^_', varsIgnorePattern: '^_' },
-    ],
+    'unused-imports/no-unused-vars': ['warn', { argsIgnorePattern: '^_', varsIgnorePattern: '^_' }],
 
     'import-x/no-cycle': 'error',
     'import-x/order': [
