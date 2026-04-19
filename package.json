@@ -14,7 +14,17 @@
     "docker:run": "docker compose up",
     "db:generate": "pnpm -F @one-piece/db generate",
     "db:migrate": "pnpm -F @one-piece/db migrate",
-    "db:studio": "pnpm -F @one-piece/db studio"
+    "db:studio": "pnpm -F @one-piece/db studio",
+    "prepare": "husky"
+  },
+  "lint-staged": {
+    "*.{ts,tsx,js,mjs,cjs}": [
+      "eslint --fix",
+      "prettier --write"
+    ],
+    "*.{json,md,yml,yaml}": [
+      "prettier --write"
+    ]
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
@@ -23,7 +33,9 @@
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-import-x": "^4.16.2",
     "eslint-plugin-unused-imports": "^4.4.1",
+    "husky": "^9.1.7",
     "jiti": "^2.6.1",
+    "lint-staged": "^16.4.0",
     "prettier": "^3.8.3",
     "tsx": "^4.21.0",
     "typescript": "^6.0.3",
