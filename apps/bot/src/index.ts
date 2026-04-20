@@ -43,14 +43,14 @@ client.on(Events.MessageCreate, async (message) => {
   const [command, ...args] = withoutPrefix.split(/\s+/);
 
   if (command?.toLowerCase() === 'repeat') {
-    const text = args.join(' ');
+    const repeatText = args.join(' ');
 
-    if (!text) {
+    if (!repeatText) {
       await message.reply('Tu dois fournir un texte.');
       return;
     }
 
-    await message.reply(text);
+    await message.reply(repeatText);
   }
 });
 
