@@ -1,0 +1,1 @@
+ALTER TABLE "player" ADD COLUMN "bounty" integer DEFAULT 0 NOT NULL;
