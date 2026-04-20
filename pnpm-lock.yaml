@@ -50,12 +50,15 @@ importers:
 
   apps/bot:
     dependencies:
+      '@one-piece/db':
+        specifier: workspace:*
+        version: link:../../packages/db
       discord.js:
         specifier: ^14.26.3
         version: 14.26.3
-      dotenv:
-        specifier: ^17.4.2
-        version: 17.4.2
+      drizzle-orm:
+        specifier: ^0.45.2
+        version: 0.45.2(postgres@3.4.9)
 
   packages/db:
     dependencies:

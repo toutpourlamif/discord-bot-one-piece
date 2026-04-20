@@ -1,7 +1,6 @@
 import { Client, Events, GatewayIntentBits } from 'discord.js';
-import { config } from 'dotenv';
 
-config({ path: '.env.local' });
+import { findOrCreatePlayer } from './domains/player/index.js';
 
 const token = process.env.DISCORD_TOKEN;
 if (!token) {
@@ -51,6 +50,16 @@ client.on(Events.MessageCreate, async (message) => {
     }
 
     await message.reply(repeatText);
+  }
+  // TODO: supprimer en prod
+  if (command === 'debug') {
+    const { player, created } = await findOrCreatePlayer(
+      message.author.id,
+      message.author.username,
+    );
+    await message.reply(
+      `${created ? '🆕 Player créé' : '✅ Player existant'}\n\`\`\`json\n${JSON.stringify(player, null, 2)}\n\`\`\``,
+    );
   }
 });
 
