@@ -10,7 +10,8 @@ Le Berry est la monnaie unique. Le joueur en gagne :
 
 - via les events (récompenses, butin, coffres…),
 - via les combats,
-- via les quêtes.
+- via les quêtes,
+- en **revendant des items** à un marchand (Fruits du Démon, ressources, esclaves…).
 
 Il en dépense dans les **shops**.
 

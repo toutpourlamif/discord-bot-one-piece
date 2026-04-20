@@ -18,10 +18,11 @@ Seul le **premier stade** est obtenable directement (drop d'event, récompense, 
 
 ## Déclencheurs d'évolution
 
-Deux manières de faire évoluer un personnage :
+Trois manières de faire évoluer un personnage :
 
 - un **`side_quest` réussi** (ex: Zoro rencontre Mihawk et fait les bons choix),
-- la **consommation d'un objet** (ex: un Fruit du Démon, un artefact).
+- la **consommation d'un objet** (ex: un Fruit du Démon, un artefact),
+- un **event spécial** qui transforme le personnage (ex: rencontre avec Kuma qui propulse un membre de l'équipage et le renvoie plus fort plus tard).
 
 L'évolution remplace l'instance du personnage par celle désignée par `nextEvolution`.
 

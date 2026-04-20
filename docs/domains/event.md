@@ -22,7 +22,9 @@ Un event peut définir des conditions d'apparition :
 - avoir tel personnage dans l'équipage,
 - force d'équipage ≥ X,
 - posséder tel objet,
-- avoir atteint telle étape du scénario.
+- avoir atteint telle étape du scénario,
+- **karma** dans une fourchette (infâme → pirates sombres type Barbe Noire ; héroïque → libérations de peuples),
+- **notoriété** (bounty) ≥ X (events d'envergure : Yonko, Mary Geoise…).
 
 Les `side_quest` sont particulièrement conditionnées : une rencontre avec Mihawk n'a de sens que si Zoro est embarqué.
 
