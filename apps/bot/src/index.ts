@@ -35,7 +35,7 @@ client.on(Events.MessageCreate, async (message) => {
   const normalized = withoutPrefix.toLowerCase();
 
   if (normalized === 'one piece') {
-    await message.reply('hello world');
+    await message.reply('hello everyone');
     return;
   }
 
