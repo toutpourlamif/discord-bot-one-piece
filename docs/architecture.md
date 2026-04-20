@@ -17,7 +17,7 @@ On ouvre un domaine (dossier + doc) uniquement au moment où on commence à code
 | `player`      | Compte joueur, progression globale, bounty, karma                          |
 | `ship`        | Navire du joueur : stats, modules, capacité de la réserve et de l'équipage |
 | `character`   | Personnages possédés (réserve) et leur arbre d'évolution                   |
-| `crew`        | Personnages actifs embarqués sur le navire                                 |
+| `crew`        | Personnages actifs embarqués sur le navire, moral d'équipage               |
 | `event`       | Événements déclenchés lors du `/récap` (AFK)                               |
 | `devil_fruit` | Fruits du Démon : bonus de stats et types additionnels pour un personnage  |
 | `economy`     | Berry, shops, marchands                                                    |
