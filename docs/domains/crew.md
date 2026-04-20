@@ -21,3 +21,18 @@ L'équipage détermine :
 ## Composer son équipage
 
 Le joueur arbitre entre ses personnages en réserve pour choisir qui embarquer. Ce choix est stratégique : un personnage laissé en réserve ne participe à rien.
+
+## Moral
+
+L'équipage porte un **moral** collectif — un attribut au niveau du crew, pas par personnage.
+
+**Effets** :
+
+- débloque ou verrouille certains events (un équipage au moral bas ne tente pas de s'aventurer sur une île)
+- **prévient la mutinerie** — en dessous d'un seuil, un personnage peut quitter l'équipage,
+- facilite la **persuasion** de personnages pour qu'ils rejoignent l'équipage. (Shanks veut rejoindre un équipage qui sait s'amuser)
+
+**Sources de variation** :
+
+- objets consommables (ex: alcool, festin — voir `resource` et `economy`),
+- events (victoires éclatantes → +moral ; défaites, trahisons → −moral),
