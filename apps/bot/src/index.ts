@@ -61,6 +61,14 @@ client.on(Events.MessageCreate, async (message) => {
       `${created ? '🆕 Player créé' : '✅ Player existant'}\n\`\`\`json\n${JSON.stringify(player, null, 2)}\n\`\`\``,
     );
   }
+
+  // TODO: supprimer avant la PROD - commande debug karma
+  if (command === 'karma') {
+    const { player } = await findOrCreatePlayer(message.author.id, message.author.username);
+
+    await message.reply(`Karma: ${player.karma}`);
+    return;
+  }
 });
 
 await client.login(token);
