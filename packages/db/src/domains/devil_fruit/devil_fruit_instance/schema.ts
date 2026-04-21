@@ -1,8 +1,8 @@
 import { integer, pgTable, serial, uniqueIndex } from 'drizzle-orm/pg-core';
 
-import { devilFruitTemplate } from './devil_fruit_template.js';
-import { timestamps } from './helpers.js';
-import { player } from './player.js';
+import { timestamps } from '../../../shared/helpers.js';
+import { player } from '../../player/schema.js';
+import { devilFruitTemplate } from '../devil_fruit_template/schema.js';
 
 export const devilFruitInstance = pgTable(
   'devil_fruit_instance',

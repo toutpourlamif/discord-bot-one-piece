@@ -1,7 +1,7 @@
 import { sql } from 'drizzle-orm';
 import { bigint, pgTable, serial, varchar } from 'drizzle-orm/pg-core';
 
-import { timestamps } from './helpers.js';
+import { timestamps } from '../../shared/helpers.js';
 
 export const player = pgTable('player', {
   id: serial('id').primaryKey(),
@@ -13,3 +13,5 @@ export const player = pgTable('player', {
     .default(sql`0`),
   ...timestamps(),
 });
+
+export type Player = typeof player.$inferSelect;

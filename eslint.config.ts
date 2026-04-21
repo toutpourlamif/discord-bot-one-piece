@@ -25,7 +25,7 @@ export default defineConfig({
   rules: {
     '@typescript-eslint/consistent-type-definitions': ['error', 'type'],
     '@typescript-eslint/consistent-type-imports': 'error',
-
+    '@typescript-eslint/array-type': ['error', { default: 'generic' }],
     '@typescript-eslint/no-floating-promises': 'error',
     '@typescript-eslint/no-misused-promises': ['error', { checksVoidReturn: { arguments: false } }],
     '@typescript-eslint/no-unnecessary-condition': 'error',
