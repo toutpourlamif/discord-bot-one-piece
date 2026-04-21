@@ -147,11 +147,19 @@ client.on(Events.MessageCreate, async (message) => {
     await message.reply({ embeds: [embed] });
     return;
   }
+  //TODO: supprimer avant la prod
   if (command?.toLowerCase() === 'moi') {
-    const embed = new EmbedBuilder().setAuthor({
-      name: message.author.username,
-      iconURL: message.author.displayAvatarURL(),
-    });
+    const targetUser = message.mentions.users.first();
+    const user = targetUser ?? message.author;
+    const embed = new EmbedBuilder()
+      .setAuthor({
+        name: user.username,
+        iconURL: user.displayAvatarURL(),
+      })
+      .setImage(user.displayAvatarURL())
+      .setTitle(user.username);
+    await message.reply({ embeds: [embed] });
+    return;
   }
 });
 
