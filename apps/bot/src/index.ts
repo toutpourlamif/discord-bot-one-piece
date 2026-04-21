@@ -1,6 +1,6 @@
 import { Client, EmbedBuilder, Events, GatewayIntentBits } from 'discord.js';
 
-import { findOrCreatePlayer } from './domains/player/index.js';
+import { findOrCreatePlayer, getKarmaGrade } from './domains/player/index.js';
 
 const token = process.env.DISCORD_TOKEN;
 if (!token) {
@@ -66,7 +66,9 @@ client.on(Events.MessageCreate, async (message) => {
   if (command === 'karma') {
     const { player } = await findOrCreatePlayer(message.author.id, message.author.username);
 
-    await message.reply(`Karma: ${player.karma}`);
+    const grade = getKarmaGrade(player.karma);
+
+    await message.reply(`Karma: ${grade} (${player.karma})`);
     return;
   }
 
