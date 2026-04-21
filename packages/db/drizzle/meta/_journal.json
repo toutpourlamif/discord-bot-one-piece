@@ -26,8 +26,22 @@
     {
       "idx": 3,
       "version": "7",
-      "when": 1776766517286,
-      "tag": "0003_magenta_bug",
+      "when": 1776716448549,
+      "tag": "0003_enable_pg_trgm",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1776716454145,
+      "tag": "0004_free_ulik",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1776769138738,
+      "tag": "0005_uneven_the_call",
       "breakpoints": true
     }
   ]

@@ -1,13 +1,15 @@
 import { drizzle } from 'drizzle-orm/postgres-js';
 import postgres from 'postgres';
 
-import * as schema from './schema/index.js';
+import { requireDatabaseUrl } from './env.js';
+import * as schema from './schema.js';
 
-const databaseUrl = process.env.DATABASE_URL;
-if (!databaseUrl) {
-  throw new Error('DATABASE_URL manquant');
-}
-
-const queryClient = postgres(databaseUrl);
+const queryClient = postgres(requireDatabaseUrl());
 
 export const db = drizzle(queryClient, { schema });
+
+export async function closeDb() {
+  await queryClient.end();
+}
+
+export type Db = typeof db;

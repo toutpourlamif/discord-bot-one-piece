@@ -12,8 +12,11 @@
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "docker:run": "docker compose up",
+    "db:m:g": "pnpm db:migrations:generate",
+    "db:m:a": "pnpm db:migrations:apply",
     "db:migrations:generate": "pnpm -F @one-piece/db generate",
     "db:migrations:apply": "pnpm -F @one-piece/db migrate",
+    "db:seed": "pnpm -F @one-piece/db seed",
     "db:studio": "pnpm -F @one-piece/db studio",
     "prepare": "husky"
   },
