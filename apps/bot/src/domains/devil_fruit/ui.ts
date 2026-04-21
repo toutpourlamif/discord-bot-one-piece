@@ -1,12 +1,20 @@
 import type { DevilFruitTemplate } from '@one-piece/db';
-import { EmbedBuilder } from 'discord.js';
+import { ActionRowBuilder, ButtonBuilder, ButtonStyle, EmbedBuilder } from 'discord.js';
 
 import { buildAssetUrl } from '../../shared/assets.js';
+import { DISCORD_BUTTON_LABEL_MAX_LENGTH } from '../../shared/constants.js';
+import { truncate } from '../../shared/helpers.js';
 
-import * as devilFruitRepository from './repository.js';
+export const INFO_CUSTOM_ID_PREFIX = 'info:devil_fruit:';
 
-export async function findDevilFruits(query: string): Promise<Array<DevilFruitTemplate>> {
-  return devilFruitRepository.searchByName(query);
+export function buildDisambiguationRow(fruits: Array<DevilFruitTemplate>): ActionRowBuilder<ButtonBuilder> {
+  const buttons = fruits.map((fruit) =>
+    new ButtonBuilder()
+      .setCustomId(`${INFO_CUSTOM_ID_PREFIX}${fruit.id}`)
+      .setLabel(truncate(fruit.name, DISCORD_BUTTON_LABEL_MAX_LENGTH))
+      .setStyle(ButtonStyle.Primary),
+  );
+  return new ActionRowBuilder<ButtonBuilder>().addComponents(buttons);
 }
 
 export function buildInfoEmbed(fruit: DevilFruitTemplate): EmbedBuilder {
@@ -22,8 +30,8 @@ export function buildInfoEmbed(fruit: DevilFruitTemplate): EmbedBuilder {
         inline: true,
       },
       // TODO: Il faut styliser ça et ajouter des emojis
-      { name: 'HP', value: formatBonus(fruit.hpBonus), inline: true },
-      { name: 'Combat', value: formatBonus(fruit.combatBonus), inline: true },
+      { name: 'HP', value: formatDfBonus(fruit.hpBonus), inline: true },
+      { name: 'Combat', value: formatDfBonus(fruit.combatBonus), inline: true },
     );
 
   if (fruit.imageUrl) {
@@ -34,6 +42,6 @@ export function buildInfoEmbed(fruit: DevilFruitTemplate): EmbedBuilder {
   return embed;
 }
 
-function formatBonus(value: number): string {
+function formatDfBonus(value: number): string {
   return value >= 0 ? `+${value}` : String(value);
 }

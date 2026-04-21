@@ -1,6 +1,12 @@
 import { Client, EmbedBuilder, Events, GatewayIntentBits } from 'discord.js';
 
-import { buildInfoEmbed, findDevilFruits } from './domains/devil_fruit/index.js';
+import {
+  buildDisambiguationRow,
+  buildInfoEmbed,
+  findById as findDevilFruitById,
+  INFO_CUSTOM_ID_PREFIX,
+  searchByName as findDevilFruits,
+} from './domains/devil_fruit/index.js';
 import { findOrCreatePlayer } from './domains/player/index.js';
 
 const token = process.env.DISCORD_TOKEN;
@@ -69,12 +75,19 @@ client.on(Events.MessageCreate, async (message) => {
       return;
     }
     const fruits = await findDevilFruits(query);
-    const [fruit] = fruits;
+    const [fruit, ...rest] = fruits;
     if (!fruit) {
       await message.reply(`Aucun résultat pour "${query}".`);
       return;
     }
-    await message.reply({ embeds: [buildInfoEmbed(fruit)] });
+    if (rest.length === 0) {
+      await message.reply({ embeds: [buildInfoEmbed(fruit)] });
+      return;
+    }
+    await message.reply({
+      content: 'Plusieurs résultats, choisis :',
+      components: [buildDisambiguationRow(fruits)],
+    });
     return;
   }
 
@@ -155,6 +168,21 @@ client.on(Events.MessageCreate, async (message) => {
     await message.reply({ embeds: [embed] });
     return;
   }
+});
+
+client.on(Events.InteractionCreate, async (interaction) => {
+  if (!interaction.isButton()) return;
+  if (!interaction.customId.startsWith(INFO_CUSTOM_ID_PREFIX)) return;
+
+  const id = Number(interaction.customId.slice(INFO_CUSTOM_ID_PREFIX.length));
+  if (!Number.isInteger(id)) return;
+
+  const fruit = await findDevilFruitById(id);
+  if (!fruit) {
+    await interaction.update({ content: "Ce fruit n'existe plus.", components: [] });
+    return;
+  }
+  await interaction.update({ content: '', embeds: [buildInfoEmbed(fruit)], components: [] });
 });
 
 await client.login(token);
