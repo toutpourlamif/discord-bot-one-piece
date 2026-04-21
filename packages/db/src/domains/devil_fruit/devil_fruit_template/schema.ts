@@ -22,3 +22,4 @@ export const devilFruitTemplate = pgTable(
 );
 
 export type DevilFruitTemplateInsert = typeof devilFruitTemplate.$inferInsert;
+export type DevilFruitTemplate = typeof devilFruitTemplate.$inferSelect;
