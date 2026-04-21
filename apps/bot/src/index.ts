@@ -62,6 +62,14 @@ client.on(Events.MessageCreate, async (message) => {
     );
   }
 
+  // TODO: supprimer avant la PROD - commande debug karma
+  if (command === 'karma') {
+    const { player } = await findOrCreatePlayer(message.author.id, message.author.username);
+
+    await message.reply(`Karma: ${player.karma}`);
+    return;
+  }
+
   if (command?.toLowerCase() === 'embed') {
     const dateUnix = Math.floor(Date.now() / 1000);
 
