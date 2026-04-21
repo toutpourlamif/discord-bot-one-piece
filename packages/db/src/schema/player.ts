@@ -1,4 +1,5 @@
-import { pgTable, serial, varchar, timestamp, integer } from 'drizzle-orm/pg-core';
+import { sql } from 'drizzle-orm';
+import { pgTable, serial, varchar, timestamp, integer, bigint } from 'drizzle-orm/pg-core';
 
 export const player = pgTable('player', {
   id: serial('id').primaryKey(),
@@ -6,6 +7,10 @@ export const player = pgTable('player', {
   discordId: varchar('discord_id', { length: 32 }).notNull().unique(),
 
   name: varchar('name', { length: 64 }).notNull(),
+  // drizzle et typescript ont du mal avec les bigint, donc on passe par sql`0`
+  bounty: bigint('bounty', { mode: 'bigint' })
+    .notNull()
+    .default(sql`0`),
 
   // Karma interne : -1000 à +1000 (contrôlé côté app)
   karma: integer('karma').notNull().default(0),

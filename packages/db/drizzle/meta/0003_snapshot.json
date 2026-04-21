@@ -1,6 +1,6 @@
 {
-  "id": "f8ad514f-714e-403e-951e-d7e07b0c2512",
-  "prevId": "39032d89-9371-4b9e-9021-3ebed0374fa2",
+  "id": "629b9722-102e-4c41-abbd-63ae431b21c0",
+  "prevId": "393d4293-af20-47ff-9893-441d9c55a719",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
@@ -28,6 +28,13 @@
         },
         "bounty": {
           "name": "bounty",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "0"
+        },
+        "karma": {
+          "name": "karma",
           "type": "integer",
           "primaryKey": false,
           "notNull": true,

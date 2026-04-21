@@ -12,8 +12,8 @@
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "docker:run": "docker compose up",
-    "db:generate": "pnpm -F @one-piece/db generate",
-    "db:migrate": "pnpm -F @one-piece/db migrate",
+    "db:migrations:generate": "pnpm -F @one-piece/db generate",
+    "db:migrations:apply": "pnpm -F @one-piece/db migrate",
     "db:studio": "pnpm -F @one-piece/db studio",
     "prepare": "husky"
   },

@@ -12,8 +12,22 @@
     {
       "idx": 1,
       "version": "7",
-      "when": 1776705959623,
-      "tag": "0001_ambiguous_hedge_knight",
+      "when": 1776693863566,
+      "tag": "0001_smart_mystique",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1776703003281,
+      "tag": "0002_great_lord_tyger",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1776766517286,
+      "tag": "0003_magenta_bug",
       "breakpoints": true
     }
   ]

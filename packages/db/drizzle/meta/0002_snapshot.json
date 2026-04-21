@@ -1,6 +1,6 @@
 {
-  "id": "f8ad514f-714e-403e-951e-d7e07b0c2512",
-  "prevId": "39032d89-9371-4b9e-9021-3ebed0374fa2",
+  "id": "393d4293-af20-47ff-9893-441d9c55a719",
+  "prevId": "f8ad514f-714e-403e-951e-d7e07b0c2512",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
@@ -28,10 +28,10 @@
         },
         "bounty": {
           "name": "bounty",
-          "type": "integer",
+          "type": "bigint",
           "primaryKey": false,
           "notNull": true,
-          "default": 0
+          "default": "0"
         },
         "created_at": {
           "name": "created_at",
