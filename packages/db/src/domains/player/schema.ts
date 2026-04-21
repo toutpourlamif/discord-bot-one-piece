@@ -1,5 +1,7 @@
 import { sql } from 'drizzle-orm';
-import { pgTable, serial, varchar, timestamp, bigint } from 'drizzle-orm/pg-core';
+import { bigint, pgTable, serial, varchar } from 'drizzle-orm/pg-core';
+
+import { timestamps } from '../../shared/helpers.js';
 
 export const player = pgTable('player', {
   id: serial('id').primaryKey(),
@@ -9,9 +11,7 @@ export const player = pgTable('player', {
   bounty: bigint('bounty', { mode: 'bigint' })
     .notNull()
     .default(sql`0`),
-  createdAt: timestamp('created_at', { withTimezone: true }).defaultNow().notNull(),
-  updatedAt: timestamp('updated_at', { withTimezone: true })
-    .defaultNow()
-    .notNull()
-    .$onUpdate(() => new Date()),
+  ...timestamps(),
 });
+
+export type Player = typeof player.$inferSelect;
