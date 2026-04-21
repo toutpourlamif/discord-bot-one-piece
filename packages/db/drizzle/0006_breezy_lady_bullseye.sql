@@ -1,0 +1,1 @@
+ALTER TABLE "devil_fruit_template" ADD COLUMN "image_url" text;
