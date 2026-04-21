@@ -1,7 +1,7 @@
 import { db, devilFruitTemplate, type DevilFruitTemplate } from '@one-piece/db';
 import { eq, ilike, or, sql } from 'drizzle-orm';
 
-export async function searchByName(query: string): Promise<Array<DevilFruitTemplate>> {
+export async function searchManyByName(query: string): Promise<Array<DevilFruitTemplate>> {
   return db
     .select()
     .from(devilFruitTemplate)

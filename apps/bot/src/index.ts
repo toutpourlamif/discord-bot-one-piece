@@ -5,7 +5,7 @@ import {
   buildInfoEmbed,
   findById as findDevilFruitById,
   INFO_CUSTOM_ID_PREFIX,
-  searchByName as findDevilFruits,
+  searchManyByName as searchManyDfByName,
 } from './domains/devil_fruit/index.js';
 import { findOrCreatePlayer } from './domains/player/index.js';
 import { DISCORD_ACTION_ROW_MAX_BUTTONS } from './shared/constants.js';
@@ -75,7 +75,7 @@ client.on(Events.MessageCreate, async (message) => {
       await message.reply('Ta recherche doit faire au moins 2 caractères.');
       return;
     }
-    const fruits = await findDevilFruits(query);
+    const fruits = await searchManyDfByName(query);
     const [fruit, ...rest] = fruits;
     if (!fruit) {
       await message.reply(`Aucun résultat pour "${query}".`);
