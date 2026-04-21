@@ -7,12 +7,7 @@ import tseslint from 'typescript-eslint';
 
 export default defineConfig({
   ignores: ['**/dist/**', '**/node_modules/**', '**/drizzle/**'],
-  extends: [
-    eslint.configs.recommended,
-    tseslint.configs.recommendedTypeChecked,
-    tseslint.configs.stylisticTypeChecked,
-    prettier,
-  ],
+  extends: [eslint.configs.recommended, tseslint.configs.recommendedTypeChecked, tseslint.configs.stylisticTypeChecked, prettier],
   languageOptions: {
     parserOptions: {
       projectService: true,

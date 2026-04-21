@@ -1,5 +1,5 @@
-const KARMA_MIN = -1000;
-const KARMA_MAX = 1000;
+const KARMA_MIN = -100;
+const KARMA_MAX = 100;
 
 const KARMA_GRADES = [
   'Infâme',

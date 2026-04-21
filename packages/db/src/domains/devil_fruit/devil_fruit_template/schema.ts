@@ -1,7 +1,7 @@
 import { sql } from 'drizzle-orm';
 import { index, integer, pgTable, serial, varchar } from 'drizzle-orm/pg-core';
 
-import { timestamps } from '../../../shared/helpers.js';
+import { imageUrl, timestamps } from '../../../shared/helpers.js';
 import { devilFruitType } from '../enum.js';
 
 export const devilFruitTemplate = pgTable(
@@ -15,11 +15,11 @@ export const devilFruitTemplate = pgTable(
       .default(sql`'{}'::devil_fruit_type[]`),
     hpBonus: integer('hp_bonus').notNull().default(0),
     combatBonus: integer('combat_bonus').notNull().default(0),
+    ...imageUrl(),
     ...timestamps(),
   },
-  (table) => [
-    index('devil_fruit_template_name_trgm_idx').using('gin', sql`${table.name} gin_trgm_ops`),
-  ],
+  (table) => [index('devil_fruit_template_name_trgm_idx').using('gin', sql`${table.name} gin_trgm_ops`)],
 );
 
 export type DevilFruitTemplateInsert = typeof devilFruitTemplate.$inferInsert;
+export type DevilFruitTemplate = typeof devilFruitTemplate.$inferSelect;
