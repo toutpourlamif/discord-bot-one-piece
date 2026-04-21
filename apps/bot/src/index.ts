@@ -1,5 +1,6 @@
 import { Client, EmbedBuilder, Events, GatewayIntentBits } from 'discord.js';
 
+import { buildInfoEmbed, findDevilFruits } from './domains/devil_fruit/index.js';
 import { findOrCreatePlayer, getKarmaGrade } from './domains/player/index.js';
 
 const token = process.env.DISCORD_TOKEN;
@@ -60,6 +61,22 @@ client.on(Events.MessageCreate, async (message) => {
     const grade = getKarmaGrade(player.karma);
 
     await message.reply(`Karma: ${grade} (${player.karma})`);
+    return;
+  }
+
+  if (command?.toLowerCase() === 'info') {
+    const query = args.join(' ').trim();
+    if (query.length < 2) {
+      await message.reply('Ta recherche doit faire au moins 2 caractères.');
+      return;
+    }
+    const fruits = await findDevilFruits(query);
+    const [fruit] = fruits;
+    if (!fruit) {
+      await message.reply(`Aucun résultat pour "${query}".`);
+      return;
+    }
+    await message.reply({ embeds: [buildInfoEmbed(fruit)] });
     return;
   }
 
