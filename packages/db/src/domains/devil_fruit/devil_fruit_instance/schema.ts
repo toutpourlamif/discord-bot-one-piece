@@ -16,7 +16,5 @@ export const devilFruitInstance = pgTable(
       .references(() => player.id, { onDelete: 'cascade' }),
     ...timestamps(),
   },
-  (table) => [
-    uniqueIndex('devil_fruit_instance_player_template_uniq').on(table.playerId, table.templateId),
-  ],
+  (table) => [uniqueIndex('devil_fruit_instance_player_template_uniq').on(table.playerId, table.templateId)],
 );
