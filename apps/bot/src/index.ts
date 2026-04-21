@@ -139,6 +139,12 @@ client.on(Events.MessageCreate, async (message) => {
     await message.reply({ embeds: [embed] });
     return;
   }
+  if (command?.toLowerCase() === 'moi') {
+    const embed = new EmbedBuilder().setAuthor({
+      name: message.author.username,
+      iconURL: message.author.displayAvatarURL(),
+    });
+  }
 });
 
 await client.login(token);
