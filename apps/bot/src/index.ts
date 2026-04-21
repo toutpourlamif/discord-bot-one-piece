@@ -13,11 +13,7 @@ if (!prefix) {
 }
 
 const client = new Client({
-  intents: [
-    GatewayIntentBits.Guilds,
-    GatewayIntentBits.GuildMessages,
-    GatewayIntentBits.MessageContent,
-  ],
+  intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages, GatewayIntentBits.MessageContent],
 });
 
 client.once(Events.ClientReady, (c) => {
@@ -53,13 +49,8 @@ client.on(Events.MessageCreate, async (message) => {
   }
   // TODO: supprimer en prod
   if (command === 'debug') {
-    const { player, created } = await findOrCreatePlayer(
-      message.author.id,
-      message.author.username,
-    );
-    await message.reply(
-      `${created ? '🆕 Player créé' : '✅ Player existant'}\n\`\`\`json\n${JSON.stringify(player, null, 2)}\n\`\`\``,
-    );
+    const { player, created } = await findOrCreatePlayer(message.author.id, message.author.username);
+    await message.reply(`${created ? '🆕 Player créé' : '✅ Player existant'}\n\`\`\`json\n${JSON.stringify(player, null, 2)}\n\`\`\``);
   }
 
   // TODO: supprimer avant la PROD - commande debug karma
