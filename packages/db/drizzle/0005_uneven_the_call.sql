@@ -1,0 +1,1 @@
+ALTER TABLE "player" ADD COLUMN "karma" integer DEFAULT 0 NOT NULL;
