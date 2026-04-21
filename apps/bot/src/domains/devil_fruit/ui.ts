@@ -35,7 +35,6 @@ export function buildInfoEmbed(fruit: DevilFruitTemplate): EmbedBuilder {
     );
 
   if (fruit.imageUrl) {
-    console.log("voici l'image url : ", fruit.imageUrl, buildAssetUrl(fruit.imageUrl));
     embed.setThumbnail(buildAssetUrl(fruit.imageUrl));
   }
 

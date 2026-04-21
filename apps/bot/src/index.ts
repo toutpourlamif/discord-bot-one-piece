@@ -182,12 +182,14 @@ client.on(Events.InteractionCreate, async (interaction) => {
   const id = Number(interaction.customId.slice(INFO_CUSTOM_ID_PREFIX.length));
   if (!Number.isInteger(id)) return;
 
+  await interaction.deferReply();
+
   const fruit = await findDevilFruitById(id);
   if (!fruit) {
-    await interaction.update({ content: "Ce fruit n'existe plus.", components: [] });
+    await interaction.editReply({ content: "Ce fruit n'existe plus.", embeds: [], components: [] });
     return;
   }
-  await interaction.update({ content: '', embeds: [buildInfoEmbed(fruit)], components: [] });
+  await interaction.editReply({ content: '', embeds: [buildInfoEmbed(fruit)], components: [] });
 });
 
 await client.login(token);
