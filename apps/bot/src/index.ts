@@ -8,6 +8,7 @@ import {
   searchByName as findDevilFruits,
 } from './domains/devil_fruit/index.js';
 import { findOrCreatePlayer } from './domains/player/index.js';
+import { DISCORD_ACTION_ROW_MAX_BUTTONS } from './shared/constants.js';
 
 const token = process.env.DISCORD_TOKEN;
 if (!token) {
@@ -84,10 +85,14 @@ client.on(Events.MessageCreate, async (message) => {
       await message.reply({ embeds: [buildInfoEmbed(fruit)] });
       return;
     }
-    await message.reply({
-      content: 'Plusieurs résultats, choisis :',
-      components: [buildDisambiguationRow(fruits)],
-    });
+    if (fruits.length <= DISCORD_ACTION_ROW_MAX_BUTTONS) {
+      await message.reply({
+        content: 'Plusieurs résultats, choisis :',
+        components: [buildDisambiguationRow(fruits)],
+      });
+      return;
+    }
+    await message.reply(`Trop de résultats (${fruits.length}), affine ta recherche.`);
     return;
   }
 
