@@ -1,7 +1,14 @@
 import { Client, EmbedBuilder, Events, GatewayIntentBits } from 'discord.js';
 
-import { buildInfoEmbed, findDevilFruits } from './domains/devil_fruit/index.js';
+import {
+  buildDisambiguationRow,
+  buildInfoEmbed,
+  findById as findDevilFruitById,
+  INFO_CUSTOM_ID_PREFIX,
+  searchManyByName as searchManyDfByName,
+} from './domains/devil_fruit/index.js';
 import { findOrCreatePlayer, getKarmaGrade } from './domains/player/index.js';
+import { DISCORD_ACTION_ROW_MAX_BUTTONS } from './shared/constants.js';
 
 const token = process.env.DISCORD_TOKEN;
 if (!token) {
@@ -70,13 +77,24 @@ client.on(Events.MessageCreate, async (message) => {
       await message.reply('Ta recherche doit faire au moins 2 caractères.');
       return;
     }
-    const fruits = await findDevilFruits(query);
-    const [fruit] = fruits;
+    const fruits = await searchManyDfByName(query);
+    const [fruit, ...rest] = fruits;
     if (!fruit) {
       await message.reply(`Aucun résultat pour "${query}".`);
       return;
     }
-    await message.reply({ embeds: [buildInfoEmbed(fruit)] });
+    if (rest.length === 0) {
+      await message.reply({ embeds: [buildInfoEmbed(fruit)] });
+      return;
+    }
+    if (fruits.length <= DISCORD_ACTION_ROW_MAX_BUTTONS) {
+      await message.reply({
+        content: 'Plusieurs résultats, choisis :',
+        components: [buildDisambiguationRow(fruits)],
+      });
+      return;
+    }
+    await message.reply(`Trop de résultats (${fruits.length}), affine ta recherche.`);
     return;
   }
 
@@ -171,6 +189,23 @@ client.on(Events.MessageCreate, async (message) => {
     await message.reply({ embeds: [embed] });
     return;
   }
+});
+
+client.on(Events.InteractionCreate, async (interaction) => {
+  if (!interaction.isButton()) return;
+  if (!interaction.customId.startsWith(INFO_CUSTOM_ID_PREFIX)) return;
+
+  const id = Number(interaction.customId.slice(INFO_CUSTOM_ID_PREFIX.length));
+  if (!Number.isInteger(id)) return;
+
+  await interaction.deferReply();
+
+  const fruit = await findDevilFruitById(id);
+  if (!fruit) {
+    await interaction.editReply({ content: "Ce fruit n'existe plus.", embeds: [], components: [] });
+    return;
+  }
+  await interaction.editReply({ content: '', embeds: [buildInfoEmbed(fruit)], components: [] });
 });
 
 await client.login(token);
