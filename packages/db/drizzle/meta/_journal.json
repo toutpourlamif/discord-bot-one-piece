@@ -57,6 +57,13 @@
       "when": 1776856760494,
       "tag": "0007_misty_nightmare",
       "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "7",
+      "when": 1776883552481,
+      "tag": "0008_jazzy_wolfsbane",
+      "breakpoints": true
     }
   ]
 }

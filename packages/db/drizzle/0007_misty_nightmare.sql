@@ -1,8 +1,8 @@
 CREATE TABLE "resource_template" (
-	"id" text PRIMARY KEY NOT NULL,
-	"name" text NOT NULL,
-	"image_url" text NOT NULL,
-	"description" text NOT NULL,
+	"id" serial PRIMARY KEY NOT NULL,
+	"name" varchar(128) NOT NULL,
+	"image_url" text,
+	"description" text,
 	"created_at" timestamp with time zone DEFAULT now() NOT NULL,
 	"updated_at" timestamp with time zone DEFAULT now() NOT NULL
 );
