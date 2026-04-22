@@ -28,6 +28,14 @@ client.once(Events.ClientReady, (c) => {
   console.log(`Bot connecté : ${c.user.tag}`);
 });
 
+function getRandomColor(): number {
+  return Math.floor(Math.random() * 0xffffff);
+}
+
+function toHex(color: number): string {
+  return `#${color.toString(16).padStart(6, '0').toUpperCase()}`;
+}
+
 // TODO: supprimer avant la PROD (j'ai fussioner les 2 tests)
 client.on(Events.MessageCreate, async (message) => {
   if (message.author.bot) return;
@@ -54,11 +62,14 @@ client.on(Events.MessageCreate, async (message) => {
     }
 
     await message.reply(repeatText);
+    return;
   }
+
   // TODO: supprimer en prod
   if (command === 'debug') {
     const { player, created } = await findOrCreatePlayer(message.author.id, message.author.username);
     await message.reply(`${created ? '🆕 Player créé' : '✅ Player existant'}\n\`\`\`json\n${JSON.stringify(player, null, 2)}\n\`\`\``);
+    return;
   }
 
   // TODO: supprimer avant la PROD - commande debug karma
@@ -95,6 +106,19 @@ client.on(Events.MessageCreate, async (message) => {
       return;
     }
     await message.reply(`Trop de résultats (${fruits.length}), affine ta recherche.`);
+    return;
+  }
+
+  if (command?.toLowerCase() === 'color') {
+    const color = getRandomColor();
+    const hex = toHex(color);
+
+    const embed = new EmbedBuilder()
+      .setTitle('🎨 Couleur aléatoire')
+      .setDescription(`Couleur tirée au hasard : **${hex}**`)
+      .setColor(color);
+
+    await message.reply({ embeds: [embed] });
     return;
   }
 
@@ -175,6 +199,7 @@ client.on(Events.MessageCreate, async (message) => {
     await message.reply({ embeds: [embed] });
     return;
   }
+
   //TODO: supprimer avant la prod
   if (command?.toLowerCase() === 'moi') {
     const targetUser = message.mentions.users.first();
