@@ -50,8 +50,15 @@ client.on(Events.MessageCreate, async (message) => {
   }
   // TODO: supprimer en prod
   if (command === 'debug') {
-    const { player, created } = await findOrCreatePlayer(message.author.id, message.author.username);
-    await message.reply(`${created ? '🆕 Player créé' : '✅ Player existant'}\n\`\`\`json\n${JSON.stringify(player, null, 2)}\n\`\`\``);
+    const target = message.mentions.users.first() ?? message.author;
+    const { player, created } = await findOrCreatePlayer(target.id, target.username);
+
+    const status = created ? '🆕 Player créé' : '✅ Player existant';
+    const stringifiablePlayer = { ...player, bounty: player.bounty.toString() };
+    const playerAsJsonString = JSON.stringify(stringifiablePlayer, null, 2);
+    const codeBlock = wrapInCodeBlock(playerAsJsonString, 'json');
+
+    await message.reply(`${status}\n${codeBlock}`);
   }
 
   // TODO: supprimer avant la PROD - commande debug karma
@@ -172,5 +179,9 @@ client.on(Events.MessageCreate, async (message) => {
     return;
   }
 });
+
+function wrapInCodeBlock(value: string, lang = ''): string {
+  return `\`\`\`${lang}\n${value}\n\`\`\``;
+}
 
 await client.login(token);
