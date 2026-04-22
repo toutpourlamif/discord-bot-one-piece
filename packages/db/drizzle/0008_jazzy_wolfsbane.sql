@@ -1,1 +1,0 @@
--- No-op: the resource_template final shape is already created in 0007.
