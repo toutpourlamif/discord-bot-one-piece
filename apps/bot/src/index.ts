@@ -61,6 +61,15 @@ client.on(Events.MessageCreate, async (message) => {
     await message.reply(`${created ? '🆕 Player créé' : '✅ Player existant'}\n\`\`\`json\n${JSON.stringify(player, null, 2)}\n\`\`\``);
   }
 
+  // TODO: SUPPRIMER EN PROD
+  if (command === 'random') {
+    const min = 1;
+    const max = 1000;
+    const randomNumber = Math.floor(Math.random() * (max - min + 1)) + min;
+
+    await message.reply(`🎲 Nombre aléatoire (${min}-${max}) : **${randomNumber}**`);
+  }
+
   // TODO: supprimer avant la PROD - commande debug karma
   if (command === 'karma') {
     const { player } = await findOrCreatePlayer(message.author.id, message.author.username);
