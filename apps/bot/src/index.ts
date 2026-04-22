@@ -7,7 +7,7 @@ import {
   INFO_CUSTOM_ID_PREFIX,
   searchManyByName as searchManyDfByName,
 } from './domains/devil_fruit/index.js';
-import { findOrCreatePlayer } from './domains/player/index.js';
+import { findOrCreatePlayer, getKarmaGrade } from './domains/player/index.js';
 import { DISCORD_ACTION_ROW_MAX_BUTTONS } from './shared/constants.js';
 
 const token = process.env.DISCORD_TOKEN;
@@ -65,7 +65,9 @@ client.on(Events.MessageCreate, async (message) => {
   if (command === 'karma') {
     const { player } = await findOrCreatePlayer(message.author.id, message.author.username);
 
-    await message.reply(`Karma: ${player.karma}`);
+    const grade = getKarmaGrade(player.karma);
+
+    await message.reply(`Karma: ${grade} (${player.karma})`);
     return;
   }
 
@@ -170,6 +172,20 @@ client.on(Events.MessageCreate, async (message) => {
       })
       .setTimestamp(new Date());
 
+    await message.reply({ embeds: [embed] });
+    return;
+  }
+  //TODO: supprimer avant la prod
+  if (command?.toLowerCase() === 'moi') {
+    const targetUser = message.mentions.users.first();
+    const user = targetUser ?? message.author;
+    const embed = new EmbedBuilder()
+      .setAuthor({
+        name: user.username,
+        iconURL: user.displayAvatarURL(),
+      })
+      .setImage(user.displayAvatarURL())
+      .setTitle(user.username);
     await message.reply({ embeds: [embed] });
     return;
   }
