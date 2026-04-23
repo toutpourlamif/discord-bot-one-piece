@@ -4,3 +4,8 @@
 export function truncate(value: string, max: number): string {
   return value.length > max ? `${value.slice(0, max - 1)}…` : value;
 }
+
+/** Entoure `value` d'un bloc de code Discord (```lang\n...\n```). `lang` sert à la coloration syntaxique (ex: 'json', 'ts'). */
+export function wrapInCodeBlock(value: string, lang = ''): string {
+  return `\`\`\`${lang}\n${value}\n\`\`\``;
+}
