@@ -1,6 +1,5 @@
-import { EmbedBuilder } from 'discord.js';
-
 import type { Command } from '../../../shared/command.js';
+import { createOpEmbed } from '../../../shared/embed/create-op-embed.js';
 
 function getRandomColor(): number {
   return Math.floor(Math.random() * 0xffffff);
@@ -16,10 +15,7 @@ export const colorCommand: Command = {
     const color = getRandomColor();
     const hex = toHex(color);
 
-    const embed = new EmbedBuilder()
-      .setTitle('🎨 Couleur aléatoire')
-      .setDescription(`Couleur tirée au hasard : **${hex}**`)
-      .setColor(color);
+    const embed = createOpEmbed().setTitle('🎨 Couleur aléatoire').setDescription(`Couleur tirée au hasard : **${hex}**`).setColor(color);
 
     await message.reply({ embeds: [embed] });
   },
