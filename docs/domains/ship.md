@@ -10,13 +10,15 @@ Le navire est créé automatiquement à la première opération qui en a besoin 
 
 Cinq attributs définissent ce que le joueur peut faire. Chacun est rattaché à une **partie du bateau** — c'est cette partie qu'on améliore pour monter l'attribut.
 
-| Attribut      | Partie du bateau | Effet                                                   |
-| ------------- | ---------------- | ------------------------------------------------------- |
-| `maxHp`       | Coque            | Points de vie maximum du navire                         |
-| `speed`       | Voile            | Réduit le temps entre deux events (voir `event`)        |
-| `crewSize`    | Ponts            | Nombre de personnages **actifs** (voir `crew`)          |
-| `reserveSize` | Chambres         | Nombre de personnages en **réserve** (voir `character`) |
-| `storageSize` | Cale             | Capacité d'objets stockables (voir `resource`)          |
+| Attribut      | Partie du bateau | Nom technique | Effet                                                   |
+| ------------- | ---------------- | ------------- | ------------------------------------------------------- |
+| `maxHp`       | Coque            | `hull`        | Points de vie maximum du navire                         |
+| `speed`       | Voile            | `sail`        | Réduit le temps entre deux events (voir `event`)        |
+| `crewSize`    | Ponts            | `decks`       | Nombre de personnages **actifs** (voir `crew`)          |
+| `reserveSize` | Chambres         | `cabins`      | Nombre de personnages en **réserve** (voir `character`) |
+| `storageSize` | Cale             | `cargo`       | Capacité d'objets stockables (voir `resource`)          |
+
+> Le **nom technique** est celui utilisé partout dans le code (types, colonnes DB, clés de constantes) : `hullLevel`, `MODULE_BONUS_BY_LEVEL.sail`, `decksLevel`, etc.
 
 ## Santé (`hp`) vs `maxHp`
 

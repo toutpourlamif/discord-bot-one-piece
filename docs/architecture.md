@@ -25,6 +25,14 @@ On ouvre un domaine (dossier + doc) uniquement au moment où on commence à code
 
 D'autres domaines viendront s'ajouter quand le besoin apparaîtra (combat, world…). On ne les crée pas en amont.
 
+### Préfixe `_` : pas un domaine
+
+Un dossier préfixé par `_` dans `domains/` n'est **pas un domaine métier**, c'est un conteneur utilitaire. Il suit la même structure (`commands/`, `interactions/`…) pour pouvoir brancher le router comme un vrai domaine, mais son contenu n'a pas de règles métier propres.
+
+| Dossier | Rôle                                                                                   |
+| ------- | -------------------------------------------------------------------------------------- |
+| `_dev`  | Commandes de test/debug (ex: `embed`, `moi`, `repeat`). Tout ici dégage avant la prod. |
+
 ## Adaptateurs
 
 | Dossier   | Rôle                                                      |
