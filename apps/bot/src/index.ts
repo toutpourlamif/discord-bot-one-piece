@@ -1,4 +1,10 @@
-import { Client, EmbedBuilder, Events, GatewayIntentBits } from 'discord.js';
+import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+import { Client, EmbedBuilder, Events, GatewayIntentBits, AttachmentBuilder } from 'discord.js';
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 import {
   buildDisambiguationRow,
@@ -68,6 +74,25 @@ client.on(Events.MessageCreate, async (message) => {
     const randomNumber = Math.floor(Math.random() * (max - min + 1)) + min;
 
     await message.reply(`🎲 Nombre aléatoire (${min}-${max}) : **${randomNumber}**`);
+  }
+
+  // TODO: SUPPRIMER EN PROD
+  if (command?.toLowerCase() === 'randomcat') {
+    const catsDir = path.resolve(__dirname, '../../../assets/cat');
+
+    const files = fs.readdirSync(catsDir).filter((f) => /\.(png|jpg|jpeg|webp)$/i.test(f));
+
+    if (files.length === 0) {
+      await message.reply('❌ Aucun chat trouvé.');
+      return;
+    }
+
+    const randomFile = files[Math.floor(Math.random() * files.length)]!;
+    const filePath = path.join(catsDir, randomFile);
+    const attachment = new AttachmentBuilder(filePath);
+
+    await message.reply({ content: 'UN CHAT 🐱 !', files: [attachment] });
+    return;
   }
 
   // TODO: supprimer avant la PROD - commande debug karma
