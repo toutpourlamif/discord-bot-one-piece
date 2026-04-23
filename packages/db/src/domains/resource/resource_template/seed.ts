@@ -1,4 +1,3 @@
-import chalk from 'chalk';
 import { sql } from 'drizzle-orm';
 
 import type { Db } from '../../../client.js';
@@ -20,9 +19,4 @@ export async function seedResources(db: Db) {
     });
 
   logSeed(resourceTemplate, RESOURCE_TEMPLATES_DATA);
-  console.log(
-    `Ressources ${chalk.green('OK')} ${chalk.yellow(`(${RESOURCE_TEMPLATES_DATA.length})`)} ${chalk.blue(
-      RESOURCE_TEMPLATES_DATA.map((resource) => resource.name).join(', '),
-    )}`,
-  );
 }
