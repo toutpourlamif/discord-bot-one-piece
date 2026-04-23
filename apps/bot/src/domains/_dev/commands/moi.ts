@@ -1,6 +1,5 @@
-import { EmbedBuilder } from 'discord.js';
-
 import type { Command } from '../../../shared/command.js';
+import { createOpEmbed } from '../../../shared/embed/create-op-embed.js';
 
 // TODO: supprimer avant la prod
 export const moiCommand: Command = {
@@ -8,7 +7,7 @@ export const moiCommand: Command = {
   async handler(message) {
     const targetUser = message.mentions.users.first();
     const user = targetUser ?? message.author;
-    const embed = new EmbedBuilder()
+    const embed = createOpEmbed()
       .setAuthor({
         name: user.username,
         iconURL: user.displayAvatarURL(),

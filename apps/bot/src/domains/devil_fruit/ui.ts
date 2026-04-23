@@ -1,8 +1,9 @@
 import type { DevilFruitTemplate } from '@one-piece/db';
-import { ActionRowBuilder, ButtonBuilder, ButtonStyle, EmbedBuilder } from 'discord.js';
+import { ActionRowBuilder, ButtonBuilder, ButtonStyle, type EmbedBuilder } from 'discord.js';
 
 import { buildAssetUrl } from '../../shared/assets.js';
 import { DISCORD_BUTTON_LABEL_MAX_LENGTH } from '../../shared/constants.js';
+import { createOpEmbed } from '../../shared/embed/create-op-embed.js';
 import { truncate } from '../../shared/helpers.js';
 
 export const INFO_CUSTOM_ID_PREFIX = 'info:devil_fruit:';
@@ -18,10 +19,9 @@ export function buildDisambiguationRow(fruits: Array<DevilFruitTemplate>): Actio
 }
 
 export function buildInfoEmbed(fruit: DevilFruitTemplate): EmbedBuilder {
-  const embed = new EmbedBuilder()
+  const embed = createOpEmbed()
     .setTitle(fruit.name)
     // TODO: Il faudrait que chaque fruit ait sa propre couleur plus tard (ajouter colonne color etc..)
-    .setColor(0x5865f2)
     .addFields(
       {
         // TODO: Il faudrait que types prennent un S seulement si c'est au pluriel (plusieurs types)
