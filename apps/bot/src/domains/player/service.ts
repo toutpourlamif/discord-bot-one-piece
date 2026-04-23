@@ -12,7 +12,7 @@ export async function findOrCreatePlayer(discordId: string, name: string): Promi
   return { player: created, created: true };
 }
 
-export async function renamePlayer(discordId: string, fallbackName: string, rawName: string): Promise<Player> {
+export async function renamePlayer(playerId: number, rawName: string): Promise<Player> {
   const trimmedName = rawName.trim();
   assertNameNotEmpty(trimmedName);
   assertNameWithinMaxLength(trimmedName);
@@ -20,6 +20,5 @@ export async function renamePlayer(discordId: string, fallbackName: string, rawN
   const sanitizedName = sanitizeName(trimmedName);
   assertNameNotEmpty(sanitizedName);
 
-  const { player } = await findOrCreatePlayer(discordId, fallbackName);
-  return playerRepository.updateName(player.id, sanitizedName);
+  return playerRepository.updateName(playerId, sanitizedName);
 }
