@@ -1,0 +1,1 @@
+ALTER TABLE "resource_template" ADD CONSTRAINT "resource_template_name_unique" UNIQUE("name");

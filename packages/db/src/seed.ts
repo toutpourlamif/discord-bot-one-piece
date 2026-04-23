@@ -1,8 +1,10 @@
 import { closeDb, db } from './client.js';
 import { seedDevilFruits } from './domains/devil_fruit/index.js';
+import { seedResources } from './domains/resource/index.js';
 
 try {
   await seedDevilFruits(db);
+  await seedResources(db);
   console.log('Seed terminé');
 } catch (err) {
   console.error('Seed failed:', err);
