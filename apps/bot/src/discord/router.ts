@@ -3,9 +3,10 @@ import type { Message } from 'discord.js';
 import { devCommands } from '../domains/_dev/index.js';
 import { devilFruitCommands } from '../domains/devil_fruit/index.js';
 import { playerCommands } from '../domains/player/index.js';
+import { shipCommands } from '../domains/ship/commands/index.js';
 import type { Command } from '../shared/command.js';
 
-const allCommands = [...playerCommands, ...devilFruitCommands, ...devCommands];
+const allCommands = [...playerCommands, ...devilFruitCommands, ...devCommands, ...shipCommands];
 const registry = new Map<string, Command>(allCommands.map((c) => [c.name, c]));
 
 /** Dispatche un message vers le bon handler de commande. Voir `docs/discord.md`. */
