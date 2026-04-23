@@ -6,6 +6,7 @@ import type { Command } from '../../../shared/command.js';
 export const moiCommand: Command = {
   name: 'moi',
   async handler(message) {
+    // TODO: remplacer par helper
     const targetUser = message.mentions.users.first();
     const user = targetUser ?? message.author;
     const embed = new EmbedBuilder()

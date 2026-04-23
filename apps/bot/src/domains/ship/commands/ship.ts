@@ -7,8 +7,12 @@ import { findOrCreateShip } from '../service.js';
 export const shipCommand: Command = {
   name: 'ship',
   async handler(message) {
-    const { player } = await findOrCreatePlayer(message.author.id, message.author.username);
+    // TODO: remplacer par helper
+    const targetUser = message.mentions.users.first();
+    const finalUser = targetUser ?? message.author;
+    const { player } = await findOrCreatePlayer(finalUser.id, finalUser.username);
     const { ship } = await findOrCreateShip(player.id);
+    // TODO: remplacer par CreateOpEmbed un jour ou l'autre
     const embed = new EmbedBuilder().setTitle(ship.name);
     await message.reply({ embeds: [embed] });
   },
