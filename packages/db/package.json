@@ -10,7 +10,7 @@
     "generate": "drizzle-kit generate",
     "migrate": "tsx --env-file=.env.local src/migrate.ts",
     "seed": "tsx --env-file=.env.local src/seed.ts",
-    "studio": "drizzle-kit studio",
+    "studio": "tsx scripts/studio.ts",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
@@ -22,6 +22,7 @@
     "@types/node": "^25.6.0",
     "dotenv": "^17.4.2",
     "drizzle-kit": "^0.31.10",
+    "open": "^11.0.0",
     "tsx": "^4.21.0"
   }
 }
