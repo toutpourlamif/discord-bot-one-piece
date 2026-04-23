@@ -9,4 +9,4 @@ process.on('SIGINT', () => child.kill('SIGINT'));
 // 2. Attend 2s puis ouvre le navigateur
 setTimeout(() => {
   void open('https://local.drizzle.studio');
-}, 2000);
+}, 500);

@@ -10,7 +10,7 @@
     "generate": "drizzle-kit generate",
     "migrate": "tsx --env-file=.env.local src/migrate.ts",
     "seed": "tsx --env-file=.env.local src/seed.ts",
-    "studio": "tsx src/studio.ts",
+    "studio": "tsx scripts/studio.ts",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
