@@ -1,15 +1,16 @@
 import type { ResourceName, ShipModuleKey } from '@one-piece/db';
 
 type UpgradeCost = {
-  berry: number;
-  resources: Partial<Record<ResourceName, number>>;
+  berry?: number;
+  resources?: Partial<Record<ResourceName, number>>;
 };
 
 type ShipModuleConfig = {
-  valueByLevel: ReadonlyArray<number>;
-  costByLevel: ReadonlyArray<UpgradeCost>;
+  valueByLevel: Array<number>;
+  costByLevel: Array<UpgradeCost>;
 };
 
+// TODO: Équilibrer les valeurs, ajouter des vrais ressources
 export const SHIP_MODULES = {
   hull: {
     valueByLevel: [100, 150, 220, 320, 450],
