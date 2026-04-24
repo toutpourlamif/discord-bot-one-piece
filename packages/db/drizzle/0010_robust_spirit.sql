@@ -1,1 +1,0 @@
-ALTER TABLE "devil_fruit_template" ADD COLUMN "description" text;
