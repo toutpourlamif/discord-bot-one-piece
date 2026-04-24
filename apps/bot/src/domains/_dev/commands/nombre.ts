@@ -1,8 +1,8 @@
 import { ActionRowBuilder, ButtonBuilder, ButtonStyle } from 'discord.js';
 import shuffle from 'lodash/shuffle.js';
 
-import type { Command } from '../../../shared/command.js';
-import { DISCORD_ACTION_ROW_MAX_BUTTONS } from '../../../shared/constants.js';
+import { DISCORD_ACTION_ROW_MAX_BUTTONS } from '../../../discord/constants.js';
+import type { Command } from '../../../discord/types.js';
 
 const MAX_RANDOM_NUMBER = 100;
 
