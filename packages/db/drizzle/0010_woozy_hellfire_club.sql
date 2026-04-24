@@ -9,4 +9,8 @@ CREATE TABLE "character_template" (
 	CONSTRAINT "character_template_name_unique" UNIQUE("name")
 );
 --> statement-breakpoint
+<<<<<<< HEAD
 CREATE INDEX "character_template_name_trgm_idx" ON "character_template" USING gin ("name" gin_trgm_ops);
+=======
+CREATE INDEX "character_template_name_trgm_idx" ON "character_template" USING gin ("name" gin_trgm_ops);
+>>>>>>> main

@@ -1,12 +1,12 @@
-import type { Command } from '../../../shared/command.js';
-import { createOpEmbed } from '../../../shared/embed/create-op-embed.js';
+import { createOpEmbed } from '../../../discord/embed/create-op-embed.js';
+import type { Command } from '../../../discord/types.js';
+import { getTargetUser } from '../../../discord/utils/get-target-user.js';
 
 // TODO: supprimer avant la prod
 export const moiCommand: Command = {
   name: 'moi',
   async handler(message) {
-    const targetUser = message.mentions.users.first();
-    const user = targetUser ?? message.author;
+    const user = getTargetUser(message);
     const embed = createOpEmbed()
       .setAuthor({
         name: user.username,

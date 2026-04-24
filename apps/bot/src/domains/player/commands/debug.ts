@@ -1,12 +1,13 @@
-import type { Command } from '../../../shared/command.js';
-import { wrapInCodeBlock } from '../../../shared/helpers.js';
+import type { Command } from '../../../discord/types.js';
+import { getTargetUser } from '../../../discord/utils/get-target-user.js';
+import { wrapInCodeBlock } from '../../../shared/utils.js';
 import { findOrCreatePlayer } from '../service.js';
 
 // TODO: supprimer en prod
 export const debugCommand: Command = {
   name: 'debug',
   async handler(message) {
-    const target = message.mentions.users.first() ?? message.author;
+    const target = getTargetUser(message);
     const { player, created } = await findOrCreatePlayer(target.id, target.username);
 
     const status = created ? '🆕 Player créé' : '✅ Player existant';

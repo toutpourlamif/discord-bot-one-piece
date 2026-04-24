@@ -1,7 +1,7 @@
 import { ActionRowBuilder, ButtonBuilder, ButtonStyle } from 'discord.js';
 
-import type { Command } from '../../../shared/command.js';
-import { DISCORD_ACTION_ROW_MAX_BUTTONS } from '../../../shared/constants.js';
+import { DISCORD_ACTION_ROW_MAX_BUTTONS } from '../../../discord/constants.js';
+import type { Command } from '../../../discord/types.js';
 
 function getRandomInteger(min: number, max: number): number {
   return Math.floor(Math.random() * (max - min + 1)) + min;

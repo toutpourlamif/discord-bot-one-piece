@@ -1,8 +1,8 @@
 import { Client, Events, GatewayIntentBits } from 'discord.js';
 
+import { setBotIconUrl } from './discord/embed/branding.js';
 import { routeInteraction } from './discord/interactionRouter.js';
 import { routeMessage } from './discord/router.js';
-import { setBotIconUrl } from './shared/embed/branding.js';
 
 const token = process.env.DISCORD_TOKEN;
 if (!token) {
