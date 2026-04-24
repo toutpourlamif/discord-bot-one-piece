@@ -1,2 +1,7 @@
+if [ ! -f node_modules/.modules.yaml ] || [ pnpm-lock.yaml -nt node_modules/.modules.yaml ]; then
+  echo "📦 Lockfile changed — running pnpm install…"
+  pnpm install
+fi
+
 pnpm lint-staged
 pnpm typecheck
