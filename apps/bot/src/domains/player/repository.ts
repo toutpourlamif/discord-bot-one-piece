@@ -10,3 +10,8 @@ export async function create(discordId: string, name: string): Promise<Player> {
   const [row] = await db.insert(player).values({ discordId, name }).returning();
   return row!;
 }
+
+export async function updateName(playerId: number, name: string): Promise<Player> {
+  const [row] = await db.update(player).set({ name }).where(eq(player.id, playerId)).returning();
+  return row!;
+}

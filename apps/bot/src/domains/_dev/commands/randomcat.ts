@@ -1,0 +1,15 @@
+import { createOpEmbed } from '../../../discord/embed/create-op-embed.js';
+import type { Command } from '../../../discord/types.js';
+
+const catImages = ['https://i.imgur.com/xJ4oIrC.jpeg', 'https://i.imgur.com/g2BEPjU.jpeg', 'https://i.imgur.com/c7FhEn6.png'];
+export const randomCatCommand: Command = {
+  name: 'randomcat',
+  async handler(message) {
+    const randomUrl = catImages[Math.floor(Math.random() * catImages.length)]!;
+
+    const embed = createOpEmbed().setTitle('UN CHAT 🐱 !').setImage(randomUrl);
+
+    await message.reply({ embeds: [embed] });
+    return;
+  },
+};
