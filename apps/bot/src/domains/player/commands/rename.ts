@@ -1,4 +1,5 @@
-import type { Command } from '../../../shared/command.js';
+import { createOpEmbed } from '../../../discord/embed/create-op-embed.js';
+import type { Command } from '../../../discord/types.js';
 import { PlayerNameValidationError } from '../name.js';
 import { findOrCreatePlayer, renamePlayer } from '../service.js';
 
@@ -8,10 +9,8 @@ export const renameCommand: Command = {
     try {
       const { player } = await findOrCreatePlayer(message.author.id, message.author.username);
       const renamed = await renamePlayer(player.id, args.join(' '));
-      await message.reply({
-        content: `Tu t'appelles maintenant ${renamed.name}.`,
-        allowedMentions: { parse: [] },
-      });
+      const embed = createOpEmbed().setDescription(`Tu t'appelles maintenant ${renamed.name}.`);
+      await message.reply({ embeds: [embed] });
     } catch (err) {
       if (err instanceof PlayerNameValidationError) {
         await message.reply(err.message);
