@@ -1,4 +1,4 @@
-import type { Command } from '../../../shared/command.js';
+import type { Command } from '../../../discord/types.js';
 import { PlayerNameValidationError } from '../name.js';
 import { findOrCreatePlayer, renamePlayer } from '../service.js';
 
