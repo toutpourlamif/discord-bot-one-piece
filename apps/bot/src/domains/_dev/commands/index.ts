@@ -3,7 +3,17 @@ import { embedCommand } from './embed.js';
 import { moiCommand } from './moi.js';
 import { nombreCommand } from './nombre.js';
 import { onePieceCommand } from './onepiece.js';
+import { randomCommand } from './random.js';
 import { randomCatCommand } from './randomcat.js';
 import { repeatCommand } from './repeat.js';
 
-export const devCommands = [onePieceCommand, repeatCommand, embedCommand, moiCommand, nombreCommand, colorCommand, randomCatCommand];
+export const devCommands = [
+  onePieceCommand,
+  repeatCommand,
+  embedCommand,
+  moiCommand,
+  nombreCommand,
+  colorCommand,
+  randomCatCommand,
+  randomCommand,
+];
