@@ -16,7 +16,6 @@ export const devilFruitTemplate = pgTable(
     hpBonus: integer('hp_bonus').notNull().default(0),
     combatBonus: integer('combat_bonus').notNull().default(0),
     ...imageUrl(),
-    ...timestamps(),
     description: text('description'),
     ...timestamps(),
   },
