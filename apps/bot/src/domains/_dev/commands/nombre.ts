@@ -1,7 +1,10 @@
 import { ActionRowBuilder, ButtonBuilder, ButtonStyle } from 'discord.js';
+import shuffle from 'lodash/shuffle.js';
 
 import { DISCORD_ACTION_ROW_MAX_BUTTONS } from '../../../discord/constants.js';
 import type { Command } from '../../../discord/types.js';
+
+const MAX_RANDOM_NUMBER = 100;
 
 function getRandomInteger(min: number, max: number): number {
   return Math.floor(Math.random() * (max - min + 1)) + min;
@@ -11,7 +14,7 @@ function getRandomIntegersExcluding(count: number, excludedNumbers: Array<number
   const results: Array<number> = [];
 
   while (results.length < count) {
-    const randomNumber = getRandomInteger(0, 100);
+    const randomNumber = getRandomInteger(0, MAX_RANDOM_NUMBER);
 
     if (excludedNumbers.includes(randomNumber) || results.includes(randomNumber)) {
       continue;
@@ -21,10 +24,6 @@ function getRandomIntegersExcluding(count: number, excludedNumbers: Array<number
   }
 
   return results;
-}
-
-function shuffleNumbers(numbers: Array<number>): Array<number> {
-  return numbers.sort(() => Math.random() - 0.5);
 }
 
 export const nombreCommand: Command = {
@@ -52,7 +51,7 @@ export const nombreCommand: Command = {
     const randomNumbers = getRandomIntegersExcluding(DISCORD_ACTION_ROW_MAX_BUTTONS - 1, [number]);
     const numbers = [number, ...randomNumbers];
 
-    const shuffledNumbers = shuffleNumbers(numbers);
+    const shuffledNumbers = shuffle(numbers);
 
     const buttons = shuffledNumbers.map((value) =>
       new ButtonBuilder().setCustomId(`nombre:${value}`).setLabel(String(value)).setStyle(ButtonStyle.Secondary),
