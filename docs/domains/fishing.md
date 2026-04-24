@@ -29,9 +29,28 @@ Un **cooldown** limite le spam entre deux lancers.
 
 ## Prérequis
 
-N'importe quel joueur peut pêcher — pas d'item obligatoire ni de localisation particulière.
+N'importe quel joueur peut pêcher — pas d'item obligatoire côté code, ni de localisation particulière.
 
-<!-- TODO: réfléchir à une manière d'augmenter la pêche — probablement un module de navire (voir `ship`) qui booste la table de loot et/ou réduit le cooldown -->
+### Canne à pêche (objet de lore)
+
+Pendant l'onboarding, un PNJ du tutoriel remet au joueur une **Canne à pêche**, stockée comme une entrée de `resource_template` (voir `resource`). Rôle purement narratif :
+
+- non consommable, invendable,
+- **aucun effet mécanique** — le code de pêche ne regarde pas sa présence,
+- sert uniquement au RP et à justifier narrativement pourquoi le joueur sait pêcher.
+
+## Amélioration via module navire
+
+Pour booster la pêche (taux de loot, raretés accessibles, cooldown…), le joueur améliore un **module dédié du navire** : **Poste de pêche** — nom technique `fishing_post` (voir `ship`).
+
+Contrairement aux autres modules qui se montent avec des ressources **génériques** (bois, fer, présence d'un charpentier…), le Poste de pêche coûte des **ressources spécifiques** créées pour lui, une par palier de niveau.
+
+<!-- TODO: choisir les items d'évolution du Poste de pêche (un par niveau cible) — pistes : hameçon, hameçon en or, fil de fer… -->
+
+Ces ressources spécifiques vivent dans `resource` comme n'importe quel matériau de type `CRAFT` et s'obtiennent :
+
+- via **drop** (events marins, butin de pêche),
+- via **achat** auprès de marchands d'île (voir `economy`).
 
 ## Pas d'implication de l'équipage
 
