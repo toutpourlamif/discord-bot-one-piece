@@ -1,1 +1,1 @@
-export { ship, type Ship } from './schema.js';
+export { ship, type Ship, type ShipModuleKey } from './schema.js';
