@@ -1,1 +1,1 @@
-export { formatBerry } from './format.js';
+export { formatBerry } from './utils/format-berry.js';

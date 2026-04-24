@@ -26,4 +26,16 @@ export const ship = pgTable('ship', {
 
 export type Ship = typeof ship.$inferSelect;
 
-export type ShipModuleKey = 'hull' | 'sail' | 'decks' | 'cabins' | 'cargo';
+export const SHIP_MODULE_KEYS = ['hull', 'sail', 'decks', 'cabins', 'cargo'] as const;
+
+export type ShipModuleKey = (typeof SHIP_MODULE_KEYS)[number];
+
+type ShipLevelColumn = 'hullLevel' | 'sailLevel' | 'decksLevel' | 'cabinsLevel' | 'cargoLevel';
+
+export const SHIP_MODULE_LEVEL_COLUMNS: Record<ShipModuleKey, ShipLevelColumn> = {
+  hull: 'hullLevel',
+  sail: 'sailLevel',
+  decks: 'decksLevel',
+  cabins: 'cabinsLevel',
+  cargo: 'cargoLevel',
+};

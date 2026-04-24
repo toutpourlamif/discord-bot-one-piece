@@ -2,7 +2,9 @@ import type { Interaction } from 'discord.js';
 
 import { devilFruitButtonHandlers } from '../domains/devil_fruit/index.js';
 
-const allButtonHandlers = [...devilFruitButtonHandlers];
+import { menuButtonHandler } from './menu/index.js';
+
+const allButtonHandlers = [...devilFruitButtonHandlers, menuButtonHandler];
 
 /** Dispatche une interaction vers le bon handler. Voir `docs/discord.md`. */
 export async function routeInteraction(interaction: Interaction): Promise<void> {

@@ -1,6 +1,11 @@
 import { db, player, type Player } from '@one-piece/db';
 import { eq } from 'drizzle-orm';
 
+export async function findById(id: number): Promise<Player | undefined> {
+  const [row] = await db.select().from(player).where(eq(player.id, id)).limit(1);
+  return row;
+}
+
 export async function findByDiscordId(discordId: string): Promise<Player | undefined> {
   const [row] = await db.select().from(player).where(eq(player.discordId, discordId)).limit(1);
   return row;

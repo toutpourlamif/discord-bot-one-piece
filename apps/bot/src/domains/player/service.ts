@@ -1,5 +1,7 @@
 import type { Player } from '@one-piece/db';
 
+import { findOrCreateShip } from '../ship/service.js';
+
 import { assertNameNotEmpty, assertNameWithinMaxLength, sanitizeName } from './name.js';
 import * as playerRepository from './repository.js';
 
@@ -9,6 +11,8 @@ export async function findOrCreatePlayer(discordId: string, name: string): Promi
   const existing = await playerRepository.findByDiscordId(discordId);
   if (existing) return { player: existing, created: false };
   const created = await playerRepository.create(discordId, name);
+  // TODO: ajouter tout ça dans une transaction
+  await findOrCreateShip(created.id);
   return { player: created, created: true };
 }
 
