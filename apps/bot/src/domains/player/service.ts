@@ -14,7 +14,6 @@ export async function findOrCreatePlayer(discordId: string, name: string): Promi
 
 export async function renamePlayer(playerId: number, rawName: string): Promise<Player> {
   const trimmedName = rawName.trim();
-  assertNameNotEmpty(trimmedName);
   assertNameWithinMaxLength(trimmedName);
 
   const sanitizedName = sanitizeName(trimmedName);
