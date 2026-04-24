@@ -5,6 +5,7 @@ import { createOpEmbed } from '../../../shared/embed/create-op-embed.js';
 export const moiCommand: Command = {
   name: 'moi',
   async handler(message) {
+    // TODO: remplacer par helper
     const targetUser = message.mentions.users.first();
     const user = targetUser ?? message.author;
     const embed = createOpEmbed()
