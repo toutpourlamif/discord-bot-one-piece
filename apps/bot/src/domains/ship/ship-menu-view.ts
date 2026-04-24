@@ -13,6 +13,7 @@ async function build(playerId: number): Promise<EmbedBuilder> {
     return createOpEmbed().setDescription("Ce joueur n'a pas encore de navire.");
   }
   const embed = createOpEmbed().setTitle(`🚢 ${ship.name}`).setDescription(`HP : ${ship.hp}`);
+  // TODO: Redesign this shit
   for (const key of SHIP_MODULE_KEYS) {
     const level = ship[SHIP_MODULE_LEVEL_COLUMNS[key]];
     const value = SHIP_MODULES[key].valueByLevel[level - 1];
