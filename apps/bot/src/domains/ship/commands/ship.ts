@@ -1,6 +1,6 @@
 import { EmbedBuilder } from 'discord.js';
 
-import type { Command } from '../../../shared/command.js';
+import type { Command } from '../../../discord/types.js';
 import { findOrCreatePlayer } from '../../player/service.js';
 import { findOrCreateShip } from '../service.js';
 
