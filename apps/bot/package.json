@@ -11,6 +11,10 @@
   "dependencies": {
     "@one-piece/db": "workspace:*",
     "discord.js": "^14.26.3",
-    "drizzle-orm": "^0.45.2"
+    "drizzle-orm": "^0.45.2",
+    "lodash": "^4.18.1"
+  },
+  "devDependencies": {
+    "@types/lodash": "^4.17.24"
   }
 }
