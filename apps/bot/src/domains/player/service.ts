@@ -1,5 +1,6 @@
 import type { Player } from '@one-piece/db';
 
+import { assertNameNotEmpty, assertNameWithinMaxLength, sanitizeName } from './name.js';
 import * as playerRepository from './repository.js';
 
 type FindOrCreateResult = { player: Player; created: boolean };
@@ -9,4 +10,14 @@ export async function findOrCreatePlayer(discordId: string, name: string): Promi
   if (existing) return { player: existing, created: false };
   const created = await playerRepository.create(discordId, name);
   return { player: created, created: true };
+}
+
+export async function renamePlayer(playerId: number, rawName: string): Promise<Player> {
+  const trimmedName = rawName.trim();
+  assertNameWithinMaxLength(trimmedName);
+
+  const sanitizedName = sanitizeName(trimmedName);
+  assertNameNotEmpty(sanitizedName);
+
+  return playerRepository.updateName(playerId, sanitizedName);
 }
