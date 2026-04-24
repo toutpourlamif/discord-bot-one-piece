@@ -1,4 +1,4 @@
-import type { Command } from '../../../shared/command.js';
+import type { Command } from '../../../discord/types.js';
 
 // TODO: SUPPRIMER EN PROD
 export const randomCommand: Command = {

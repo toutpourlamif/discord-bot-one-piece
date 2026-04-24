@@ -1,5 +1,5 @@
-import type { Command } from '../../../shared/command.js';
-import { createOpEmbed } from '../../../shared/embed/create-op-embed.js';
+import { createOpEmbed } from '../../../discord/embed/create-op-embed.js';
+import type { Command } from '../../../discord/types.js';
 
 function getRandomColor(): number {
   return Math.floor(Math.random() * 0xffffff);

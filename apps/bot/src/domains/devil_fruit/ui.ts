@@ -1,10 +1,10 @@
 import type { DevilFruitTemplate } from '@one-piece/db';
 import { ActionRowBuilder, ButtonBuilder, ButtonStyle, type EmbedBuilder } from 'discord.js';
 
-import { buildAssetUrl } from '../../shared/assets.js';
-import { DISCORD_BUTTON_LABEL_MAX_LENGTH } from '../../shared/constants.js';
-import { createOpEmbed } from '../../shared/embed/create-op-embed.js';
-import { truncate } from '../../shared/helpers.js';
+import { DISCORD_BUTTON_LABEL_MAX_LENGTH } from '../../discord/constants.js';
+import { createOpEmbed } from '../../discord/embed/create-op-embed.js';
+import { buildAssetUrl } from '../../shared/build-asset-url.js';
+import { truncate } from '../../shared/utils.js';
 
 export const INFO_CUSTOM_ID_PREFIX = 'info:devil_fruit:';
 

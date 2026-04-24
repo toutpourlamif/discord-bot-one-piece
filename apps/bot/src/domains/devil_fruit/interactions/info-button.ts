@@ -1,6 +1,6 @@
 import type { ButtonInteraction } from 'discord.js';
 
-import type { ButtonHandler } from '../../../shared/button-handler.js';
+import type { ButtonHandler } from '../../../discord/types.js';
 import { findById } from '../repository.js';
 import { buildInfoEmbed, INFO_CUSTOM_ID_PREFIX } from '../ui.js';
 
