@@ -9,7 +9,7 @@ import { resourceTemplate } from './schema.js';
 export async function seedResources(db: Db) {
   await db
     .insert(resourceTemplate)
-    .values(RESOURCE_TEMPLATES_DATA)
+    .values([...RESOURCE_TEMPLATES_DATA])
     .onConflictDoUpdate({
       target: resourceTemplate.name,
       set: {

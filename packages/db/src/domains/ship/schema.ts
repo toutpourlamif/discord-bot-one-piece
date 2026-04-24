@@ -25,3 +25,5 @@ export const ship = pgTable('ship', {
 });
 
 export type Ship = typeof ship.$inferSelect;
+
+export type ShipModuleKey = 'hull' | 'sail' | 'decks' | 'cabins' | 'cargo';

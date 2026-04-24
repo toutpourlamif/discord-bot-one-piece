@@ -1,5 +1,5 @@
-import type { Command } from '../../../shared/command.js';
-import { DISCORD_ACTION_ROW_MAX_BUTTONS } from '../../../shared/constants.js';
+import { DISCORD_ACTION_ROW_MAX_BUTTONS } from '../../../discord/constants.js';
+import type { Command } from '../../../discord/types.js';
 import { searchManyByName } from '../repository.js';
 import { buildDisambiguationRow, buildInfoEmbed } from '../ui.js';
 

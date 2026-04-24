@@ -1,4 +1,4 @@
-import type { Command } from '../../../shared/command.js';
+import type { Command } from '../../../discord/types.js';
 
 export const repeatCommand: Command = {
   name: 'repeat',
