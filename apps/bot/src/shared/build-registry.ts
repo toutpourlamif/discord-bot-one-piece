@@ -1,5 +1,5 @@
 /** Construit une `Map<name, item>` depuis un tableau, en throwant si deux items partagent la même clé `name`. */
-export function buildRegistry<T>(items: Array<T>, getName: (item: T) => string): Map<string, T> {
+export function buildRegistryWithUniqueNames<T>(items: Array<T>, getName: (item: T) => string): Map<string, T> {
   const registry = new Map<string, T>();
   for (const item of items) {
     const name = getName(item);
