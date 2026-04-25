@@ -2,8 +2,8 @@ import type { DevilFruitTemplate } from '@one-piece/db';
 import { ActionRowBuilder, ButtonBuilder, ButtonStyle, type EmbedBuilder } from 'discord.js';
 
 import { DISCORD_BUTTON_LABEL_MAX_LENGTH } from '../../discord/constants.js';
-import { createOpEmbed } from '../../discord/embed/create-op-embed.js';
 import { buildCustomId } from '../../discord/utils/build-custom-id.js';
+import { buildOpEmbed } from '../../discord/utils/build-op-embed.js';
 import { buildAssetUrl } from '../../shared/build-asset-url.js';
 import { truncate } from '../../shared/utils.js';
 
@@ -20,7 +20,7 @@ export function buildDisambiguationRow(fruits: Array<DevilFruitTemplate>): Actio
 }
 
 export function buildInfoEmbed(fruit: DevilFruitTemplate): EmbedBuilder {
-  const embed = createOpEmbed()
+  const embed = buildOpEmbed()
     .setTitle(fruit.name)
     // TODO: Il faudrait que chaque fruit ait sa propre couleur plus tard (ajouter colonne color etc..)
     .addFields(

@@ -2,10 +2,11 @@ import type { Player } from '@one-piece/db';
 import { ActionRowBuilder, ButtonBuilder, ButtonStyle } from 'discord.js';
 
 import { PAGINATION } from '../../discord/constants.js';
-import { createOpEmbed } from '../../discord/embed/create-op-embed.js';
 import type { View } from '../../discord/types.js';
 import { buildCustomId } from '../../discord/utils/build-custom-id.js';
+import { buildOpEmbed } from '../../discord/utils/build-op-embed.js';
 import { clampPage, splitIntoPages } from '../../discord/utils/paginate.js';
+import { buildProfilButton } from '../player/profil-button.js';
 
 import { INVENTORY_BUTTON_NAME } from './constants.js';
 import type { Inventory } from './types.js';
@@ -13,11 +14,12 @@ import type { Inventory } from './types.js';
 const EMPTY_INVENTORY_DESCRIPTION = 'Inventaire vide';
 
 export function buildInventoryView(player: Player, inventory: Inventory, page: number): View {
-  const embed = createOpEmbed().setTitle(`Inventaire de ${player.name}`);
+  const embed = buildOpEmbed().setTitle(`Inventaire de ${player.name}`);
+  const backRow = new ActionRowBuilder<ButtonBuilder>().addComponents(buildProfilButton(player.id));
 
   if (inventory.length === 0) {
     embed.setDescription(EMPTY_INVENTORY_DESCRIPTION);
-    return { embeds: [embed], components: [] };
+    return { embeds: [embed], components: [backRow] };
   }
 
   const lines = inventory.map((item) => `${item.name} — ${item.quantity}`);
@@ -30,7 +32,7 @@ export function buildInventoryView(player: Player, inventory: Inventory, page: n
 
   return {
     embeds: [embed],
-    components: [buildPaginationButtons(player.id, currentPage, pages.length)],
+    components: [backRow, buildPaginationButtons(player.id, currentPage, pages.length)],
   };
 }
 
