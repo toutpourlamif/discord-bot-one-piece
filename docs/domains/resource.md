@@ -4,6 +4,12 @@
 
 Les **ressources** regroupent tous les objets que le joueur amasse et qui ne sont pas un personnage. Trois natures cohabitent dans un inventaire logique unique, avec des règles de stockage distinctes.
 
+## Vocabulaire
+
+- **Resource** — un objet possédé (instance d'une `resource_template`), avec une quantité.
+- **Inventory** — l'ensemble des resources d'un joueur, vu comme un tout. C'est une **vue dérivée** (jointure `resource_instance` × `resource_template`), pas une table en base. Le code expose ce concept via `getInventory(playerId)` dans `resource/repository.ts`.
+- **InventoryItem** — une entrée de l'inventaire (`{ name, quantity }`).
+
 ## Les trois types
 
 ### `CRAFT` — matériaux d'amélioration
