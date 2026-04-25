@@ -1,0 +1,1 @@
+CREATE INDEX "resource_template_name_trgm_idx" ON "resource_template" USING gin ("name" gin_trgm_ops);

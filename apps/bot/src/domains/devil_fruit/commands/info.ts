@@ -1,7 +1,8 @@
 import { DISCORD_ACTION_ROW_MAX_BUTTONS } from '../../../discord/constants.js';
 import type { Command } from '../../../discord/types.js';
+import { buildDevilFruitInfoEmbed } from '../build-info-embed.js';
 import { searchManyByName } from '../repository.js';
-import { buildDisambiguationRow, buildInfoEmbed } from '../ui.js';
+import { buildDisambiguationRow } from '../ui.js';
 
 export const infoCommand: Command = {
   name: 'info',
@@ -18,7 +19,7 @@ export const infoCommand: Command = {
       return;
     }
     if (rest.length === 0) {
-      await message.reply({ embeds: [buildInfoEmbed(fruit)] });
+      await message.reply({ embeds: [buildDevilFruitInfoEmbed(fruit)] });
       return;
     }
     if (fruits.length <= DISCORD_ACTION_ROW_MAX_BUTTONS) {
