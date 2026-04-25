@@ -1,5 +1,5 @@
 import { colorCommand } from './color.js';
-import { debugCommand } from './debug.js';
+import { debugCommand } from './debug/index.js';
 import { embedCommand } from './embed.js';
 import { moiCommand } from './moi.js';
 import { nombreCommand } from './nombre.js';
