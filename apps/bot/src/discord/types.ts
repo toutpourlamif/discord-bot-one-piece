@@ -1,4 +1,4 @@
-import type { ButtonInteraction, Message } from 'discord.js';
+import type { ActionRowBuilder, ButtonBuilder, ButtonInteraction, EmbedBuilder, Message } from 'discord.js';
 
 export type Command = {
   name: string;
@@ -6,6 +6,11 @@ export type Command = {
 };
 
 export type ButtonHandler = {
-  customIdPrefix: string;
-  handle: (interaction: ButtonInteraction) => Promise<void>;
+  name: string;
+  handle: (interaction: ButtonInteraction, args: Array<string>) => Promise<void>;
+};
+
+export type View = {
+  embeds: Array<EmbedBuilder>;
+  components: Array<ActionRowBuilder<ButtonBuilder>>;
 };
