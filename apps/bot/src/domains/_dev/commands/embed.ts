@@ -1,12 +1,12 @@
-import { createOpEmbed } from '../../../discord/embed/create-op-embed.js';
 import type { Command } from '../../../discord/types.js';
+import { buildOpEmbed } from '../../../discord/utils/build-op-embed.js';
 
 export const embedCommand: Command = {
   name: 'embed',
   async handler(message) {
     const dateUnix = Math.floor(Date.now() / 1000);
 
-    const embed = createOpEmbed()
+    const embed = buildOpEmbed()
       .setAuthor({
         name: 'Author: name (cliquable)',
         iconURL: 'https://placehold.co/64x64/5865F2/FFFFFF.png?text=A',
