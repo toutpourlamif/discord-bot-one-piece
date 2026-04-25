@@ -1,6 +1,6 @@
 import { Client, Events, GatewayIntentBits } from 'discord.js';
 
-import { setBotIconUrl } from './discord/embed/branding.js';
+import { setBotIconUrl } from './discord/branding.js';
 import { routeInteraction } from './discord/interactionRouter.js';
 import { routeMessage } from './discord/router.js';
 

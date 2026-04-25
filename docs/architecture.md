@@ -22,6 +22,7 @@ On ouvre un domaine (dossier + doc) uniquement au moment où on commence à code
 | `devil_fruit` | Fruits du Démon : bonus de stats et types additionnels pour un personnage  |
 | `economy`     | Berry, shops, marchands                                                    |
 | `resource`    | Matériaux de craft, artefacts de main story, FDD non consommés             |
+| `fishing`     | Action `/pêcher` à la demande : loot, events, avancée scénario             |
 
 D'autres domaines viendront s'ajouter quand le besoin apparaîtra (combat, world…). On ne les crée pas en amont.
 
