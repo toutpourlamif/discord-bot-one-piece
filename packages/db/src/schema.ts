@@ -2,4 +2,4 @@ export { devilFruitInstance, devilFruitTemplate, devilFruitType } from './domain
 export { player } from './domains/player/index.js';
 export { ship } from './domains/ship/index.js';
 export { resourceInstance, resourceTemplate } from './domains/resource/index.js';
-export { characterTemplate } from './domains/character/index.js';
+export { characterInstance, characterTemplate } from './domains/character/index.js';
