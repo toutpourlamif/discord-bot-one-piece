@@ -1,6 +1,6 @@
 import type { Interaction } from 'discord.js';
 
-import { devilFruitButtonHandlers } from '../domains/devil_fruit/index.js';
+import { infoButtonHandlers } from '../domains/_info/index.js';
 import { playerButtonHandlers } from '../domains/player/index.js';
 import { resourceButtonHandlers } from '../domains/resource/index.js';
 import { shipButtonHandlers } from '../domains/ship/index.js';
@@ -10,7 +10,7 @@ import { CUSTOM_ID_SEPARATOR } from './constants.js';
 import type { ButtonHandler } from './types.js';
 
 const allButtonHandlers: Array<ButtonHandler> = [
-  ...devilFruitButtonHandlers,
+  ...infoButtonHandlers,
   ...playerButtonHandlers,
   ...shipButtonHandlers,
   ...resourceButtonHandlers,

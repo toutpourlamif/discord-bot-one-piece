@@ -1,1 +1,1 @@
-export { characterTemplate } from './character_template/schema.js';
+export { characterTemplate, type CharacterTemplate } from './character_template/schema.js';
