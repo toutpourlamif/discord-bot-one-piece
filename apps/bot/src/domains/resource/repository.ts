@@ -19,6 +19,7 @@ export async function listAllTemplates(): Promise<Array<ResourceTemplate>> {
   return db.select().from(resourceTemplate);
 }
 
+/** Ajoute n quantité d'une ressource à un joueur, si il avait déjà x ressource, alors la quantité devient x + n */
 export async function addResourceToPlayer(playerId: number, templateId: number, quantity: number): Promise<void> {
   await db
     .insert(resourceInstance)
