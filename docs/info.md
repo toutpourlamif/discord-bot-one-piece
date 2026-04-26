@@ -1,4 +1,4 @@
-# Recherche par nom
+# Recherche par nom (commande !info)
 
 Comment on cherche une entité quand le user tape une query (`!info luffy`, etc.).
 
@@ -45,6 +45,14 @@ db.select()
   index('<table>_name_trgm_idx').using('gin', sql`${table.name} gin_trgm_ops`);
   ```
   Sans l'index, ça marche quand même mais ça scan toute la table — à éviter dès qu'il y a du volume.
+
+## Score retourné
+
+Les `searchManyByName` des repos ne renvoient pas que les entités, ils renvoient aussi le `score` de similarité (le float entre 0 et 1 que Postgres calcule via `similarity(name, query)`). On l'expose en sélectionnant la colonne en plus des champs de la table, puis on map vers `{ entity, score }`.
+
+À quoi ça sert : la commande `!info` interroge plusieurs domaines en parallèle (fruit, ressource, …) et a besoin d'un critère commun pour merger les résultats inter-domaines. Le score donne ce critère : on flatten, on trie par score décroissant, on cap au top 5.
+
+Note : un résultat qui matche **uniquement** par `ILIKE` (pas par trigram) aura un score très bas, voire 0. C'est OK — il ressort en bas du classement et ne pollue pas le top.
 
 ## Règles côté commande
 
