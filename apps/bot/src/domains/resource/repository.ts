@@ -15,7 +15,7 @@ export async function getInventory(playerId: number): Promise<Inventory> {
     .orderBy(asc(resourceTemplate.name));
 }
 
-export async function listTemplates(): Promise<Array<ResourceTemplate>> {
+export async function listAllTemplates(): Promise<Array<ResourceTemplate>> {
   return db.select().from(resourceTemplate);
 }
 
