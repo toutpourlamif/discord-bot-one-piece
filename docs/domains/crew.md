@@ -22,7 +22,13 @@ L'équipage détermine :
 
 Le joueur arbitre entre ses personnages en réserve pour choisir qui embarquer. Ce choix est stratégique : un personnage laissé en réserve ne participe à rien.
 
+## Capitaine
+
+Un membre de l'équipage est désigné comme **capitaine**. Il est forcément embarqué (pas en réserve). Un seul capitaine par joueur. Le capitaine débloque ou influence certains events (un capitaine charismatique facilite la persuasion, un capitaine guerrier débloque des combats spécifiques, etc.).
+
 ## Moral
+
+<!-- TODO: implémentation reportée -->
 
 L'équipage porte un **moral** collectif — un attribut au niveau du crew, pas par personnage.
 

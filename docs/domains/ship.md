@@ -20,6 +20,8 @@ Cinq attributs définissent ce que le joueur peut faire. Chacun est rattaché à
 
 > Le **nom technique** est celui utilisé partout dans le code (types, colonnes DB, clés de constantes) : `hullLevel`, `MODULE_BONUS_BY_LEVEL.sail`, `decksLevel`, etc.
 
+> `crewSize` part à **3** au niveau 1 et gagne **+1 par niveau** de Ponts.
+
 ## Santé (`hp`) vs `maxHp`
 
 Deux champs distincts :
