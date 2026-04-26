@@ -13,7 +13,9 @@ export const fishingCommand: Command = {
     const { player } = await findOrCreatePlayer(user.id, user.username);
     const result = await runFishingAttempt(player.id);
 
-    const embed = buildOpEmbed().setTitle('🎣 Pêche').setDescription(`${player.name} a pêché **${result.resourceName}** !`);
+    const embed = buildOpEmbed()
+      .setTitle('🎣 Pêche')
+      .setDescription(`${player.name} a pêché ${result.quantity}x **${result.resourceName}** !`);
     await message.reply({ embeds: [embed] });
   },
 };
