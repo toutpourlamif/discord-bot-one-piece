@@ -7,6 +7,7 @@ import { shipButtonHandlers } from '../domains/ship/index.js';
 import { buildRegistryWithUniqueNames } from '../shared/build-registry.js';
 
 import { CUSTOM_ID_SEPARATOR } from './constants.js';
+import { NotFoundError } from './errors.js';
 import type { ButtonHandler } from './types.js';
 
 const allButtonHandlers: Array<ButtonHandler> = [
@@ -27,5 +28,16 @@ export async function routeInteraction(interaction: Interaction): Promise<void> 
   const handler = buttonRegistry.get(name);
   if (!handler) return;
 
-  await handler.handle(interaction, args);
+  try {
+    await handler.handle(interaction, args);
+  } catch (error) {
+    if (error instanceof NotFoundError) {
+      console.warn(error);
+      await interaction.reply({ content: error.message, ephemeral: true });
+      return;
+    }
+
+    console.error(error);
+    await interaction.reply({ content: 'Une erreur est survenue.', ephemeral: true });
+  }
 }

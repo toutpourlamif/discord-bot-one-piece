@@ -7,6 +7,8 @@ import { resourceCommands } from '../domains/resource/index.js';
 import { shipCommands } from '../domains/ship/commands/index.js';
 import { buildRegistryWithUniqueNames } from '../shared/build-registry.js';
 
+import { NotFoundError } from './errors.js';
+
 const allCommands = [...playerCommands, ...devilFruitCommands, ...devCommands, ...shipCommands, ...resourceCommands];
 const registry = buildRegistryWithUniqueNames(allCommands, (c) => c.name.toLowerCase());
 
@@ -23,5 +25,15 @@ export async function routeMessage(message: Message, prefix: string): Promise<vo
   const command = registry.get(rawName.toLowerCase());
   if (!command) return;
 
-  await command.handler(message, args);
+  try {
+    await command.handler(message, args);
+  } catch (error) {
+    if (error instanceof NotFoundError) {
+      console.warn(error);
+      await message.reply(error.message);
+      return;
+    }
+    console.error(error);
+    await message.reply('Une erreur est survenue.');
+  }
 }
