@@ -2,12 +2,13 @@ import type { Message } from 'discord.js';
 
 import { devCommands } from '../domains/_dev/index.js';
 import { infoCommands } from '../domains/_info/index.js';
+import { characterCommands } from '../domains/character/commands/index.js';
 import { playerCommands } from '../domains/player/index.js';
 import { resourceCommands } from '../domains/resource/index.js';
 import { shipCommands } from '../domains/ship/commands/index.js';
 import { buildRegistryWithUniqueNames } from '../shared/build-registry.js';
 
-const allCommands = [...playerCommands, ...infoCommands, ...devCommands, ...shipCommands, ...resourceCommands];
+const allCommands = [...playerCommands, ...infoCommands, ...devCommands, ...shipCommands, ...resourceCommands, ...characterCommands];
 const registry = buildRegistryWithUniqueNames(allCommands, (c) => c.name.toLowerCase());
 
 /** Dispatche un message vers le bon handler de commande. Voir `docs/discord.md`. */
