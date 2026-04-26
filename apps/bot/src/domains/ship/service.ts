@@ -1,6 +1,6 @@
 import type { Ship } from '@one-piece/db';
 
-import { sanitizeName } from '../../shared/name.js';
+import { sanitizeName } from '../../shared/sanitize-name.js';
 
 import { MAX_SHIP_NAME_LENGTH } from './constants.js';
 import * as shipRepository from './repository.js';

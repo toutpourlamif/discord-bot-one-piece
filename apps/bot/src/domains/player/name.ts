@@ -1,8 +1,5 @@
-import { sanitizeName } from '../../shared/name.js';
-
 import { MAX_PLAYER_NAME_LENGTH } from './constants.js';
 
-export { sanitizeName };
 export class PlayerNameValidationError extends Error {}
 
 export function assertNameNotEmpty(name: string) {
