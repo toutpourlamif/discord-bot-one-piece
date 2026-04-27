@@ -8,8 +8,9 @@ import { shipButtonHandlers } from '../domains/ship/index.js';
 import { buildRegistryWithUniqueNames } from '../shared/build-registry.js';
 
 import { CUSTOM_ID_SEPARATOR } from './constants.js';
-import { NotFoundError } from './errors.js';
+import { NotFoundError, ValidationError } from './errors.js';
 import type { ButtonHandler } from './types.js';
+import { buildOpEmbed } from './utils/build-op-embed.js';
 
 const allButtonHandlers: Array<ButtonHandler> = [
   ...infoButtonHandlers,
@@ -20,26 +21,31 @@ const allButtonHandlers: Array<ButtonHandler> = [
 ];
 const buttonRegistry = buildRegistryWithUniqueNames(allButtonHandlers, (h) => h.name);
 
+function isUserFacingError(error: unknown): error is NotFoundError | ValidationError {
+  return error instanceof NotFoundError || error instanceof ValidationError;
+}
+
 /** Dispatche une interaction vers le bon handler. Voir `docs/discord.md`. */
 export async function routeInteraction(interaction: Interaction): Promise<void> {
   if (!interaction.isButton()) return;
 
   try {
     const [name, ...args] = interaction.customId.split(CUSTOM_ID_SEPARATOR);
-    if (!name) throw new Error(`nom pas trouvé: ${interaction.customId}`);
+    if (!name) throw new ValidationError(`nom pas trouvé: ${interaction.customId}`);
 
     const handler = buttonRegistry.get(name);
     if (!handler) return;
 
     await handler.handle(interaction, args);
   } catch (error) {
-    if (error instanceof NotFoundError) {
-      console.warn(error);
-      await interaction.reply({ content: error.message, ephemeral: true });
-      return;
+    switch (true) {
+      case isUserFacingError(error):
+        console.warn(error);
+        await interaction.reply({ embeds: [buildOpEmbed('warn').setDescription(error.message)], ephemeral: true });
+        break;
+      default:
+        console.error(error);
+        await interaction.reply({ embeds: [buildOpEmbed('error').setDescription('Une erreur est survenue.')], ephemeral: true });
     }
-
-    console.error(error);
-    await interaction.reply({ content: 'Une erreur est survenue.', ephemeral: true });
   }
 }

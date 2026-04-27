@@ -1,3 +1,4 @@
+import { ValidationError } from '../../../discord/errors.js';
 import type { ButtonHandler } from '../../../discord/types.js';
 import { parseIntegerArg } from '../../../discord/utils/parse-integer-arg.js';
 import type { DomainName } from '../../../shared/domains.js';
@@ -11,8 +12,8 @@ export const infoButtonHandler: ButtonHandler = {
     const [domain, rawId] = args;
 
     //TODO voir si l'erreur n'est pas factorisable
-    if (!domain || !rawId) {
-      throw new Error(`arguments invalides: ${interaction.customId}`);
+    if (!domain) {
+      throw new ValidationError(`arguments invalides: ${interaction.customId}`);
     }
 
     const id = parseIntegerArg(rawId);
@@ -21,7 +22,7 @@ export const infoButtonHandler: ButtonHandler = {
 
     //TODO voir si l'erreur n'est pas factorisable
     if (!provider) {
-      throw new Error(`domaine info invalide: ${domain}`);
+      throw new ValidationError(`domaine info invalide: ${domain}`);
     }
 
     await interaction.deferUpdate();
