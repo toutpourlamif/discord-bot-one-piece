@@ -6,12 +6,6 @@ export async function findByPlayerId(playerId: number): Promise<Ship | undefined
   return row;
 }
 
-export async function findByPlayerIdOrThrow(playerId: number): Promise<Ship> {
-  const row = await findByPlayerId(playerId);
-  if (!row) throw new Error(`ship introuvable pour player: ${playerId}`);
-  return row;
-}
-
 export async function create(playerId: number, name: string): Promise<Ship> {
   const [row] = await db.insert(ship).values({ playerId, name }).returning();
   return row!;
