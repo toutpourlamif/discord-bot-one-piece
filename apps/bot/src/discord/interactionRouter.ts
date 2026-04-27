@@ -1,6 +1,6 @@
 import type { Interaction } from 'discord.js';
 
-import { emojiButtonHandlers } from '../domains/_dev/index.js';
+import { devButtonHandlers } from '../domains/_dev/index.js';
 import { infoButtonHandlers } from '../domains/_info/index.js';
 import { characterButtonHandlers } from '../domains/character/interactions/index.js';
 import { playerButtonHandlers } from '../domains/player/index.js';
@@ -17,7 +17,7 @@ const allButtonHandlers: Array<ButtonHandler> = [
   ...shipButtonHandlers,
   ...resourceButtonHandlers,
   ...characterButtonHandlers,
-  ...emojiButtonHandlers,
+  ...devButtonHandlers,
 ];
 const buttonRegistry = buildRegistryWithUniqueNames(allButtonHandlers, (h) => h.name);
 

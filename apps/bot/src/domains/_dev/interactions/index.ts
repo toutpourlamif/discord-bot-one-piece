@@ -1,3 +1,3 @@
 import { emojiButtonHandler } from './emoji-buttons.js';
 
-export const emojiButtonHandlers = [emojiButtonHandler];
+export const devButtonHandlers = [emojiButtonHandler];
