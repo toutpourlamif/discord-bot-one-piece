@@ -1,7 +1,7 @@
 import type { ButtonHandler } from '../../../discord/types.js';
 import { buildOpEmbed } from '../../../discord/utils/build-op-embed.js';
 
-export const EMOJI_BUTTON_NAME = 'emojibtn';
+const EMOJI_BUTTON_NAME = 'emojibtn';
 
 export const emojiButtonHandler: ButtonHandler = {
   name: EMOJI_BUTTON_NAME,
