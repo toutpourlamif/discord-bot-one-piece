@@ -1,6 +1,8 @@
 import { db, ship, type Ship } from '@one-piece/db';
 import { eq } from 'drizzle-orm';
 
+import { NotFoundError } from '../../discord/errors.js';
+
 export async function findByPlayerId(playerId: number): Promise<Ship | undefined> {
   const [row] = await db.select().from(ship).where(eq(ship.playerId, playerId)).limit(1);
   return row;
@@ -8,7 +10,7 @@ export async function findByPlayerId(playerId: number): Promise<Ship | undefined
 
 export async function findByPlayerIdOrThrow(playerId: number): Promise<Ship> {
   const row = await findByPlayerId(playerId);
-  if (!row) throw new Error(`ship introuvable pour player: ${playerId}`);
+  if (!row) throw new NotFoundError();
   return row;
 }
 

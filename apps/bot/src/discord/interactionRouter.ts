@@ -8,7 +8,7 @@ import { shipButtonHandlers } from '../domains/ship/index.js';
 import { buildRegistryWithUniqueNames } from '../shared/build-registry.js';
 
 import { CUSTOM_ID_SEPARATOR } from './constants.js';
-import { NotFoundError, ValidationError } from './errors.js';
+import { AppError, ValidationError } from './errors.js';
 import type { ButtonHandler } from './types.js';
 import { buildOpEmbed } from './utils/build-op-embed.js';
 
@@ -34,9 +34,9 @@ export async function routeInteraction(interaction: Interaction): Promise<void> 
 
     await handler.handle(interaction, args);
   } catch (error) {
-    if (error instanceof NotFoundError || error instanceof ValidationError) {
-      console.warn(error);
-      await interaction.reply({ embeds: [buildOpEmbed('warn').setDescription(error.message)], ephemeral: true });
+    if (error instanceof AppError) {
+      console[error.severity](error);
+      await interaction.reply({ embeds: [buildOpEmbed(error.severity).setDescription(error.userMessage)], ephemeral: true });
     } else {
       console.error(error);
       await interaction.reply({ embeds: [buildOpEmbed('error').setDescription('Une erreur est survenue.')], ephemeral: true });
