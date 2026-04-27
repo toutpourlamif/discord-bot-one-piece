@@ -15,11 +15,7 @@ async function handle(interaction: ButtonInteraction, args: Array<string>): Prom
 
   await interaction.deferUpdate();
 
-  const player = await playerRepository.findById(playerId);
-  if (!player) {
-    await interaction.editReply({ content: 'Joueur introuvable.', embeds: [], components: [] });
-    return;
-  }
+  const player = await playerRepository.findByIdOrThrow(playerId);
 
   const inventory = await getInventory(player.id);
   await interaction.editReply(buildInventoryView(player, inventory, page));

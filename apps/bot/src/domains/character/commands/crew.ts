@@ -12,10 +12,7 @@ export const crewCommand: Command = {
   async handler(message) {
     const target = getTargetUser(message);
     const { player } = await findOrCreatePlayer(target.id, target.username);
-    const ship = await shipRepository.findByPlayerId(player.id);
-    if (!ship) {
-      throw new Error(`navire manquant pour le joueur ${player.id}`);
-    }
+    const ship = await shipRepository.findByPlayerIdOrThrow(player.id);
     const characters = await getCharactersByPlayerId(player.id);
     await message.reply(buildCharactersView(player, ship, characters, 0));
   },

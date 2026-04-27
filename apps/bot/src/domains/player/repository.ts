@@ -6,6 +6,12 @@ export async function findById(id: number): Promise<Player | undefined> {
   return row;
 }
 
+export async function findByIdOrThrow(id: number): Promise<Player> {
+  const row = await findById(id);
+  if (!row) throw new Error(`player introuvable: ${id}`);
+  return row;
+}
+
 export async function findByDiscordId(discordId: string): Promise<Player | undefined> {
   const [row] = await db.select().from(player).where(eq(player.discordId, discordId)).limit(1);
   return row;

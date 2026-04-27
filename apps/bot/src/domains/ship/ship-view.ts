@@ -6,7 +6,7 @@ import { buildOpEmbed } from '../../discord/utils/build-op-embed.js';
 
 import { SHIP_BUTTON_NAME } from './constants.js';
 import { SHIP_MODULES } from './modules.js';
-import { findByPlayerId } from './repository.js';
+import { findByPlayerIdOrThrow } from './repository.js';
 
 const MODULE_LABELS: Record<ShipModuleKey, string> = {
   hull: 'Coque',
@@ -18,10 +18,7 @@ const MODULE_LABELS: Record<ShipModuleKey, string> = {
 
 export async function buildShipView(playerId: number): Promise<View> {
   const navRow = buildMenuButtons(SHIP_BUTTON_NAME, playerId);
-  const ship = await findByPlayerId(playerId);
-  if (!ship) {
-    return { embeds: [buildOpEmbed().setDescription("Ce joueur n'a pas encore de navire.")], components: [navRow] };
-  }
+  const ship = await findByPlayerIdOrThrow(playerId);
   const embed = buildOpEmbed().setTitle(`🚢 ${ship.name}`).setDescription(`HP : ${ship.hp}`);
   // TODO: Redesign this shit
   for (const key of SHIP_MODULE_KEYS) {

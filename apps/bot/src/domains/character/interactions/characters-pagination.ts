@@ -17,16 +17,8 @@ async function handle(interaction: ButtonInteraction, args: Array<string>): Prom
 
   await interaction.deferUpdate();
 
-  const player = await playerRepository.findById(playerId);
-  // TODO: Implémenter findByIdOrThrow et remplacer par ça
-  if (!player) {
-    throw new Error(`joueur introuvable pour characters pagination: ${playerId}`);
-  }
-
-  const ship = await shipRepository.findByPlayerId(player.id);
-  if (!ship) {
-    throw new Error(`navire manquant pour le joueur ${player.id}`);
-  }
+  const player = await playerRepository.findByIdOrThrow(playerId);
+  const ship = await shipRepository.findByPlayerIdOrThrow(player.id);
 
   const characters = await getCharactersByPlayerId(player.id);
   await interaction.editReply(buildCharactersView(player, ship, characters, page));
