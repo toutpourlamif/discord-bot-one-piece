@@ -14,10 +14,6 @@ import { buildOpEmbed } from './utils/build-op-embed.js';
 const allCommands = [...playerCommands, ...infoCommands, ...devCommands, ...shipCommands, ...resourceCommands, ...characterCommands];
 const registry = buildRegistryWithUniqueNames(allCommands, (c) => c.name.toLowerCase());
 
-function isUserFacingError(error: unknown): error is NotFoundError | ValidationError {
-  return error instanceof NotFoundError || error instanceof ValidationError;
-}
-
 /** Dispatche un message vers le bon handler de commande. Voir `docs/discord.md`. */
 export async function routeMessage(message: Message, prefix: string): Promise<void> {
   if (message.author.bot) return;
@@ -34,14 +30,12 @@ export async function routeMessage(message: Message, prefix: string): Promise<vo
   try {
     await command.handler(message, args);
   } catch (error) {
-    switch (true) {
-      case isUserFacingError(error):
-        console.warn(error);
-        await message.reply({ embeds: [buildOpEmbed('warn').setDescription(error.message)] });
-        break;
-      default:
-        console.error(error);
-        await message.reply({ embeds: [buildOpEmbed('error').setDescription('Une erreur est survenue.')] });
+    if (error instanceof NotFoundError || error instanceof ValidationError) {
+      console.warn(error);
+      await message.reply({ embeds: [buildOpEmbed('warn').setDescription(error.message)] });
+    } else {
+      console.error(error);
+      await message.reply({ embeds: [buildOpEmbed('error').setDescription('Une erreur est survenue.')] });
     }
   }
 }

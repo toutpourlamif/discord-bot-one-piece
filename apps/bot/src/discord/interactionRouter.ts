@@ -21,10 +21,6 @@ const allButtonHandlers: Array<ButtonHandler> = [
 ];
 const buttonRegistry = buildRegistryWithUniqueNames(allButtonHandlers, (h) => h.name);
 
-function isUserFacingError(error: unknown): error is NotFoundError | ValidationError {
-  return error instanceof NotFoundError || error instanceof ValidationError;
-}
-
 /** Dispatche une interaction vers le bon handler. Voir `docs/discord.md`. */
 export async function routeInteraction(interaction: Interaction): Promise<void> {
   if (!interaction.isButton()) return;
@@ -38,14 +34,12 @@ export async function routeInteraction(interaction: Interaction): Promise<void> 
 
     await handler.handle(interaction, args);
   } catch (error) {
-    switch (true) {
-      case isUserFacingError(error):
-        console.warn(error);
-        await interaction.reply({ embeds: [buildOpEmbed('warn').setDescription(error.message)], ephemeral: true });
-        break;
-      default:
-        console.error(error);
-        await interaction.reply({ embeds: [buildOpEmbed('error').setDescription('Une erreur est survenue.')], ephemeral: true });
+    if (error instanceof NotFoundError || error instanceof ValidationError) {
+      console.warn(error);
+      await interaction.reply({ embeds: [buildOpEmbed('warn').setDescription(error.message)], ephemeral: true });
+    } else {
+      console.error(error);
+      await interaction.reply({ embeds: [buildOpEmbed('error').setDescription('Une erreur est survenue.')], ephemeral: true });
     }
   }
 }
