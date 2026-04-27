@@ -11,7 +11,6 @@ export const characterRaceEnum = pgEnum('character_race', [
   'CYBORG',
   'MERMAID',
   'DWARF',
-  'THREEEYED',
 ]);
 
 export type Race = (typeof characterRaceEnum.enumValues)[number];

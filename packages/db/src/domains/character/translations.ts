@@ -10,5 +10,4 @@ export const characterRaceTranslations: Record<Race, string> = {
   CYBORG: 'Cyborg',
   MERMAID: 'Sirène',
   DWARF: 'Nain',
-  THREEEYED: 'Trois-Yeux',
 };
