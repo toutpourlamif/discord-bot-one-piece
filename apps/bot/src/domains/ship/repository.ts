@@ -10,3 +10,8 @@ export async function create(playerId: number, name: string): Promise<Ship> {
   const [row] = await db.insert(ship).values({ playerId, name }).returning();
   return row!;
 }
+
+export async function rename(shipId: number, newName: string): Promise<Ship> {
+  const [row] = await db.update(ship).set({ name: newName }).where(eq(ship.id, shipId)).returning();
+  return row!;
+}
