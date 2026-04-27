@@ -1,4 +1,5 @@
 import type { ButtonHandler } from '../../../discord/types.js';
+import { parseIntegerArg } from '../../../discord/utils/parse-integer-arg.js';
 import type { DomainName } from '../../../shared/domains.js';
 import { infoProviderByDomain } from '../registry.js';
 
@@ -8,14 +9,20 @@ export const infoButtonHandler: ButtonHandler = {
   name: INFO_BUTTON_NAME,
   async handle(interaction, args) {
     const [domain, rawId] = args;
-    // TODO: THROW ERROR
-    if (!domain || !rawId) return;
-    // TODO: utiliser le helper de validation d'id (en cours de création)
-    const id = Number(rawId);
-    if (!Number.isInteger(id)) return;
+
+    //TODO voir si l'erreur n'est pas factorisable
+    if (!domain || !rawId) {
+      throw new Error(`arguments invalides: ${interaction.customId}`);
+    }
+
+    const id = parseIntegerArg(rawId);
 
     const provider = infoProviderByDomain.get(domain as DomainName);
-    if (!provider) return;
+
+    //TODO voir si l'erreur n'est pas factorisable
+    if (!provider) {
+      throw new Error(`domaine info invalide: ${domain}`);
+    }
 
     await interaction.deferUpdate();
     const embed = await provider.buildEmbedById(id);

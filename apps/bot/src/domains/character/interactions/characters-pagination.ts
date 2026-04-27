@@ -1,6 +1,7 @@
 import type { ButtonInteraction } from 'discord.js';
 
 import type { ButtonHandler } from '../../../discord/types.js';
+import { parseIntegerArg } from '../../../discord/utils/parse-integer-arg.js';
 import * as playerRepository from '../../player/repository.js';
 import * as shipRepository from '../../ship/repository.js';
 import { buildCharactersView } from '../characters-view.js';
@@ -8,12 +9,8 @@ import { CHARACTERS_BUTTON_NAME } from '../constants.js';
 import { getCharactersByPlayerId } from '../repository.js';
 
 async function handle(interaction: ButtonInteraction, args: Array<string>): Promise<void> {
-  const playerId = Number(args[0]);
-  const page = Number(args[1]);
-  // TODO: Utiliser parseArgAsInteger ici
-  if (!Number.isInteger(playerId) || !Number.isInteger(page)) {
-    throw new Error(`arguments invalides dans characters pagination: ${interaction.customId}`);
-  }
+  const playerId = parseIntegerArg(args[0]);
+  const page = parseIntegerArg(args[1]);
 
   await interaction.deferUpdate();
 

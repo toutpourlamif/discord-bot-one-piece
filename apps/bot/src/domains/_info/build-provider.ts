@@ -1,5 +1,6 @@
 import type { EmbedBuilder } from 'discord.js';
 
+import { NotFoundError } from '../../discord/errors.js';
 import type { DomainName } from '../../shared/domains.js';
 
 import type { InfoProvider } from './types.js';
@@ -25,9 +26,7 @@ export function buildInfoProvider<TEntity extends { id: number; name: string }>(
     },
     async buildEmbedById(id) {
       const entity = await input.findById(id);
-      // TODO: remplacer par une classe d'erreur typée (ex: NotFoundError) quand le global error handler arrive
-      // https://github.com/toutpourlamif/discord-bot-one-piece/issues/115
-      if (!entity) throw new Error("Ce résultat n'existe plus.");
+      if (!entity) throw new NotFoundError("Ce résultat n'existe plus.");
       return input.buildEmbed(entity);
     },
   };

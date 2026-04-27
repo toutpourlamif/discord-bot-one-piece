@@ -24,13 +24,13 @@ const buttonRegistry = buildRegistryWithUniqueNames(allButtonHandlers, (h) => h.
 export async function routeInteraction(interaction: Interaction): Promise<void> {
   if (!interaction.isButton()) return;
 
-  const [name, ...args] = interaction.customId.split(CUSTOM_ID_SEPARATOR);
-  if (!name) throw new Error(`nom pas trouvé: ${interaction.customId}`);
-
-  const handler = buttonRegistry.get(name);
-  if (!handler) return;
-
   try {
+    const [name, ...args] = interaction.customId.split(CUSTOM_ID_SEPARATOR);
+    if (!name) throw new Error(`nom pas trouvé: ${interaction.customId}`);
+
+    const handler = buttonRegistry.get(name);
+    if (!handler) return;
+
     await handler.handle(interaction, args);
   } catch (error) {
     if (error instanceof NotFoundError) {
