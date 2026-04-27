@@ -15,6 +15,21 @@ export async function getInventory(playerId: number): Promise<Inventory> {
     .orderBy(asc(resourceTemplate.name));
 }
 
+export async function listAllTemplates(): Promise<Array<ResourceTemplate>> {
+  return db.select().from(resourceTemplate);
+}
+
+/** Ajoute n quantité d'une ressource à un joueur, si il avait déjà x ressource, alors la quantité devient x + y */
+export async function addResourceToPlayer(playerId: number, templateId: number, quantity: number): Promise<void> {
+  await db
+    .insert(resourceInstance)
+    .values({ playerId, templateId, quantity })
+    .onConflictDoUpdate({
+      target: [resourceInstance.playerId, resourceInstance.templateId],
+      set: { quantity: sql`${resourceInstance.quantity} + ${quantity}` },
+    });
+}
+
 export async function searchManyByName(query: string): Promise<Array<{ entity: ResourceTemplate; score: number }>> {
   const rows = await db
     .select({
