@@ -1,0 +1,48 @@
+import type { Player, Ship } from '@one-piece/db';
+
+import type { View } from '../../discord/types.js';
+import { buildMenuButtons } from '../../discord/utils/build-menu-buttons.js';
+import { buildOpEmbed } from '../../discord/utils/build-op-embed.js';
+import { buildPaginationButtons } from '../../discord/utils/build-pagination-buttons.js';
+import { clampPage, splitIntoPages } from '../../discord/utils/paginate.js';
+import { getCrewCapacity } from '../crew/capacity.js';
+
+import { CHARACTERS_BUTTON_NAME } from './constants.js';
+import type { CharacterRow } from './types.js';
+
+export function buildCharactersView(player: Player, ship: Ship, characters: Array<CharacterRow>, page: number): View {
+  const menuRow = buildMenuButtons(CHARACTERS_BUTTON_NAME, player.id);
+
+  const crew = characters.filter((c) => c.joinedCrewAt !== null);
+  const reserve = characters.filter((c) => c.joinedCrewAt === null);
+
+  const reservePages = splitIntoPages(reserve.map(formatLine));
+  const pageCount = 1 + reservePages.length;
+  const currentPage = clampPage(page, pageCount);
+
+  const embed = buildOpEmbed();
+  const isCrewPage = currentPage === 0;
+
+  if (isCrewPage) {
+    const crewCapacity = getCrewCapacity(ship);
+    embed.setTitle(`Équipage de ${player.name} (${crew.length}/${crewCapacity})`).setDescription(crew.map(formatLine).join('\n'));
+  } else {
+    const reservePage = reservePages[currentPage - 1];
+    if (!reservePage) throw new Error(`Page de réserve introuvable: ${currentPage}/${reservePages.length}`);
+    embed.setTitle(`Réserve de ${player.name}`).setDescription(reservePage);
+  }
+
+  if (pageCount > 1) {
+    embed.setFooter({ text: `Page ${currentPage + 1}/${pageCount}` });
+  }
+
+  return {
+    embeds: [embed],
+    components: [...buildPaginationButtons(CHARACTERS_BUTTON_NAME, player.id, currentPage, pageCount), menuRow],
+  };
+}
+
+function formatLine(row: CharacterRow): string {
+  const prefix = row.isCaptain ? '⭐ ' : '';
+  return `${prefix}${row.name}`;
+}
