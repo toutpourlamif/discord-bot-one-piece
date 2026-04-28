@@ -9,6 +9,9 @@ import { resourceCommands } from '../domains/resource/index.js';
 import { shipCommands } from '../domains/ship/commands/index.js';
 import { buildRegistryWithUniqueNames } from '../shared/build-registry.js';
 
+import { AppError } from './errors.js';
+import { buildOpEmbed } from './utils/build-op-embed.js';
+
 const allCommands = [
   ...playerCommands,
   ...infoCommands,
@@ -33,5 +36,15 @@ export async function routeMessage(message: Message, prefix: string): Promise<vo
   const command = registry.get(rawName.toLowerCase());
   if (!command) return;
 
-  await command.handler(message, args);
+  try {
+    await command.handler(message, args);
+  } catch (error) {
+    if (error instanceof AppError) {
+      console[error.severity](error);
+      await message.reply({ embeds: [buildOpEmbed(error.severity).setDescription(error.userMessage)] });
+    } else {
+      console.error(error);
+      await message.reply({ embeds: [buildOpEmbed('error').setDescription('Une erreur est survenue.')] });
+    }
+  }
 }

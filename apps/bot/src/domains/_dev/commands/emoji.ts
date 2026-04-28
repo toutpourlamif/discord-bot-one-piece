@@ -8,7 +8,7 @@ const EMOJIS: Array<string> = ['🍖', '🏴‍☠️', '⚓', '🐉', '🗺️'
 
 export const emojiCommand: Command = {
   name: 'emoji',
-  async handler(message, args) {
+  async handler(message) {
     const embed = buildOpEmbed().setTitle('Emojis').setDescription('Choisis un emoji ! ');
     const fiveEmojis = sampleSize(EMOJIS, 5);
     const buttons = fiveEmojis.map((emoji, index) =>

@@ -9,7 +9,9 @@ import { shipButtonHandlers } from '../domains/ship/index.js';
 import { buildRegistryWithUniqueNames } from '../shared/build-registry.js';
 
 import { CUSTOM_ID_SEPARATOR } from './constants.js';
+import { AppError, ValidationError } from './errors.js';
 import type { ButtonHandler } from './types.js';
+import { buildOpEmbed } from './utils/build-op-embed.js';
 
 const allButtonHandlers: Array<ButtonHandler> = [
   ...infoButtonHandlers,
@@ -25,11 +27,21 @@ const buttonRegistry = buildRegistryWithUniqueNames(allButtonHandlers, (h) => h.
 export async function routeInteraction(interaction: Interaction): Promise<void> {
   if (!interaction.isButton()) return;
 
-  const [name, ...args] = interaction.customId.split(CUSTOM_ID_SEPARATOR);
-  if (!name) throw new Error(`nom pas trouvé: ${interaction.customId}`);
+  try {
+    const [name, ...args] = interaction.customId.split(CUSTOM_ID_SEPARATOR);
+    if (!name) throw new ValidationError(`nom pas trouvé: ${interaction.customId}`);
 
-  const handler = buttonRegistry.get(name);
-  if (!handler) return;
+    const handler = buttonRegistry.get(name);
+    if (!handler) return;
 
-  await handler.handle(interaction, args);
+    await handler.handle(interaction, args);
+  } catch (error) {
+    if (error instanceof AppError) {
+      console[error.severity](error);
+      await interaction.reply({ embeds: [buildOpEmbed(error.severity).setDescription(error.userMessage)], ephemeral: true });
+    } else {
+      console.error(error);
+      await interaction.reply({ embeds: [buildOpEmbed('error').setDescription('Une erreur est survenue.')], ephemeral: true });
+    }
+  }
 }
