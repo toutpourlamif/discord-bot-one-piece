@@ -4,17 +4,18 @@ import { handleDf } from './df.js';
 import { handlePlayer } from './player.js';
 import { handleResource } from './resource.js';
 import { handleShip } from './ship.js';
-import type { DebugHandler } from './utils.js';
 
-const helpMessage = 'Sous-commandes supportées : player, ship, df, resource';
+const DEBUG_SUBCOMMANDS = ['player', 'ship', 'df', 'resource'] as const;
 
-type DebugSubcommand = 'player' | 'ship' | 'df' | 'resource';
+type DebugSubcommand = (typeof DEBUG_SUBCOMMANDS)[number];
+
+const helpMessage = `Sous-commandes supportées : ${DEBUG_SUBCOMMANDS.join(', ')}`;
 
 function isDebugSubcommand(value: string | undefined): value is DebugSubcommand {
-  return value === 'player' || value === 'ship' || value === 'df' || value === 'resource';
+  return value !== undefined && DEBUG_SUBCOMMANDS.includes(value as DebugSubcommand);
 }
 
-const handlers: Record<DebugSubcommand, DebugHandler> = {
+const handlers: Record<DebugSubcommand, Command['handler']> = {
   player: handlePlayer,
   ship: handleShip,
   df: handleDf,
@@ -31,6 +32,6 @@ export const debugCommand: Command = {
       return;
     }
 
-    await handlers[subcommand](message, args);
+    await handlers[subcommand](message, args.slice(1));
   },
 };
