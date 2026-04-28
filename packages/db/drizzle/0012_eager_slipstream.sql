@@ -1,1 +1,1 @@
-ALTER TABLE "devil_fruit_template" ADD COLUMN "description" text;
+ALTER TABLE "devil_fruit_template" ADD COLUMN IF NOT EXISTS "description" text;
