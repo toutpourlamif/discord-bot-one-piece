@@ -1,7 +1,7 @@
 import { NotFoundError, ValidationError } from '../../../discord/errors.js';
 import type { Command } from '../../../discord/types.js';
 import { giveCharacter } from '../../character/index.js';
-import { searchManyByName } from '../../character/repository.js';
+import * as characterRepository from '../../character/repository.js';
 import { findOrCreatePlayer } from '../../player/service.js';
 
 // TODO: supprimer avant la prod
@@ -13,7 +13,7 @@ export const giveCharacterCommand: Command = {
       throw new ValidationError('Tu dois fournir un nom.');
     }
 
-    const [hit] = await searchManyByName(query);
+    const [hit] = await characterRepository.searchManyByName(query);
     if (!hit) {
       throw new NotFoundError(`Aucun character trouvé pour ${query}.`);
     }

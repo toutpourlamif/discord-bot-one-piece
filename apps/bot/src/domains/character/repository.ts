@@ -29,7 +29,7 @@ export async function giveCharacterToPlayer(playerId: number, templateId: number
       templateId,
     })
     .returning();
-  if (!created) throw new InternalError('Failed to create character instance.');
+  if (!created) throw new InternalError("Impossible de créer l'instance de character.");
   return created;
 }
 
