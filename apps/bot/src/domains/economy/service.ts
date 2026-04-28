@@ -1,16 +1,12 @@
-import { debitBerry, creditBerry } from '../player/repository.js';
+import * as playerRepository from '../economy/repository.js';
 
-export class InsufficientFundsError extends Error {
-  constructor() {
-    super('Fonds insuffisants.');
-  }
-}
+import { InsufficientFundsError } from './errors.js';
 
 export async function buy(playerId: number, amount: bigint): Promise<void> {
-  const success = await debitBerry(playerId, amount);
+  const success = await playerRepository.debitBerry(playerId, amount);
   if (!success) throw new InsufficientFundsError();
 }
 
 export async function sell(playerId: number, amount: bigint): Promise<void> {
-  await creditBerry(playerId, amount);
+  await playerRepository.creditBerry(playerId, amount);
 }

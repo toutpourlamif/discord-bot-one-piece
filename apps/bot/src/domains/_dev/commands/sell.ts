@@ -2,7 +2,6 @@ import type { Command } from '../../../discord/types.js';
 import { sell } from '../../economy/index.js';
 import { formatBerry } from '../../economy/utils/format-berry.js';
 import { findOrCreatePlayer } from '../../player/service.js';
-// TODO: enlever en production, c'est juste pour tester les fonctionnalités d'achat/vente
 
 export const sellCommand: Command = {
   name: 'sell',

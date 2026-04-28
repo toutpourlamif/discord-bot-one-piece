@@ -1,5 +1,5 @@
 import { db, player, type Player } from '@one-piece/db';
-import { and, eq, gte, sql } from 'drizzle-orm';
+import { eq } from 'drizzle-orm';
 
 import { NotFoundError } from '../../discord/errors.js';
 
@@ -27,21 +27,4 @@ export async function create(discordId: string, name: string): Promise<Player> {
 export async function updateName(playerId: number, name: string): Promise<Player> {
   const [row] = await db.update(player).set({ name }).where(eq(player.id, playerId)).returning();
   return row!;
-}
-
-export async function debitBerry(playerId: number, amount: bigint): Promise<boolean> {
-  const result = await db
-    .update(player)
-    .set({ berries: sql`${player.berries} - ${amount}` })
-    .where(and(eq(player.id, playerId), gte(player.berries, amount)))
-    .returning();
-
-  return result.length > 0;
-}
-
-export async function creditBerry(playerId: number, amount: bigint): Promise<void> {
-  await db
-    .update(player)
-    .set({ berries: sql`${player.berries} + ${amount}` })
-    .where(eq(player.id, playerId));
 }
