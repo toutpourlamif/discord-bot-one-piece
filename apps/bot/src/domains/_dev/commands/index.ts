@@ -1,6 +1,7 @@
 import { colorCommand } from './color.js';
 import { embedCommand } from './embed.js';
 import { emojiCommand } from './emoji.js';
+import { giveCharacterCommand } from './givecharacter.js';
 import { moiCommand } from './moi.js';
 import { nombreCommand } from './nombre.js';
 import { onePieceCommand } from './onepiece.js';
@@ -12,6 +13,7 @@ export const devCommands = [
   onePieceCommand,
   repeatCommand,
   embedCommand,
+  giveCharacterCommand,
   moiCommand,
   nombreCommand,
   colorCommand,

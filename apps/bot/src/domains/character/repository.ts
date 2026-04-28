@@ -1,5 +1,7 @@
-import { characterInstance, characterTemplate, db, type CharacterTemplate } from '@one-piece/db';
+import { characterInstance, characterTemplate, db, type CharacterInstance, type CharacterTemplate } from '@one-piece/db';
 import { asc, desc, eq, getTableColumns, ilike, or, sql } from 'drizzle-orm';
+
+import { InternalError } from '../../discord/errors.js';
 
 import type { CharacterRow } from './types.js';
 
@@ -17,6 +19,18 @@ export async function getCharactersByPlayerId(playerId: number): Promise<Array<C
     .innerJoin(characterTemplate, eq(characterInstance.templateId, characterTemplate.id))
     .where(eq(characterInstance.playerId, playerId))
     .orderBy(desc(characterInstance.isCaptain), sql`${characterInstance.joinedCrewAt} asc nulls last`, asc(characterTemplate.name));
+}
+
+export async function giveCharacterToPlayer(playerId: number, templateId: number): Promise<CharacterInstance> {
+  const [created] = await db
+    .insert(characterInstance)
+    .values({
+      playerId,
+      templateId,
+    })
+    .returning();
+  if (!created) throw new InternalError('Failed to create character instance.');
+  return created;
 }
 
 export async function searchManyByName(query: string): Promise<Array<{ entity: CharacterTemplate; score: number }>> {
