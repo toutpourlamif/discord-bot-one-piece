@@ -1,6 +1,8 @@
 import { characterInstance, characterTemplate, db, type CharacterTemplate } from '@one-piece/db';
 import { and, asc, desc, eq, getTableColumns, ilike, or, sql } from 'drizzle-orm';
 
+import { NotFoundError } from '../../discord/errors.js';
+
 import type { CharacterRow } from './types.js';
 
 export async function getCharactersByPlayerId(playerId: number): Promise<Array<CharacterRow>> {
@@ -50,7 +52,7 @@ export async function setCaptain(playerId: number, instanceId: number): Promise<
       .where(and(eq(characterInstance.id, instanceId), eq(characterInstance.playerId, playerId)));
 
     if (result.count === 0) {
-      throw new Error(`character_instance ${instanceId} introuvable pour le joueur ${playerId}`);
+      throw new NotFoundError("Ce character n'est pas dans ton équipage.");
     }
   });
 }
