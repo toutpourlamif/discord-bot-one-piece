@@ -1,6 +1,6 @@
 import { ButtonBuilder, ButtonStyle } from 'discord.js';
 
-import { buildCustomId } from '../../discord/utils/build-custom-id.js';
+import { buildCustomId } from '../../discord/utils/index.js';
 import { DOMAIN_EMOJI } from '../../shared/domains.js';
 
 import { CREW_BUTTON_NAME } from './constants.js';

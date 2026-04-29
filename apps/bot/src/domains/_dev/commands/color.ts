@@ -1,5 +1,5 @@
 import type { Command } from '../../../discord/types.js';
-import { buildOpEmbed } from '../../../discord/utils/build-op-embed.js';
+import { buildOpEmbed } from '../../../discord/utils/index.js';
 
 function getRandomColor(): number {
   return Math.floor(Math.random() * 0xffffff);

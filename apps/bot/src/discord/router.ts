@@ -10,7 +10,7 @@ import { shipCommands } from '../domains/ship/commands/index.js';
 import { buildRegistryWithUniqueNames } from '../shared/build-registry.js';
 
 import { AppError } from './errors.js';
-import { buildOpEmbed } from './utils/build-op-embed.js';
+import { buildOpEmbed } from './utils/index.js';
 
 const allCommands = [
   ...playerCommands,

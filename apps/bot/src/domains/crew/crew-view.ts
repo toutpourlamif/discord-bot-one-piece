@@ -1,14 +1,11 @@
 import type { Player, Ship } from '@one-piece/db';
 
 import type { View } from '../../discord/types.js';
-import { buildMenuButtons } from '../../discord/utils/build-menu-buttons.js';
-import { buildOpEmbed } from '../../discord/utils/build-op-embed.js';
-import { buildPaginationButtons } from '../../discord/utils/build-pagination-buttons.js';
-import { clampPage, splitIntoPages } from '../../discord/utils/paginate.js';
+import { buildMenuButtons, buildOpEmbed, buildPaginationButtons, clampPage, splitIntoPages } from '../../discord/utils/index.js';
 import type { CharacterRow } from '../character/types.js';
 import { getCharacterInstanceName } from '../character/utils/index.js';
+import { getCrewCapacity } from '../crew/capacity.js';
 
-import { getCrewCapacity } from './capacity.js';
 import { CREW_BUTTON_NAME } from './constants.js';
 
 export function buildCrewView(player: Player, ship: Ship, characters: Array<CharacterRow>, page: number): View {
