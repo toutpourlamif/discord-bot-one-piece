@@ -1,5 +1,5 @@
 {
-  "id": "70e1320a-0092-4ce1-9356-283b814f6b16",
+  "id": "6bfc5972-a8e3-46f2-9fb4-b5b92b15f6cd",
   "prevId": "dc07e911-7d2e-4d9f-88f8-b464797abc30",
   "version": "7",
   "dialect": "postgresql",
@@ -44,12 +44,6 @@
           "primaryKey": false,
           "notNull": true,
           "default": false
-        },
-        "devil_fruit_template_id": {
-          "name": "devil_fruit_template_id",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": false
         },
         "created_at": {
           "name": "created_at",
@@ -131,19 +125,6 @@
           ],
           "onDelete": "cascade",
           "onUpdate": "no action"
-        },
-        "character_instance_devil_fruit_template_id_devil_fruit_template_id_fk": {
-          "name": "character_instance_devil_fruit_template_id_devil_fruit_template_id_fk",
-          "tableFrom": "character_instance",
-          "tableTo": "devil_fruit_template",
-          "columnsFrom": [
-            "devil_fruit_template_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "restrict",
-          "onUpdate": "no action"
         }
       },
       "compositePrimaryKeys": {},
@@ -187,11 +168,13 @@
           "notNull": true,
           "default": 10
         },
-        "devil_fruit_template_id": {
-          "name": "devil_fruit_template_id",
-          "type": "integer",
+        "rarity": {
+          "name": "rarity",
+          "type": "rarity",
+          "typeSchema": "public",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true,
+          "default": "'COMMON'"
         },
         "image_url": {
           "name": "image_url",
@@ -231,21 +214,7 @@
           "with": {}
         }
       },
-      "foreignKeys": {
-        "character_template_devil_fruit_template_id_devil_fruit_template_id_fk": {
-          "name": "character_template_devil_fruit_template_id_devil_fruit_template_id_fk",
-          "tableFrom": "character_template",
-          "tableTo": "devil_fruit_template",
-          "columnsFrom": [
-            "devil_fruit_template_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "restrict",
-          "onUpdate": "no action"
-        }
-      },
+      "foreignKeys": {},
       "compositePrimaryKeys": {},
       "uniqueConstraints": {
         "character_template_name_unique": {
@@ -391,6 +360,14 @@
           "primaryKey": false,
           "notNull": true,
           "default": 0
+        },
+        "rarity": {
+          "name": "rarity",
+          "type": "rarity",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'COMMON'"
         },
         "image_url": {
           "name": "image_url",
@@ -639,6 +616,14 @@
           "primaryKey": false,
           "notNull": true
         },
+        "rarity": {
+          "name": "rarity",
+          "type": "rarity",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'COMMON'"
+        },
         "image_url": {
           "name": "image_url",
           "type": "text",
@@ -823,6 +808,16 @@
         "GAZ",
         "CAOUTCHOUC",
         "POISON"
+      ]
+    },
+    "public.rarity": {
+      "name": "rarity",
+      "schema": "public",
+      "values": [
+        "COMMON",
+        "RARE",
+        "VERY_RARE",
+        "LEGENDARY"
       ]
     }
   },

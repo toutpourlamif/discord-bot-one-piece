@@ -1,4 +1,0 @@
-ALTER TABLE "character_instance" ADD COLUMN "devil_fruit_template_id" integer;--> statement-breakpoint
-ALTER TABLE "character_template" ADD COLUMN "devil_fruit_template_id" integer;--> statement-breakpoint
-ALTER TABLE "character_instance" ADD CONSTRAINT "character_instance_devil_fruit_template_id_devil_fruit_template_id_fk" FOREIGN KEY ("devil_fruit_template_id") REFERENCES "public"."devil_fruit_template"("id") ON DELETE restrict ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "character_template" ADD CONSTRAINT "character_template_devil_fruit_template_id_devil_fruit_template_id_fk" FOREIGN KEY ("devil_fruit_template_id") REFERENCES "public"."devil_fruit_template"("id") ON DELETE restrict ON UPDATE no action;
