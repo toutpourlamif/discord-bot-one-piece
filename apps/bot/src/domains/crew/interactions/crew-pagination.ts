@@ -6,7 +6,7 @@ import { getCharactersByPlayerId } from '../../character/repository.js';
 import * as playerRepository from '../../player/repository.js';
 import * as shipRepository from '../../ship/repository.js';
 import { CREW_BUTTON_NAME } from '../constants.js';
-import { buildCrewView } from '../crew-view.js';
+import { buildCrewView } from '../utils/build-crew-view.js';
 
 async function handle(interaction: ButtonInteraction, args: Array<string>): Promise<void> {
   const playerId = parseIntegerArg(args[0]);

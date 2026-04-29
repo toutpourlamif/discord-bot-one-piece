@@ -3,7 +3,7 @@ import { getTargetUser } from '../../../discord/utils/index.js';
 import { getCharactersByPlayerId } from '../../character/repository.js';
 import { findOrCreatePlayer } from '../../player/service.js';
 import * as shipRepository from '../../ship/repository.js';
-import { buildCrewView } from '../crew-view.js';
+import { buildCrewView } from '../utils/build-crew-view.js';
 
 export const crewCommand: Command = {
   // TODO: Accept alias such as "!reserv" !"members"..

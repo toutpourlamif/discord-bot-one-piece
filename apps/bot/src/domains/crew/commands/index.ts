@@ -1,4 +1,4 @@
+import { changeCaptainCommand } from './change-captain.js';
 import { crewCommand } from './crew.js';
-import { setCaptainCommand } from './set-captain.js';
 
-export const crewCommands = [crewCommand, setCaptainCommand];
+export const crewCommands = [crewCommand, changeCaptainCommand];

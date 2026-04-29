@@ -3,10 +3,10 @@ import { buildOpEmbed } from '../../../discord/utils/build-op-embed.js';
 import { getSelfUser } from '../../../discord/utils/get-self-user.js';
 import { getCharacterInstanceName } from '../../character/utils/index.js';
 import { findOrCreatePlayer } from '../../player/service.js';
+import { buildSetCaptainView } from '../build-change-captain-view.js';
 import { getCrewByPlayerId } from '../service.js';
-import { buildSetCaptainView } from '../set-captain-view.js';
 
-export const setCaptainCommand: Command = {
+export const changeCaptainCommand: Command = {
   name: 'setcaptain',
   async handler(message) {
     const user = getSelfUser(message);
@@ -18,7 +18,9 @@ export const setCaptainCommand: Command = {
 
       await message.reply({
         embeds: [
-          buildOpEmbed('warn').setDescription(`T'as qu'un seul perso : **${getCharacterInstanceName(captain)}** est forcément capitaine.`),
+          buildOpEmbed('warn').setDescription(
+            `Vous n'avez qu'un seul personnage : **${getCharacterInstanceName(captain)}** est forcément capitaine.`,
+          ),
         ],
       });
       return;
