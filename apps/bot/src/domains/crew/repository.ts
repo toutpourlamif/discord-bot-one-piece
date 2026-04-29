@@ -1,14 +1,9 @@
-import { characterInstance, db, type DbOrTransaction } from '@one-piece/db';
+import { characterInstance, db, type CharacterInstance, type DbOrTransaction } from '@one-piece/db';
 import { and, eq, isNotNull } from 'drizzle-orm';
 
-export async function findOwnerPlayerIdByInstanceId(instanceId: number): Promise<number | undefined> {
-  const [row] = await db
-    .select({ playerId: characterInstance.playerId })
-    .from(characterInstance)
-    .where(eq(characterInstance.id, instanceId))
-    .limit(1);
-
-  return row?.playerId;
+export async function findCharacterInstanceById(instanceId: number): Promise<CharacterInstance | undefined> {
+  const [row] = await db.select().from(characterInstance).where(eq(characterInstance.id, instanceId)).limit(1);
+  return row;
 }
 
 export async function removeCaptain(playerId: number, client: DbOrTransaction): Promise<void> {

@@ -7,6 +7,7 @@ import type { View } from '../../discord/types.js';
 import { buildCustomId } from '../../discord/utils/build-custom-id.js';
 import { buildOpEmbed } from '../../discord/utils/build-op-embed.js';
 import type { CharacterRow } from '../character/types.js';
+import { getCharacterInstanceName } from '../character/utils/index.js';
 
 import { SET_CAPTAIN_BUTTON_NAME } from './constants.js';
 
@@ -28,6 +29,7 @@ function buildCaptainButtonRows(crew: Array<CharacterRow>): Array<ActionRowBuild
 function buildCaptainButton(character: CharacterRow): ButtonBuilder {
   return new ButtonBuilder()
     .setCustomId(buildCustomId(SET_CAPTAIN_BUTTON_NAME, character.instanceId))
-    .setLabel(character.name)
-    .setStyle(character.isCaptain ? ButtonStyle.Primary : ButtonStyle.Secondary);
+    .setLabel(getCharacterInstanceName(character))
+    .setStyle(character.isCaptain ? ButtonStyle.Primary : ButtonStyle.Secondary)
+    .setDisabled(character.isCaptain);
 }
