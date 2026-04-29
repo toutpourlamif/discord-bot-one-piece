@@ -1,14 +1,17 @@
 import { db, player } from '@one-piece/db';
 import { and, eq, gte, sql } from 'drizzle-orm';
 
-export async function debitBerry(playerId: number, amount: bigint): Promise<boolean> {
-  const result = await db
+export async function debitBerry(
+  playerId: number,
+  amount: bigint,
+): Promise<bigint | null> {
+  const [updated] = await db
     .update(player)
     .set({ berries: sql`${player.berries} - ${amount}` })
     .where(and(eq(player.id, playerId), gte(player.berries, amount)))
-    .returning();
+    .returning({ berries: player.berries });
 
-  return result.length > 0;
+  return updated?.berries ?? null;
 }
 
 export async function creditBerry(playerId: number, amount: bigint): Promise<void> {
