@@ -8,8 +8,14 @@ import { CHARACTERS_BUTTON_NAME } from './constants.js';
 import type { CharacterRow } from './types.js';
 import { getCharacterInstanceName } from './utils/index.js';
 
-export function buildCharactersView(player: Player, ship: Ship, characters: Array<CharacterRow>, page: number): View {
-  const menuRow = buildMenuButtons(CHARACTERS_BUTTON_NAME, player.id);
+export function buildCharactersView(
+  player: Player,
+  ship: Ship,
+  characters: Array<CharacterRow>,
+  page: number,
+  ownerDiscordId: string,
+): View {
+  const menuRow = buildMenuButtons(CHARACTERS_BUTTON_NAME, ownerDiscordId, player.id);
 
   const crew = characters.filter((c) => c.joinedCrewAt !== null);
   const reserve = characters.filter((c) => c.joinedCrewAt === null);
@@ -36,7 +42,7 @@ export function buildCharactersView(player: Player, ship: Ship, characters: Arra
 
   return {
     embeds: [embed],
-    components: [...buildPaginationButtons(CHARACTERS_BUTTON_NAME, player.id, currentPage, pageCount), menuRow],
+    components: [...buildPaginationButtons(CHARACTERS_BUTTON_NAME, ownerDiscordId, player.id, currentPage, pageCount), menuRow],
   };
 }
 

@@ -8,9 +8,9 @@ import type { Inventory } from './types.js';
 
 const EMPTY_INVENTORY_DESCRIPTION = 'Inventaire vide';
 
-export function buildInventoryView(player: Player, inventory: Inventory, page: number): View {
+export function buildInventoryView(player: Player, inventory: Inventory, page: number, ownerDiscordId: string): View {
   const embed = buildOpEmbed().setTitle(`Inventaire de ${player.name}`);
-  const menuRow = buildMenuButtons(INVENTORY_BUTTON_NAME, player.id);
+  const menuRow = buildMenuButtons(INVENTORY_BUTTON_NAME, ownerDiscordId, player.id);
 
   if (inventory.length === 0) {
     embed.setDescription(EMPTY_INVENTORY_DESCRIPTION);
@@ -29,6 +29,6 @@ export function buildInventoryView(player: Player, inventory: Inventory, page: n
 
   return {
     embeds: [embed],
-    components: [...buildPaginationButtons(INVENTORY_BUTTON_NAME, player.id, currentPage, pages.length), menuRow],
+    components: [...buildPaginationButtons(INVENTORY_BUTTON_NAME, ownerDiscordId, player.id, currentPage, pages.length), menuRow],
   };
 }
