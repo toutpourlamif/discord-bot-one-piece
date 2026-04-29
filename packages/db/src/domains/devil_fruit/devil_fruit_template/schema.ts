@@ -16,7 +16,7 @@ export const devilFruitTemplate = pgTable(
       .default(sql`'{}'::devil_fruit_type[]`),
     hpBonus: integer('hp_bonus').notNull().default(0),
     combatBonus: integer('combat_bonus').notNull().default(0),
-    rarity: rarity('rarity').notNull().default('COMMUN'),
+    rarity: rarity('rarity').notNull().default('COMMON'),
     ...imageUrl(),
     description: text('description'),
     ...timestamps(),

@@ -11,7 +11,7 @@ export const characterTemplate = pgTable(
     name: varchar('name', { length: 128 }).notNull().unique(),
     hp: integer('hp').notNull().default(100),
     combat: integer('combat').notNull().default(10),
-    rarity: rarity('rarity').notNull().default('COMMUN'),
+    rarity: rarity('rarity').notNull().default('COMMON'),
 
     ...imageUrl(),
     ...timestamps(),

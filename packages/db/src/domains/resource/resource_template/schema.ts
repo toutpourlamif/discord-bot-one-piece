@@ -9,7 +9,7 @@ export const resourceTemplate = pgTable(
   {
     id: serial('id').primaryKey(),
     name: varchar('name', { length: 128 }).notNull().unique(),
-    rarity: rarity('rarity').notNull().default('COMMUN'),
+    rarity: rarity('rarity').notNull().default('COMMON'),
 
     ...imageUrl(),
     description: text('description'),
