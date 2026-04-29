@@ -4,6 +4,14 @@
 
 Le **joueur** est le compte Discord et sa progression globale. C'est le point d'entrée de toute action — un joueur possède un navire (voir `ship`), un équipage (voir `crew`), une réserve de personnages (voir `character`), des ressources (voir `resource`), et un solde de Berry (voir `economy`).
 
+## Player vs PlayerAsCharacter
+
+Le `player` (table) tient ce qui est **compte-level** : identité Discord, bounty, karma, progression globale.
+
+Le joueur **existe aussi comme personnage dans le monde** : c'est le **PlayerAsCharacter** (voir `character`). Tout ce qui est "trucs qu'un perso a" — race, Fruit du Démon, stats, équipement — vit sur ce `character_instance`, **pas** sur `player`. Ça évite de dupliquer chaque feature des personnages côté player.
+
+À la création d'un player (`findOrCreatePlayer`), son PlayerAsCharacter est créé dans la même transaction. Quand le joueur se rename, le `nickname` du PlayerAsCharacter est mis à jour pour rester cohérent avec son nom affiché.
+
 ## Bounty
 
 La prime mise sur la tête du joueur par le Gouvernement Mondial, exprimée en Berry.

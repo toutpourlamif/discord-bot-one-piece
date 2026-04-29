@@ -1,6 +1,7 @@
 import { sql } from 'drizzle-orm';
-import { boolean, check, integer, pgTable, serial, timestamp, uniqueIndex } from 'drizzle-orm/pg-core';
+import { boolean, check, integer, pgTable, serial, timestamp, uniqueIndex, varchar } from 'drizzle-orm/pg-core';
 
+import { MAX_CHARACTER_NAME_LENGTH } from '../../../shared/constants.js';
 import { timestamps } from '../../../shared/helpers.js';
 import { player } from '../../player/schema.js';
 import { characterTemplate } from '../character_template/schema.js';
@@ -15,6 +16,7 @@ export const characterInstance = pgTable(
     playerId: integer('player_id')
       .notNull()
       .references(() => player.id, { onDelete: 'cascade' }),
+    nickname: varchar('nickname', { length: MAX_CHARACTER_NAME_LENGTH }),
     joinedCrewAt: timestamp('joined_crew_at', { withTimezone: true }),
     isCaptain: boolean('is_captain').notNull().default(false),
     ...timestamps(),

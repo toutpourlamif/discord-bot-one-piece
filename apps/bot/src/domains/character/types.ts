@@ -2,6 +2,7 @@
 export type CharacterRow = {
   instanceId: number;
   name: string;
+  nickname: string | null;
   hp: number;
   combat: number;
   joinedCrewAt: Date | null;
