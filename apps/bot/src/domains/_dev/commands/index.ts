@@ -1,4 +1,5 @@
 import { colorCommand } from './color.js';
+import { debugCommand } from './debug/index.js';
 import { embedCommand } from './embed.js';
 import { emojiCommand } from './emoji.js';
 import { moiCommand } from './moi.js';
@@ -17,5 +18,6 @@ export const devCommands = [
   colorCommand,
   randomCatCommand,
   randomCommand,
+  debugCommand,
   emojiCommand,
 ];
