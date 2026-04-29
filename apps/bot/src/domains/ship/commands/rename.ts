@@ -1,5 +1,5 @@
 import type { Command } from '../../../discord/types.js';
-import { buildOpEmbed } from '../../../discord/utils/build-op-embed.js';
+import { buildOpEmbed } from '../../../discord/utils/index.js';
 import { findOrCreatePlayer } from '../../player/service.js';
 import { ShipNameValidationError } from '../service.js';
 import { renameShip } from '../service.js';

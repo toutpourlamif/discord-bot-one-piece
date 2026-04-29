@@ -168,7 +168,7 @@
           "typeSchema": "public",
           "primaryKey": false,
           "notNull": true,
-          "default": "'COMMUN'"
+          "default": "'COMMON'"
         },
         "image_url": {
           "name": "image_url",
@@ -361,7 +361,7 @@
           "typeSchema": "public",
           "primaryKey": false,
           "notNull": true,
-          "default": "'COMMUN'"
+          "default": "'COMMON'"
         },
         "image_url": {
           "name": "image_url",
@@ -616,7 +616,7 @@
           "typeSchema": "public",
           "primaryKey": false,
           "notNull": true,
-          "default": "'COMMUN'"
+          "default": "'COMMON'"
         },
         "image_url": {
           "name": "image_url",
@@ -808,10 +808,10 @@
       "name": "rarity",
       "schema": "public",
       "values": [
-        "COMMUN",
+        "COMMON",
         "RARE",
-        "TRES_RARE",
-        "LEGENDAIRE"
+        "VERY_RARE",
+        "LEGENDARY"
       ]
     }
   },

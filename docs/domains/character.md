@@ -10,6 +10,19 @@ Luffy adolescent  ≠  Luffy Gear 1  ≠  Luffy Gear 2  ≠  Luffy Gear 5
 
 Ce sont 4 personnages différents dans la base, reliés par un arbre d'évolution.
 
+## PlayerAsCharacter
+
+Le **PlayerAsCharacter** est le personnage qui matérialise le joueur lui-même dans le monde. C'est un `character_instance` comme les autres — il est dans la réserve, dans l'équipage, mange un Fruit du Démon, gagne des stats, exactement comme n'importe quel personnage. Toute feature ajoutée aux personnages s'applique automatiquement au PlayerAsCharacter, sans duplication.
+
+Concrètement :
+
+- Il pointe vers un `character_template` système nommé `PLAYER_AS_CHARACTER` (constante `PLAYER_AS_CHARACTER_TEMPLATE_NAME`). Ce template n'est **pas recrutable** — il est exclu des recherches (`searchManyByName`).
+- Il porte un `nickname` qui prend le dessus sur le `name` du template à l'affichage. Par défaut, c'est le nom du joueur ; quand le joueur se rename, le nickname suit.
+- Il est créé en même temps que le player (dans la même transaction), avec `isCaptain = true` et `joinedCrewAt = now()` — au début, il est seul, donc captain par défaut.
+- Il **n'est pas figé captain** : il peut être destitué, mis en réserve, etc., comme n'importe quel `character_instance`. Pour le retrouver on filtre sur `templateId = PLAYER_AS_CHARACTER`, jamais sur `isCaptain`.
+
+Helper d'affichage : `getCharacterInstanceName(row)` retourne `nickname ?? template.name` — utilisé partout où on affiche un perso.
+
 ## Arbre d'évolution
 
 Chaque personnage a une propriété `nextEvolution` qui pointe vers le stade suivant (ou `null` s'il n'évolue plus).

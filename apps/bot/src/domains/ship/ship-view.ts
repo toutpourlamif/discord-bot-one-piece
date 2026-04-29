@@ -1,8 +1,7 @@
 import { SHIP_MODULE_KEYS, SHIP_MODULE_LEVEL_COLUMNS, type ShipModuleKey } from '@one-piece/db';
 
 import type { View } from '../../discord/types.js';
-import { buildMenuButtons } from '../../discord/utils/build-menu-buttons.js';
-import { buildOpEmbed } from '../../discord/utils/build-op-embed.js';
+import { buildMenuButtons, buildOpEmbed } from '../../discord/utils/index.js';
 
 import { SHIP_BUTTON_NAME } from './constants.js';
 import { SHIP_MODULES } from './modules.js';
