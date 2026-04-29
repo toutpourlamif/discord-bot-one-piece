@@ -1,5 +1,5 @@
 {
-  "id": "956cff0d-0f3b-40ff-852f-b9a96849ff11",
+  "id": "dc07e911-7d2e-4d9f-88f8-b464797abc30",
   "prevId": "6a2fab71-702f-4fbe-9162-653ece4235d6",
   "version": "7",
   "dialect": "postgresql",
@@ -25,6 +25,12 @@
           "type": "integer",
           "primaryKey": false,
           "notNull": true
+        },
+        "nickname": {
+          "name": "nickname",
+          "type": "varchar(64)",
+          "primaryKey": false,
+          "notNull": false
         },
         "joined_crew_at": {
           "name": "joined_crew_at",
@@ -161,14 +167,6 @@
           "primaryKey": false,
           "notNull": true,
           "default": 10
-        },
-        "rarity": {
-          "name": "rarity",
-          "type": "rarity",
-          "typeSchema": "public",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "'COMMON'"
         },
         "image_url": {
           "name": "image_url",
@@ -354,14 +352,6 @@
           "primaryKey": false,
           "notNull": true,
           "default": 0
-        },
-        "rarity": {
-          "name": "rarity",
-          "type": "rarity",
-          "typeSchema": "public",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "'COMMON'"
         },
         "image_url": {
           "name": "image_url",
@@ -610,14 +600,6 @@
           "primaryKey": false,
           "notNull": true
         },
-        "rarity": {
-          "name": "rarity",
-          "type": "rarity",
-          "typeSchema": "public",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "'COMMON'"
-        },
         "image_url": {
           "name": "image_url",
           "type": "text",
@@ -802,16 +784,6 @@
         "GAZ",
         "CAOUTCHOUC",
         "POISON"
-      ]
-    },
-    "public.rarity": {
-      "name": "rarity",
-      "schema": "public",
-      "values": [
-        "COMMON",
-        "RARE",
-        "VERY_RARE",
-        "LEGENDARY"
       ]
     }
   },
