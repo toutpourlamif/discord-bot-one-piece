@@ -6,7 +6,7 @@ import { crewButtonHandlers } from '../domains/crew/index.js';
 import { playerButtonHandlers } from '../domains/player/index.js';
 import { resourceButtonHandlers } from '../domains/resource/index.js';
 import { shipButtonHandlers } from '../domains/ship/index.js';
-import { buildRegistryWithUniqueNames } from '../shared/build-registry.js';
+import { buildRegistry } from '../shared/build-registry.js';
 
 import { CUSTOM_ID_SEPARATOR } from './constants.js';
 import { AppError, ValidationError } from './errors.js';
@@ -21,7 +21,7 @@ const allButtonHandlers: Array<ButtonHandler> = [
   ...crewButtonHandlers,
   ...devButtonHandlers,
 ];
-const buttonRegistry = buildRegistryWithUniqueNames(allButtonHandlers, (h) => h.name);
+const buttonRegistry = buildRegistry(allButtonHandlers, (h) => h.name);
 
 /** Dispatche une interaction vers le bon handler. Voir `docs/discord.md`. */
 export async function routeInteraction(interaction: Interaction): Promise<void> {

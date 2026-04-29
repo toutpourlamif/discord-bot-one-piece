@@ -7,7 +7,7 @@ import { fishingCommands } from '../domains/fishing/index.js';
 import { playerCommands } from '../domains/player/index.js';
 import { resourceCommands } from '../domains/resource/index.js';
 import { shipCommands } from '../domains/ship/commands/index.js';
-import { buildRegistryWithUniqueNames } from '../shared/build-registry.js';
+import { buildRegistry } from '../shared/build-registry.js';
 
 import { AppError } from './errors.js';
 import { buildOpEmbed } from './utils/index.js';
@@ -21,7 +21,9 @@ const allCommands = [
   ...fishingCommands,
   ...crewCommands,
 ];
-const registry = buildRegistryWithUniqueNames(allCommands, (c) => c.name.toLowerCase());
+const registry = buildRegistry(allCommands, (command) =>
+  Array.isArray(command.name) ? command.name.map((name) => name.toLowerCase()) : command.name.toLowerCase(),
+);
 
 /** Dispatche un message vers le bon handler de commande. Voir `docs/discord.md`. */
 export async function routeMessage(message: Message, prefix: string): Promise<void> {
