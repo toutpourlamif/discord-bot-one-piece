@@ -7,9 +7,9 @@ import { fishingCommands } from '../domains/fishing/index.js';
 import { playerCommands } from '../domains/player/index.js';
 import { resourceCommands } from '../domains/resource/index.js';
 import { shipCommands } from '../domains/ship/commands/index.js';
-import { buildRegistryWithUniqueNames } from '../shared/build-registry.js';
 
 import { AppError } from './errors.js';
+import type { Command } from './types.js';
 import { buildOpEmbed } from './utils/index.js';
 
 const allCommands = [
@@ -21,7 +21,23 @@ const allCommands = [
   ...fishingCommands,
   ...characterCommands,
 ];
-const registry = buildRegistryWithUniqueNames(allCommands, (c) => c.name.toLowerCase());
+const registry = new Map<string, Command>();
+
+for (const command of allCommands) {
+  for (const name of getCommandNames(command)) {
+    const key = name.toLowerCase();
+
+    if (registry.has(key)) {
+      throw new Error(`Doublon dans le registre: "${key}"`);
+    }
+
+    registry.set(key, command);
+  }
+}
+
+function getCommandNames(command: Command): Array<string> {
+  return Array.isArray(command.name) ? command.name : [command.name];
+}
 
 /** Dispatche un message vers le bon handler de commande. Voir `docs/discord.md`. */
 export async function routeMessage(message: Message, prefix: string): Promise<void> {
