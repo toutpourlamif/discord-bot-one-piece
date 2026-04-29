@@ -14,8 +14,7 @@ export const setCaptainCommand: Command = {
     const crew = await getCrewByPlayerId(player.id);
 
     if (crew.length === 1) {
-      const captain = crew[0];
-      if (!captain) return;
+      const captain = crew[0]!;
 
       await message.reply({
         embeds: [

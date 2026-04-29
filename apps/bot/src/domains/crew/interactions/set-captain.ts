@@ -10,7 +10,6 @@ import { findOrCreatePlayer } from '../../player/service.js';
 import { SET_CAPTAIN_BUTTON_NAME } from '../constants.js';
 import * as crewRepository from '../repository.js';
 import { getCrewByPlayerId, replaceCaptainOfPlayer } from '../service.js';
-import { buildSetCaptainView } from '../set-captain-view.js';
 
 async function handle(interaction: ButtonInteraction, args: Array<string>): Promise<void> {
   const targetInstanceId = parseIntegerArg(args[0]);
@@ -24,15 +23,9 @@ async function handle(interaction: ButtonInteraction, args: Array<string>): Prom
 
   const crew = await getCrewByPlayerId(player.id);
   const selectedMember = crew.find((character) => character.instanceId === targetInstanceId);
-  assertMemberIsInCrew(selectedMember);
+  assertSelectedMemberExists(selectedMember);
 
   await interaction.deferUpdate();
-
-  if (selectedMember.isCaptain) {
-    await interaction.editReply(buildSetCaptainView(player, crew));
-    return;
-  }
-
   await replaceCaptainOfPlayer(player.id, targetInstanceId);
 
   const embed = buildOpEmbed('success')
@@ -47,7 +40,7 @@ function assertCharacterBelongsToPlayer(ownerPlayerId: number | undefined, playe
   throw new ValidationError("Tu ne peux pas changer le capitaine de quelqu'un d'autre.");
 }
 
-function assertMemberIsInCrew(member: CharacterRow | undefined): asserts member is CharacterRow {
+function assertSelectedMemberExists(member: CharacterRow | undefined): asserts member is CharacterRow {
   if (member) return;
 
   throw new ValidationError("Ce personnage n'est pas dans ton équipage.");
