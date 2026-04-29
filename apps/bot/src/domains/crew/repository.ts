@@ -1,7 +1,5 @@
-import { characterInstance, db, type Db } from '@one-piece/db';
+import { characterInstance, db, type DbOrTransaction } from '@one-piece/db';
 import { and, eq, isNotNull } from 'drizzle-orm';
-
-type Transaction = Parameters<Parameters<Db['transaction']>[0]>[0];
 
 export async function findOwnerPlayerIdByInstanceId(instanceId: number): Promise<number | undefined> {
   const [row] = await db
@@ -13,15 +11,15 @@ export async function findOwnerPlayerIdByInstanceId(instanceId: number): Promise
   return row?.playerId;
 }
 
-export async function removeCaptain(playerId: number, transaction: Transaction): Promise<void> {
-  await transaction
+export async function removeCaptain(playerId: number, client: DbOrTransaction): Promise<void> {
+  await client
     .update(characterInstance)
     .set({ isCaptain: false })
     .where(and(eq(characterInstance.playerId, playerId), eq(characterInstance.isCaptain, true)));
 }
 
-export async function setCaptain(playerId: number, instanceId: number, transaction: Transaction): Promise<boolean> {
-  const result = await transaction
+export async function setCaptain(playerId: number, instanceId: number, client: DbOrTransaction): Promise<boolean> {
+  const result = await client
     .update(characterInstance)
     .set({ isCaptain: true })
     .where(and(eq(characterInstance.id, instanceId), eq(characterInstance.playerId, playerId), isNotNull(characterInstance.joinedCrewAt)));
