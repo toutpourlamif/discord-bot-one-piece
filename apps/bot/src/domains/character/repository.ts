@@ -9,6 +9,8 @@ import {
 } from '@one-piece/db';
 import { and, asc, desc, eq, getTableColumns, ilike, ne, or, sql } from 'drizzle-orm';
 
+import { NotFoundError } from '../../discord/errors.js';
+
 import type { CharacterRow } from './types.js';
 
 export async function getCharactersByPlayerId(playerId: number): Promise<Array<CharacterRow>> {
@@ -53,8 +55,7 @@ export async function findById(id: number): Promise<CharacterTemplate | undefine
 
 export async function getPlayerAsCharacterTemplate(): Promise<CharacterTemplate> {
   const [row] = await db.select().from(characterTemplate).where(eq(characterTemplate.name, PLAYER_AS_CHARACTER_TEMPLATE_NAME)).limit(1);
-  // TODO: replace with NotFoundError
-  if (!row) throw new Error(`Template ${PLAYER_AS_CHARACTER_TEMPLATE_NAME} introuvable — exécute le seed.`);
+  if (!row) throw new NotFoundError(`Template ${PLAYER_AS_CHARACTER_TEMPLATE_NAME} introuvable — exécute le seed.`);
   return row;
 }
 
