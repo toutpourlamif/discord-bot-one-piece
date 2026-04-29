@@ -7,9 +7,9 @@ import { CHARACTERS_BUTTON_NAME } from './constants.js';
 
 const FIRST_PAGE = 0;
 
-export function buildCharactersNavButton(playerId: number, options?: { disabled?: boolean }): ButtonBuilder {
+export function buildCharactersNavButton(ownerDiscordId: string, playerId: number, options?: { disabled?: boolean }): ButtonBuilder {
   return new ButtonBuilder()
-    .setCustomId(buildCustomId(CHARACTERS_BUTTON_NAME, playerId, FIRST_PAGE))
+    .setCustomId(buildCustomId(CHARACTERS_BUTTON_NAME, ownerDiscordId, playerId, FIRST_PAGE))
     .setLabel('Personnages')
     .setEmoji(DOMAIN_EMOJI.character)
     .setStyle(ButtonStyle.Secondary)

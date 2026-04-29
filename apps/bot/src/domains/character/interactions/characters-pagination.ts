@@ -1,6 +1,8 @@
 import type { ButtonInteraction } from 'discord.js';
 
+import { ValidationError } from '../../../discord/errors.js';
 import type { ButtonHandler } from '../../../discord/types.js';
+import { assertMenuOwner } from '../../../discord/utils/assert-menu-owner.js';
 import { parseIntegerArg } from '../../../discord/utils/parse-integer-arg.js';
 import * as playerRepository from '../../player/repository.js';
 import * as shipRepository from '../../ship/repository.js';
@@ -9,8 +11,11 @@ import { CHARACTERS_BUTTON_NAME } from '../constants.js';
 import { getCharactersByPlayerId } from '../repository.js';
 
 async function handle(interaction: ButtonInteraction, args: Array<string>): Promise<void> {
-  const playerId = parseIntegerArg(args[0]);
-  const page = parseIntegerArg(args[1]);
+  const ownerDiscordId = args[0];
+  if (!ownerDiscordId) throw new ValidationError('Propriétaire du menu introuvable.');
+  if (!(await assertMenuOwner(interaction, ownerDiscordId))) return;
+  const playerId = parseIntegerArg(args[1]);
+  const page = parseIntegerArg(args[2]);
 
   await interaction.deferUpdate();
 
@@ -18,7 +23,7 @@ async function handle(interaction: ButtonInteraction, args: Array<string>): Prom
   const ship = await shipRepository.findByPlayerIdOrThrow(player.id);
 
   const characters = await getCharactersByPlayerId(player.id);
-  await interaction.editReply(buildCharactersView(player, ship, characters, page));
+  await interaction.editReply(buildCharactersView(player, ship, characters, page, ownerDiscordId));
 }
 
 export const charactersPaginationButtonHandler: ButtonHandler = {

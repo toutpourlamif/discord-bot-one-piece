@@ -16,8 +16,8 @@ const MODULE_LABELS: Record<ShipModuleKey, string> = {
   cargo: 'Cale',
 };
 
-export async function buildShipView(playerId: number): Promise<View> {
-  const navRow = buildMenuButtons(SHIP_BUTTON_NAME, playerId);
+export async function buildShipView(playerId: number, ownerDiscordId: string): Promise<View> {
+  const navRow = buildMenuButtons(SHIP_BUTTON_NAME, ownerDiscordId, playerId);
   const ship = await findByPlayerIdOrThrow(playerId);
   const embed = buildOpEmbed().setTitle(`🚢 ${ship.name}`).setDescription(`HP : ${ship.hp}`);
   // TODO: Redesign this shit

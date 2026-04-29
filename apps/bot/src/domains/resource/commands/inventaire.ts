@@ -11,6 +11,6 @@ export const inventaireCommand: Command = {
     const { player } = await findOrCreatePlayer(target.id, target.username);
     const inventory = await getInventory(player.id);
 
-    await message.reply(buildInventoryView(player, inventory, 0));
+    await message.reply(buildInventoryView(player, inventory, 0, message.author.id));
   },
 };

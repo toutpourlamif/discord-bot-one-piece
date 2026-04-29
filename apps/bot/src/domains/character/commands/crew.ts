@@ -14,6 +14,6 @@ export const crewCommand: Command = {
     const { player } = await findOrCreatePlayer(target.id, target.username);
     const ship = await shipRepository.findByPlayerIdOrThrow(player.id);
     const characters = await getCharactersByPlayerId(player.id);
-    await message.reply(buildCharactersView(player, ship, characters, 0));
+    await message.reply(buildCharactersView(player, ship, characters, 0, message.author.id));
   },
 };
