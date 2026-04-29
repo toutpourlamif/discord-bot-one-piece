@@ -11,7 +11,7 @@ import { getInventory } from '../repository.js';
 async function handle(interaction: ButtonInteraction, args: Array<string>): Promise<void> {
   const ownerDiscordId = args[0];
   if (!ownerDiscordId) throw new ValidationError('Propriétaire du menu introuvable.');
-  if (!(await assertMenuOwner(interaction, ownerDiscordId))) return;
+  assertMenuOwner(interaction, ownerDiscordId);
   const playerId = parseIntegerArg(args[1]);
   const page = parseIntegerArg(args[2]);
 

@@ -1,11 +1,9 @@
 import type { ButtonInteraction } from 'discord.js';
 
-export async function assertMenuOwner(interaction: ButtonInteraction, ownerDiscordId: string): Promise<boolean> {
-  if (interaction.user.id === ownerDiscordId) return true;
+import { ValidationError } from '../errors.js';
 
-  await interaction.reply({
-    content: "Ce menu n'est pas pour toi.",
-    ephemeral: true,
-  });
-  return false;
+export function assertMenuOwner(interaction: ButtonInteraction, ownerDiscordId: string): void {
+  if (interaction.user.id === ownerDiscordId) return;
+
+  throw new ValidationError("Ce menu n'est pas pour toi.");
 }
