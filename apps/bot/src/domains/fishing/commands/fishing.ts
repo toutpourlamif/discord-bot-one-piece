@@ -1,6 +1,5 @@
 import type { Command } from '../../../discord/types.js';
-import { buildOpEmbed } from '../../../discord/utils/build-op-embed.js';
-import { getTargetUser } from '../../../discord/utils/get-target-user.js';
+import { buildOpEmbed, getTargetUser } from '../../../discord/utils/index.js';
 import { findOrCreatePlayer } from '../../player/service.js';
 import { runFishingAttempt } from '../service.js';
 

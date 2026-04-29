@@ -1,6 +1,6 @@
 import { ButtonBuilder, ButtonStyle } from 'discord.js';
 
-import { buildCustomId } from '../../discord/utils/build-custom-id.js';
+import { buildCustomId } from '../../discord/utils/index.js';
 
 import { INVENTORY_BUTTON_NAME } from './constants.js';
 

@@ -1,7 +1,7 @@
 import type { ButtonInteraction } from 'discord.js';
 
 import type { ButtonHandler } from '../../../discord/types.js';
-import { parseIntegerArg } from '../../../discord/utils/parse-integer-arg.js';
+import { parseIntegerArg } from '../../../discord/utils/index.js';
 import * as playerRepository from '../../player/repository.js';
 import * as shipRepository from '../../ship/repository.js';
 import { buildCharactersView } from '../characters-view.js';

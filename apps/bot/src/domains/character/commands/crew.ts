@@ -1,5 +1,5 @@
 import type { Command } from '../../../discord/types.js';
-import { getTargetUser } from '../../../discord/utils/get-target-user.js';
+import { getTargetUser } from '../../../discord/utils/index.js';
 import { findOrCreatePlayer } from '../../player/service.js';
 import * as shipRepository from '../../ship/repository.js';
 import { buildCharactersView } from '../characters-view.js';

@@ -1,7 +1,7 @@
 import type { ButtonInteraction } from 'discord.js';
 
 import type { ButtonHandler } from '../../../discord/types.js';
-import { parseIntegerArg } from '../../../discord/utils/parse-integer-arg.js';
+import { parseIntegerArg } from '../../../discord/utils/index.js';
 import { PROFIL_BUTTON_NAME } from '../constants.js';
 import { buildProfilView } from '../profil-view.js';
 
