@@ -9,6 +9,7 @@ import { getCrewCapacity } from '../crew/capacity.js';
 
 import { CHARACTERS_BUTTON_NAME } from './constants.js';
 import type { CharacterRow } from './types.js';
+import { getCharacterInstanceName } from './utils/index.js';
 
 export function buildCharactersView(player: Player, ship: Ship, characters: Array<CharacterRow>, page: number): View {
   const menuRow = buildMenuButtons(CHARACTERS_BUTTON_NAME, player.id);
@@ -44,5 +45,5 @@ export function buildCharactersView(player: Player, ship: Ship, characters: Arra
 
 function formatLine(row: CharacterRow): string {
   const prefix = row.isCaptain ? '⭐ ' : '';
-  return `${prefix}${row.name}`;
+  return `${prefix}${getCharacterInstanceName(row)}`;
 }
