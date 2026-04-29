@@ -9,7 +9,7 @@ import { devilFruitTemplate } from './schema.js';
 export async function seedDevilFruits(db: Db) {
   await db
     .insert(devilFruitTemplate)
-    .values(DEVIL_FRUIT_TEMPLATES_DATA)
+    .values([...DEVIL_FRUIT_TEMPLATES_DATA])
     .onConflictDoUpdate({
       target: devilFruitTemplate.name,
       set: {
