@@ -1,15 +1,15 @@
 import type { Player, Ship } from '@one-piece/db';
 
-import type { View } from '../../discord/types.js';
-import { buildMenuButtons, buildOpEmbed, buildPaginationButtons, clampPage, splitIntoPages } from '../../discord/utils/index.js';
-import { getCrewCapacity } from '../crew/capacity.js';
+import type { View } from '../../../discord/types.js';
+import { buildMenuButtons, buildOpEmbed, buildPaginationButtons, clampPage, splitIntoPages } from '../../../discord/utils/index.js';
+import type { CharacterRow } from '../../character/types.js';
+import { getCharacterInstanceName } from '../../character/utils/index.js';
+import { CREW_BUTTON_NAME } from '../constants.js';
 
-import { CHARACTERS_BUTTON_NAME } from './constants.js';
-import type { CharacterRow } from './types.js';
-import { getCharacterInstanceName } from './utils/index.js';
+import { getCrewCapacity } from './get-crew-capacity.js';
 
-export function buildCharactersView(player: Player, ship: Ship, characters: Array<CharacterRow>, page: number): View {
-  const menuRow = buildMenuButtons(CHARACTERS_BUTTON_NAME, player.id);
+export function buildCrewView(player: Player, ship: Ship, characters: Array<CharacterRow>, page: number): View {
+  const menuRow = buildMenuButtons(CREW_BUTTON_NAME, player.id);
 
   const crew = characters.filter((c) => c.joinedCrewAt !== null);
   const reserve = characters.filter((c) => c.joinedCrewAt === null);
@@ -36,7 +36,7 @@ export function buildCharactersView(player: Player, ship: Ship, characters: Arra
 
   return {
     embeds: [embed],
-    components: [...buildPaginationButtons(CHARACTERS_BUTTON_NAME, player.id, currentPage, pageCount), menuRow],
+    components: [...buildPaginationButtons(CREW_BUTTON_NAME, player.id, currentPage, pageCount), menuRow],
   };
 }
 

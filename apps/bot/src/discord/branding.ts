@@ -6,6 +6,7 @@ export const EMBED_COLORS = {
   default: BOT_COLOR,
   error: 0xed4245,
   info: 0x99aab5,
+  success: 0x57f287,
   warn: 0xfee75c,
 } as const;
 

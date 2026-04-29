@@ -2,7 +2,7 @@ import type { Interaction } from 'discord.js';
 
 import { devButtonHandlers } from '../domains/_dev/interactions/index.js';
 import { infoButtonHandlers } from '../domains/_info/index.js';
-import { characterButtonHandlers } from '../domains/character/interactions/index.js';
+import { crewButtonHandlers } from '../domains/crew/index.js';
 import { playerButtonHandlers } from '../domains/player/index.js';
 import { resourceButtonHandlers } from '../domains/resource/index.js';
 import { shipButtonHandlers } from '../domains/ship/index.js';
@@ -18,7 +18,7 @@ const allButtonHandlers: Array<ButtonHandler> = [
   ...playerButtonHandlers,
   ...shipButtonHandlers,
   ...resourceButtonHandlers,
-  ...characterButtonHandlers,
+  ...crewButtonHandlers,
   ...devButtonHandlers,
 ];
 const buttonRegistry = buildRegistryWithUniqueNames(allButtonHandlers, (h) => h.name);

@@ -2,7 +2,7 @@ import type { Message } from 'discord.js';
 
 import { devCommands } from '../domains/_dev/index.js';
 import { infoCommands } from '../domains/_info/index.js';
-import { characterCommands } from '../domains/character/commands/index.js';
+import { crewCommands } from '../domains/crew/index.js';
 import { fishingCommands } from '../domains/fishing/index.js';
 import { playerCommands } from '../domains/player/index.js';
 import { resourceCommands } from '../domains/resource/index.js';
@@ -19,7 +19,7 @@ const allCommands = [
   ...shipCommands,
   ...resourceCommands,
   ...fishingCommands,
-  ...characterCommands,
+  ...crewCommands,
 ];
 const registry = buildRegistryWithUniqueNames(allCommands, (c) => c.name.toLowerCase());
 
