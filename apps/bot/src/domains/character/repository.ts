@@ -2,6 +2,7 @@ import {
   characterInstance,
   characterTemplate,
   db,
+  devilFruitTemplate,
   PLAYER_AS_CHARACTER_TEMPLATE_NAME,
   type CharacterInstance,
   type CharacterTemplate,
@@ -11,7 +12,7 @@ import { and, asc, desc, eq, getTableColumns, ilike, ne, or, sql } from 'drizzle
 
 import { NotFoundError } from '../../discord/errors.js';
 
-import type { CharacterRow } from './types.js';
+import type { CharacterRow, CharacterTemplateInfo } from './types.js';
 
 export async function getCharactersByPlayerId(playerId: number): Promise<Array<CharacterRow>> {
   return db
@@ -48,8 +49,17 @@ export async function searchManyByName(query: string): Promise<Array<{ entity: C
   return rows.map(({ score, ...entity }) => ({ entity, score }));
 }
 
-export async function findById(id: number): Promise<CharacterTemplate | undefined> {
-  const [row] = await db.select().from(characterTemplate).where(eq(characterTemplate.id, id)).limit(1);
+export async function findById(id: number): Promise<CharacterTemplateInfo | undefined> {
+  const [row] = await db
+    .select({
+      ...getTableColumns(characterTemplate),
+      devilFruitName: devilFruitTemplate.name,
+      devilFruitTypes: devilFruitTemplate.types,
+    })
+    .from(characterTemplate)
+    .leftJoin(devilFruitTemplate, eq(devilFruitTemplate.id, characterTemplate.devilFruitTemplateId))
+    .where(eq(characterTemplate.id, id))
+    .limit(1);
   return row;
 }
 

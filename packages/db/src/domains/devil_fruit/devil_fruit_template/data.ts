@@ -1,6 +1,6 @@
 import type { DevilFruitTemplateInsert } from './schema.js';
 
-export const DEVIL_FRUIT_TEMPLATES_DATA: Array<DevilFruitTemplateInsert> = [
+export const DEVIL_FRUIT_TEMPLATES_DATA = [
   {
     name: 'Gomu Gomu no Mi',
     types: ['CAOUTCHOUC'],
@@ -39,4 +39,6 @@ export const DEVIL_FRUIT_TEMPLATES_DATA: Array<DevilFruitTemplateInsert> = [
     combatBonus: 35,
     imageUrl: 'devil-fruits/yami-yami-no-mi.webp',
   },
-];
+] as const satisfies ReadonlyArray<DevilFruitTemplateInsert>;
+
+export type DevilFruitName = (typeof DEVIL_FRUIT_TEMPLATES_DATA)[number]['name'];
