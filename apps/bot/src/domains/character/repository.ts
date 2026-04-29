@@ -1,7 +1,5 @@
 import { characterInstance, characterTemplate, db, type CharacterTemplate } from '@one-piece/db';
-import { and, asc, desc, eq, getTableColumns, ilike, or, sql } from 'drizzle-orm';
-
-import { NotFoundError } from '../../discord/errors.js';
+import { asc, desc, eq, getTableColumns, ilike, or, sql } from 'drizzle-orm';
 
 import type { CharacterRow } from './types.js';
 
@@ -37,22 +35,4 @@ export async function searchManyByName(query: string): Promise<Array<{ entity: C
 export async function findById(id: number): Promise<CharacterTemplate | undefined> {
   const [row] = await db.select().from(characterTemplate).where(eq(characterTemplate.id, id)).limit(1);
   return row;
-}
-
-export async function setCaptain(playerId: number, instanceId: number): Promise<void> {
-  await db.transaction(async (tx) => {
-    await tx
-      .update(characterInstance)
-      .set({ isCaptain: false })
-      .where(and(eq(characterInstance.playerId, playerId), eq(characterInstance.isCaptain, true)));
-
-    const result = await tx
-      .update(characterInstance)
-      .set({ isCaptain: true })
-      .where(and(eq(characterInstance.id, instanceId), eq(characterInstance.playerId, playerId)));
-
-    if (result.count === 0) {
-      throw new NotFoundError("Ce character n'est pas dans ton équipage.");
-    }
-  });
 }

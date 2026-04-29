@@ -2,13 +2,14 @@ import type { ButtonInteraction } from 'discord.js';
 
 import type { ButtonHandler } from '../../../discord/types.js';
 import { parseIntegerArg } from '../../../discord/utils/parse-integer-arg.js';
+import * as crewRepository from '../../crew/repository.js';
+import { buildSetCaptainView } from '../../crew/set-captain-view.js';
 import { findOrCreatePlayer } from '../../player/service.js';
 import { SET_CAPTAIN_BUTTON_NAME } from '../constants.js';
-import { getCharactersByPlayerId, setCaptain } from '../repository.js';
-import { buildSetCaptainView } from '../set-captain-view.js';
+import { getCrewByPlayerId } from '../service.js';
 
 async function handle(interaction: ButtonInteraction, args: Array<string>): Promise<void> {
-  const instanceId = parseIntegerArg(args[0]);
+  const targetInstanceId = parseIntegerArg(args[0]);
 
   await interaction.deferUpdate();
 
@@ -18,18 +19,16 @@ async function handle(interaction: ButtonInteraction, args: Array<string>): Prom
     return;
   }
 
-  const characters = await getCharactersByPlayerId(player.id);
-  const crew = characters.filter((character) => character.joinedCrewAt !== null);
+  const crew = await getCrewByPlayerId(player.id);
 
-  if (!crew.some((character) => character.instanceId === instanceId)) {
-    await interaction.followUp({ content: "Tu ne peux pas changer le capitaine de quelqu'un d'autre.", ephemeral: true });
+  if (!crew.some((character) => character.instanceId === targetInstanceId)) {
+    await interaction.followUp({ content: "Ce character n'est pas dans ton équipage.", ephemeral: true });
     return;
   }
 
-  await setCaptain(player.id, instanceId);
+  await crewRepository.setCaptain(player.id, targetInstanceId);
 
-  const updatedCharacters = await getCharactersByPlayerId(player.id);
-  const updatedCrew = updatedCharacters.filter((character) => character.joinedCrewAt !== null);
+  const updatedCrew = await getCrewByPlayerId(player.id);
   await interaction.editReply(buildSetCaptainView(player, updatedCrew));
 }
 

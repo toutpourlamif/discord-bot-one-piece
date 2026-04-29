@@ -1,14 +1,14 @@
 import type { Player } from '@one-piece/db';
 import { ActionRowBuilder, ButtonBuilder, ButtonStyle } from 'discord.js';
+import chunk from 'lodash/chunk.js';
 
+import { DISCORD_ACTION_ROW_MAX_BUTTONS } from '../../discord/constants.js';
 import type { View } from '../../discord/types.js';
 import { buildCustomId } from '../../discord/utils/build-custom-id.js';
 import { buildOpEmbed } from '../../discord/utils/build-op-embed.js';
+import { SET_CAPTAIN_BUTTON_NAME } from '../character/constants.js';
+import type { CharacterRow } from '../character/types.js';
 
-import { SET_CAPTAIN_BUTTON_NAME } from './constants.js';
-import type { CharacterRow } from './types.js';
-
-const BUTTONS_PER_ROW = 5;
 const MAX_CAPTAIN_BUTTONS = 25;
 
 export function buildSetCaptainView(player: Player, crew: Array<CharacterRow>): View {
@@ -21,22 +21,14 @@ export function buildSetCaptainView(player: Player, crew: Array<CharacterRow>): 
 }
 
 function buildCaptainButtonRows(crew: Array<CharacterRow>): Array<ActionRowBuilder<ButtonBuilder>> {
-  const rows: Array<ActionRowBuilder<ButtonBuilder>> = [];
+  return chunk(crew, DISCORD_ACTION_ROW_MAX_BUTTONS).map((rowCharacters) =>
+    new ActionRowBuilder<ButtonBuilder>().addComponents(rowCharacters.map(buildCaptainButton)),
+  );
+}
 
-  for (let index = 0; index < crew.length; index += BUTTONS_PER_ROW) {
-    const rowCharacters = crew.slice(index, index + BUTTONS_PER_ROW);
-
-    rows.push(
-      new ActionRowBuilder<ButtonBuilder>().addComponents(
-        rowCharacters.map((character) =>
-          new ButtonBuilder()
-            .setCustomId(buildCustomId(SET_CAPTAIN_BUTTON_NAME, character.instanceId))
-            .setLabel(character.name)
-            .setStyle(character.isCaptain ? ButtonStyle.Success : ButtonStyle.Secondary),
-        ),
-      ),
-    );
-  }
-
-  return rows;
+function buildCaptainButton(character: CharacterRow): ButtonBuilder {
+  return new ButtonBuilder()
+    .setCustomId(buildCustomId(SET_CAPTAIN_BUTTON_NAME, character.instanceId))
+    .setLabel(character.name)
+    .setStyle(character.isCaptain ? ButtonStyle.Success : ButtonStyle.Secondary);
 }
