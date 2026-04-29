@@ -23,7 +23,7 @@ async function handle(interaction: ButtonInteraction, args: Array<string>): Prom
 
   const crew = await getCrewByPlayerId(player.id);
   const selectedMember = crew.find((character) => character.instanceId === targetInstanceId);
-  assertSelectedMemberExists(selectedMember);
+  assertCharacterIsInCrew(selectedMember);
 
   await interaction.deferUpdate();
   await replaceCaptainOfPlayer(player.id, targetInstanceId);
@@ -40,7 +40,7 @@ function assertCharacterBelongsToPlayer(ownerPlayerId: number | undefined, playe
   throw new ValidationError("Tu ne peux pas changer le capitaine de quelqu'un d'autre.");
 }
 
-function assertSelectedMemberExists(member: CharacterRow | undefined): asserts member is CharacterRow {
+function assertCharacterIsInCrew(member: CharacterRow | undefined): asserts member is CharacterRow {
   if (member) return;
 
   throw new ValidationError("Ce personnage n'est pas dans ton équipage.");

@@ -4,8 +4,8 @@ import { getSelfUser } from '../../../discord/utils/get-self-user.js';
 import { prefix } from '../../../index.js';
 import { getCharacterInstanceName } from '../../character/utils/index.js';
 import { findOrCreatePlayer } from '../../player/service.js';
-import { buildSetCaptainView } from '../build-change-captain-view.js';
 import { getCrewByPlayerId } from '../service.js';
+import { buildSetCaptainView } from '../utils/build-change-captain-view.js';
 
 import { crewCommand } from './crew.js';
 
