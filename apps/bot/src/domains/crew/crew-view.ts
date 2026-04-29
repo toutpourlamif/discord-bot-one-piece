@@ -5,13 +5,13 @@ import { buildMenuButtons } from '../../discord/utils/build-menu-buttons.js';
 import { buildOpEmbed } from '../../discord/utils/build-op-embed.js';
 import { buildPaginationButtons } from '../../discord/utils/build-pagination-buttons.js';
 import { clampPage, splitIntoPages } from '../../discord/utils/paginate.js';
-import { getCrewCapacity } from '../crew/capacity.js';
+import type { CharacterRow } from '../character/types.js';
 
-import { CHARACTERS_BUTTON_NAME } from './constants.js';
-import type { CharacterRow } from './types.js';
+import { getCrewCapacity } from './capacity.js';
+import { CREW_BUTTON_NAME } from './constants.js';
 
-export function buildCharactersView(player: Player, ship: Ship, characters: Array<CharacterRow>, page: number): View {
-  const menuRow = buildMenuButtons(CHARACTERS_BUTTON_NAME, player.id);
+export function buildCrewView(player: Player, ship: Ship, characters: Array<CharacterRow>, page: number): View {
+  const menuRow = buildMenuButtons(CREW_BUTTON_NAME, player.id);
 
   const crew = characters.filter((c) => c.joinedCrewAt !== null);
   const reserve = characters.filter((c) => c.joinedCrewAt === null);
@@ -38,7 +38,7 @@ export function buildCharactersView(player: Player, ship: Ship, characters: Arra
 
   return {
     embeds: [embed],
-    components: [...buildPaginationButtons(CHARACTERS_BUTTON_NAME, player.id, currentPage, pageCount), menuRow],
+    components: [...buildPaginationButtons(CREW_BUTTON_NAME, player.id, currentPage, pageCount), menuRow],
   };
 }
 

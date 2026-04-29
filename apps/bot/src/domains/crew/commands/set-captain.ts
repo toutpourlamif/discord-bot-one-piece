@@ -1,8 +1,8 @@
 import type { Command } from '../../../discord/types.js';
 import { getSelfUser } from '../../../discord/utils/get-self-user.js';
-import { buildSetCaptainView } from '../../crew/set-captain-view.js';
 import { findOrCreatePlayer } from '../../player/service.js';
 import { getCrewByPlayerId } from '../service.js';
+import { buildSetCaptainView } from '../set-captain-view.js';
 
 export const setCaptainCommand: Command = {
   name: 'setcaptain',
