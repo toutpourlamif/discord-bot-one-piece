@@ -1,6 +1,6 @@
 import { NotFoundError } from '../../../../discord/errors.js';
 import type { Command } from '../../../../discord/types.js';
-import { parseIntegerArg } from '../../../../discord/utils/parse-integer-arg.js';
+import { parseIntegerArg } from '../../../../discord/utils/index.js';
 import * as resourceRepository from '../../../resource/repository.js';
 
 import { replyDebugData } from './utils.js';

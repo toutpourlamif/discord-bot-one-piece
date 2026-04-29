@@ -1,6 +1,5 @@
 import type { View } from '../../discord/types.js';
-import { buildMenuButtons } from '../../discord/utils/build-menu-buttons.js';
-import { buildOpEmbed } from '../../discord/utils/build-op-embed.js';
+import { buildMenuButtons, buildOpEmbed } from '../../discord/utils/index.js';
 import { formatBerry } from '../economy/utils/format-berry.js';
 
 import { PROFIL_BUTTON_NAME } from './constants.js';

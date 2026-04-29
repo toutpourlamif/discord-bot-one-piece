@@ -1,7 +1,7 @@
 import type { DevilFruitTemplate } from '@one-piece/db';
 import type { EmbedBuilder } from 'discord.js';
 
-import { buildOpEmbed } from '../../discord/utils/build-op-embed.js';
+import { buildOpEmbed } from '../../discord/utils/index.js';
 import { buildAssetUrl } from '../../shared/build-asset-url.js';
 import { DOMAIN_EMOJI, DOMAIN_LABEL } from '../../shared/domains.js';
 

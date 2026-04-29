@@ -1,7 +1,7 @@
 import type { ButtonInteraction } from 'discord.js';
 
 import type { ButtonHandler } from '../../../discord/types.js';
-import { parseIntegerArg } from '../../../discord/utils/parse-integer-arg.js';
+import { parseIntegerArg } from '../../../discord/utils/index.js';
 import { SHIP_BUTTON_NAME } from '../constants.js';
 import { buildShipView } from '../ship-view.js';
 

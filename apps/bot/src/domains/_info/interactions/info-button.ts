@@ -1,6 +1,6 @@
 import { ValidationError } from '../../../discord/errors.js';
 import type { ButtonHandler } from '../../../discord/types.js';
-import { parseIntegerArg } from '../../../discord/utils/parse-integer-arg.js';
+import { parseIntegerArg } from '../../../discord/utils/index.js';
 import type { DomainName } from '../../../shared/domains.js';
 import { infoProviderByDomain } from '../registry.js';
 
