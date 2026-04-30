@@ -1,5 +1,5 @@
 import { sql } from 'drizzle-orm';
-import { index, integer, pgTable, serial, varchar } from 'drizzle-orm/pg-core';
+import { index, integer, pgTable, serial, varchar, text } from 'drizzle-orm/pg-core';
 
 import { imageUrl, timestamps } from '../../../shared/helpers.js';
 import { rarity } from '../../../shared/rarity.js';
@@ -10,6 +10,7 @@ export const characterTemplate = pgTable(
   {
     id: serial('id').primaryKey(),
     name: varchar('name', { length: 128 }).notNull().unique(),
+    description: text('description'),
     hp: integer('hp').notNull().default(100),
     combat: integer('combat').notNull().default(10),
     devilFruitTemplateId: integer('devil_fruit_template_id').references(() => devilFruitTemplate.id, {

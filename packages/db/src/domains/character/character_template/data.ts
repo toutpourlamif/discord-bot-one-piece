@@ -23,17 +23,20 @@ export const CHARACTER_TEMPLATES_DATA: Array<CharacterTemplateSeed> = [
     combat: 10,
     imageUrl: null,
     devilFruitName: 'Gomu Gomu no Mi',
+    description: 'Homme ÉLastique qui adore le bezelouf',
   },
   {
     name: 'Roronoa Zoro',
     hp: 10,
     combat: 10,
     imageUrl: null,
+    description: 'épéiste avec des origine dz',
   },
   {
     name: 'Shanks',
     hp: 10,
     combat: 10,
     imageUrl: null,
+    description: 'rouqin boosté',
   },
 ];

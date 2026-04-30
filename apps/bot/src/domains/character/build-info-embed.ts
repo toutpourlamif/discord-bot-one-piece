@@ -6,7 +6,6 @@ import { DOMAIN_EMOJI, DOMAIN_LABEL } from '../../shared/domains.js';
 
 import type { CharacterTemplateInfo } from './types.js';
 
-// TODO: ajouter une colonne `description` à character_template (ticket à créer) puis la rendre ici via setDescription
 // TODO: design de l'embed character à revoir (emojis, couleur, mise en forme HP/Combat)
 export function buildCharacterInfoEmbed(template: CharacterTemplateInfo): EmbedBuilder {
   const embed = buildOpEmbed()
@@ -21,6 +20,10 @@ export function buildCharacterInfoEmbed(template: CharacterTemplateInfo): EmbedB
 
   if (template.imageUrl) {
     embed.setThumbnail(buildAssetUrl(template.imageUrl));
+  }
+
+  if (template.description !== null) {
+    embed.setDescription(template.description);
   }
 
   return embed;
