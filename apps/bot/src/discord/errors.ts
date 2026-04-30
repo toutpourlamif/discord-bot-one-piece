@@ -24,3 +24,10 @@ export class ValidationError extends AppError {
     this.name = 'ValidationError';
   }
 }
+
+export class InternalError extends AppError {
+  constructor(message: string) {
+    super(message, 'error', 'Une erreur est survenue, veuillez contacter un admin.');
+    this.name = 'InternalError';
+  }
+}
