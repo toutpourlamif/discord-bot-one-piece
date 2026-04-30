@@ -8,7 +8,7 @@ export const sellCommand: Command = {
   async handler(message, args) {
     const amount = BigInt(args[0] ?? '0');
     const { player } = await findOrCreatePlayer(message.author.id, message.author.username);
-    await sell(player.id, amount);
-    await message.reply(`+${formatBerry(amount)} (solde : ${formatBerry(player.berries + amount)}฿)`);
+    const newBerriesAmount = await sell(player.id, amount);
+    await message.reply(`+${formatBerry(amount)} (solde : ${formatBerry(newBerriesAmount)})`);
   },
 };
