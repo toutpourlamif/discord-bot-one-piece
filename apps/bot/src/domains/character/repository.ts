@@ -21,7 +21,7 @@ export async function getCharactersByPlayerId(playerId: number): Promise<Array<C
     .orderBy(desc(characterInstance.isCaptain), sql`${characterInstance.joinedCrewAt} asc nulls last`, asc(characterTemplate.name));
 }
 
-export async function giveCharacterToPlayer(playerId: number, templateId: number): Promise<CharacterInstance> {
+export async function createCharacterInstance(playerId: number, templateId: number): Promise<CharacterInstance> {
   const [created] = await db
     .insert(characterInstance)
     .values({
