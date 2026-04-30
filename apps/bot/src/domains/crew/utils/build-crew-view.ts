@@ -2,6 +2,7 @@ import type { Player, Ship } from '@one-piece/db';
 
 import type { View } from '../../../discord/types.js';
 import { buildMenuButtons, buildOpEmbed, buildPaginationButtons, clampPage, splitIntoPages } from '../../../discord/utils/index.js';
+import { buildAssetUrl } from '../../../shared/build-asset-url.js';
 import type { CharacterRow } from '../../character/types.js';
 import { getCharacterInstanceName } from '../../character/utils/index.js';
 import { CREW_BUTTON_NAME } from '../constants.js';
@@ -24,6 +25,10 @@ export function buildCrewView(player: Player, ship: Ship, characters: Array<Char
   if (isCrewPage) {
     const crewCapacity = getCrewCapacity(ship);
     embed.setTitle(`Équipage de ${player.name} (${crew.length}/${crewCapacity})`).setDescription(crew.map(formatLine).join('\n'));
+    const captain = crew.find((character) => character.isCaptain);
+    if (captain?.imageUrl) {
+      embed.setThumbnail(buildAssetUrl(captain.imageUrl));
+    }
   } else {
     const reservePage = reservePages[currentPage - 1];
     if (!reservePage) throw new Error(`Page de réserve introuvable: ${currentPage}/${reservePages.length}`);

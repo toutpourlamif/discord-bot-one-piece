@@ -21,7 +21,7 @@ export const CHARACTER_TEMPLATES_DATA: Array<CharacterTemplateSeed> = [
     name: 'Monkey D. Luffy',
     hp: 10,
     combat: 10,
-    imageUrl: null,
+    imageUrl: 'devil-fruits/gomu-gomu-no-mi.webp',
     devilFruitName: 'Gomu Gomu no Mi',
   },
   {
