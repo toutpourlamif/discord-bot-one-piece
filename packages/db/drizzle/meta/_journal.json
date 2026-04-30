@@ -113,13 +113,6 @@
       "when": 1777209297109,
       "tag": "0015_live_de_berlinois",
       "breakpoints": true
-    },
-    {
-      "idx": 16,
-      "version": "7",
-      "when": 1777322695398,
-      "tag": "0016_hot_blockbuster",
-      "breakpoints": true
     }
   ]
 }
