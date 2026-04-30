@@ -5,7 +5,7 @@ import { InsufficientFundsError } from './errors.js';
 // TODO: renommer la fonction quand besoin métier
 export async function buy(playerId: number, amount: bigint): Promise<bigint> {
   const newBalance = await playerRepository.debitBerry(playerId, amount);
-  if (newBalance === null) throw new InsufficientFundsError();
+  if (!newBalance) throw new InsufficientFundsError();
   return newBalance;
 }
 
