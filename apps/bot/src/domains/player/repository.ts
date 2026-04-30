@@ -1,4 +1,4 @@
-import { db, player, type Player } from '@one-piece/db';
+import { db, player, type DbOrTransaction, type Player } from '@one-piece/db';
 import { eq } from 'drizzle-orm';
 
 import { NotFoundError } from '../../discord/errors.js';
@@ -19,12 +19,12 @@ export async function findByDiscordId(discordId: string): Promise<Player | undef
   return row;
 }
 
-export async function create(discordId: string, name: string): Promise<Player> {
-  const [row] = await db.insert(player).values({ discordId, name }).returning();
+export async function create(discordId: string, name: string, transaction: DbOrTransaction = db): Promise<Player> {
+  const [row] = await transaction.insert(player).values({ discordId, name }).returning();
   return row!;
 }
 
-export async function updateName(playerId: number, name: string): Promise<Player> {
-  const [row] = await db.update(player).set({ name }).where(eq(player.id, playerId)).returning();
+export async function updateName(playerId: number, name: string, client: DbOrTransaction = db): Promise<Player> {
+  const [row] = await client.update(player).set({ name }).where(eq(player.id, playerId)).returning();
   return row!;
 }

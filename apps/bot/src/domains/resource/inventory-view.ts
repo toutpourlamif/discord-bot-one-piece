@@ -1,10 +1,7 @@
 import type { Player } from '@one-piece/db';
 
 import type { View } from '../../discord/types.js';
-import { buildMenuButtons } from '../../discord/utils/build-menu-buttons.js';
-import { buildOpEmbed } from '../../discord/utils/build-op-embed.js';
-import { buildPaginationButtons } from '../../discord/utils/build-pagination-buttons.js';
-import { clampPage, splitIntoPages } from '../../discord/utils/paginate.js';
+import { buildMenuButtons, buildOpEmbed, buildPaginationButtons, clampPage, splitIntoPages } from '../../discord/utils/index.js';
 
 import { INVENTORY_BUTTON_NAME } from './constants.js';
 import type { Inventory } from './types.js';

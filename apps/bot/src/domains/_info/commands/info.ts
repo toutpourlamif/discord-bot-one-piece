@@ -2,9 +2,7 @@ import { ActionRowBuilder, ButtonBuilder, ButtonStyle } from 'discord.js';
 
 import { DISCORD_ACTION_ROW_MAX_BUTTONS, DISCORD_BUTTON_LABEL_MAX_LENGTH } from '../../../discord/constants.js';
 import type { Command } from '../../../discord/types.js';
-import { buildCustomId } from '../../../discord/utils/build-custom-id.js';
-import { buildOpEmbed } from '../../../discord/utils/build-op-embed.js';
-import { getQuery } from '../../../discord/utils/get-query.js';
+import { buildCustomId, buildOpEmbed, getQuery } from '../../../discord/utils/index.js';
 import { DOMAIN_EMOJI } from '../../../shared/domains.js';
 import { truncate } from '../../../shared/utils.js';
 import { INFO_BUTTON_NAME } from '../interactions/info-button.js';
