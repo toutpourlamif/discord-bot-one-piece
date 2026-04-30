@@ -1,0 +1,1 @@
+ALTER TABLE "player" ADD COLUMN "berries" bigint DEFAULT 0 NOT NULL;

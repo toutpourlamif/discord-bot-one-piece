@@ -2,13 +2,12 @@ import { ActionRowBuilder, ButtonBuilder, ButtonStyle } from 'discord.js';
 import sampleSize from 'lodash/sampleSize.js';
 
 import type { Command } from '../../../discord/types.js';
-import { buildCustomId } from '../../../discord/utils/build-custom-id.js';
-import { buildOpEmbed } from '../../../discord/utils/build-op-embed.js';
+import { buildCustomId, buildOpEmbed } from '../../../discord/utils/index.js';
 const EMOJIS: Array<string> = ['🍖', '🏴‍☠️', '⚓', '🐉', '🗺️', '🛶', '☠️', '🍈', '🦈', '🐟', '🏝️', '⚔️', '🔫', '🔪'];
 
 export const emojiCommand: Command = {
   name: 'emoji',
-  async handler(message, args) {
+  async handler(message) {
     const embed = buildOpEmbed().setTitle('Emojis').setDescription('Choisis un emoji ! ');
     const fiveEmojis = sampleSize(EMOJIS, 5);
     const buttons = fiveEmojis.map((emoji, index) =>

@@ -1,0 +1,1 @@
+ALTER TABLE "character_instance" ADD COLUMN "nickname" varchar(64);
