@@ -14,7 +14,7 @@ export const giveCharacterCommand: Command = {
 
     const [hit] = await characterRepository.searchManyByName(query);
     if (!hit) {
-      throw new NotFoundError(`Aucun character trouvé pour ${query}.`);
+      throw new NotFoundError(`Aucun personnage trouvé pour ${query}.`);
     }
 
     const { player } = await findOrCreatePlayer(target.id, target.username);
