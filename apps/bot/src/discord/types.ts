@@ -1,7 +1,9 @@
 import type { ActionRowBuilder, ButtonBuilder, ButtonInteraction, EmbedBuilder, Message } from 'discord.js';
 
+export type CommandName = string | Array<string>;
+
 export type Command = {
-  name: string;
+  name: CommandName;
   handler: (message: Message, args: Array<string>) => Promise<void>;
 };
 

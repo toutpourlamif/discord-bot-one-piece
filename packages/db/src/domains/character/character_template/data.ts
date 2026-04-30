@@ -1,10 +1,16 @@
+import type { DevilFruitName } from '../../devil_fruit/devil_fruit_template/data.js';
+
+import { PLAYER_AS_CHARACTER_TEMPLATE_NAME } from './constants.js';
 import type { CharacterTemplateInsert } from './schema.js';
 
 /** Nom du template spéciale qui représente le player (voir doc) */
-export const PLAYER_AS_CHARACTER_TEMPLATE_NAME = 'PLAYER_AS_CHARACTER';
+
+type CharacterTemplateSeed = Omit<CharacterTemplateInsert, 'devilFruitTemplateId'> & {
+  devilFruitName?: DevilFruitName;
+};
 
 // TODO: supprimer/modifier en prod
-export const CHARACTER_TEMPLATES_DATA: Array<CharacterTemplateInsert> = [
+export const CHARACTER_TEMPLATES_DATA: Array<CharacterTemplateSeed> = [
   {
     name: PLAYER_AS_CHARACTER_TEMPLATE_NAME,
     hp: 10,
@@ -16,6 +22,7 @@ export const CHARACTER_TEMPLATES_DATA: Array<CharacterTemplateInsert> = [
     hp: 10,
     combat: 10,
     imageUrl: null,
+    devilFruitName: 'Gomu Gomu no Mi',
   },
   {
     name: 'Roronoa Zoro',

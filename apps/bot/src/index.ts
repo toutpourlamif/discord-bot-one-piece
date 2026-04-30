@@ -9,7 +9,7 @@ if (!token) {
   throw new Error('DISCORD_TOKEN manquant dans apps/bot/.env.local');
 }
 
-const prefix = process.env.COMMAND_PREFIX;
+export const prefix = process.env.COMMAND_PREFIX;
 if (!prefix) {
   throw new Error('COMMAND_PREFIX manquant dans apps/bot/.env.local');
 }

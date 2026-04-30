@@ -3,6 +3,7 @@ import { boolean, check, integer, pgTable, serial, timestamp, uniqueIndex, varch
 
 import { MAX_CHARACTER_NAME_LENGTH } from '../../../shared/constants.js';
 import { timestamps } from '../../../shared/helpers.js';
+import { devilFruitTemplate } from '../../devil_fruit/devil_fruit_template/schema.js';
 import { player } from '../../player/schema.js';
 import { characterTemplate } from '../character_template/schema.js';
 
@@ -19,6 +20,9 @@ export const characterInstance = pgTable(
     nickname: varchar('nickname', { length: MAX_CHARACTER_NAME_LENGTH }),
     joinedCrewAt: timestamp('joined_crew_at', { withTimezone: true }),
     isCaptain: boolean('is_captain').notNull().default(false),
+    devilFruitTemplateId: integer('devil_fruit_template_id').references(() => devilFruitTemplate.id, {
+      onDelete: 'restrict',
+    }),
     ...timestamps(),
   },
   (table) => [
