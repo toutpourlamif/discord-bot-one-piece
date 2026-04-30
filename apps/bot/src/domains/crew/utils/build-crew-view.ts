@@ -8,8 +8,8 @@ import { CREW_BUTTON_NAME } from '../constants.js';
 
 import { getCrewCapacity } from './get-crew-capacity.js';
 
-export function buildCrewView(player: Player, ship: Ship, characters: Array<CharacterRow>, page: number): View {
-  const menuRow = buildMenuButtons(CREW_BUTTON_NAME, player.id);
+export function buildCrewView(player: Player, ship: Ship, characters: Array<CharacterRow>, page: number, ownerDiscordId: string): View {
+  const menuRow = buildMenuButtons(CREW_BUTTON_NAME, ownerDiscordId, player.id);
 
   const crew = characters.filter((c) => c.joinedCrewAt !== null);
   const reserve = characters.filter((c) => c.joinedCrewAt === null);
@@ -36,7 +36,7 @@ export function buildCrewView(player: Player, ship: Ship, characters: Array<Char
 
   return {
     embeds: [embed],
-    components: [...buildPaginationButtons(CREW_BUTTON_NAME, player.id, currentPage, pageCount), menuRow],
+    components: [...buildPaginationButtons(CREW_BUTTON_NAME, ownerDiscordId, player.id, currentPage, pageCount), menuRow],
   };
 }
 
