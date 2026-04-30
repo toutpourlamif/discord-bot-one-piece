@@ -1,5 +1,3 @@
-// apps/bot/src/discord/utils/assert-menu-owner.ts
-
 import type { ButtonInteraction } from 'discord.js';
 
 import { ValidationError } from '../errors.js';
