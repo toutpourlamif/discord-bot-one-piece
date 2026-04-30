@@ -31,7 +31,7 @@ export async function getCharactersByPlayerId(playerId: number): Promise<Array<C
     .orderBy(desc(characterInstance.isCaptain), sql`${characterInstance.joinedCrewAt} asc nulls last`, asc(characterTemplate.name));
 }
 
-export async function createCharacterInstance(playerId: number, templateId: number): Promise<CharacterInstance> {
+export async function createCharacterInstance(playerId: number, templateId: number): Promise<CharacterRow> {
   const [created] = await db
     .insert(characterInstance)
     .values({
@@ -39,8 +39,25 @@ export async function createCharacterInstance(playerId: number, templateId: numb
       templateId,
     })
     .returning();
-  if (!created) throw new InternalError("Impossible de créer l'instance de character.");
-  return created;
+  if (!created) throw new InternalError('Impossible de créer ce personnage.');
+
+  const [createdRow] = await db
+    .select({
+      instanceId: characterInstance.id,
+      name: characterTemplate.name,
+      nickname: characterInstance.nickname,
+      hp: characterTemplate.hp,
+      combat: characterTemplate.combat,
+      joinedCrewAt: characterInstance.joinedCrewAt,
+      isCaptain: characterInstance.isCaptain,
+    })
+    .from(characterInstance)
+    .innerJoin(characterTemplate, eq(characterInstance.templateId, characterTemplate.id))
+    .where(eq(characterInstance.id, created.id))
+    .limit(1);
+  if (!createdRow) throw new InternalError("Impossible de récupérer l'instance de character créée.");
+
+  return createdRow;
 }
 
 export async function searchManyByName(query: string): Promise<Array<{ entity: CharacterTemplate; score: number }>> {

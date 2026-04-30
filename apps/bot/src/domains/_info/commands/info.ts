@@ -14,12 +14,10 @@ const ENTITIES_DISPLAYED_LIMIT = 10;
 export const infoCommand: Command = {
   name: 'info',
   async handler(message, args) {
-    const query = getQuery(args, `Ta recherche doit faire au moins ${MIN_QUERY_LENGTH} caractères.`);
-    if (query.length < MIN_QUERY_LENGTH) {
-      // TODO: Throw "MalformatedError" aulieu d'afficher un msg
-      await message.reply(`Ta recherche doit faire au moins ${MIN_QUERY_LENGTH} caractères.`);
-      return;
-    }
+    const query = getQuery(args, {
+      emptyMessage: `Ta recherche doit faire au moins ${MIN_QUERY_LENGTH} caractères.`,
+      minLength: MIN_QUERY_LENGTH,
+    });
 
     const hitsPerProvider = await Promise.all(infoProviders.map((provider) => provider.searchManyByName(query)));
     const topHits = hitsPerProvider

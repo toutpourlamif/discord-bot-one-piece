@@ -1,7 +1,6 @@
-import { NotFoundError, ValidationError } from '../../../discord/errors.js';
+import { NotFoundError } from '../../../discord/errors.js';
 import type { Command } from '../../../discord/types.js';
-import { buildOpEmbed } from '../../../discord/utils/build-op-embed.js';
-import { getTargetUser } from '../../../discord/utils/get-target-user.js';
+import { buildOpEmbed, getQuery, getTargetUser } from '../../../discord/utils/index.js';
 import * as characterRepository from '../../character/repository.js';
 import { findOrCreatePlayer } from '../../player/service.js';
 
@@ -10,13 +9,7 @@ export const giveCharacterCommand: Command = {
   name: 'givecharacter',
   async handler(message, args) {
     const target = getTargetUser(message);
-    const query = args
-      .filter((arg) => !isUserMention(arg))
-      .join(' ')
-      .trim();
-    if (!query) {
-      throw new ValidationError('Tu dois fournir un nom.');
-    }
+    const query = getQuery(getCharacterQueryArgs(args), { emptyMessage: 'Tu dois fournir un nom.' });
 
     const [hit] = await characterRepository.searchManyByName(query);
     if (!hit) {
@@ -24,11 +17,16 @@ export const giveCharacterCommand: Command = {
     }
 
     const { player } = await findOrCreatePlayer(target.id, target.username);
-    await characterRepository.createCharacterInstance(player.id, hit.entity.id);
+    const createdInstance = await characterRepository.createCharacterInstance(player.id, hit.entity.id);
 
-    await message.reply({ embeds: [buildOpEmbed().setDescription(`${player.name} a reçu ${hit.entity.name}.`)] });
+    await message.reply({ embeds: [buildOpEmbed().setDescription(`${player.name} a reçu ${createdInstance.name}.`)] });
   },
 };
+
+function getCharacterQueryArgs(args: Array<string>): Array<string> {
+  const [firstArg, ...queryArgs] = args;
+  return firstArg && isUserMention(firstArg) ? queryArgs : args;
+}
 
 function isUserMention(value: string): boolean {
   return /^<@!?\d+>$/.test(value);
