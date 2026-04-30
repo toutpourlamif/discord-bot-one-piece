@@ -9,7 +9,8 @@ export const giveCharacterCommand: Command = {
   name: 'givecharacter',
   async handler(message, args) {
     const target = getTargetUser(message);
-    const query = getQuery(getCharacterQueryArgs(args), { emptyMessage: 'Tu dois fournir un nom.' });
+    const queryArgs = message.mentions.users.first() ? args.slice(1) : args;
+    const query = getQuery(queryArgs, { emptyMessage: 'Tu dois fournir un nom.' });
 
     const [hit] = await characterRepository.searchManyByName(query);
     if (!hit) {
@@ -22,12 +23,3 @@ export const giveCharacterCommand: Command = {
     await message.reply({ embeds: [buildOpEmbed().setDescription(`${player.name} a reçu ${createdInstance.name}.`)] });
   },
 };
-
-function getCharacterQueryArgs(args: Array<string>): Array<string> {
-  const [firstArg, ...queryArgs] = args;
-  return firstArg && isUserMention(firstArg) ? queryArgs : args;
-}
-
-function isUserMention(value: string): boolean {
-  return /^<@!?\d+>$/.test(value);
-}
