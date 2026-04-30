@@ -6,11 +6,14 @@ export async function findCharacterInstanceById(instanceId: number): Promise<Cha
   return row;
 }
 
-export async function removeCaptain(playerId: number, client: DbOrTransaction): Promise<void> {
-  await client
+export async function removeCaptain(playerId: number, client: DbOrTransaction): Promise<number | null> {
+  const [previous] = await client
     .update(characterInstance)
     .set({ isCaptain: false })
-    .where(and(eq(characterInstance.playerId, playerId), eq(characterInstance.isCaptain, true)));
+    .where(and(eq(characterInstance.playerId, playerId), eq(characterInstance.isCaptain, true)))
+    .returning({ id: characterInstance.id });
+
+  return previous?.id ?? null;
 }
 
 export async function setCaptain(playerId: number, instanceId: number, client: DbOrTransaction): Promise<boolean> {
