@@ -2,7 +2,7 @@ import { ActionRowBuilder, ButtonBuilder, ButtonStyle } from 'discord.js';
 
 import { DISCORD_ACTION_ROW_MAX_BUTTONS, DISCORD_BUTTON_LABEL_MAX_LENGTH } from '../../../discord/constants.js';
 import type { Command } from '../../../discord/types.js';
-import { buildCustomId, buildOpEmbed } from '../../../discord/utils/index.js';
+import { buildCustomId, buildOpEmbed, getQuery } from '../../../discord/utils/index.js';
 import { DOMAIN_EMOJI } from '../../../shared/domains.js';
 import { truncate } from '../../../shared/utils.js';
 import { INFO_BUTTON_NAME } from '../interactions/info-button.js';
@@ -14,12 +14,10 @@ const ENTITIES_DISPLAYED_LIMIT = 10;
 export const infoCommand: Command = {
   name: 'info',
   async handler(message, args) {
-    const query = args.join(' ').trim();
-    if (query.length < MIN_QUERY_LENGTH) {
-      // TODO: Throw "MalformatedError" aulieu d'afficher un msg
-      await message.reply(`Ta recherche doit faire au moins ${MIN_QUERY_LENGTH} caractères.`);
-      return;
-    }
+    const query = getQuery(args, {
+      emptyMessage: `Ta recherche doit faire au moins ${MIN_QUERY_LENGTH} caractères.`,
+      minLength: MIN_QUERY_LENGTH,
+    });
 
     const hitsPerProvider = await Promise.all(infoProviders.map((provider) => provider.searchManyByName(query)));
     const topHits = hitsPerProvider

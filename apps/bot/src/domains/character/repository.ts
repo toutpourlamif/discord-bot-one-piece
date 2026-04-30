@@ -10,7 +10,7 @@ import {
 } from '@one-piece/db';
 import { and, asc, desc, eq, getTableColumns, ilike, ne, or, sql } from 'drizzle-orm';
 
-import { NotFoundError } from '../../discord/errors.js';
+import { InternalError, NotFoundError } from '../../discord/errors.js';
 
 import type { CharacterRow, CharacterTemplateInfo } from './types.js';
 
@@ -30,6 +30,35 @@ export async function getCharactersByPlayerId(playerId: number): Promise<Array<C
     .innerJoin(characterTemplate, eq(characterInstance.templateId, characterTemplate.id))
     .where(eq(characterInstance.playerId, playerId))
     .orderBy(desc(characterInstance.isCaptain), sql`${characterInstance.joinedCrewAt} asc nulls last`, asc(characterTemplate.name));
+}
+
+export async function createCharacterInstance(playerId: number, templateId: number): Promise<CharacterRow> {
+  const [created] = await db
+    .insert(characterInstance)
+    .values({
+      playerId,
+      templateId,
+    })
+    .returning();
+  if (!created) throw new InternalError('Impossible de créer ce personnage.');
+
+  const [createdRow] = await db
+    .select({
+      instanceId: characterInstance.id,
+      name: characterTemplate.name,
+      nickname: characterInstance.nickname,
+      hp: characterTemplate.hp,
+      combat: characterTemplate.combat,
+      joinedCrewAt: characterInstance.joinedCrewAt,
+      isCaptain: characterInstance.isCaptain,
+    })
+    .from(characterInstance)
+    .innerJoin(characterTemplate, eq(characterInstance.templateId, characterTemplate.id))
+    .where(eq(characterInstance.id, created.id))
+    .limit(1);
+  if (!createdRow) throw new InternalError("Impossible de récupérer le personnage créé.");
+
+  return createdRow;
 }
 
 export async function searchManyByName(query: string): Promise<Array<{ entity: CharacterTemplate; score: number }>> {
