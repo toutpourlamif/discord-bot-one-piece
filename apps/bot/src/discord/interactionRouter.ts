@@ -1,27 +1,27 @@
-import type { Interaction } from 'discord.js';
+import type { Interaction, InteractionReplyOptions } from 'discord.js';
 
 import { devButtonHandlers } from '../domains/_dev/interactions/index.js';
 import { infoButtonHandlers } from '../domains/_info/index.js';
-import { characterButtonHandlers } from '../domains/character/interactions/index.js';
+import { crewButtonHandlers } from '../domains/crew/index.js';
 import { playerButtonHandlers } from '../domains/player/index.js';
 import { resourceButtonHandlers } from '../domains/resource/index.js';
 import { shipButtonHandlers } from '../domains/ship/index.js';
-import { buildRegistryWithUniqueNames } from '../shared/build-registry.js';
+import { buildRegistry } from '../shared/build-registry.js';
 
 import { CUSTOM_ID_SEPARATOR } from './constants.js';
 import { AppError, ValidationError } from './errors.js';
 import type { ButtonHandler } from './types.js';
-import { buildOpEmbed } from './utils/build-op-embed.js';
+import { buildOpEmbed } from './utils/index.js';
 
 const allButtonHandlers: Array<ButtonHandler> = [
   ...infoButtonHandlers,
   ...playerButtonHandlers,
   ...shipButtonHandlers,
   ...resourceButtonHandlers,
-  ...characterButtonHandlers,
+  ...crewButtonHandlers,
   ...devButtonHandlers,
 ];
-const buttonRegistry = buildRegistryWithUniqueNames(allButtonHandlers, (h) => h.name);
+const buttonRegistry = buildRegistry(allButtonHandlers, (h) => h.name);
 
 /** Dispatche une interaction vers le bon handler. Voir `docs/discord.md`. */
 export async function routeInteraction(interaction: Interaction): Promise<void> {
@@ -38,10 +38,25 @@ export async function routeInteraction(interaction: Interaction): Promise<void> 
   } catch (error) {
     if (error instanceof AppError) {
       console[error.severity](error);
-      await interaction.reply({ embeds: [buildOpEmbed(error.severity).setDescription(error.userMessage)], ephemeral: true });
+      await replyWithEphemeralError(interaction, {
+        embeds: [buildOpEmbed(error.severity).setDescription(error.userMessage)],
+      });
     } else {
       console.error(error);
-      await interaction.reply({ embeds: [buildOpEmbed('error').setDescription('Une erreur est survenue.')], ephemeral: true });
+      await replyWithEphemeralError(interaction, {
+        embeds: [buildOpEmbed('error').setDescription('Une erreur est survenue.')],
+      });
     }
   }
+}
+
+async function replyWithEphemeralError(interaction: Interaction, options: InteractionReplyOptions): Promise<void> {
+  if (!interaction.isRepliable()) return;
+
+  if (interaction.deferred || interaction.replied) {
+    await interaction.followUp({ ...options, ephemeral: true });
+    return;
+  }
+
+  await interaction.reply({ ...options, ephemeral: true });
 }

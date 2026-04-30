@@ -2,12 +2,15 @@ import { sql } from 'drizzle-orm';
 import { index, pgTable, serial, text, varchar } from 'drizzle-orm/pg-core';
 
 import { imageUrl, timestamps } from '../../../shared/helpers.js';
+import { rarity } from '../../../shared/rarity.js';
 
 export const resourceTemplate = pgTable(
   'resource_template',
   {
     id: serial('id').primaryKey(),
     name: varchar('name', { length: 128 }).notNull().unique(),
+    rarity: rarity('rarity').notNull().default('COMMON'),
+
     ...imageUrl(),
     description: text('description'),
     ...timestamps(),

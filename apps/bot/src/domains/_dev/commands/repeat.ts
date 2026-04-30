@@ -1,13 +1,10 @@
 import type { Command } from '../../../discord/types.js';
+import { getQuery } from '../../../discord/utils/get-query.js';
 
 export const repeatCommand: Command = {
   name: 'repeat',
   async handler(message, args) {
-    const text = args.join(' ');
-    if (!text) {
-      await message.reply('Tu dois fournir un texte.');
-      return;
-    }
+    const text = getQuery(args, { emptyMessage: 'Tu dois fournir un texte.' });
     await message.reply(text);
   },
 };

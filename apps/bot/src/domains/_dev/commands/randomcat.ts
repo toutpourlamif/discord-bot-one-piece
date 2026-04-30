@@ -1,7 +1,7 @@
 import { ActionRowBuilder, ButtonBuilder, ButtonStyle } from 'discord.js';
 
 import type { Command } from '../../../discord/types.js';
-import { buildOpEmbed } from '../../../discord/utils/build-op-embed.js';
+import { buildOpEmbed } from '../../../discord/utils/index.js';
 
 const catImages = ['https://i.imgur.com/xJ4oIrC.jpeg', 'https://i.imgur.com/g2BEPjU.jpeg', 'https://i.imgur.com/c7FhEn6.png'];
 

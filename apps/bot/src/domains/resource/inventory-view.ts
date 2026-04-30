@@ -1,19 +1,16 @@
 import type { Player } from '@one-piece/db';
 
 import type { View } from '../../discord/types.js';
-import { buildMenuButtons } from '../../discord/utils/build-menu-buttons.js';
-import { buildOpEmbed } from '../../discord/utils/build-op-embed.js';
-import { buildPaginationButtons } from '../../discord/utils/build-pagination-buttons.js';
-import { clampPage, splitIntoPages } from '../../discord/utils/paginate.js';
+import { buildMenuButtons, buildOpEmbed, buildPaginationButtons, clampPage, splitIntoPages } from '../../discord/utils/index.js';
 
 import { INVENTORY_BUTTON_NAME } from './constants.js';
 import type { Inventory } from './types.js';
 
 const EMPTY_INVENTORY_DESCRIPTION = 'Inventaire vide';
 
-export function buildInventoryView(player: Player, inventory: Inventory, page: number): View {
+export function buildInventoryView(player: Player, inventory: Inventory, page: number, ownerDiscordId: string): View {
   const embed = buildOpEmbed().setTitle(`Inventaire de ${player.name}`);
-  const menuRow = buildMenuButtons(INVENTORY_BUTTON_NAME, player.id);
+  const menuRow = buildMenuButtons(INVENTORY_BUTTON_NAME, ownerDiscordId, player.id);
 
   if (inventory.length === 0) {
     embed.setDescription(EMPTY_INVENTORY_DESCRIPTION);
@@ -32,6 +29,6 @@ export function buildInventoryView(player: Player, inventory: Inventory, page: n
 
   return {
     embeds: [embed],
-    components: [...buildPaginationButtons(INVENTORY_BUTTON_NAME, player.id, currentPage, pages.length), menuRow],
+    components: [...buildPaginationButtons(INVENTORY_BUTTON_NAME, ownerDiscordId, player.id, currentPage, pages.length), menuRow],
   };
 }
