@@ -47,6 +47,7 @@ export async function createCharacterInstance(playerId: number, templateId: numb
       instanceId: characterInstance.id,
       name: characterTemplate.name,
       nickname: characterInstance.nickname,
+      imageUrl: characterTemplate.imageUrl,
       hp: characterTemplate.hp,
       combat: characterTemplate.combat,
       joinedCrewAt: characterInstance.joinedCrewAt,
@@ -56,7 +57,7 @@ export async function createCharacterInstance(playerId: number, templateId: numb
     .innerJoin(characterTemplate, eq(characterInstance.templateId, characterTemplate.id))
     .where(eq(characterInstance.id, created.id))
     .limit(1);
-  if (!createdRow) throw new InternalError("Impossible de récupérer le personnage créé.");
+  if (!createdRow) throw new InternalError('Impossible de récupérer le personnage créé.');
 
   return createdRow;
 }
