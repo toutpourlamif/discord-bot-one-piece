@@ -17,6 +17,9 @@ export const player = pgTable('player', {
   bounty: bigint('bounty', { mode: 'bigint' })
     .notNull()
     .default(sql`0`),
+  berries: bigint('berries', { mode: 'bigint' })
+    .notNull()
+    .default(sql`0`),
   ...timestamps(),
 });
 
