@@ -20,6 +20,7 @@ export async function getCharactersByPlayerId(playerId: number): Promise<Array<C
       instanceId: characterInstance.id,
       name: characterTemplate.name,
       nickname: characterInstance.nickname,
+      imageUrl: characterTemplate.imageUrl,
       hp: characterTemplate.hp,
       combat: characterTemplate.combat,
       joinedCrewAt: characterInstance.joinedCrewAt,
