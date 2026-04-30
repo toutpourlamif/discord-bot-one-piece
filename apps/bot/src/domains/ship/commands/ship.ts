@@ -8,6 +8,6 @@ export const shipCommand: Command = {
   async handler(message) {
     const user = getTargetUser(message);
     const { player } = await findOrCreatePlayer(user.id, user.username);
-    await message.reply(await buildShipView(player.id));
+    await message.reply(await buildShipView(player.id, message.author.id));
   },
 };
