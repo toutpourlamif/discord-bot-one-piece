@@ -55,7 +55,7 @@ export async function createCharacterInstance(playerId: number, templateId: numb
     .innerJoin(characterTemplate, eq(characterInstance.templateId, characterTemplate.id))
     .where(eq(characterInstance.id, created.id))
     .limit(1);
-  if (!createdRow) throw new InternalError("Impossible de récupérer le personnage créé.");
+  if (!createdRow) throw new InternalError('Impossible de récupérer le personnage créé.');
 
   return createdRow;
 }
