@@ -25,6 +25,7 @@ export const CHARACTER_TEMPLATES_DATA: Array<CharacterTemplateSeed> = [
     race: 'HUMAN',
     imageUrl: null,
     devilFruitName: 'Gomu Gomu no Mi',
+    description: 'Homme ÉLastique qui adore le bezelouf',
   },
   {
     name: 'Roronoa Zoro',
@@ -32,6 +33,7 @@ export const CHARACTER_TEMPLATES_DATA: Array<CharacterTemplateSeed> = [
     combat: 10,
     race: 'HUMAN',
     imageUrl: null,
+    description: 'épéiste avec des origine dz',
   },
   {
     name: 'Shanks',
@@ -39,5 +41,6 @@ export const CHARACTER_TEMPLATES_DATA: Array<CharacterTemplateSeed> = [
     combat: 10,
     race: 'HUMAN',
     imageUrl: null,
+    description: 'rouqin boosté',
   },
 ];
