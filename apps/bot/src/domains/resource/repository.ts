@@ -1,10 +1,10 @@
-import { db, resourceInstance, resourceTemplate, type ResourceTemplate } from '@one-piece/db';
-import { asc, eq, getTableColumns, ilike, or, sql } from 'drizzle-orm';
+import { db, resourceInstance, resourceTemplate, type ResourceName, type ResourceTemplate, type DbOrTransaction } from '@one-piece/db';
+import { and, asc, eq, getTableColumns, gte, ilike, or, sql } from 'drizzle-orm';
 
 import type { Inventory } from './types.js';
 
-export async function getInventory(playerId: number): Promise<Inventory> {
-  return db
+export async function getInventory(playerId: number, client: DbOrTransaction = db): Promise<Inventory> {
+  return client
     .select({
       name: resourceTemplate.name,
       quantity: resourceInstance.quantity,
@@ -46,4 +46,28 @@ export async function searchManyByName(query: string): Promise<Array<{ entity: R
 export async function findById(id: number): Promise<ResourceTemplate | undefined> {
   const [row] = await db.select().from(resourceTemplate).where(eq(resourceTemplate.id, id)).limit(1);
   return row;
+}
+
+export async function debitResourceByName(
+  playerId: number,
+  name: ResourceName,
+  quantity: number,
+  client: DbOrTransaction = db,
+): Promise<boolean> {
+  const [template] = await client
+    .select({ id: resourceTemplate.id })
+    .from(resourceTemplate)
+    .where(eq(resourceTemplate.name, name))
+    .limit(1);
+  if (!template) return false;
+
+  const [updated] = await client
+    .update(resourceInstance)
+    .set({ quantity: sql`${resourceInstance.quantity} - ${quantity}` })
+    .where(
+      and(eq(resourceInstance.playerId, playerId), eq(resourceInstance.templateId, template.id), gte(resourceInstance.quantity, quantity)),
+    )
+    .returning({ id: resourceInstance.id });
+
+  return updated !== undefined;
 }

@@ -11,6 +11,7 @@ import { randomCommand } from './random.js';
 import { randomCatCommand } from './randomcat.js';
 import { repeatCommand } from './repeat.js';
 import { sellCommand } from './sell.js';
+import { upgradeShipCommand } from './upgrade-ship.js';
 
 export const devCommands = [
   onePieceCommand,
@@ -26,4 +27,5 @@ export const devCommands = [
   emojiCommand,
   buyCommand,
   sellCommand,
+  upgradeShipCommand,
 ];
