@@ -1,13 +1,10 @@
 import type { Command } from '../../../discord/types.js';
-import { buildOpEmbed } from '../../../discord/utils/build-op-embed.js';
-import { getTargetUser } from '../../../discord/utils/get-target-user.js';
+import { buildOpEmbed, getTargetUser } from '../../../discord/utils/index.js';
 import { findOrCreatePlayer } from '../../player/service.js';
 import { runFishingAttempt } from '../service.js';
 
 export const fishingCommand: Command = {
-  // TODO: !fish devrait marcher aussi, il faut retravailler l'architecture pour que name soit une liste de strings
-  // https://github.com/toutpourlamif/discord-bot-one-piece/issues/118
-  name: 'fish',
+  name: ['fishing', 'fish'],
   async handler(message) {
     const user = getTargetUser(message);
     const { player } = await findOrCreatePlayer(user.id, user.username);

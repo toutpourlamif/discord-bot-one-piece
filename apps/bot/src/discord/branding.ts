@@ -4,7 +4,10 @@ export const BOT_COLOR = 0x5284de;
 
 export const EMBED_COLORS = {
   default: BOT_COLOR,
+  error: 0xed4245,
   info: 0x99aab5,
+  success: 0x57f287,
+  warn: 0xfee75c,
 } as const;
 
 export type EmbedVariant = keyof typeof EMBED_COLORS;

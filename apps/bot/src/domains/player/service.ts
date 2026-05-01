@@ -1,19 +1,28 @@
-import type { Player } from '@one-piece/db';
+import { db, type Player } from '@one-piece/db';
 
 import { sanitizeName } from '../../shared/sanitize-name.js';
+import * as characterRepository from '../character/repository.js';
 import { findOrCreateShip } from '../ship/service.js';
 
 import { assertNameNotEmpty, assertNameWithinMaxLength } from './name.js';
 import * as playerRepository from './repository.js';
 
-type FindOrCreateResult = { player: Player; created: boolean };
+type FindOrCreateResult = {
+  player: Player;
+  created: boolean;
+};
 
 export async function findOrCreatePlayer(discordId: string, name: string): Promise<FindOrCreateResult> {
   const existing = await playerRepository.findByDiscordId(discordId);
   if (existing) return { player: existing, created: false };
-  const created = await playerRepository.create(discordId, name);
-  // TODO: ajouter tout ça dans une transaction
-  await findOrCreateShip(created.id);
+
+  const created = await db.transaction(async (transaction) => {
+    const newPlayer = await playerRepository.create(discordId, name, transaction);
+    await characterRepository.createPlayerAsCharacterInstance(newPlayer.id, newPlayer.name, transaction);
+    await findOrCreateShip(newPlayer.id, undefined, transaction);
+    return newPlayer;
+  });
+
   return { player: created, created: true };
 }
 
@@ -24,5 +33,9 @@ export async function renamePlayer(playerId: number, rawName: string): Promise<P
   const sanitizedName = sanitizeName(trimmedName);
   assertNameNotEmpty(sanitizedName);
 
-  return playerRepository.updateName(playerId, sanitizedName);
+  return db.transaction(async (transaction) => {
+    const updated = await playerRepository.updateName(playerId, sanitizedName, transaction);
+    await characterRepository.updatePlayerAsCharacterNickname(playerId, sanitizedName, transaction);
+    return updated;
+  });
 }

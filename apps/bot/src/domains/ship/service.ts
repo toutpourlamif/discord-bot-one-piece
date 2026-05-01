@@ -1,4 +1,4 @@
-import type { Ship } from '@one-piece/db';
+import { db, type DbOrTransaction, type Ship } from '@one-piece/db';
 
 import { sanitizeName } from '../../shared/sanitize-name.js';
 
@@ -9,10 +9,14 @@ export class ShipNameValidationError extends Error {}
 
 type FindOrCreateResult = { ship: Ship; created: boolean };
 
-export async function findOrCreateShip(playerId: number, name = 'Navire sans nom'): Promise<FindOrCreateResult> {
-  const existing = await shipRepository.findByPlayerId(playerId);
+export async function findOrCreateShip(
+  playerId: number,
+  name = 'Navire sans nom',
+  client: DbOrTransaction = db,
+): Promise<FindOrCreateResult> {
+  const existing = await shipRepository.findByPlayerId(playerId, client);
   if (existing) return { ship: existing, created: false };
-  const created = await shipRepository.create(playerId, name);
+  const created = await shipRepository.create(playerId, name, client);
   return { ship: created, created: true };
 }
 
