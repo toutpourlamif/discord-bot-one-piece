@@ -35,7 +35,6 @@ export async function replaceCaptainOfPlayer(playerId: number, instanceId: numbe
       },
       actorPlayerId: playerId,
       target: { type: 'character_instance', id: instanceId },
-      source: 'discord_button',
       client: transaction,
     });
   });

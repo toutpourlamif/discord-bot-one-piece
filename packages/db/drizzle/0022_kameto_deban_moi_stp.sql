@@ -5,8 +5,7 @@ CREATE TABLE "history" (
 	"actor_player_id" integer,
 	"target_type" text,
 	"target_id" integer,
-	"payload" jsonb DEFAULT '{}'::jsonb NOT NULL,
-	"source" text
+	"payload" jsonb DEFAULT '{}'::jsonb NOT NULL
 );
 --> statement-breakpoint
 ALTER TABLE "history" ADD CONSTRAINT "history_actor_player_id_player_id_fk" FOREIGN KEY ("actor_player_id") REFERENCES "public"."player"("id") ON DELETE set null ON UPDATE no action;--> statement-breakpoint

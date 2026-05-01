@@ -40,7 +40,6 @@ Une seule table, avec quelques colonnes fixes pour les questions qu'on posera so
 | `actor_player_id`           | Qui a fait l'action (vide si c'est le système : un cron, un admin)                   |
 | `target_type` + `target_id` | Sur quoi porte l'action (un personnage, un fruit, un navire…). Volontairement libre. |
 | `payload`                   | Les détails spécifiques au type d'action, en JSON                                    |
-| `source`                    | D'où vient l'action : bouton Discord, commande, cron, admin                          |
 
 > `target_id` peut pointer vers n'importe quelle table, donc on ne met pas de clé étrangère dessus. C'est voulu : ça nous laisse libres d'effacer de vieilles entrées plus tard sans casser de contraintes.
 
@@ -65,7 +64,6 @@ appendHistory({
   payload: { fromCharacterInstanceId, toCharacterInstanceId },
   actorPlayerId: player.id,
   target: { type: 'character_instance', id: instanceId },
-  source: 'discord_button',
   client: transaction, // optionnel — voir ci-dessous
 });
 ```

@@ -15,7 +15,6 @@ export const history = pgTable(
     payload: jsonb('payload')
       .notNull()
       .default(sql`'{}'::jsonb`),
-    source: text('source'),
   },
   (table) => [
     index('history_occurred_at_idx').on(table.occurredAt.desc()),

@@ -9,5 +9,3 @@ export type HistoryTargetType =
   | 'ship';
 
 export type HistoryTarget = { type: HistoryTargetType; id: number };
-
-export type HistorySource = 'discord_button' | 'discord_command' | 'cron' | 'admin';
