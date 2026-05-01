@@ -12,11 +12,11 @@ import { buildShipButton } from '../../domains/ship/ship-button.js';
 
 /** Build un ActionRow pour naviguer entre les menus principaux (Profil / Navire / Inventaire / Équipage).
  *  Le bouton de la vue courante est disabled. */
-export function buildMenuButtons(currentKey: string, playerId: number): ActionRowBuilder<ButtonBuilder> {
+export function buildMenuButtons(currentKey: string, ownerDiscordId: string, playerId: number): ActionRowBuilder<ButtonBuilder> {
   return new ActionRowBuilder<ButtonBuilder>().addComponents(
-    buildProfilButton(playerId, { disabled: currentKey === PROFIL_BUTTON_NAME }),
-    buildShipButton(playerId, { disabled: currentKey === SHIP_BUTTON_NAME }),
-    buildInventoryNavButton(playerId, { disabled: currentKey === INVENTORY_BUTTON_NAME }),
-    buildCrewNavButton(playerId, { disabled: currentKey === CREW_BUTTON_NAME }),
+    buildProfilButton(ownerDiscordId, playerId, { disabled: currentKey === PROFIL_BUTTON_NAME }),
+    buildShipButton(ownerDiscordId, playerId, { disabled: currentKey === SHIP_BUTTON_NAME }),
+    buildInventoryNavButton(ownerDiscordId, playerId, { disabled: currentKey === INVENTORY_BUTTON_NAME }),
+    buildCrewNavButton(ownerDiscordId, playerId, { disabled: currentKey === CREW_BUTTON_NAME }),
   );
 }

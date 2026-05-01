@@ -9,7 +9,7 @@ import { buildSetCaptainView } from '../utils/build-change-captain-view.js';
 
 import { crewCommand } from './crew.js';
 
-const crewCommandName = crewCommand.name;
+const [crewCommandName] = Array.isArray(crewCommand.name) ? crewCommand.name : [crewCommand.name];
 
 export const changeCaptainCommand: Command = {
   name: 'changecaptain',
