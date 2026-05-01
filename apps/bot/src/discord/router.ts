@@ -11,7 +11,7 @@ import { shipCommands } from '../domains/ship/commands/index.js';
 import { buildRegistry } from '../shared/build-registry.js';
 
 import { AppError } from './errors.js';
-import { buildOpEmbed } from './utils/index.js';
+import { buildOpEmbed, buildServerOnlyEmbed } from './utils/index.js';
 
 const allCommands = [
   ...playerCommands,
@@ -34,11 +34,7 @@ export async function routeMessage(message: Message, prefix: string): Promise<vo
   if (!content.startsWith(prefix)) return;
   if (!message.guildId) {
     await message.reply({
-      embeds: [
-        buildOpEmbed('warn').setDescription(
-          'Le bot se joue uniquement sur un serveur Discord. Invite-le sur ton serveur ou rejoins-en un.',
-        ),
-      ],
+      embeds: [buildServerOnlyEmbed()],
     });
     return;
   }

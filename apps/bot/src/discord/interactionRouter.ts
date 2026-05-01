@@ -12,7 +12,7 @@ import { buildRegistry } from '../shared/build-registry.js';
 import { CUSTOM_ID_SEPARATOR } from './constants.js';
 import { AppError, ValidationError } from './errors.js';
 import type { ButtonHandler } from './types.js';
-import { buildOpEmbed } from './utils/index.js';
+import { buildOpEmbed, buildServerOnlyEmbed } from './utils/index.js';
 
 const allButtonHandlers: Array<ButtonHandler> = [
   ...infoButtonHandlers,
@@ -29,11 +29,7 @@ export async function routeInteraction(interaction: Interaction): Promise<void> 
   if (!interaction.isButton()) return;
   if (!interaction.guildId) {
     await interaction.reply({
-      embeds: [
-        buildOpEmbed('warn').setDescription(
-          'Le bot se joue uniquement sur un serveur Discord. Invite-le sur ton serveur ou rejoins-en un.',
-        ),
-      ],
+      embeds: [buildServerOnlyEmbed()],
       ephemeral: true,
     });
     return;
