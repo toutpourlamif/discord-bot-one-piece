@@ -1,1 +1,0 @@
-ALTER TABLE "character_template" ADD COLUMN "description" text;

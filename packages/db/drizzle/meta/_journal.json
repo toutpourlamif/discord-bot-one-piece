@@ -134,13 +134,6 @@
       "when": 1777486751859,
       "tag": "0018_pov_tu_migres_avc_argent_haram",
       "breakpoints": true
-    },
-    {
-      "idx": 19,
-      "version": "7",
-      "when": 1777550350393,
-      "tag": "0019_live_de_walidsax",
-      "breakpoints": true
     }
   ]
 }
