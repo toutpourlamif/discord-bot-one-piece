@@ -1,7 +1,7 @@
 export type CaptainChangedLog = {
   type: 'crew.captain_changed';
   payload: {
-    fromCharacterInstanceId: number | null;
+    fromCharacterInstanceId: number;
     toCharacterInstanceId: number;
   };
 };
