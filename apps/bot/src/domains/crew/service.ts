@@ -3,7 +3,7 @@ import { db } from '@one-piece/db';
 import { NotFoundError } from '../../discord/errors.js';
 import * as characterRepository from '../character/repository.js';
 import type { CharacterRow } from '../character/types.js';
-import { appendHistory } from '../history/index.js';
+import * as historyRepository from '../history/index.js';
 
 import * as crewRepository from './repository.js';
 
@@ -27,7 +27,7 @@ export async function replaceCaptainOfPlayer(playerId: number, instanceId: numbe
       throw new NotFoundError("Ce personnage n'est pas dans ton équipage.");
     }
 
-    await appendHistory({
+    await historyRepository.appendHistory({
       type: 'crew.captain_changed',
       payload: {
         fromCharacterInstanceId: previousCaptainId,
