@@ -102,6 +102,7 @@ Tous les events cross-player ne s'appliquent pas à toutes les paires (combat pi
 const piratesEncounter: EventGenerator = {
   type: 'combat.pirates_encounter',
   scope: 'interactive',
+  seedScope: 'zone', // tirage partagé entre tous les joueurs présents dans la zone
   appliesTo: (a, b) => a.status === 'PIRATE' && b.status === 'PIRATE',
   probability: (a, b) => 0.3,
   ...
@@ -110,11 +111,14 @@ const piratesEncounter: EventGenerator = {
 const piratesAlliance: EventGenerator = {
   type: 'alliance.pirates',
   scope: 'interactive',
+  seedScope: 'zone',
   appliesTo: (a, b) => a.status === 'PIRATE' && b.status === 'PIRATE',
   probability: () => 0.02, // rare
   ...
 };
 ```
+
+> **Tous les générateurs cross-player utilisent `seedScope: 'zone'`** — c'est ce qui permet à A et B (tirant chacun de leur côté) d'arriver à la même conclusion ("encounter au bucket 14h") sans table partagée.
 
 `appliesTo` = `conditions` mais pour les paires.
 

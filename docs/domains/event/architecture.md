@@ -41,20 +41,29 @@ Entier 64 bits, indexable, comparable, sans fuseau horaire.
 
 ## 3. Seed déterministe
 
-Pour chaque `(bucket, zone)` :
+Le moteur prend des décisions aléatoires (un baril apparaît-il, combien de berries, deux joueurs se rencontrent-ils). On veut que ces tirages soient **rejouables** : deux exécutions du même bucket donnent le même résultat. Solution : un RNG initialisé par une graine (seed) calculée à partir de paramètres connus.
+
+**Mais selon le type d'event, on partage ou pas le seed entre joueurs.** Chaque générateur déclare son `seedScope` :
+
+| `seedScope` | Seed dérivé de        | Qui obtient le même tirage ?                     | Cas d'usage                                                 |
+| ----------- | --------------------- | ------------------------------------------------ | ----------------------------------------------------------- |
+| `'zone'`    | `(bucket_id, zone)`   | Tous les joueurs présents dans la zone au bucket | Rencontres, météo, événements partagés du monde             |
+| `'player'`  | `(bucket_id, player)` | Toi seul                                         | Événements personnels (ton baril, mainstory, mouette perso) |
 
 ```ts
-seed = hash(bucket_id, zone_id);
-rng = seedRng(seed);
+const seed = gen.seedScope === 'zone' ? hash(bucket_id, zone_id) : hash(bucket_id, player_id);
+const rng = createRng(seed);
 ```
 
-Le `rng` décide de tout : un baril apparaît-il, deux joueurs se rencontrent-ils, combien de berries.
+**La magie du `'zone'` :** deux joueurs qui calculent le seed du bucket 14h zone "East Blue" obtiennent le **même seed**. Si Rayan recap à 18h et tire "rencontre Hakim au bucket 14h", quand Hakim recap à 19h son moteur tire le même seed → la même rencontre. **Le hasard est partagé sans table commune.**
 
-**La magie :** deux joueurs qui calculent le seed du bucket 14h zone "East Blue" obtiennent le **même seed**. Si Rayan recap à 18h et tire "rencontre Hakim au bucket 14h", quand Hakim recap à 19h son moteur tire le même seed → la même rencontre. **Le hasard est partagé sans table commune.**
+**Pourquoi `'player'` existe :** sinon Hakim et Rayan trouveraient tous les deux "un baril à 14h15 East Blue" et le ramasseraient tous les deux — c'est censé être une trouvaille perso, pas un événement du monde. Mixer `player_id` dans le seed isole le tirage à un joueur.
 
 | Alternative écartée                                    | Problème                                                |
 | ------------------------------------------------------ | ------------------------------------------------------- |
-| Random non-seedé                                       | Rayan voit "rencontre Hakim", Hakim ne le verra jamais. |
+| Random non-seedé pour les events de zone               | Rayan voit "rencontre Hakim", Hakim ne le verra jamais. |
+| Tout en seed `'player'`                                | Plus de rencontres, plus de monde partagé.              |
+| Tout en seed `'zone'`                                  | Tout le monde trouve les mêmes barils perso.            |
 | Table `encounter` partagée écrite par le 1er qui recap | Couplage, race conditions, complexité.                  |
 | Cron tick                                              | Marche mais réintroduit l'infra.                        |
 

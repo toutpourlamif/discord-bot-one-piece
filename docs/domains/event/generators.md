@@ -2,6 +2,23 @@
 
 Un **générateur** définit quand et comment un event apparaît. **Un fichier par générateur**, listés dans `registry.ts`. Le moteur itère cette liste à chaque bucket.
 
+## Champs communs
+
+| Champ         | Obligatoire | Rôle                                                                                                                                                                     |
+| ------------- | ----------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `type`        | oui         | identifiant unique du générateur (ex: `passive.seagull_flyby`)                                                                                                           |
+| `scope`       | oui         | `'passive'` ou `'interactive'` (mode d'affichage et timing des effets — cf [architecture.md](./architecture.md))                                                         |
+| `seedScope`   | oui         | `'zone'` (tirage partagé entre tous les joueurs de la zone) ou `'player'` (tirage isolé à un joueur). Détails : [architecture.md](./architecture.md#3-seed-déterministe) |
+| `conditions`  | non         | `(ctx) => boolean` — filtre dur basé sur l'état du joueur                                                                                                                |
+| `cooldown`    | non         | délai en secondes avant qu'un même type puisse re-déclencher (lookup `history`)                                                                                          |
+| `oneTime`     | non         | `true` = ne se déclenche qu'une seule fois dans la vie du joueur                                                                                                         |
+| `probability` | oui         | `(ctx) => number` ∈ [0,1], tirage final                                                                                                                                  |
+
+Choix typique du `seedScope` :
+
+- Rencontres entre joueurs, météo, événements de zone → `'zone'`.
+- Trouvaille perso (baril qui flotte près de toi), mainstory, mouette → `'player'`.
+
 ## Forme passive
 
 Deux fonctions distinctes :
@@ -13,6 +30,7 @@ Deux fonctions distinctes :
 const seagullFlyby: PassiveGenerator = {
   type: 'passive.seagull_flyby',
   scope: 'passive',
+  seedScope: 'player', // mouette perso, pas un événement de zone
   conditions: (ctx) => ctx.zone === 'east_blue', // optionnel
   cooldown: 1800, // optionnel : 30 min via history
   probability: () => 0.3, // 30% / bucket éligible
@@ -38,6 +56,7 @@ Tout ce qui vient de `rng` ou `ctx` doit être **figé dans `state`** au `build`
 const fishingHaul: PassiveGenerator = {
   type: 'passive.fishing_haul',
   scope: 'passive',
+  seedScope: 'player',
   conditions: (ctx) => ctx.zone === 'east_blue',
   probability: () => 0.2,
 
@@ -69,6 +88,7 @@ const fishingHaul: PassiveGenerator = {
 const barrelFound: EventGenerator = {
   type: 'fishing.barrel_found',
   scope: 'interactive',
+  seedScope: 'player',
   probability: () => 0.1,
   initial: 'choice',
   steps: {
@@ -104,6 +124,7 @@ function openBarrel(ctx, rng) {
 const defeatCrocodile: EventGenerator = {
   type: 'mainstory.alabasta.defeat_crocodile',
   scope: 'interactive',
+  seedScope: 'player', // mainstory perso
   conditions: (ctx) => ctx.history.has('mainstory.alabasta.save_vivi.resolved') && ctx.player.hasItem('haki_basic'),
   probability: () => 1.0,
   initial: 'opener',
