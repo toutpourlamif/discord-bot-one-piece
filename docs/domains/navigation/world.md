@@ -2,7 +2,7 @@
 
 ## Vue d'ensemble
 
-Le monde de One Piece est immense, mais on ne le code pas en une fois. La V1 démarre **petit** : juste de quoi faire un parcours de mainstory plausible (East Blue → Reverse Mountain → Paradise → Alabasta). On ajoutera des zones au fur et à mesure.
+Le monde de One Piece est immense, mais on ne le code pas en une fois. La V1 démarre **petit** : juste de quoi faire un parcours de mainstory plausible (Foosha → Reverse Mountain → Paradise → Alabasta). On ajoutera des zones au fur et à mesure.
 
 Voici le plan général canonique de l'univers, pour avoir l'image en tête :
 
@@ -18,39 +18,38 @@ South Blue ─┘                              │
                                      New World (2ème moitié)
 ```
 
-> Pour l'instant on n'a qu'**East Blue** parmi les Blue. On ajoutera les autres plus tard.
+> Pour l'instant on n'a que des îles d'**East Blue** parmi les Blue. On ajoutera les autres plus tard.
 
 ## Catalogue des zones de la V1
 
 ### Islands (les zones terrestres)
 
-| Island             | Description                                                              |
-| ------------------ | ------------------------------------------------------------------------ |
-| `east_blue`        | Le point de départ de tous les nouveaux joueurs. Mer paisible.           |
-| `reverse_mountain` | La porte d'entrée du Grand Line. Une montagne avec un courant qui monte. |
-| `whisky_peak`      | Première île du Grand Line. Un piège à pirates, pleine d'agents secrets. |
-| `little_garden`    | Une île préhistorique, dinosaures, géants. Détour de la mainstory.       |
-| `drum`             | Île hivernale, un médecin légendaire. C'est là qu'on recrute Chopper.    |
-| `alabasta`         | Royaume désertique. Combat contre Crocodile, c'est le climax de l'arc 1. |
+| Island             | Description                                                                 |
+| ------------------ | --------------------------------------------------------------------------- |
+| `foosha`           | Le village natal de Luffy. Point de départ de tous les nouveaux joueurs.    |
+| `loguetown`        | La dernière île d'East Blue avant le Grand Line. Lieu d'exécution de Roger. |
+| `reverse_mountain` | La porte d'entrée du Grand Line. Une montagne avec un courant qui monte.    |
+| `whisky_peak`      | Première île du Grand Line. Un piège à pirates, pleine d'agents secrets.    |
+| `little_garden`    | Une île préhistorique, dinosaures, géants. Détour de la mainstory.          |
+| `drum`             | Île hivernale, un médecin légendaire. C'est là qu'on recrute Chopper.       |
+| `alabasta`         | Royaume désertique. Combat contre Crocodile, c'est le climax de l'arc 1.    |
 
-### Seas (les zones sous-mer entre les îles)
+### Seas (les zones de mer entre les îles)
 
-| Sea                | Quand on y est                                              |
-| ------------------ | ----------------------------------------------------------- |
-| `at_sea_east_blue` | Pendant qu'on navigue dans East Blue.                       |
-| `at_sea_paradise`  | Pendant qu'on navigue dans la 1ère moitié du Grand Line.    |
-| `at_sea_new_world` | Déclaré pour le futur. Aucune île atteignable encore en V1. |
-
-> **Convention de naming** : tout ce qui est une mer commence par `at_sea_`. C'est ce préfixe qui distingue les Seas des Islands en TypeScript (cf `Comment tout ce monde est représenté en code` plus bas).
+| Sea             | Quand on y est                                              |
+| --------------- | ----------------------------------------------------------- |
+| `sea_east_blue` | Pendant qu'on navigue entre les îles d'East Blue.           |
+| `sea_paradise`  | Pendant qu'on navigue dans la 1ère moitié du Grand Line.    |
+| `sea_new_world` | Déclaré pour le futur. Aucune île atteignable encore en V1. |
 
 > **Vocabulaire** : on appelle ces deux familles `Island` et `Sea`. Le terme générique qui désigne l'une ou l'autre, c'est `Zone` (= `Island | Sea`).
 
-> **Pourquoi 3 sous-mers et pas une seule ?** Parce que deux joueurs en mer dans des régions complètement différentes (un qui quitte Wano, un qui quitte East Blue) ne devraient pas se rencontrer. Avec 3 sous-mers, on évite ces rencontres absurdes — un East Blue ne croise pas un Paradise.
+> **Pourquoi 3 sea\_ et pas une seule ?** Parce que deux joueurs en mer dans des régions complètement différentes (un qui quitte Wano, un qui quitte East Blue) ne devraient pas se rencontrer. Avec 3 mers, on évite ces rencontres absurdes — un joueur en `sea_east_blue` ne croise pas un joueur en `sea_paradise`.
 
 ## Le graphe d'arêtes (qui mène à qui)
 
 ```
-east_blue ──→ reverse_mountain ──→ whisky_peak ──→ little_garden ──→ drum ──→ alabasta
+foosha ──→ loguetown ──→ reverse_mountain ──→ whisky_peak ──→ little_garden ──→ drum ──→ alabasta
 ```
 
 C'est volontairement linéaire pour la V1. Un seul chemin possible, on suit le rail. À mesure qu'on rajoute des îles (Jaya, Skypiea, Water 7…), le graphe va se ramifier.
@@ -82,20 +81,30 @@ Les Eternal Pose sont des **récompenses rares** : on en trouve via des événem
 
 ## Comment tout ce monde est représenté en code
 
-### Le graphe est en TypeScript
+### Single source of truth : deux arrays TypeScript
 
-Pas de table SQL pour le graphe (les arêtes, les durées, les conditions par route) — c'est une **constante TypeScript** déclarée en dur dans `apps/bot/src/domains/navigation/world.ts`. Le graphe ne change pas au runtime, c'est plus simple à versionner et à tester.
+La liste des zones est définie **une seule fois**, dans `packages/db/src/domains/.../zones.ts` :
 
-### Mais la liste des zones, elle, vient de l'enum Postgres
+- `ISLANDS` : array TS des îles.
+- `SEAS` : array TS des mers.
+- `ZONES = [...ISLANDS, ...SEAS]` : la concaténation, utilisée pour générer l'enum Postgres.
 
-La liste des zones existantes est définie **une seule fois** : dans l'enum Drizzle `zone_enum` (cf `packages/db/`). Le module navigation TS dérive automatiquement ses types `Island`, `Sea`, et `Zone = Island | Sea` depuis cet enum, en se basant sur la convention de naming : tout ce qui commence par `at_sea_` est une `Sea`, le reste est une `Island`.
+L'enum Drizzle `zoneEnum` est dérivé directement de `ZONES`. Donc ajouter une nouvelle zone se fait à un seul endroit (le bon array), et la migration de l'enum + les types TS suivent automatiquement.
 
-Concrètement, ajouter une nouvelle zone se fait à un seul endroit (la migration de l'enum). Les types TS et les arrays exposés (`ISLANDS`, `SEAS`) se mettent à jour tout seuls — pas de duplication, pas de drift possible.
+Les types TS exposés :
+
+- `type Island = (typeof ISLANDS)[number]`
+- `type Sea = (typeof SEAS)[number]`
+- `type Zone = (typeof ZONES)[number]` (= `Island | Sea`)
+
+### Le graphe en lui-même reste en TypeScript
+
+Pas de table SQL pour le graphe (les arêtes, les durées, les conditions par route) — c'est une constante TypeScript déclarée en dur dans `apps/bot/src/domains/navigation/world.ts`. Il ne change pas au runtime, c'est plus simple à versionner et à tester.
 
 ### À retenir
 
-- `Island` = une île (East Blue, Drum, Alabasta…).
-- `Sea` = une zone "en mer" (`at_sea_paradise`, etc.).
+- `Island` = une île (Foosha, Drum, Alabasta…).
+- `Sea` = une mer (`sea_east_blue`, `sea_paradise`, `sea_new_world`).
 - `Zone = Island | Sea` = l'umbrella, utilisé partout où on s'en fiche.
 - Les arêtes du graphe (`from`/`to`) sont toujours des `Island`. Le `via` (la mer traversée) est toujours une `Sea`. On ne voyage pas DEPUIS ou VERS une mer — la mer est juste un transit.
 

@@ -106,7 +106,7 @@ Un **générateur narratif par sous-mer** (`navigation.drift.east_blue`, `naviga
 ## Récap visuel d'un voyage typique
 
 ```
-Bucket 0   : choix "Partir vers Drum" → bascule en at_sea_paradise, ETA fixée à bucket 30
+Bucket 0   : choix "Partir vers Drum" → bascule en sea_paradise, ETA fixée à bucket 30
 Bucket 8   : event "Calme plat. L'équipage en profite pour pêcher (+50 berries)."
 Bucket 17  : event "Tempête. -1 moral."
 Bucket 24  : event "Tu croises un navire marchand. [Discuter] [Ignorer]"

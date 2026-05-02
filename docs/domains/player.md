@@ -14,7 +14,7 @@ Le joueur **existe aussi comme personnage dans le monde** : c'est le **PlayerAsC
 
 ## Position courante
 
-Le joueur a une colonne `player.current_zone` (type `zone_enum`) qui indique **où il est en ce moment** : une île (Drum, Alabasta…) ou une sous-mer (`at_sea_paradise`…) s'il est en transit.
+Le joueur a une colonne `player.current_zone` (type `zone_enum`) qui indique **où il est en ce moment** : une île (Drum, Alabasta…) ou une mer (`sea_paradise`…) s'il est en transit.
 
 Mise à jour dans la même transaction qu'un INSERT `history.player.zone_changed`. Pas de table d'historique des zones : la règle "encounters seulement au bucket courant" (cf domaine `event` → `cross-player.md`) rend inutile la connaissance de "qui était où à un bucket passé". Si on veut un jour reconstruire l'historique des déplacements d'un joueur, on le dérive de `history.player.zone_changed`.
 

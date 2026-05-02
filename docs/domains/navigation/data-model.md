@@ -52,25 +52,16 @@ Un joueur peut en posséder plusieurs, mais un seul exemplaire de chaque. Chacun
 
 ## L'enum des zones
 
-Tous les noms de zones (îles et mers) vivent dans **un même enum Postgres**. C'est ce qu'utilisent `zone_presence.zone` et `player.travel_target_zone`.
+Tous les noms de zones (îles et mers) vivent dans **un même enum Postgres** `zone_enum`. C'est ce qu'utilisent `player.current_zone` et `player.travel_target_zone`.
+
+L'enum est **dérivé** des deux arrays TypeScript `ISLANDS` et `SEAS` (cf [world.md](./world.md) §"Single source of truth"). On ne maintient pas la liste à deux endroits.
 
 V1 :
 
-```
-zone_enum = (
-  'east_blue',
-  'reverse_mountain',
-  'whisky_peak',
-  'little_garden',
-  'drum',
-  'alabasta',
-  'at_sea_east_blue',
-  'at_sea_paradise',
-  'at_sea_new_world'
-)
-```
+- Islands : `foosha`, `loguetown`, `reverse_mountain`, `whisky_peak`, `little_garden`, `drum`, `alabasta`.
+- Seas : `sea_east_blue`, `sea_paradise`, `sea_new_world`.
 
-À chaque fois qu'on ajoute une nouvelle île, c'est une migration `ALTER TYPE zone_enum ADD VALUE 'new_island'`.
+Ajouter une nouvelle zone = pousser dans le bon array TS + générer la migration. Pas de `ALTER TYPE` à écrire à la main.
 
 ## Le graphe des arêtes
 
@@ -87,17 +78,17 @@ Pourquoi en code et pas en base :
 
 La position courante du joueur vit sur `player.current_zone` (cf domaine `player`). À chaque étape du voyage, on l'update et on trace dans `history`, dans la même transaction :
 
-**Au départ (île → sous-mer) :**
+**Au départ (île → mer) :**
 
-1. `UPDATE player SET current_zone = 'at_sea_paradise' WHERE id = ?`
-2. `INSERT history (event_type, actor_player_id, payload) VALUES ('player.zone_changed', ?, { from: 'east_blue', to: 'at_sea_paradise' })`
+1. `UPDATE player SET current_zone = 'sea_paradise' WHERE id = ?`
+2. `INSERT history (event_type, actor_player_id, payload) VALUES ('player.zone_changed', ?, { from: 'reverse_mountain', to: 'sea_paradise' })`
 3. - UPDATE des colonnes `travel_*` (cf section précédente)
 
-**À l'arrivée (sous-mer → île) :**
+**À l'arrivée (mer → île) :**
 
 Pareil, en remettant `current_zone` à la zone d'arrivée et en vidant les colonnes `travel_*`.
 
-`current_zone` est la **source de vérité de "où est le joueur en ce moment"**. Les colonnes `travel_*` sont des **infos additionnelles** sur le voyage en cours quand `current_zone` est une sous-mer.
+`current_zone` est la **source de vérité de "où est le joueur en ce moment"**. Les colonnes `travel_*` sont des **infos additionnelles** sur le voyage en cours quand `current_zone` est une mer.
 
 ## Trace dans `history`
 

@@ -12,7 +12,7 @@ C'est l'état par défaut. Si le joueur ne fait rien, il reste ancré indéfinim
 
 ### 2. En transit (en mer)
 
-Le joueur a quitté une île et fait route vers une autre. Sa colonne `zone_presence` pointe vers une zone "sous-mer" (par exemple `at_sea_paradise`). Trois colonnes sur la table `player` racontent le voyage en cours :
+Le joueur a quitté une île et fait route vers une autre. Sa colonne `current_zone` pointe vers une mer (par exemple `sea_paradise`). Trois colonnes sur la table `player` racontent le voyage en cours :
 
 - `travel_target_zone` : l'île qu'il vise.
 - `travel_started_at` : le moment où il a quitté son île précédente.
@@ -56,7 +56,7 @@ Déclenché quand l'item entre dans l'inventaire.
 
 Quand le joueur clique sur "Partir vers Drum", l'engine fait dans la même transaction :
 
-1. **Bascule la zone** : `recordZoneChange(player, 'at_sea_paradise')`.
+1. **Bascule la zone** : `recordZoneChange(player, 'sea_paradise')`.
 2. **Remplit les colonnes de voyage** sur `player` : `travel_target_zone = 'drum'`, `travel_started_at = now()`, `travel_eta_at = now() + duréeCalculée`.
 3. **Trace dans `history`** : `event_type = 'travel.departed'`, payload avec origine, destination, durée estimée.
 
