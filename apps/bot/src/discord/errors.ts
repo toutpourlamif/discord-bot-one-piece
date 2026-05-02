@@ -31,3 +31,10 @@ export class InternalError extends AppError {
     this.name = 'InternalError';
   }
 }
+
+export class AdminOnlyError extends AppError {
+  constructor(message: string) {
+    super(message, 'warn', 'Cette commande est réservée aux admins.');
+    this.name = 'AdminOnlyError';
+  }
+}
