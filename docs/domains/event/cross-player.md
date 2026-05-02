@@ -90,9 +90,9 @@ A et B voient chacun les boutons.
   - Calcul de l'outcome, application des effets aux deux.
   - Append `history` avec le pair et le choix.
 - Second qui clique : 0 lignes supprimées → "trop lent, l'autre a choisi" + résumé.
-- Joueur qui se connecte après résolution : `event_instance` n'existe plus, le moteur consulte `history` et affiche un ambient "à 14h t'as croisé A, voici ce qu'il s'est passé".
+- Joueur qui se connecte après résolution : `event_instance` n'existe plus, le moteur consulte `history` et affiche un passive "à 14h t'as croisé A, voici ce qu'il s'est passé".
 
-> **Pourquoi pas une négociation** : si B prend 1h, A est bloqué (1 stateful max + must-be-synced). Mauvaise UX. First-clicker = qui agit, agit. Plus rapide, plus dynamique, fidèle aux pirates.
+> **Pourquoi pas une négociation** : si B prend 1h, A est bloqué (1 interactive max + must-be-synced). Mauvaise UX. First-clicker = qui agit, agit. Plus rapide, plus dynamique, fidèle aux pirates.
 
 ## Compatibilité (`appliesTo`)
 
@@ -101,7 +101,7 @@ Tous les events cross-player ne s'appliquent pas à toutes les paires (combat pi
 ```ts
 const piratesEncounter: EventGenerator = {
   type: 'combat.pirates_encounter',
-  scope: 'stateful',
+  scope: 'interactive',
   appliesTo: (a, b) => a.status === 'PIRATE' && b.status === 'PIRATE',
   probability: (a, b) => 0.3,
   ...
@@ -109,7 +109,7 @@ const piratesEncounter: EventGenerator = {
 
 const piratesAlliance: EventGenerator = {
   type: 'alliance.pirates',
-  scope: 'stateful',
+  scope: 'interactive',
   appliesTo: (a, b) => a.status === 'PIRATE' && b.status === 'PIRATE',
   probability: () => 0.02, // rare
   ...

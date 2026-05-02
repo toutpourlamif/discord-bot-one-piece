@@ -29,11 +29,11 @@ ctx.history = {
 
 ## 2. Idempotence garantie par `event_instance`
 
-L'unicité `(player_id, type, bucket_id)` sur `event_instance` (cf [data-model.md](./data-model.md)) couvre tout : ambient comme stateful y passent, donc un retry après échec ou un double `!recap` simultané se résout par un conflit refusé silencieusement.
+L'unicité `(player_id, type, bucket_id)` sur `event_instance` (cf [data-model.md](./data-model.md)) couvre tout : passive comme interactive y passent, donc un retry après échec ou un double `!recap` simultané se résout par un conflit refusé silencieusement.
 
 **Implémentation** : utiliser `INSERT ... ON CONFLICT DO NOTHING` côté engine. Sinon une ligne déjà tracée bloque toute la transaction du recap au moindre retry.
 
-> **Pas besoin d'une protection séparée sur `history`** : l'INSERT `history` (pour ambient) se fait dans la même transaction que l'INSERT `event_instance`. Si l'`event_instance` est rejeté pour doublon, le `history` correspondant n'est jamais inséré non plus. Pas de drift possible.
+> **Pas besoin d'une protection séparée sur `history`** : l'INSERT `history` (pour passive) se fait dans la même transaction que l'INSERT `event_instance`. Si l'`event_instance` est rejeté pour doublon, le `history` correspondant n'est jamais inséré non plus. Pas de drift possible.
 
 ## 3. Index `history` pour le hot path
 
@@ -72,7 +72,7 @@ Sans : `goTo: 'haki_charegd'` (typo) → erreur uniquement au runtime, sur le bu
 ```ts
 function validateGenerators(generators: Array<EventGenerator>) {
   for (const gen of generators) {
-    if (gen.scope !== 'stateful') continue;
+    if (gen.scope !== 'interactive') continue;
     const stepNames = Object.keys(gen.steps);
     for (const [stepName, step] of Object.entries(gen.steps)) {
       for (const choice of step.choices(/* ctx fake */)) {

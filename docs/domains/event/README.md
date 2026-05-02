@@ -8,7 +8,7 @@ Jamais déclenchés à la demande : calculés à partir du temps écoulé, de la
 
 | Doc                                  | Contenu                                                                       |
 | ------------------------------------ | ----------------------------------------------------------------------------- |
-| [architecture.md](./architecture.md) | Modèle lazy, buckets 15 min, seed déterministe, ambient vs stateful           |
+| [architecture.md](./architecture.md) | Modèle lazy, buckets 15 min, seed déterministe, passive vs interactive        |
 | [recap-flow.md](./recap-flow.md)     | Règle "synced pour agir", cycle d'un `!recap`, cap 48h                        |
 | [generators.md](./generators.md)     | Contrat `EventGenerator`, filtres, `ctx`, effets, mainstory, ajout d'un event |
 | [cross-player.md](./cross-player.md) | Rencontres entre joueurs, `zone_presence`, first-clicker-wins, guild, DM      |
@@ -19,9 +19,9 @@ Jamais déclenchés à la demande : calculés à partir du temps écoulé, de la
 
 Pour valider l'archi sans écrire 50 générateurs :
 
-- `ambient.seagull_flyby` — purement décoratif
-- `ambient.calm_sea` / `ambient.rough_sea` — du remplissage
-- `fishing.barrel_found` — premier stateful 1 step
+- `passive.seagull_flyby` — purement décoratif
+- `passive.calm_sea` / `passive.rough_sea` — du remplissage
+- `fishing.barrel_found` — premier interactive 1 step
 - `combat.pirates_encounter` — premier cross-player
 
 ## Organisation des fichiers
@@ -36,7 +36,7 @@ apps/bot/src/domains/event/
     apply-effects.ts      ← application des Effect[]
   registry.ts             ← liste de tous les générateurs
   generators/
-    ambient/seagull-flyby.ts
+    passive/seagull-flyby.ts
     fishing/barrel-found.ts
     combat/pirates-encounter.ts
     mainstory/alabasta/{find-map,save-vivi,defeat-crocodile,retry-crocodile}.ts

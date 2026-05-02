@@ -2,7 +2,7 @@
 
 Un **générateur** définit quand et comment un event apparaît. **Un fichier par générateur**, listés dans `registry.ts`. Le moteur itère cette liste à chaque bucket.
 
-## Forme ambient
+## Forme passive
 
 Deux fonctions distinctes :
 
@@ -10,9 +10,9 @@ Deux fonctions distinctes :
 - `render(state)` → appelée au clic "Suivant". Pure : `state → embed`. **Ne reçoit pas `ctx`.**
 
 ```ts
-const seagullFlyby: AmbientGenerator = {
-  type: 'ambient.seagull_flyby',
-  scope: 'ambient',
+const seagullFlyby: PassiveGenerator = {
+  type: 'passive.seagull_flyby',
+  scope: 'passive',
   conditions: (ctx) => ctx.zone === 'east_blue', // optionnel
   cooldown: 1800, // optionnel : 30 min via history
   probability: () => 0.3, // 30% / bucket éligible
@@ -30,14 +30,14 @@ const seagullFlyby: AmbientGenerator = {
 };
 ```
 
-### Ambient avec contenu stochastique ou ctx-dépendant
+### Passive avec contenu stochastique ou ctx-dépendant
 
 Tout ce qui vient de `rng` ou `ctx` doit être **figé dans `state`** au `build`, pour que `render` puisse le retrouver à l'identique au clic.
 
 ```ts
-const fishingHaul: AmbientGenerator = {
-  type: 'ambient.fishing_haul',
-  scope: 'ambient',
+const fishingHaul: PassiveGenerator = {
+  type: 'passive.fishing_haul',
+  scope: 'passive',
   conditions: (ctx) => ctx.zone === 'east_blue',
   probability: () => 0.2,
 
@@ -59,16 +59,16 @@ const fishingHaul: AmbientGenerator = {
 };
 ```
 
-> **Pourquoi `render` n'a pas `ctx`** : un event ambient est un snapshot du passé. Si `render` lisait le ctx actuel, on aurait des incohérences narratives ("Ton homme-poisson plonge…" alors qu'il a quitté l'équipage entre-temps), ou pire un embed qui ne correspond plus à l'effet réellement appliqué. Tout ce qui est nécessaire au rendu doit être figé dans `state` au `build`.
+> **Pourquoi `render` n'a pas `ctx`** : un event passive est un snapshot du passé. Si `render` lisait le ctx actuel, on aurait des incohérences narratives ("Ton homme-poisson plonge…" alors qu'il a quitté l'équipage entre-temps), ou pire un embed qui ne correspond plus à l'effet réellement appliqué. Tout ce qui est nécessaire au rendu doit être figé dans `state` au `build`.
 
 > **Cas limite — afficher du présent** (ex: "Tu as maintenant X berries au total") : ça relève d'un message de suivi, pas du contenu de l'event. À gérer hors générateur, dans le code qui orchestre l'affichage de la queue.
 
-## Forme stateful 1 étape
+## Forme interactive 1 étape
 
 ```ts
 const barrelFound: EventGenerator = {
   type: 'fishing.barrel_found',
-  scope: 'stateful',
+  scope: 'interactive',
   probability: () => 0.1,
   initial: 'choice',
   steps: {
@@ -94,16 +94,16 @@ function openBarrel(ctx, rng) {
 
 À retenir :
 
-- **Ambient** : `build(ctx, rng)` au calcul, `render(state)` au clic. `render` est pure sur `state`.
-- **Stateful** : graphe de `steps` nommées. Chaque étape : `embed(state, ctx)` + `choices(state, ctx)`. Chaque choix : `goTo` (transition) ou `resolve` (résolution finale).
-- `resolve(ctx, rng)` retourne `{ embed, effects, resolutionType }`. C'est là que les effets stateful sont appliqués (≠ ambient où c'est au `build`).
+- **Passive** : `build(ctx, rng)` au calcul, `render(state)` au clic. `render` est pure sur `state`.
+- **Interactive** : graphe de `steps` nommées. Chaque étape : `embed(state, ctx)` + `choices(state, ctx)`. Chaque choix : `goTo` (transition) ou `resolve` (résolution finale).
+- `resolve(ctx, rng)` retourne `{ embed, effects, resolutionType }`. C'est là que les effets interactive sont appliqués (≠ passive où c'est au `build`).
 
-## Forme stateful multi-étapes (graphe)
+## Forme interactive multi-étapes (graphe)
 
 ```ts
 const defeatCrocodile: EventGenerator = {
   type: 'mainstory.alabasta.defeat_crocodile',
-  scope: 'stateful',
+  scope: 'interactive',
   conditions: (ctx) => ctx.history.has('mainstory.alabasta.save_vivi.resolved') && ctx.player.hasItem('haki_basic'),
   probability: () => 1.0,
   initial: 'opener',
@@ -222,12 +222,12 @@ L'engine a `applyEffects(effects, ctx, transaction)` qui dispatch chaque variant
 
 Une ligne `history` est écrite (cf doc dédiée `history.md`) :
 
-- pour un **ambient** : à l'engine, en même temps que l'INSERT `event_instance` et l'application des effets.
-- pour un **stateful** : à la résolution, quand le joueur a cliqué un choix.
+- pour un **passive** : à l'engine, en même temps que l'INSERT `event_instance` et l'application des effets.
+- pour un **interactive** : à la résolution, quand le joueur a cliqué un choix.
 
 Champs :
 
-- `event_type` = type ambient (ex: `ambient.fishing_haul`) ou `resolutionType` du choix stateful (ex: `mainstory.alabasta.defeat_crocodile.won`).
+- `event_type` = type passive (ex: `passive.fishing_haul`) ou `resolutionType` du choix interactive (ex: `mainstory.alabasta.defeat_crocodile.won`).
 - `actor_player_id` = joueur déclencheur, ou `NULL` pour events système.
 - `target_type` + `target_id` = optionnel.
 - `bucket_id` = bucket d'origine.
