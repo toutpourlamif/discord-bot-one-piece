@@ -1,4 +1,5 @@
 export { devilFruitInstance, devilFruitTemplate, devilFruitType } from './domains/devil_fruit/index.js';
+export { guild } from './domains/guild/index.js';
 export { player } from './domains/player/index.js';
 export { ship } from './domains/ship/index.js';
 export { resourceInstance, resourceTemplate } from './domains/resource/index.js';

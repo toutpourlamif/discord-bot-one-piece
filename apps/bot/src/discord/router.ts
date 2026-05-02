@@ -4,13 +4,14 @@ import { devCommands } from '../domains/_dev/index.js';
 import { infoCommands } from '../domains/_info/index.js';
 import { crewCommands } from '../domains/crew/index.js';
 import { fishingCommands } from '../domains/fishing/index.js';
+import { ensureGuildExists } from '../domains/guild/index.js';
 import { playerCommands } from '../domains/player/index.js';
 import { resourceCommands } from '../domains/resource/index.js';
 import { shipCommands } from '../domains/ship/commands/index.js';
 import { buildRegistry } from '../shared/build-registry.js';
 
 import { AppError } from './errors.js';
-import { buildOpEmbed } from './utils/index.js';
+import { buildOpEmbed, buildServerOnlyEmbed } from './utils/index.js';
 
 const allCommands = [
   ...playerCommands,
@@ -31,6 +32,12 @@ export async function routeMessage(message: Message, prefix: string): Promise<vo
 
   const content = message.content.trim();
   if (!content.startsWith(prefix)) return;
+  if (!message.guildId) {
+    await message.reply({
+      embeds: [buildServerOnlyEmbed()],
+    });
+    return;
+  }
 
   const [rawName, ...args] = content.slice(prefix.length).trim().split(/\s+/);
   if (!rawName) return;
@@ -39,6 +46,7 @@ export async function routeMessage(message: Message, prefix: string): Promise<vo
   if (!command) return;
 
   try {
+    await ensureGuildExists(message.guildId);
     await command.handler(message, args);
   } catch (error) {
     if (error instanceof AppError) {
