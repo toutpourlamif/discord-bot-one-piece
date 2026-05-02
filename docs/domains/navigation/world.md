@@ -22,9 +22,9 @@ South Blue ─┘                              │
 
 ## Catalogue des zones de la V1
 
-### Zones terrestres (les îles)
+### Islands (les zones terrestres)
 
-| Zone               | Description                                                              |
+| Island             | Description                                                              |
 | ------------------ | ------------------------------------------------------------------------ |
 | `east_blue`        | Le point de départ de tous les nouveaux joueurs. Mer paisible.           |
 | `reverse_mountain` | La porte d'entrée du Grand Line. Une montagne avec un courant qui monte. |
@@ -33,13 +33,17 @@ South Blue ─┘                              │
 | `drum`             | Île hivernale, un médecin légendaire. C'est là qu'on recrute Chopper.    |
 | `alabasta`         | Royaume désertique. Combat contre Crocodile, c'est le climax de l'arc 1. |
 
-### Zones sous-mer (la mer entre les îles)
+### Seas (les zones sous-mer entre les îles)
 
-| Zone               | Quand on y est                                              |
+| Sea                | Quand on y est                                              |
 | ------------------ | ----------------------------------------------------------- |
 | `at_sea_east_blue` | Pendant qu'on navigue dans East Blue.                       |
 | `at_sea_paradise`  | Pendant qu'on navigue dans la 1ère moitié du Grand Line.    |
 | `at_sea_new_world` | Déclaré pour le futur. Aucune île atteignable encore en V1. |
+
+> **Convention de naming** : tout ce qui est une mer commence par `at_sea_`. C'est ce préfixe qui distingue les Seas des Islands en TypeScript (cf `Comment tout ce monde est représenté en code` plus bas).
+
+> **Vocabulaire** : on appelle ces deux familles `Island` et `Sea`. Le terme générique qui désigne l'une ou l'autre, c'est `Zone` (= `Island | Sea`).
 
 > **Pourquoi 3 sous-mers et pas une seule ?** Parce que deux joueurs en mer dans des régions complètement différentes (un qui quitte Wano, un qui quitte East Blue) ne devraient pas se rencontrer. Avec 3 sous-mers, on évite ces rencontres absurdes — un East Blue ne croise pas un Paradise.
 
@@ -78,39 +82,21 @@ Les Eternal Pose sont des **récompenses rares** : on en trouve via des événem
 
 ## Comment tout ce monde est représenté en code
 
-Pas de table SQL pour le graphe — c'est une **constante TypeScript** déclarée en dur. Le graphe ne change pas au runtime, et c'est plus simple à versionner et à tester.
+### Le graphe est en TypeScript
 
-Quelque chose du style :
+Pas de table SQL pour le graphe (les arêtes, les durées, les conditions par route) — c'est une **constante TypeScript** déclarée en dur dans `apps/bot/src/domains/navigation/world.ts`. Le graphe ne change pas au runtime, c'est plus simple à versionner et à tester.
 
-```ts
-// apps/bot/src/domains/navigation/world.ts
+### Mais la liste des zones, elle, vient de l'enum Postgres
 
-export const ZONES = ['east_blue', 'reverse_mountain', 'whisky_peak' /* ... */] as const;
-export type Zone = (typeof ZONES)[number];
+La liste des zones existantes est définie **une seule fois** : dans l'enum Drizzle `zone_enum` (cf `packages/db/`). Le module navigation TS dérive automatiquement ses types `Island`, `Sea`, et `Zone = Island | Sea` depuis cet enum, en se basant sur la convention de naming : tout ce qui commence par `at_sea_` est une `Sea`, le reste est une `Island`.
 
-export const SEA_ZONES = ['at_sea_east_blue', 'at_sea_paradise', 'at_sea_new_world'] as const;
-export type SeaZone = (typeof SEA_ZONES)[number];
+Concrètement, ajouter une nouvelle zone se fait à un seul endroit (la migration de l'enum). Les types TS et les arrays exposés (`ISLANDS`, `SEAS`) se mettent à jour tout seuls — pas de duplication, pas de drift possible.
 
-type Edge = {
-  from: Zone;
-  to: Zone;
-  via: SeaZone;
-  baseDurationBuckets: number;
-  requires?: Array<TravelCondition>;
-  softModifiers?: Array<TravelModifier>;
-};
+### À retenir
 
-export const ZONE_GRAPH: Array<Edge> = [
-  { from: 'east_blue', to: 'reverse_mountain', via: 'at_sea_east_blue', baseDurationBuckets: 8 },
-  {
-    from: 'reverse_mountain',
-    to: 'whisky_peak',
-    via: 'at_sea_paradise',
-    baseDurationBuckets: 12,
-    requires: [{ type: 'item', name: 'Log Pose' }],
-  },
-  // ...
-];
-```
+- `Island` = une île (East Blue, Drum, Alabasta…).
+- `Sea` = une zone "en mer" (`at_sea_paradise`, etc.).
+- `Zone = Island | Sea` = l'umbrella, utilisé partout où on s'en fiche.
+- Les arêtes du graphe (`from`/`to`) sont toujours des `Island`. Le `via` (la mer traversée) est toujours une `Sea`. On ne voyage pas DEPUIS ou VERS une mer — la mer est juste un transit.
 
 Les types `TravelCondition` et `TravelModifier` sont décrits dans [travel-mechanics.md](./travel-mechanics.md).
