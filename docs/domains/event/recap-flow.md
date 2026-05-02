@@ -6,12 +6,14 @@
 
 Conditions :
 
-1. `last_recap_at` = fin du dernier bucket complet (tous les events passés vécus).
-2. Aucun `event_instance` en attente.
+1. `last_recap_at` = fin du dernier bucket complet (le moteur a calculé tout ce qui aurait pu arriver).
+2. Aucun **stateful** en attente dans `event_instance`.
 
 Sinon, le bot répond :
 
 > "Tu as des events en attente. Tape `!recap` pour les vivre avant d'agir."
+
+> **Ambient en attente n'empêche pas d'agir.** Leurs effets sont déjà appliqués (état synchro), ils ne sont en queue que pour la narration. Le joueur peut donc agir avec une queue d'ambient non consommés derrière lui ; il les verra au prochain `!recap` ou en cliquant "Suivant".
 
 ### Pourquoi cette règle change tout
 
@@ -52,27 +54,39 @@ Il `!recap`, traverse son timeline (ambient affichés, stateful résolus un par 
 
 ## Cycle d'un `!recap`
 
-`last_recap_at` sur `player` = jusqu'où on a déjà traité les buckets du joueur.
+Deux phases distinctes : **calcul** (rejouer les buckets, appliquer les effets, remplir la queue) puis **affichage** (dérouler la queue événement par événement).
 
-> Pas exactement "dernière fois qu'on a recap" : c'est "jusqu'à quel point dans le temps on a calculé ses events". Peut reculer si un stateful nous fige.
+`last_recap_at` sur `player` = jusqu'où le moteur a calculé. La queue à dérouler = `SELECT * FROM event_instance WHERE player_id = me ORDER BY bucket_id`.
+
+> Pas exactement "dernière fois qu'on a recap" : c'est "jusqu'à quel point dans le temps on a calculé ses events". Peut reculer si un stateful fige le moteur.
+
+### Phase calcul
 
 À `!recap` à 18h00 avec `last_recap_at = 12h00` :
 
-1. **`event_instance` pending ?**
-   - Oui → réafficher (embed + boutons), aucun nouveau bucket traité.
+1. **Stateful pending dans `event_instance` ?**
+   - Oui → on ne calcule rien. Le joueur doit d'abord résoudre le stateful → on passe direct à la phase affichage de la queue actuelle.
    - Non → continuer.
-2. **Rejouer les buckets entre `last_recap_at` et `now()`** (cap 48h). Pour chaque bucket :
+2. Rejouer les buckets entre `last_recap_at` et `now()` (cap 48h). Pour chaque bucket :
    - Dériver le seed.
-   - Itérer les **ambient** : ceux qui passent filtres + proba sont matérialisés (embed + effets).
+   - Itérer les **ambient** : ceux qui passent filtres + proba sont matérialisés. Pour chacun : `effects` appliqués + INSERT `event_instance` (avec `state` figé pour le re-render au clic) + INSERT `history`.
    - Itérer les **stateful** : si plusieurs candidats, tirage pondéré, on en garde **un seul**.
-   - Si un stateful est tiré → INSERT `event_instance`, **stop la boucle**, figer `last_recap_at` au début de ce bucket.
+   - Si un stateful est tiré → INSERT `event_instance` (state initial), **stop la boucle**, figer `last_recap_at` à la **fin** de ce bucket (cf encadré ci-dessous).
    - Sinon, continuer. Au dernier bucket, `last_recap_at = now()`.
-3. **Afficher** : liste chronologique des ambient, puis le stateful en attente avec ses boutons.
-4. **Tout dans une seule transaction Drizzle.**
 
-> **Transaction** = bloc DB tout-ou-rien. Si l'INSERT de l'`event_instance` foire après application d'un effet ambient (+50 berries), le joueur ne garde pas les berries sans la trace.
+> **Pourquoi figer `last_recap_at` à la fin du bucket du stateful (pas au début)** : le bucket interrompu a déjà été entièrement processé (ambient matérialisés + stateful tiré). En le figeant à la fin, on garantit qu'au prochain `!recap` (après résolution), l'engine reprend au bucket **suivant** et ne re-tire jamais ce bucket. Aucun risque de re-firer les ambient déjà en queue ou déjà consommés. L'unicité `(player_id, type, bucket_id)` sur `event_instance` est un filet de sécurité, pas la défense de première ligne. 3. **Tout dans une seule transaction Drizzle.**
 
-Pas de cooldown sur `!recap`. S'il n'y a rien à afficher, on le dit.
+> **Transaction** = bloc DB tout-ou-rien. Si l'INSERT d'un `event_instance` foire après application d'un effet ambient (+50 berries), le joueur ne garde pas les berries sans la trace.
+
+### Phase affichage
+
+Lecture de la queue (ordonnée par `bucket_id`) et affichage du **premier** event :
+
+- **Queue vide** → "Vous n'avez aucun événement en attente."
+- **Ambient en tête** → retrouver le générateur via `type`, appeler `render(state)`, afficher l'embed + bouton **Suivant**. Clic → DELETE l'`event_instance`, render le suivant.
+- **Stateful en tête** → appeler `steps[state.step].embed(state, ctx)` + boutons des choix. Clic sur un choix → appliquer les effets, DELETE `event_instance`, INSERT `history`, render le suivant (ou bien `goTo` une autre étape sans DELETE).
+
+Le joueur peut interrompre à tout moment : la queue persiste. Au prochain `!recap`, on recalcule les nouveaux buckets (s'il y en a) puis on reprend l'affichage en haut de queue. Pas de cooldown sur `!recap`.
 
 ## Un seul stateful en attente max
 

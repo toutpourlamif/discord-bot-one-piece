@@ -27,21 +27,13 @@ ctx.history = {
 
 > **Note** : pour les events `oneTime` qui doivent matcher "depuis toujours", soit charger toute l'history (cher si 100k events), soit faire une requête séparée ciblée. À voir à l'implém.
 
-## 2. Idempotence des ambient via `bucket_id` dans `history`
+## 2. Idempotence garantie par `event_instance`
 
-Si la transaction échoue à mi-parcours et qu'on retry, les effets ambient peuvent être appliqués deux fois — Postgres protège **dans la même transaction**, pas contre un retry après échec.
+L'unicité `(player_id, type, bucket_id)` sur `event_instance` (cf [data-model.md](./data-model.md)) couvre tout : ambient comme stateful y passent, donc un retry après échec ou un double `!recap` simultané se résout par un conflit refusé silencieusement.
 
-**Fix** : colonne `bucket_id bigint` (nullable) sur `history`, et avant d'insérer un ambient, vérifier qu'il n'existe pas déjà pour `(player_id, event_type, bucket_id)`. Index unique partiel :
+**Implémentation** : utiliser `INSERT ... ON CONFLICT DO NOTHING` côté engine. Sinon une ligne déjà tracée bloque toute la transaction du recap au moindre retry.
 
-```sql
-CREATE UNIQUE INDEX history_idempotence_idx
-  ON history (actor_player_id, event_type, bucket_id)
-  WHERE bucket_id IS NOT NULL;
-```
-
-Retry → INSERT fail → skip silencieux → pas de double-spend.
-
-> **Pourquoi pas pour les stateful** : `event_instance` a déjà sa contrainte `(player_id, type, bucket_id)`. Les ambient n'y passent pas, donc il faut les couvrir ailleurs.
+> **Pas besoin d'une protection séparée sur `history`** : l'INSERT `history` (pour ambient) se fait dans la même transaction que l'INSERT `event_instance`. Si l'`event_instance` est rejeté pour doublon, le `history` correspondant n'est jamais inséré non plus. Pas de drift possible.
 
 ## 3. Index `history` pour le hot path
 

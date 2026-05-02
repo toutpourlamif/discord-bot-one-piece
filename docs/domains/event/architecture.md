@@ -60,15 +60,19 @@ Le `rng` décide de tout : un baril apparaît-il, deux joueurs se rencontrent-il
 
 ## Deux types d'events
 
-| Type         | Persistance                    | Décision joueur | Volume                  |
-| ------------ | ------------------------------ | --------------- | ----------------------- |
-| **Ambient**  | Aucune (juste trace `history`) | Non             | Beaucoup (1+/bucket)    |
-| **Stateful** | Ligne `event_instance`         | Oui (boutons)   | Rare (1 max en attente) |
+Les deux passent par `event_instance` (la queue de ce que le joueur n'a pas encore consommé). Différences : timing des effets et nombre autorisé en file.
 
-Exemples ambient : _"À 14h15 une vague a secoué ton navire (-2 moral)"_, _"À 14h30 ton équipage a aperçu une mouette"_. Affichés dans le recap, effets appliqués dans la transaction. Plus de ligne en base après.
+| Type         | Effets appliqués     | Nombre actif    | Décision joueur | Disparition de la queue    |
+| ------------ | -------------------- | --------------- | --------------- | -------------------------- |
+| **Ambient**  | au calcul (engine)   | illimité        | Non             | clic "Suivant" → DELETE    |
+| **Stateful** | au clic (résolution) | 1 max à la fois | Oui (boutons)   | clic sur un choix → DELETE |
 
-Exemples stateful : _"Tu as repéré un baril. [Ouvrir] [Laisser]"_, _"Crocodile se dresse devant toi. [Attaquer] [Charger Haki]"_. Persistés tant que pas de clic.
+Exemples ambient : _"À 14h15 une vague a secoué ton navire (-2 moral)"_, _"À 14h30 ton équipage a aperçu une mouette"_. Effets appliqués pendant le `!recap` (état du joueur immédiatement à jour). La ligne `event_instance` ne sert qu'à différer l'affichage jusqu'à ce que le joueur clique "Suivant".
 
-> **Pourquoi cette séparation** : persister les ambient gonflerait `event_instance` pour rien. Ne pas persister les stateful permettrait au joueur de "rerouler" en re-recap (re-tirage du résultat à chaque vue).
+Exemples stateful : _"Tu as repéré un baril. [Ouvrir] [Laisser]"_, _"Crocodile se dresse devant toi. [Attaquer] [Charger Haki]"_. Pas d'effet tant que le joueur n'a pas choisi.
 
-> **Stateful** = qui porte un état entre recaps. **Ambient** = stateless, joué et oublié (sauf l'entrée `history`).
+> **Pourquoi appliquer les ambient au calcul** : si tu as perdu un membre d'équipage à 14h, il doit être perdu à 19h même si tu n'as pas encore cliqué through. L'état du joueur reflète toujours le passé calculé, indépendamment de la dette narrative restante.
+
+> **Pourquoi un seul stateful actif** : rythme narratif. Tu vois → tu décides → tu continues, plutôt que 8 décisions balancées d'un coup. Le moteur s'arrête dès qu'il en tire un, le joueur résout, puis `!recap` reprend le calcul.
+
+> **Stateful** = qui porte un état entre recaps. **Ambient** = stateless une fois affiché.

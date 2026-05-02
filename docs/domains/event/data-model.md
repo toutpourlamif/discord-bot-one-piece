@@ -2,31 +2,37 @@
 
 Trois tables, chacune avec un rôle clair.
 
-## `event_instance` — stateful en cours
+## `event_instance` — queue des events non consommés
 
-| Colonne        | Type         | Rôle                                                              |
-| -------------- | ------------ | ----------------------------------------------------------------- |
-| `id`           | bigserial PK | identifiant unique                                                |
-| `player_id`    | integer FK   | propriétaire                                                      |
-| `type`         | text         | identifiant du générateur (`mainstory.alabasta.find_map`)         |
-| `bucket_id`    | bigint       | bucket dans lequel l'event a été tiré                             |
-| `encounter_id` | bigint, null | relie les events cross-player (deux lignes liées)                 |
-| `state`        | jsonb        | étape actuelle pour les multi-étapes (`{ step: 'haki_charged' }`) |
-| `created_at`   | timestamptz  |                                                                   |
+Contient à la fois les ambient en attente d'affichage et les stateful en attente de décision. Une ligne disparaît quand le joueur "consomme" l'event (clic "Suivant" pour ambient, clic sur un choix pour stateful).
+
+| Colonne        | Type                        | Rôle                                                                                          |
+| -------------- | --------------------------- | --------------------------------------------------------------------------------------------- |
+| `id`           | bigserial PK                | identifiant unique                                                                            |
+| `player_id`    | integer FK                  | propriétaire                                                                                  |
+| `type`         | text                        | identifiant du générateur (`mainstory.alabasta.find_map`)                                     |
+| `scope`        | enum `ambient` / `stateful` | détermine le mode d'affichage (Suivant vs choix) et le timing des effets                      |
+| `bucket_id`    | bigint                      | bucket dans lequel l'event a été tiré (sert aussi à l'ordre d'affichage)                      |
+| `encounter_id` | bigint, null                | relie les events cross-player (deux lignes liées)                                             |
+| `state`        | jsonb                       | ambient : snapshot pour `render(state)` ; stateful multi-step : `{ step: 'haki_charged', … }` |
+| `created_at`   | timestamptz                 |                                                                                               |
 
 > **`bigserial`** = compteur 64 bits auto-incrémenté. **PK** = primary key. **FK** = foreign key (Postgres garantit la référence). **`jsonb`** = JSON binaire interrogeable et indexable.
 
-**Contrainte unique : `(player_id, type, bucket_id)`** — base de l'**idempotence**. Si `!recap` est rejoué deux fois, le moteur regénère le même event depuis le même seed → INSERT en doublon refusé silencieusement.
+**Contrainte unique : `(player_id, type, bucket_id)`** — base de l'**idempotence**. Si le calcul d'un bucket est rejoué (retry après échec de transaction, double `!recap`), le moteur regénère le même event depuis le même seed → INSERT en doublon refusé silencieusement.
 
 > **Idempotence** = opération qu'on peut appeler N fois avec le même résultat qu'une seule. "Marquer comme lu" : idempotent. "Envoyer email" : non.
 
-### Une fois résolu : DELETE
+### Lifecycle
 
-`event_instance` ne contient que ce qui est en cours. Une fois résolu, ligne supprimée, trace dans `history`.
+| Phase                    | Ambient                                          | Stateful                                                        |
+| ------------------------ | ------------------------------------------------ | --------------------------------------------------------------- |
+| Calcul (`!recap` engine) | INSERT row + effets appliqués + INSERT `history` | INSERT row (state initial), pas d'effet, pas d'`history` encore |
+| Clic joueur              | "Suivant" → DELETE row                           | Choix → effets appliqués + DELETE row + INSERT `history`        |
 
-> **Pourquoi pas un champ `status: 'resolved'`** : la table grossirait indéfiniment alors qu'aucun usage des resolved (info utile dans `history`). DELETE = plus propre, moins d'index.
+> **Pourquoi pas un champ `status: 'consumed'`** : la table grossirait indéfiniment alors qu'aucun usage des consumed (l'archive est dans `history`). DELETE = plus propre, moins d'index.
 
-> **Append-only** = on n'ajoute que des lignes, jamais d'UPDATE/DELETE. C'est le contrat de `history`. `event_instance` n'est PAS append-only : UPDATE du `state` à chaque transition, DELETE à la résolution. C'est un "panier en cours", pas un log.
+> **`event_instance` n'est PAS append-only** : UPDATE du `state` à chaque transition d'un stateful multi-step, DELETE à la consommation. C'est un "panier en cours", pas un log. `history` est l'archive immuable.
 
 ## `zone_presence` — historique des zones par intervalles
 
@@ -47,13 +53,13 @@ Projection dénormalisée maintenue dans la même transaction qu'un changement d
 
 Cf doc dédiée `history.md`. Lignes pertinentes pour le domaine event :
 
-| Colonne                     | Rôle                                                                                                  |
-| --------------------------- | ----------------------------------------------------------------------------------------------------- |
-| `event_type`                | le `resolutionType` retourné par le générateur (ex: `mainstory.alabasta.defeat_crocodile.won`)        |
-| `actor_player_id`           | joueur déclencheur, ou `NULL` pour events système                                                     |
-| `target_type` + `target_id` | optionnel, sur quoi porte l'event                                                                     |
-| `bucket_id`                 | bucket d'origine — utilisé pour l'**idempotence des ambient** (cf [performance.md](./performance.md)) |
-| `payload`                   | données utiles aux futurs lookups (montant gagné, choix fait, qui a perdu…)                           |
+| Colonne                     | Rôle                                                                                           |
+| --------------------------- | ---------------------------------------------------------------------------------------------- |
+| `event_type`                | le `resolutionType` retourné par le générateur (ex: `mainstory.alabasta.defeat_crocodile.won`) |
+| `actor_player_id`           | joueur déclencheur, ou `NULL` pour events système                                              |
+| `target_type` + `target_id` | optionnel, sur quoi porte l'event                                                              |
+| `bucket_id`                 | bucket d'origine de l'event                                                                    |
+| `payload`                   | données utiles aux futurs lookups (montant gagné, choix fait, qui a perdu…)                    |
 
 `history` rend possibles : `conditions`, `cooldown`, `oneTime`, mainstory, et tout event qui réagit au passé.
 

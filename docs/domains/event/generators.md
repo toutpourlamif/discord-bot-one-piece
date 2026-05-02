@@ -4,19 +4,64 @@ Un **générateur** définit quand et comment un event apparaît. **Un fichier p
 
 ## Forme ambient
 
+Deux fonctions distinctes :
+
+- `build(ctx, rng)` → appelée au calcul (engine). Retourne `{ effects, state }`. Le `state` capture **tout ce qui dépend de `ctx` ou `rng`** au moment du bucket.
+- `render(state)` → appelée au clic "Suivant". Pure : `state → embed`. **Ne reçoit pas `ctx`.**
+
 ```ts
-const seagullFlyby: EventGenerator = {
+const seagullFlyby: AmbientGenerator = {
   type: 'ambient.seagull_flyby',
   scope: 'ambient',
   conditions: (ctx) => ctx.zone === 'east_blue', // optionnel
   cooldown: 1800, // optionnel : 30 min via history
   probability: () => 0.3, // 30% / bucket éligible
-  build: (ctx, rng) => ({
-    embed: makeEmbed('Une mouette passe au-dessus du navire.'),
-    effects: [], // ou [{ type: 'addMorale', amount: 1 }]
+
+  build: () => ({
+    effects: [],
+    state: {},
   }),
+
+  render: () =>
+    makeEmbed({
+      title: 'Une mouette passe au-dessus du navire.',
+      image: { url: 'https://cdn.../seagull.png' },
+    }),
 };
 ```
+
+### Ambient avec contenu stochastique ou ctx-dépendant
+
+Tout ce qui vient de `rng` ou `ctx` doit être **figé dans `state`** au `build`, pour que `render` puisse le retrouver à l'identique au clic.
+
+```ts
+const fishingHaul: AmbientGenerator = {
+  type: 'ambient.fishing_haul',
+  scope: 'ambient',
+  conditions: (ctx) => ctx.zone === 'east_blue',
+  probability: () => 0.2,
+
+  build: (ctx, rng) => {
+    const hasFishman = ctx.crew.has('fishman');
+    const base = 50 + Math.floor(rng.next() * 50);
+    const bonus = hasFishman ? base : 0; // homme-poisson double la prise
+
+    return {
+      effects: [{ type: 'addBerries', amount: BigInt(base + bonus) }],
+      state: { base, bonus, hadFishman: hasFishman },
+    };
+  },
+
+  render: (state) =>
+    state.hadFishman
+      ? makeEmbed(`Ton homme-poisson plonge et ramène ${state.base + state.bonus} berries (${state.base} + ${state.bonus} bonus).`)
+      : makeEmbed(`Tu pêches ${state.base} berries.`),
+};
+```
+
+> **Pourquoi `render` n'a pas `ctx`** : un event ambient est un snapshot du passé. Si `render` lisait le ctx actuel, on aurait des incohérences narratives ("Ton homme-poisson plonge…" alors qu'il a quitté l'équipage entre-temps), ou pire un embed qui ne correspond plus à l'effet réellement appliqué. Tout ce qui est nécessaire au rendu doit être figé dans `state` au `build`.
+
+> **Cas limite — afficher du présent** (ex: "Tu as maintenant X berries au total") : ça relève d'un message de suivi, pas du contenu de l'event. À gérer hors générateur, dans le code qui orchestre l'affichage de la queue.
 
 ## Forme stateful 1 étape
 
@@ -49,10 +94,9 @@ function openBarrel(ctx, rng) {
 
 À retenir :
 
-- `build` pour les ambient (1 écran, pas d'interaction).
-- `steps` pour les stateful : nom + embed + choix.
-- Chaque choix : `goTo` (transition) ou `resolve` (résolution).
-- `resolve` retourne `{ embed, effects, resolutionType }`.
+- **Ambient** : `build(ctx, rng)` au calcul, `render(state)` au clic. `render` est pure sur `state`.
+- **Stateful** : graphe de `steps` nommées. Chaque étape : `embed(state, ctx)` + `choices(state, ctx)`. Chaque choix : `goTo` (transition) ou `resolve` (résolution finale).
+- `resolve(ctx, rng)` retourne `{ embed, effects, resolutionType }`. C'est là que les effets stateful sont appliqués (≠ ambient où c'est au `build`).
 
 ## Forme stateful multi-étapes (graphe)
 
@@ -176,13 +220,18 @@ L'engine a `applyEffects(effects, ctx, transaction)` qui dispatch chaque variant
 
 ## Couplage avec `history`
 
-À chaque résolution, ligne dans `history` (cf doc dédiée `history.md`) :
+Une ligne `history` est écrite (cf doc dédiée `history.md`) :
 
-- `event_type` = le `resolutionType` retourné (ex: `mainstory.alabasta.defeat_crocodile.won`)
-- `actor_player_id` = joueur déclencheur, ou `NULL` pour events système
-- `target_type` + `target_id` = optionnel
-- `bucket_id` = bucket d'origine (idempotence, cf [performance.md](./performance.md))
-- `payload` = données utiles (montant gagné, choix fait, qui a perdu…)
+- pour un **ambient** : à l'engine, en même temps que l'INSERT `event_instance` et l'application des effets.
+- pour un **stateful** : à la résolution, quand le joueur a cliqué un choix.
+
+Champs :
+
+- `event_type` = type ambient (ex: `ambient.fishing_haul`) ou `resolutionType` du choix stateful (ex: `mainstory.alabasta.defeat_crocodile.won`).
+- `actor_player_id` = joueur déclencheur, ou `NULL` pour events système.
+- `target_type` + `target_id` = optionnel.
+- `bucket_id` = bucket d'origine.
+- `payload` = données utiles (montant gagné, choix fait, qui a perdu…).
 
 C'est cette table qui rend possibles `conditions`, `cooldown`, `oneTime`, mainstory, et tout event qui réagit au passé.
 
