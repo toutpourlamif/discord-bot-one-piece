@@ -6,13 +6,10 @@
 
 Sans : 50 générateurs × 192 buckets × 2-3 lookups = **~30 000 requêtes** pour un seul recap.
 
-**Fix** : une seule requête au début de `process-recap` charge l'history pertinente :
+**Fix** : une seule requête au début de `process-recap` charge **toute** l'history du joueur :
 
 ```ts
-const playerHistory = await client
-  .select()
-  .from(history)
-  .where(and(eq(history.actorPlayerId, playerId), gte(history.occurredAt, since)));
+const playerHistory = await client.select().from(history).where(eq(history.actorPlayerId, playerId));
 ```
 
 `ctx.history` interroge ensuite ce tableau en mémoire :
@@ -25,7 +22,7 @@ ctx.history = {
 };
 ```
 
-> **Note** : pour les events `oneTime` qui doivent matcher "depuis toujours", soit charger toute l'history (cher si 100k events), soit faire une requête séparée ciblée. À voir à l'implém.
+> **Pourquoi tout charger et pas juste les N derniers jours** : les filtres `oneTime` ont besoin du "depuis toujours". Tronquer la fenêtre forcerait des requêtes séparées au cas par cas, ce qui annule l'optimisation. Le volume reste raisonnable (quelques milliers de lignes par joueur même après des mois de jeu actif).
 
 ## 2. Idempotence garantie par `event_instance`
 
