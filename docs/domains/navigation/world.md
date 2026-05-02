@@ -107,7 +107,7 @@ export const ZONE_GRAPH: Array<Edge> = [
     to: 'whisky_peak',
     via: 'at_sea_paradise',
     baseDurationBuckets: 12,
-    requires: [{ kind: 'item', id: 'log_pose' }],
+    requires: [{ type: 'item', name: 'Log Pose' }],
   },
   // ...
 ];

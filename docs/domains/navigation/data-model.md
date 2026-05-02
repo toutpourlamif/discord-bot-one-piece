@@ -20,24 +20,43 @@ Quand il **change de cap pendant le trajet**, on garde `travel_started_at` mais 
 
 ## Nouveaux items dans l'inventaire
 
-### `log_pose`
+On suit le pattern existant du projet : chaque type d'item est **une ligne dans `resource_template`** identifiée par son `name`. On lookup par nom (`ctx.inventory.has('Log Pose')`).
 
-Item **unique** par joueur (on peut en avoir un seul à la fois). Permet de naviguer dans le Grand Line.
+### Le Log Pose
+
+Une seule ligne `resource_template` :
+
+| name     |
+| -------- |
+| Log Pose |
+
+Le joueur en possède au plus un exemplaire à la fois. C'est le passe-droit pour naviguer dans le Grand Line.
 
 - Obtenu typiquement à Reverse Mountain ou comme récompense d'un event mainstory du début du Grand Line.
 - Peut être **perdu** lors d'un combat ou d'un naufrage.
 - Peut être **acheté** chez certains marchands.
 
-### `eternal_pose:<island>`
+### Les Eternal Poses
 
-Items **multiples** : un joueur peut en posséder plusieurs, mais un seul exemplaire de chacun. Chaque Eternal Pose est verrouillé sur **une île précise**.
+**Une ligne `resource_template` par île pose-able**. Le nom encode la destination :
 
-Exemples : `eternal_pose:drum`, `eternal_pose:skypiea`, `eternal_pose:water_seven`.
+| name                   |
+| ---------------------- |
+| Eternal Pose - Drum    |
+| Eternal Pose - Skypiea |
+| Eternal Pose - Water 7 |
+| ...                    |
+
+Un joueur peut en posséder plusieurs, mais un seul exemplaire de chaque. Chacun est verrouillé sur l'île écrite dans son nom.
 
 - Obtenu généralement comme récompense rare d'un event spécifique à une île.
 - Permanent (ne se perd pas en combat, mais peut être volé via certains events).
 
-> Le détail de comment ces items sont représentés dans la table `inventory` est à voir avec le domaine `inventory` quand il sera mis en place. Pour l'instant, on suppose juste qu'on peut faire `ctx.inventory.has('log_pose')` et `ctx.inventory.has('eternal_pose:drum')`.
+> **Pourquoi une ligne par île et pas une ligne unique "Eternal Pose" avec un paramètre ?** Parce qu'on suit le pattern du projet (`resource_template` est identifié par `name`, sans paramètre). Ajouter un système paramétrique juste pour les Eternal Poses serait une exception qui complexifierait pour rien. Si un jour on a 30 destinations différentes et que ça devient lourd, on pourra refactoriser.
+
+### Côté code
+
+Les noms exacts vivent dans la même `RESOURCE_TEMPLATES_DATA` que les autres ressources (`packages/db/src/domains/resource/resource_template/data.ts`), et la liste des Eternal Poses doit rester synchronisée avec la liste des zones du graphe. Idéalement un test au boot vérifie que pour chaque île traversable via Eternal Pose, la ligne `resource_template` existe.
 
 ## L'enum des zones
 
