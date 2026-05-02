@@ -80,7 +80,7 @@ Pendant le transit, certains événements en mer proposent une **réorientation*
 >
 > [Dévier vers Jaya] [Continuer vers Drum]
 
-Si oui, l'engine recalcule la nouvelle destination et la nouvelle ETA, met à jour les colonnes `travel_*`. Pas de pénalité de temps perdu pour le détour : on repart depuis la position actuelle (en mer, dans la même sous-mer).
+Si oui, l'engine recalcule la nouvelle destination et la nouvelle ETA, met à jour les colonnes `travel_*`.
 
 ## Dérive : quand ça tourne mal
 

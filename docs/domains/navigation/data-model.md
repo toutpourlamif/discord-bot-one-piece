@@ -16,11 +16,9 @@ Quand le joueur **part**, les trois colonnes se remplissent.
 Quand il **arrive** (ou qu'il **dérive**), les trois colonnes se vident.
 Quand il **change de cap pendant le trajet**, on garde `travel_started_at` mais on met à jour `travel_target_zone` et `travel_eta_at`.
 
-> **Pourquoi sur `player` et pas dans `event_instance.state` ?** Parce que ces infos sont **lues très souvent** : à chaque `!recap`, à chaque `!profil`, dans le `ctx` des générateurs en mer. Trois colonnes scalaires sont infiniment plus rapides à lire qu'un champ JSON. Et c'est conceptuellement simple : "où en est le joueur dans son voyage" est un état du joueur.
-
 ## Nouveaux items dans l'inventaire
 
-On suit le pattern existant du projet : chaque type d'item est **une ligne dans `resource_template`** identifiée par son `name`. On lookup par nom (`ctx.inventory.has('Log Pose')`).
+On suit le pattern existant du projet : chaque type d'item est **une ligne dans `resource_template`** identifiée par son `name`. On lookup par nom (`inventory.has('Log Pose')`).
 
 ### Le Log Pose
 
@@ -30,15 +28,15 @@ Une seule ligne `resource_template` :
 | -------- |
 | Log Pose |
 
-Le joueur en possède au plus un exemplaire à la fois. C'est le passe-droit pour naviguer dans le Grand Line.
+Le joueur en possède UN ou 0 (vendu, perdu, volé).
 
-- Obtenu typiquement à Reverse Mountain ou comme récompense d'un event mainstory du début du Grand Line.
+- Obtenu typiquement dans la main story (reverse mountain)
 - Peut être **perdu** lors d'un combat ou d'un naufrage.
-- Peut être **acheté** chez certains marchands.
+- Peut être **acheté** chez certains marchands. (events quand on s'aperçoit qu'il en a plus)
 
 ### Les Eternal Poses
 
-**Une ligne `resource_template` par île pose-able**. Le nom encode la destination :
+**Une ligne `resource_template` par île traçable**. Le nom encode la destination :
 
 | name                   |
 | ---------------------- |
@@ -52,15 +50,9 @@ Un joueur peut en posséder plusieurs, mais un seul exemplaire de chaque. Chacun
 - Obtenu généralement comme récompense rare d'un event spécifique à une île.
 - Permanent (ne se perd pas en combat, mais peut être volé via certains events).
 
-> **Pourquoi une ligne par île et pas une ligne unique "Eternal Pose" avec un paramètre ?** Parce qu'on suit le pattern du projet (`resource_template` est identifié par `name`, sans paramètre). Ajouter un système paramétrique juste pour les Eternal Poses serait une exception qui complexifierait pour rien. Si un jour on a 30 destinations différentes et que ça devient lourd, on pourra refactoriser.
-
-### Côté code
-
-Les noms exacts vivent dans la même `RESOURCE_TEMPLATES_DATA` que les autres ressources (`packages/db/src/domains/resource/resource_template/data.ts`), et la liste des Eternal Poses doit rester synchronisée avec la liste des zones du graphe. Idéalement un test au boot vérifie que pour chaque île traversable via Eternal Pose, la ligne `resource_template` existe.
-
 ## L'enum des zones
 
-Tous les noms de zones (terrestres et sous-mers) vivent dans **un même enum Postgres**. C'est ce qu'utilisent `zone_presence.zone` et `player.travel_target_zone`.
+Tous les noms de zones (îles et mers) vivent dans **un même enum Postgres**. C'est ce qu'utilisent `zone_presence.zone` et `player.travel_target_zone`.
 
 V1 :
 
@@ -80,8 +72,6 @@ zone_enum = (
 
 À chaque fois qu'on ajoute une nouvelle île, c'est une migration `ALTER TYPE zone_enum ADD VALUE 'new_island'`.
 
-> **Pourquoi un enum et pas une table `zones` ?** Parce que la liste est petite, change rarement, et on en a besoin partout en TS. Avec un enum on garde la liste synchronisée entre TS et Postgres, et on a la complétion automatique. Une table serait sur-dimensionnée pour ce besoin.
-
 ## Le graphe des arêtes
 
 **Pas en base de données.** Le graphe est une constante TypeScript dans `apps/bot/src/domains/navigation/world.ts` (cf [world.md](./world.md) §"Comment tout ce monde est représenté en code").
@@ -93,19 +83,21 @@ Pourquoi en code et pas en base :
 - C'est très naturellement versionnable avec git.
 - On peut facilement écrire des tests qui valident le graphe (pas de cycle, pas d'arête vers une zone inexistante, etc.).
 
-## Comment ça s'articule avec `zone_presence`
+## Comment la position est mise à jour pendant un voyage
 
-`zone_presence` (créée dans le domaine event) ne change pas. Quand le joueur passe d'une île à une sous-mer, c'est un changement de zone normal :
+La position courante du joueur vit sur `player.current_zone` (cf domaine `player`). À chaque étape du voyage, on l'update et on trace dans `history`, dans la même transaction :
 
-1. `UPDATE zone_presence SET left_at = now() WHERE player_id = ? AND left_at IS NULL`
-2. `INSERT zone_presence (player_id, zone, entered_at, left_at) VALUES (?, 'at_sea_paradise', now(), NULL)`
+**Au départ (île → sous-mer) :**
 
-Pareil quand on arrive à destination :
+1. `UPDATE player SET current_zone = 'at_sea_paradise' WHERE id = ?`
+2. `INSERT history (event_type, actor_player_id, payload) VALUES ('player.zone_changed', ?, { from: 'east_blue', to: 'at_sea_paradise' })`
+3. - UPDATE des colonnes `travel_*` (cf section précédente)
 
-1. `UPDATE zone_presence SET left_at = now() WHERE player_id = ? AND left_at IS NULL`
-2. `INSERT zone_presence (player_id, zone, entered_at, left_at) VALUES (?, 'drum', now(), NULL)`
+**À l'arrivée (sous-mer → île) :**
 
-Donc `zone_presence` reste la **source de vérité de "où est le joueur en ce moment"**. Les colonnes `travel_*` sont juste des **infos additionnelles** sur le voyage en cours quand la zone est une sous-mer.
+Pareil, en remettant `current_zone` à la zone d'arrivée et en vidant les colonnes `travel_*`.
+
+`current_zone` est la **source de vérité de "où est le joueur en ce moment"**. Les colonnes `travel_*` sont des **infos additionnelles** sur le voyage en cours quand `current_zone` est une sous-mer.
 
 ## Trace dans `history`
 

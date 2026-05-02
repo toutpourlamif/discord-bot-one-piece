@@ -58,11 +58,15 @@ Exemples :
 
 ## Si les conditions changent en cours de route
 
-Le joueur part d'Alabasta vers Drum. Au milieu du voyage, il subit une rencontre où il **perd Nami** (capturée). Que se passe-t-il ?
+Le joueur part d'Alabasta vers Drum. Au milieu du voyage, il **perd Nami** (capturée), ou son **Log Pose est volé**, ou son **navire prend des dégâts**. On ne le bloque pas : il continue, mais l'**ETA est recalculée** à la volée.
 
-**Réponse simple : on continue.** On ne re-vérifie pas les conditions une fois en mer. Le joueur arrive quand même à destination, juste plus tard si on recalcule la `dériveFactor` à la volée (futur — pour l'instant, durée figée au départ).
+Principe : on connaît la **fraction du voyage déjà parcourue** via `(now() - travel_started_at) / (travel_eta_at - travel_started_at)`. On recalcule la durée totale avec les nouvelles conditions, et on n'applique le malus qu'à la part **restante** :
 
-> **Pourquoi ce choix ?** Parce qu'arrêter le joueur en pleine mer pour lui dire "tu n'as plus de navigateur, tu es bloqué" serait nul. Mieux vaut qu'il continue et compose avec.
+```
+nouvelleETA = now() + nouvelleDuréeTotale × (1 - progressActuel)
+```
+
+Pas de double pénalité pour le temps déjà passé. La fonction `recomputeTravelETA(playerId)` est appelée par les effets qui modifient l'état du voyage (perte de personnage, dégâts navire, perte d'item Log Pose, etc.) quand le joueur est en transit.
 
 ## Combien d'événements en mer pendant un trajet ?
 
@@ -78,13 +82,26 @@ Sur un trajet de 30 buckets, ça donne **2 events en mer + 1 arrivée** en moyen
 
 ## La dérive : quand on arrive ailleurs
 
-Sur 5% des voyages environ, le joueur n'arrive pas à destination — il dérive. L'engine choisit aléatoirement (seed `at_sea_*` + bucket d'arrivée) une **autre île atteignable de la même région** et bascule la zone vers celle-là.
+Au moment de terminer un voyage, l'engine roll un dé pour décider si le joueur arrive bien à destination ou s'il **dérive vers une autre île de la même région**. La probabilité dépend continûment de l'état du joueur :
 
-> _"La tempête a soufflé toute la nuit. Quand le calme revient, tu reconnais une côte… ce n'est pas Drum, c'est Little Garden."_
+```
+driftProbability = clamp(
+  0.02
+  + (1 - shipHealth/100) × 0.3       // navire endommagé → ↑
+  + (hasLogPose ? 0 : 0.2),          // pas de Log Pose → ↑
+  0.02, 0.5
+)
+```
 
-Pas de pénalité supplémentaire — juste arrivée ailleurs. Le joueur peut alors décider de repartir vers la destination initiale (depuis cette nouvelle île).
+Concrètement : navire en pleine forme + Log Pose → 2% (résiduel météo). Navire à 30% sans Log Pose → ~36%.
 
-> **Important :** la dérive ne te fait jamais arriver dans une zone où tu ne pourrais pas aller normalement (pas de Skypiea par dérive si tu n'as pas un Eternal Pose). Ça reste réaliste : tu dérives vers le **plus proche atteignable**.
+Si dérive : l'engine choisit (RNG seedé) une autre île atteignable depuis la même sous-mer (autre `via` dans `ZONE_GRAPH`), et bascule vers elle. Pas d'arrivée dans une zone normalement inaccessible (jamais Skypiea par dérive sans Eternal Pose).
+
+### Le récit de la dérive
+
+Un **générateur narratif par sous-mer** (`navigation.drift.east_blue`, `navigation.drift.paradise`, `navigation.drift.new_world`) fournit l'embed de dérive avec une ambiance custom par région. L'engine les déclenche manuellement — ils ne sortent jamais d'un tirage aléatoire.
+
+> _"Le brouillard de Paradise t'a égaré. Tu visais Drum, c'est Little Garden qui t'accueille."_
 
 ## Récap visuel d'un voyage typique
 
