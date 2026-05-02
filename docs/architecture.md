@@ -23,6 +23,7 @@ On ouvre un domaine (dossier + doc) uniquement au moment où on commence à code
 | `economy`     | Berry, shops, marchands                                                                                                            |
 | `resource`    | Matériaux de craft, artefacts de main story, FDD non consommés                                                                     |
 | `fishing`     | Action `/pêcher` à la demande : loot, events, avancée scénario                                                                     |
+| `history`     | HISTORIQUE DE tout ce qu'il se passe et qui peut servir plus tard pour analyser / pour des events                                  |
 
 D'autres domaines viendront s'ajouter quand le besoin apparaîtra (combat, world…). On ne les crée pas en amont.
 
