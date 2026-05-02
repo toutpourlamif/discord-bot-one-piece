@@ -12,6 +12,14 @@ Le joueur **existe aussi comme personnage dans le monde** : c'est le **PlayerAsC
 
 À la création d'un player (`findOrCreatePlayer`), son PlayerAsCharacter est créé dans la même transaction. Quand le joueur se rename, le `nickname` du PlayerAsCharacter est mis à jour pour rester cohérent avec son nom affiché.
 
+## Origin guild
+
+Le **serveur Discord d'origine** d'un joueur est figé à sa création (colonne `player.origin_guild_id`, settée par `findOrCreatePlayer`, jamais update). Stable même si le joueur devient ensuite actif sur d'autres serveurs.
+
+Sert principalement à afficher le tag du serveur d'origine pendant un encounter cross-player (cf domaine `event` → `cross-player.md`). Thématiquement, c'est l'**île d'origine** du pirate — elle reste avec lui toute sa vie.
+
+> Indépendant du leaderboard : `!leaderboard` reste **par serveur** et liste les membres présents sur le serveur courant qui ont joué (via le futur domaine `guild_player`). Un joueur peut donc apparaître dans plusieurs leaderboards locaux, son `origin_guild_id` ne change jamais.
+
 ## Bounty
 
 La prime mise sur la tête du joueur par le Gouvernement Mondial, exprimée en Berry.
