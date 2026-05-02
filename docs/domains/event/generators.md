@@ -215,7 +215,7 @@ Pas un gros event "Alabasta". Une **suite d'events distincts** qui se débloquen
 | `ctx.history`      | helpers : `has(type)`, `lastResolutionOf(prefix)`, `countSince(type, sec)` |
 | `ctx.bucket_id`    | bucket en cours                                                            |
 | `ctx.zone`         | zone du joueur à ce bucket                                                 |
-| `ctx.othersInZone` | autres joueurs présents (cross-player, déjà filtrés par guild)             |
+| `ctx.othersInZone` | autres joueurs présents dans la zone au bucket (tous serveurs confondus)   |
 
 > **Pourquoi un objet plutôt que des paramètres positionnels** : ajouter `ctx.weather` ne casse aucun générateur existant.
 

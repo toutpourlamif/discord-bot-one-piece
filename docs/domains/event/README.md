@@ -11,7 +11,7 @@ Jamais déclenchés à la demande : calculés à partir du temps écoulé, de la
 | [architecture.md](./architecture.md) | Modèle lazy, buckets 15 min, seed déterministe, passive vs interactive        |
 | [recap-flow.md](./recap-flow.md)     | Règle "synced pour agir", cycle d'un `!recap`, cap 48h                        |
 | [generators.md](./generators.md)     | Contrat `EventGenerator`, filtres, `ctx`, effets, mainstory, ajout d'un event |
-| [cross-player.md](./cross-player.md) | Rencontres entre joueurs, `zone_presence`, first-clicker-wins, guild, DM      |
+| [cross-player.md](./cross-player.md) | Rencontres inter-serveur, `zone_presence`, first-clicker-wins, identité, DM   |
 | [data-model.md](./data-model.md)     | Tables `event_instance`, `zone_presence`, lien avec `history`                 |
 | [performance.md](./performance.md)   | Pré-agrégation, idempotence, index, `custom_id`, validations boot             |
 

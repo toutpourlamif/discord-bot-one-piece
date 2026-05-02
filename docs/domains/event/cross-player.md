@@ -122,13 +122,25 @@ const piratesAlliance: EventGenerator = {
 
 `appliesTo` = `conditions` mais pour les paires.
 
-## Filtrage par guild
+## Encounters globaux (inter-serveur)
 
-Encounter cross-player **uniquement si les deux joueurs sont sur le même serveur Discord**. Rayan sur "OnePieceFR" et Hakim sur "PirateLand" ne se croisent jamais, même tous deux à East Blue.
+Les rencontres se produisent entre **tous les joueurs du bot**, peu importe leur serveur Discord. Rayan sur "OnePieceFR" peut croiser Hakim sur "PirateLand" tant qu'ils sont dans la même zone au même bucket.
 
-L'engine filtre `othersInZone` sur la guild du joueur qui recap **avant** d'évaluer `appliesTo`.
+> **Pourquoi inter-serveur** : avec must-be-synced + même zone + même bucket comme contraintes, restreindre aussi à la même guild rendrait les rencontres trop rares dans la pratique. La densité de rencontres est ce qui rend le monde vivant. Inter-serveur permet aussi de tomber sur des inconnus, ce qui est thématiquement fidèle à One Piece.
 
-> **Pourquoi** : chaque serveur Discord est sa propre instance du jeu. `!leaderboard`, rangs de yonko, rivalités locales — tout suppose des interactions sociales en guild. Voir le domaine `guild_player` pour le tracking présence joueur/serveur.
+> **Indépendant du leaderboard** : le `!leaderboard` reste **par serveur** (liste les membres présents sur le serveur courant qui ont joué — voir le domaine `guild_player` pour le tracking présence joueur/serveur). Un joueur peut donc apparaître dans plusieurs leaderboards locaux sans que ça change quoi que ce soit aux encounters.
+
+## Identité affichée pendant un encounter
+
+Quand A croise B, on affiche le **nom de pirate** de B (déjà unique dans le jeu) + un **tag du serveur d'origine** de B en discret, par exemple :
+
+> _« Tu croises Hakim — OnePieceFR. »_
+
+Le serveur d'origine est figé à la création du joueur (cf colonne `player.origin_guild_id` dans [data-model.md](./data-model.md)). Il ne change jamais, même si le joueur devient actif sur d'autres serveurs.
+
+> **Pourquoi le serveur d'origine et pas "le dernier serveur joué"** : stable, gratuit à calculer, et thématiquement fort — comme dans One Piece, ton île d'origine reste avec toi toute ta vie.
+
+> **Edge case** : si le bot a été kické du serveur d'origine, on n'a pas le nom à afficher. Fallback : juste le nom de pirate sans tag.
 
 ## Notification DM
 
