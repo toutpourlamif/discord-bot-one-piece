@@ -38,14 +38,14 @@ export async function routeMessage(message: Message, prefix: string): Promise<vo
   const command = registry.get(rawName.toLowerCase());
   if (!command) return;
 
-  if (command.adminOnly === true) {
-    const user = getSelfUser(message);
-    const { player } = await findOrCreatePlayer(user.id, user.username);
-    if (!player.isAdmin) {
-      throw new AdminOnlyError();
-    }
-  }
   try {
+    if (command.adminOnly === true) {
+      const user = getSelfUser(message);
+      const { player } = await findOrCreatePlayer(user.id, user.username);
+      if (!player.isAdmin) {
+        throw new AdminOnlyError();
+      }
+    }
     await command.handler(message, args);
   } catch (error) {
     if (error instanceof AppError) {

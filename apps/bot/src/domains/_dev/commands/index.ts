@@ -26,4 +26,4 @@ export const devCommands = [
   emojiCommand,
   buyCommand,
   sellCommand,
-];
+].map((cmd) => ({ ...cmd, adminOnly: true }));
