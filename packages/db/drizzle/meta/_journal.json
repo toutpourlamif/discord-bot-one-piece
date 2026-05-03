@@ -169,6 +169,13 @@
       "when": 1777801953029,
       "tag": "0023_liberez_sophiane",
       "breakpoints": true
+    },
+    {
+      "idx": 24,
+      "version": "7",
+      "when": 1777825097776,
+      "tag": "0024_kalash_est_charger",
+      "breakpoints": true
     }
   ]
 }
