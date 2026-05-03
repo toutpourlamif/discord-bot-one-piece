@@ -1,0 +1,1 @@
+ALTER TABLE "player" ADD COLUMN "last_recap_at" timestamp with time zone DEFAULT now() NOT NULL;
