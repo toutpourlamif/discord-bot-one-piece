@@ -1,5 +1,5 @@
 import { sql } from 'drizzle-orm';
-import { pgTable, serial, varchar, bigint, integer } from 'drizzle-orm/pg-core';
+import { pgTable, serial, varchar, bigint, integer, timestamp } from 'drizzle-orm/pg-core';
 
 import { MAX_CHARACTER_NAME_LENGTH } from '../../shared/constants.js';
 import { timestamps } from '../../shared/helpers.js';
@@ -21,6 +21,7 @@ export const player = pgTable('player', {
     .notNull()
     .default(sql`0`),
   ...timestamps(),
+  last_recap_at: timestamp('last_recap_at', { withTimezone: true }).notNull().defaultNow(),
 });
 
 export type Player = typeof player.$inferSelect;

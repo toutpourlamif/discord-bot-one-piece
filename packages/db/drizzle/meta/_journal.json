@@ -162,6 +162,13 @@
       "when": 1777640285756,
       "tag": "0022_kameto_deban_moi_stp",
       "breakpoints": true
+    },
+    {
+      "idx": 23,
+      "version": "7",
+      "when": 1777814909006,
+      "tag": "0023_far_squirrel_girl",
+      "breakpoints": true
     }
   ]
 }
