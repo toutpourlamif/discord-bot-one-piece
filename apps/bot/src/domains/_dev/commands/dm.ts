@@ -8,7 +8,8 @@ export const dmCommand: Command = {
   name: 'dm',
   async handler(message, args) {
     const target = getTargetUser(message);
-    const query = getQuery(args, { emptyMessage: 'Tu dois fournir un message.' });
+    const queryArgs = message.mentions.users.first() ? args.slice(1) : args;
+    const query = getQuery(queryArgs, { emptyMessage: 'Tu dois fournir un message.', minLength: 3 });
 
     const result = await sendDirectMessage({
       client: message.client,
@@ -17,9 +18,11 @@ export const dmCommand: Command = {
     });
 
     if (result.delivered) {
-      await message.reply(`Message envoyé à ${target.username}.`);
+      const embed = buildOpEmbed().setDescription(`Message envoyé à ${target.username}.`);
+      await message.reply({ embeds: [embed] });
     } else {
-      await message.reply(`Impossible d'envoyer un message à ${target.username}.`);
+      const embed = buildOpEmbed().setDescription(`Impossible d'envoyer un message à ${target.username}.`);
+      await message.reply({ embeds: [embed] });
     }
   },
 };
