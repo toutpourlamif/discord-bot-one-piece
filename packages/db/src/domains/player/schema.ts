@@ -21,6 +21,7 @@ export const player = pgTable('player', {
     .notNull()
     .default(sql`0`),
   ...timestamps(),
+  lastProcessedBucketId: integer('last_processed_bucket_id').notNull(),
   isAdmin: boolean('is_admin').notNull().default(false),
 });
 
