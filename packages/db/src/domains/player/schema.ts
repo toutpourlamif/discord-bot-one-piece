@@ -1,5 +1,5 @@
 import { sql } from 'drizzle-orm';
-import { pgTable, serial, varchar, bigint, integer, timestamp } from 'drizzle-orm/pg-core';
+import { pgTable, serial, varchar, bigint, integer, boolean, timestamp } from 'drizzle-orm/pg-core';
 
 import { MAX_CHARACTER_NAME_LENGTH } from '../../shared/constants.js';
 import { timestamps } from '../../shared/helpers.js';
@@ -21,6 +21,7 @@ export const player = pgTable('player', {
     .notNull()
     .default(sql`0`),
   ...timestamps(),
+  isAdmin: boolean('is_admin').notNull().default(false),
   last_recap_at: timestamp('last_recap_at', { withTimezone: true }).notNull().defaultNow(),
 });
 
