@@ -7,7 +7,8 @@
     "dev": "tsx watch --env-file=.env.local src/index.ts",
     "start": "tsx --env-file=.env.local src/index.ts",
     "smoke-test": "tsx scripts/smoke-test.ts",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run"
   },
   "dependencies": {
     "@one-piece/db": "workspace:*",
@@ -16,6 +17,7 @@
     "lodash": "^4.18.1"
   },
   "devDependencies": {
-    "@types/lodash": "^4.17.24"
+    "@types/lodash": "^4.17.24",
+    "vitest": "^4.1.5"
   }
 }
