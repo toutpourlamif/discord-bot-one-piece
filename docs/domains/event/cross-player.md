@@ -40,7 +40,7 @@ Tout dans la même transaction → toujours synchronisées, pas de drift.
 
 Quand le moteur d'A processe le bucket B et veut un encounter avec X :
 
-> `X.last_recap_at >= fin du bucket B` ?
+> `X.last_processed_bucket_id >= B` ?
 
 - **Oui** → X a vécu ce moment dans son timeline → encounter généré, `event_instance` insérée pour A et X.
 - **Non** → X est en retard → **skip**. X n'existe pas dans le monde à ce moment-là.
@@ -51,7 +51,7 @@ Quand le moteur d'A processe le bucket B et veut un encounter avec X :
 
 Sans elle : Hakim recap à 14h, encounter avec Rayan AFK, Hakim résout un combat. Rayan revient, recap, sa timeline diverge (mainstory à 13h30 → Drum). Conflit avec le combat à 14h.
 
-Avec : Hakim au bucket 14h voit `Rayan.last_recap_at = 12h` → skip. **Aucun encounter n'est jamais généré pour un AFK.** Aucun conflit possible.
+Avec : Hakim au bucket 14h voit `Rayan.last_processed_bucket_id` correspondant à 12h → skip. **Aucun encounter n'est jamais généré pour un AFK.** Aucun conflit possible.
 
 ### Conséquence : encounters AFK différés (pas perdus)
 
@@ -63,11 +63,11 @@ Quand les deux sont actifs et synchros au bucket courant, le premier qui recap (
 
 ### Trade-off accepté : monde "plus vide"
 
-Si la moitié des joueurs sont AFK, le monde paraît plus vide pour les actifs. Sain : peuplé par ceux qui jouent, pas par des fantômes. Un AFK qui revient et `!recap` redevient visible aux autres dès que son `last_recap_at` rattrape leur fenêtre.
+Si la moitié des joueurs sont AFK, le monde paraît plus vide pour les actifs. Sain : peuplé par ceux qui jouent, pas par des fantômes. Un AFK qui revient et `!recap` redevient visible aux autres dès que son `last_processed_bucket_id` rattrape leur fenêtre.
 
 ## Cohérence temporelle automatique
 
-Comme **aucun joueur ne peut agir sans être synced**, deux joueurs qui s'encountent sont forcément à jour dans leur timeline. `zone_presence` et `history` sont alignés sur ce qui s'est passé jusqu'à leur `last_recap_at`. Aucune incohérence à gérer.
+Comme **aucun joueur ne peut agir sans être synced**, deux joueurs qui s'encountent sont forcément à jour dans leur timeline. `zone_presence` et `history` sont alignés sur ce qui s'est passé jusqu'à leur `last_processed_bucket_id`. Aucune incohérence à gérer.
 
 ## Première détection : INSERT pour les deux
 

@@ -4,14 +4,14 @@ Trois piliers : **lazy**, **buckets**, **seed déterministe**. Permettent un mon
 
 ## 1. Lazy : tout est calculé au `!recap`
 
-Aucun job en background. Tant que personne ne joue, le bot dort. `!recap` calcule à la volée tout ce qui aurait pu arriver depuis `last_recap_at`.
+Aucun job en background. Tant que personne ne joue, le bot dort. `!recap` calcule à la volée tout ce qui aurait pu arriver depuis `last_processed_bucket_id`.
 
-| Bénéfice          | Détail                                                                     |
-| ----------------- | -------------------------------------------------------------------------- |
-| Coût d'infra zéro | 90% des joueurs Discord sont AFK à un instant T.                           |
-| Pas de scheduler  | Rien à déployer, rien à monitorer.                                         |
-| Pas de catch-up   | Si le bot est down 4h, `!recap` recompute toujours depuis `last_recap_at`. |
-| Local dev trivial | Un terminal, le bot reste cohérent.                                        |
+| Bénéfice          | Détail                                                                                |
+| ----------------- | ------------------------------------------------------------------------------------- |
+| Coût d'infra zéro | 90% des joueurs Discord sont AFK à un instant T.                                      |
+| Pas de scheduler  | Rien à déployer, rien à monitorer.                                                    |
+| Pas de catch-up   | Si le bot est down 4h, `!recap` recompute toujours depuis `last_processed_bucket_id`. |
+| Local dev trivial | Un terminal, le bot reste cohérent.                                                   |
 
 Trade-off accepté : moins de "le monde tourne pendant que je regarde pas" — compensé par le seed déterministe (même résultats pour tous, voir plus bas). Events à péremption stricte (vente flash 30 min) moins naturels — pas un besoin pour ce jeu.
 
