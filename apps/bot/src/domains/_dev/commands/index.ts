@@ -1,6 +1,7 @@
 import { buyCommand } from './buy.js';
 import { colorCommand } from './color.js';
 import { debugCommand } from './debug/index.js';
+import { dmCommand } from './dm.js';
 import { embedCommand } from './embed.js';
 import { emojiCommand } from './emoji.js';
 import { giveCharacterCommand } from './givecharacter.js';
@@ -26,4 +27,5 @@ export const devCommands = [
   emojiCommand,
   buyCommand,
   sellCommand,
+  dmCommand,
 ];
