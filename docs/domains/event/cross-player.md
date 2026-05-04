@@ -2,39 +2,17 @@
 
 Quand deux joueurs sont dans la même zone et que le seed dit "rencontre", on matérialise l'event **pour les deux**.
 
-## `zone_presence` : qui était où
+## Comment on sait qui est où
 
-Pour répondre à "qui était dans Z à T", il faut l'historique des zones de **tous les joueurs**, pas juste celui qui recap. Table dédiée :
-
-| Colonne      | Type        | Rôle                             |
-| ------------ | ----------- | -------------------------------- |
-| `player_id`  | integer FK  |                                  |
-| `zone`       | enum        | zone occupée                     |
-| `entered_at` | timestamptz | entrée                           |
-| `left_at`    | timestamptz | sortie — `NULL` si zone actuelle |
-
-PK `(player_id, entered_at)`. Index principal `(zone, entered_at, left_at)`.
-
-Range query simple :
+Chaque joueur a sa zone courante stockée sur `player.current_zone`. Une simple requête répond à "qui est dans Z en ce moment" :
 
 ```sql
-SELECT player_id FROM zone_presence
-WHERE zone = 'east_blue'
-  AND entered_at <= '14:00'
-  AND (left_at IS NULL OR left_at > '14:00')
+SELECT id FROM player WHERE current_zone = 'foosha';
 ```
 
-> **Pourquoi pas dériver de `history.player.zone_changed`** : window function lourde ("dernier zone_changed avant T pour chaque joueur"), mal indexable, crame à 1000 joueurs. `zone_presence` est une **projection dénormalisée** optimisée pour ce cas de lecture.
+> **Pourquoi pas une table d'historique des zones (type `zone_presence`)** : la règle clé ci-dessous (encounter uniquement avec un joueur synced past le bucket courant) garantit qu'on n'a **jamais** besoin de savoir où était quelqu'un dans le passé — on ne s'intéresse qu'à où il est maintenant. Une simple colonne sur `player` suffit.
 
-### Maintenance
-
-À chaque changement de zone, dans la même transaction Drizzle :
-
-1. UPDATE la ligne courante de `zone_presence` : `left_at = <ts>`.
-2. INSERT nouvelle ligne : `entered_at = <ts>, left_at = NULL`.
-3. Append `history.player.zone_changed`.
-
-Tout dans la même transaction → toujours synchronisées, pas de drift.
+Tout changement de zone : UPDATE `player.current_zone` + INSERT `history.player.zone_changed` dans la même transaction. Si on veut un jour reconstruire le déplacement d'un joueur, on le dérive du log `history`.
 
 ## Règle clé : encounter possible uniquement avec un joueur synced past le bucket
 
@@ -67,7 +45,7 @@ Si la moitié des joueurs sont AFK, le monde paraît plus vide pour les actifs. 
 
 ## Cohérence temporelle automatique
 
-Comme **aucun joueur ne peut agir sans être synced**, deux joueurs qui s'encountent sont forcément à jour dans leur timeline. `zone_presence` et `history` sont alignés sur ce qui s'est passé jusqu'à leur `last_processed_bucket_id`. Aucune incohérence à gérer.
+Comme **aucun joueur ne peut agir sans être synced**, deux joueurs qui s'encountent sont forcément à jour dans leur timeline. `player.current_zone` et `history` sont alignés sur ce qui s'est passé jusqu'à leur `last_processed_bucket_id`. Aucune incohérence à gérer.
 
 ## Première détection : INSERT pour les deux
 

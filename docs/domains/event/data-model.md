@@ -1,6 +1,6 @@
 # Modèle de données
 
-Trois tables, chacune avec un rôle clair.
+Deux tables, chacune avec un rôle clair.
 
 ## `event_instance` — queue des events non consommés
 
@@ -34,21 +34,6 @@ Contient à la fois les passive en attente d'affichage et les interactive en att
 
 > **`event_instance` n'est PAS append-only** : UPDATE du `state` à chaque transition d'un interactive multi-step, DELETE à la consommation. C'est un "panier en cours", pas un log. `history` est l'archive immuable.
 
-## `zone_presence` — historique des zones par intervalles
-
-Détails et justification dans [cross-player.md](./cross-player.md).
-
-| Colonne      | Type        | Rôle                  |
-| ------------ | ----------- | --------------------- |
-| `player_id`  | integer FK  |                       |
-| `zone`       | enum        |                       |
-| `entered_at` | timestamptz |                       |
-| `left_at`    | timestamptz | NULL si zone actuelle |
-
-PK `(player_id, entered_at)`. Index `(zone, entered_at, left_at)` pour "qui était dans Z à T".
-
-Projection dénormalisée maintenue dans la même transaction qu'un changement de zone (cf cross-player).
-
 ## `history` — log append-only
 
 Cf doc dédiée `history.md`. Lignes pertinentes pour le domaine event :
@@ -67,4 +52,4 @@ Cf doc dédiée `history.md`. Lignes pertinentes pour le domaine event :
 
 **Tout `!recap` tient dans une seule transaction Drizzle.** Si l'INSERT d'un `event_instance` foire après application d'un effet passive (+50 berries), le joueur ne garde pas les berries sans la trace.
 
-Tout changement de zone : UPDATE `zone_presence` + INSERT `zone_presence` + INSERT `history.player.zone_changed` dans la même transaction.
+Tout changement de zone : UPDATE `player.current_zone` + INSERT `history.player.zone_changed` dans la même transaction.
