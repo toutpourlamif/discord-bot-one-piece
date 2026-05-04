@@ -32,21 +32,21 @@ Exemples : Poneglyphs, armes antiques, fragments de carte au trésor.
 
 ### `DEVIL_FRUIT` — Fruits du Démon non consommés
 
-Tant qu'un FDD n'a pas été mangé, il vit dans l'inventaire du joueur. Deux usages exclusifs :
+Tant qu'un FDD n'a pas été mangé, il fait partie des possessions du joueur. Conceptuellement c'est une "ressource" comme les autres, mais **techniquement il vit dans une table dédiée** `devil_fruit_instance` (pas dans `resource_instance`) — l'unicité par fruit et le lien éventuel vers le personnage porteur justifient un schéma propre. Voir `devil_fruit`.
+
+Deux usages exclusifs :
 
 - **Consommé** par un personnage qui n'en porte aucun — action définitive qui lie le fruit au personnage (voir `devil_fruit`).
 - **Revendu** à un marchand (voir `economy`).
 
-Les règles d'unicité, d'obtention et d'effets post-consommation sont documentées dans `devil_fruit`.
-
 ## Stockage
 
-| Type          | Compte dans `storageSize` ? |
-| ------------- | --------------------------- |
-| `CRAFT`       | Oui (cale)                  |
-| `STORY`       | Non — inventaire à part     |
-| `DEVIL_FRUIT` | Non — inventaire à part     |
+| Type          | Table                  | Compte dans la capacité de la cale ? |
+| ------------- | ---------------------- | ------------------------------------ |
+| `CRAFT`       | `resource_instance`    | Oui                                  |
+| `STORY`       | `resource_instance`    | Non — inventaire à part              |
+| `DEVIL_FRUIT` | `devil_fruit_instance` | Non — inventaire à part              |
 
-Les matériaux `CRAFT` sont stockés dans la **cale** du navire — la capacité est fixée par l'attribut `storageSize` (voir `ship`). Quand la cale est pleine, le joueur ne peut plus ramasser de matériau tant qu'il n'a pas consommé ou crafté avec.
+Les matériaux `CRAFT` sont stockés dans la **cale** du navire — la capacité est dérivée du niveau du module `cargo` (voir `ship`). Quand la cale est pleine, le joueur ne peut plus ramasser de matériau tant qu'il n'a pas consommé ou crafté avec.
 
 Les `STORY` et `DEVIL_FRUIT` sont conservés à part, sans limite (l'unicité propre aux FDD plafonne déjà naturellement leur volume).
