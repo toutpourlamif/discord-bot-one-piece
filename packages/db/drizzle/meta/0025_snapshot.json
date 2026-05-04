@@ -1,6 +1,6 @@
 {
-  "id": "55c38e45-dacd-41d4-9ce8-84d95c1deb5c",
-  "prevId": "98a97b9a-5b09-4ead-adb5-9815e1ad7cce",
+  "id": "7d766a81-4b13-49e6-ba52-d7acc820a341",
+  "prevId": "5e0e7a71-103f-4dec-b500-84b6336acb47",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
@@ -688,6 +688,19 @@
           "primaryKey": false,
           "notNull": true,
           "default": "now()"
+        },
+        "last_processed_bucket_id": {
+          "name": "last_processed_bucket_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "is_admin": {
+          "name": "is_admin",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": false
         }
       },
       "indexes": {},
@@ -999,6 +1012,53 @@
           ]
         }
       },
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.guild": {
+      "name": "guild",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "varchar(32)",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "language": {
+          "name": "language",
+          "type": "varchar(8)",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'fr'"
+        },
+        "prefix": {
+          "name": "prefix",
+          "type": "varchar(8)",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'!'"
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
       "policies": {},
       "checkConstraints": {},
       "isRLSEnabled": false

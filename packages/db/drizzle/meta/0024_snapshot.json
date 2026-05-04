@@ -1,6 +1,6 @@
 {
-  "id": "55c38e45-dacd-41d4-9ce8-84d95c1deb5c",
-  "prevId": "98a97b9a-5b09-4ead-adb5-9815e1ad7cce",
+  "id": "5e0e7a71-103f-4dec-b500-84b6336acb47",
+  "prevId": "21479169-949a-4906-9a7b-2837e366b523",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
@@ -688,6 +688,19 @@
           "primaryKey": false,
           "notNull": true,
           "default": "now()"
+        },
+        "last_processed_bucket_id": {
+          "name": "last_processed_bucket_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "is_admin": {
+          "name": "is_admin",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": false
         }
       },
       "indexes": {},

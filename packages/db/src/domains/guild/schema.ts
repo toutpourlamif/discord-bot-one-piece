@@ -2,7 +2,10 @@ import { pgTable, varchar } from 'drizzle-orm/pg-core';
 
 import { timestamps } from '../../shared/helpers.js';
 
-import { DEFAULT_GUILD_LANGUAGE, DEFAULT_GUILD_PREFIX, MAX_GUILD_PREFIX_LENGTH } from './constants.js';
+import { MAX_GUILD_PREFIX_LENGTH } from './constants.js';
+
+const DEFAULT_GUILD_LANGUAGE = 'fr';
+const DEFAULT_GUILD_PREFIX = '!';
 
 export const guild = pgTable('guild', {
   id: varchar('id', { length: 32 }).primaryKey(),
