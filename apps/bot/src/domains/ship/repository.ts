@@ -3,13 +3,30 @@ import { eq } from 'drizzle-orm';
 
 import { NotFoundError } from '../../discord/errors.js';
 
-export async function findByPlayerId(playerId: number, client: DbOrTransaction = db): Promise<Ship | undefined> {
+type FindByPlayerIdOptions = {
+  forUpdate?: boolean;
+};
+
+export async function findByPlayerId(
+  playerId: number,
+  client: DbOrTransaction = db,
+  options: FindByPlayerIdOptions = {},
+): Promise<Ship | undefined> {
+  if (options.forUpdate) {
+    const [row] = await client.select().from(ship).where(eq(ship.playerId, playerId)).limit(1).for('update');
+    return row;
+  }
+
   const [row] = await client.select().from(ship).where(eq(ship.playerId, playerId)).limit(1);
   return row;
 }
 
-export async function findByPlayerIdOrThrow(playerId: number, client: DbOrTransaction = db): Promise<Ship> {
-  const row = await findByPlayerId(playerId, client);
+export async function findByPlayerIdOrThrow(
+  playerId: number,
+  client: DbOrTransaction = db,
+  options: FindByPlayerIdOptions = {},
+): Promise<Ship> {
+  const row = await findByPlayerId(playerId, client, options);
   if (!row) throw new NotFoundError();
   return row;
 }
@@ -22,12 +39,6 @@ export async function create(playerId: number, name: string, client: DbOrTransac
 export async function rename(shipId: number, newName: string, client: DbOrTransaction = db): Promise<Ship> {
   const [row] = await client.update(ship).set({ name: newName }).where(eq(ship.id, shipId)).returning();
   return row!;
-}
-
-export async function findByPlayerIdForUpdateOrThrow(playerId: number, client: DbOrTransaction): Promise<Ship> {
-  const [row] = await client.select().from(ship).where(eq(ship.playerId, playerId)).limit(1).for('update');
-  if (!row) throw new NotFoundError();
-  return row;
 }
 
 export async function updateModuleLevel(

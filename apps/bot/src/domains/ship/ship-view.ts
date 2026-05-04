@@ -5,7 +5,7 @@ import type { View } from '../../discord/types.js';
 import { buildCustomId, buildMenuButtons, buildOpEmbed } from '../../discord/utils/index.js';
 import * as playerRepository from '../player/repository.js';
 
-import { SHIP_BUTTON_NAME, UPGRADE_SHIP_BUTTON_NAME } from './constants.js';
+import { SHIP_BUTTON_NAME, UPGRADE_MODULE_EMOJI, UPGRADE_SHIP_BUTTON_NAME } from './constants.js';
 import { SHIP_MODULE_LABELS, SHIP_MODULES } from './modules.js';
 import { findByPlayerIdOrThrow } from './repository.js';
 
@@ -17,17 +17,11 @@ export async function buildShipView(playerId: number, ownerDiscordId: string): P
 
   const components = [navRow];
 
-  if (player.discordId === ownerDiscordId) {
-    const upgradeRow = new ActionRowBuilder<ButtonBuilder>().addComponents(
-      new ButtonBuilder()
-        .setCustomId(buildCustomId(UPGRADE_SHIP_BUTTON_NAME, ownerDiscordId, playerId))
-        .setLabel('Améliorer')
-        .setEmoji('⚙️')
-        .setStyle(ButtonStyle.Primary),
-    );
-
-    components.unshift(upgradeRow);
-  }
+  appendUpgradeShipButton(components, {
+    isOwner: player.discordId === ownerDiscordId,
+    ownerDiscordId,
+    playerId,
+  });
 
   // TODO: Redesign this shit
   for (const key of SHIP_MODULE_KEYS) {
@@ -41,4 +35,27 @@ export async function buildShipView(playerId: number, ownerDiscordId: string): P
   }
 
   return { embeds: [embed], components };
+}
+
+type AppendUpgradeShipButtonOptions = {
+  isOwner: boolean;
+  ownerDiscordId: string;
+  playerId: number;
+};
+
+function appendUpgradeShipButton(
+  components: Array<ActionRowBuilder<ButtonBuilder>>,
+  { isOwner, ownerDiscordId, playerId }: AppendUpgradeShipButtonOptions,
+): void {
+  if (!isOwner) return;
+
+  const upgradeRow = new ActionRowBuilder<ButtonBuilder>().addComponents(
+    new ButtonBuilder()
+      .setCustomId(buildCustomId(UPGRADE_SHIP_BUTTON_NAME, ownerDiscordId, playerId))
+      .setLabel('Améliorer')
+      .setEmoji(UPGRADE_MODULE_EMOJI)
+      .setStyle(ButtonStyle.Primary),
+  );
+
+  components.unshift(upgradeRow);
 }
