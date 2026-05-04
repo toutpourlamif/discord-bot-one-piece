@@ -2,9 +2,9 @@
 
 ## Concept
 
-La **pêche** est une action à la demande, déclenchée par le joueur via `/pêcher`. Chaque lancer est **indépendant** : pas de niveau, pas d'XP, pas de mémoire entre deux lancers.
+La **pêche** est une action à la demande, déclenchée par le joueur via `!fishing`. Chaque lancer est **indépendant** : pas de niveau, pas d'XP, pas de mémoire entre deux lancers.
 
-C'est la voie des joueurs pressés pour grappiller des bonus entre deux `/récap`, et un levier scénaristique pour la **main story**.
+C'est la voie des joueurs pressés pour grappiller des bonus entre deux `!recap`, et un levier scénaristique pour la **main story**.
 
 ## Résultats possibles d'un lancer
 

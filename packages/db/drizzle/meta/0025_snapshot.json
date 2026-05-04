@@ -1,6 +1,6 @@
 {
-  "id": "21479169-949a-4906-9a7b-2837e366b523",
-  "prevId": "55c38e45-dacd-41d4-9ce8-84d95c1deb5c",
+  "id": "a452f772-bfd1-44e5-8b2d-44374f3c37a9",
+  "prevId": "5e0e7a71-103f-4dec-b500-84b6336acb47",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
@@ -480,6 +480,105 @@
       "checkConstraints": {},
       "isRLSEnabled": false
     },
+    "public.event_instance": {
+      "name": "event_instance",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "bigserial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "player_id": {
+          "name": "player_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "event_key": {
+          "name": "event_key",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "is_interactive": {
+          "name": "is_interactive",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "bucket_id": {
+          "name": "bucket_id",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "state": {
+          "name": "state",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'{}'::jsonb"
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {
+        "event_instance_player_event_key_bucket_uniq": {
+          "name": "event_instance_player_event_key_bucket_uniq",
+          "columns": [
+            {
+              "expression": "player_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "event_key",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "bucket_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": true,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "event_instance_player_id_player_id_fk": {
+          "name": "event_instance_player_id_player_id_fk",
+          "tableFrom": "event_instance",
+          "tableTo": "player",
+          "columnsFrom": [
+            "player_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
     "public.history": {
       "name": "history",
       "schema": "",
@@ -688,6 +787,12 @@
           "primaryKey": false,
           "notNull": true,
           "default": "now()"
+        },
+        "last_processed_bucket_id": {
+          "name": "last_processed_bucket_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
         },
         "is_admin": {
           "name": "is_admin",
