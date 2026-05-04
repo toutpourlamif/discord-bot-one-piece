@@ -183,6 +183,13 @@
       "when": 1777917311002,
       "tag": "0025_meow",
       "breakpoints": true
+    },
+    {
+      "idx": 26,
+      "version": "7",
+      "when": 1777616819773,
+      "tag": "0026_un_chikwangue_par_jour",
+      "breakpoints": true
     }
   ]
 }
