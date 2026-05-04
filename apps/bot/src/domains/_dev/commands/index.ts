@@ -28,4 +28,4 @@ export const devCommands = [
   buyCommand,
   sellCommand,
   upgradeShipCommand,
-];
+].map((cmd) => ({ ...cmd, adminOnly: true }));
