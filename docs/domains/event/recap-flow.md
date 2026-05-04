@@ -6,7 +6,7 @@
 
 Conditions :
 
-1. `last_recap_at` = fin du dernier bucket complet (le moteur a calculé tout ce qui aurait pu arriver).
+1. `last_processed_bucket_id >= currentBucketId() - 1` (= le moteur a déjà processé tous les buckets complets jusqu'à maintenant ; le `-1` parce que le bucket en cours n'est pas encore complet).
 2. Aucun **interactive** en attente dans `event_instance`.
 
 Sinon, le bot répond :
@@ -24,7 +24,7 @@ Avec : **le joueur traverse son passé avant d'altérer le présent.** Conséque
 - Plus aucune incohérence temporelle.
 - `!recap` devient un passage obligé.
 - Pas besoin de `target_effects` dans `history` pour les cross-player : les deux joueurs sont synchros par construction → INSERT direct pour les deux.
-- Pas de fast-forward d'autres joueurs : un joueur observé est forcément à jour à son `last_recap_at`.
+- Pas de fast-forward d'autres joueurs : un joueur observé est forcément à jour à son `last_processed_bucket_id`.
 
 ### Implémentation : middleware
 
@@ -56,25 +56,26 @@ Il `!recap`, traverse son timeline (passive affichés, interactive résolus un p
 
 Deux phases distinctes : **calcul** (rejouer les buckets, appliquer les effets, remplir la queue) puis **affichage** (dérouler la queue événement par événement).
 
-`last_recap_at` sur `player` = jusqu'où le moteur a calculé. La queue à dérouler = `SELECT * FROM event_instance WHERE player_id = me ORDER BY bucket_id`.
+`last_processed_bucket_id` sur `player` = id du dernier bucket que le moteur a calculé pour ce joueur. La queue à dérouler = `SELECT * FROM event_instance WHERE player_id = me ORDER BY bucket_id`.
 
-> Pas exactement "dernière fois qu'on a recap" : c'est "jusqu'à quel point dans le temps on a calculé ses events". Peut reculer si un interactive fige le moteur.
+> Pas "dernière fois qu'on a tapé `!recap`" : c'est "jusqu'à quel bucket on a calculé ses events". Les deux peuvent diverger — un interactif tiré fige `last_processed_bucket_id` jusqu'à résolution, le joueur peut très bien retaper `!recap` plusieurs fois entre temps sans rien faire avancer.
 
 ### Phase calcul
 
-À `!recap` à 18h00 avec `last_recap_at = 12h00` :
+À `!recap` au bucket courant `nowBucket = 1234` alors que `last_processed_bucket_id = 1210` (= 24 buckets en arrière, soit 6h) :
 
 1. **Interactive pending dans `event_instance` ?**
    - Oui → on ne calcule rien. Le joueur doit d'abord résoudre le interactive → on passe direct à la phase affichage de la queue actuelle.
    - Non → continuer.
-2. Rejouer les buckets entre `last_recap_at` et `now()` (cap 48h). Pour chaque bucket :
+2. Rejouer les buckets de `last_processed_bucket_id + 1` à `nowBucket - 1` (= dernier bucket complet, on ne traite pas le bucket en cours). Cap 48h en amont. Pour chaque bucket :
    - Dériver le seed.
    - Itérer les **passive** : ceux qui passent filtres + proba sont matérialisés. Pour chacun : `effects` appliqués + INSERT `event_instance` (avec `state` figé pour le re-render au clic) + INSERT `history`.
    - Itérer les **interactive** : si plusieurs candidats, tirage pondéré, on en garde **un seul**.
-   - Si un interactive est tiré → INSERT `event_instance` (state initial), **stop la boucle**, figer `last_recap_at` à la **fin** de ce bucket (cf encadré ci-dessous).
-   - Sinon, continuer. Au dernier bucket, `last_recap_at = now()`.
+   - Si un interactive est tiré → INSERT `event_instance` (state initial), **stop la boucle**, set `last_processed_bucket_id = ce bucket-id` (cf encadré ci-dessous).
+   - Sinon, continuer. Au dernier bucket processé, `last_processed_bucket_id = nowBucket - 1`.
+3. **Tout dans une seule transaction Drizzle.**
 
-> **Pourquoi figer `last_recap_at` à la fin du bucket du interactive (pas au début)** : le bucket interrompu a déjà été entièrement processé (passive matérialisés + interactive tiré). En le figeant à la fin, on garantit qu'au prochain `!recap` (après résolution), l'engine reprend au bucket **suivant** et ne re-tire jamais ce bucket. Aucun risque de re-firer les passive déjà en queue ou déjà consommés. L'unicité `(player_id, type, bucket_id)` sur `event_instance` est un filet de sécurité, pas la défense de première ligne. 3. **Tout dans une seule transaction Drizzle.**
+> **Pourquoi marquer le bucket de l'interactive comme processé (et pas le précédent)** : le bucket interrompu a déjà été entièrement processé (passive matérialisés + interactive tiré). En l'enregistrant comme processé, on garantit qu'au prochain `!recap` (après résolution), l'engine reprend au bucket **suivant** et ne re-tire jamais ce bucket. Aucun risque de re-firer les passive déjà en queue ou déjà consommés. L'unicité `(player_id, type, bucket_id)` sur `event_instance` est un filet de sécurité, pas la défense de première ligne.
 
 > **Transaction** = bloc DB tout-ou-rien. Si l'INSERT d'un `event_instance` foire après application d'un effet passive (+50 berries), le joueur ne garde pas les berries sans la trace.
 
