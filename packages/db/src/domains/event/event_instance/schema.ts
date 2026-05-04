@@ -1,5 +1,5 @@
 import { sql } from 'drizzle-orm';
-import { bigint, bigserial, boolean, integer, jsonb, pgTable, text, timestamp, uniqueIndex } from 'drizzle-orm/pg-core';
+import { bigserial, boolean, integer, jsonb, pgTable, text, timestamp, uniqueIndex } from 'drizzle-orm/pg-core';
 
 import { player } from '../../player/schema.js';
 
@@ -12,7 +12,7 @@ export const eventInstance = pgTable(
       .references(() => player.id, { onDelete: 'cascade' }),
     eventKey: text('event_key').notNull(),
     isInteractive: boolean('is_interactive').notNull(),
-    bucketId: bigint('bucket_id', { mode: 'bigint' }).notNull(),
+    bucketId: integer('bucket_id').notNull(),
     state: jsonb('state')
       .notNull()
       .default(sql`'{}'::jsonb`),

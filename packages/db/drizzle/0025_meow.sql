@@ -3,7 +3,7 @@ CREATE TABLE "event_instance" (
 	"player_id" integer NOT NULL,
 	"event_key" text NOT NULL,
 	"is_interactive" boolean NOT NULL,
-	"bucket_id" bigint NOT NULL,
+	"bucket_id" integer NOT NULL,
 	"state" jsonb DEFAULT '{}'::jsonb NOT NULL,
 	"created_at" timestamp with time zone DEFAULT now() NOT NULL
 );

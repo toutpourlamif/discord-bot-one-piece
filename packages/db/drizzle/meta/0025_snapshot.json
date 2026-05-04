@@ -1,5 +1,5 @@
 {
-  "id": "a452f772-bfd1-44e5-8b2d-44374f3c37a9",
+  "id": "3bdc0600-cda9-4f7e-8a64-e1c24ea0feda",
   "prevId": "5e0e7a71-103f-4dec-b500-84b6336acb47",
   "version": "7",
   "dialect": "postgresql",
@@ -510,7 +510,7 @@
         },
         "bucket_id": {
           "name": "bucket_id",
-          "type": "bigint",
+          "type": "integer",
           "primaryKey": false,
           "notNull": true
         },
