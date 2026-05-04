@@ -6,9 +6,8 @@ import { buildOpEmbed } from '../../../discord/utils/build-op-embed.js';
 import { assertMenuOwner, parseIntegerArg, parseMenuOwnerDiscordId } from '../../../discord/utils/index.js';
 import { CONFIRM_SHIP_MODULE_UPGRADE_BUTTON_NAME } from '../constants.js';
 import { SHIP_MODULE_LABELS } from '../modules.js';
-import { parseShipModuleKey } from '../parse-ship-module-key.js';
 import { upgradeShipModule } from '../service.js';
-import { assertPlayerOwnsShip } from '../utils/index.js';
+import { assertPlayerOwnsShip, parseShipModuleKey } from '../utils/index.js';
 
 async function handle(interaction: ButtonInteraction, args: Array<string>): Promise<void> {
   const ownerDiscordId = parseMenuOwnerDiscordId(args[0]);
