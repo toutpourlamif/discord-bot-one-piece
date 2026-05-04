@@ -16,8 +16,6 @@ export class ShipNameValidationError extends Error {}
 
 type FindOrCreateResult = { ship: Ship; created: boolean };
 
-export type { ShipModuleUpgradePreview };
-
 export async function findOrCreateShip(
   playerId: number,
   name = 'Navire sans nom',

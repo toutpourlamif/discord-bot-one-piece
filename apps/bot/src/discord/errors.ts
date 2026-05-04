@@ -25,6 +25,13 @@ export class ValidationError extends AppError {
   }
 }
 
+export class ForbiddenError extends AppError {
+  constructor(message = "Tu n'as pas la permission de faire ça.") {
+    super(message, 'warn');
+    this.name = 'ForbiddenError';
+  }
+}
+
 export class InternalError extends AppError {
   constructor(message: string) {
     super(message, 'error', 'Une erreur est survenue, veuillez contacter un admin.');

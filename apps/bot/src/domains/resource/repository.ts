@@ -1,6 +1,8 @@
 import { db, resourceInstance, resourceTemplate, type ResourceName, type ResourceTemplate, type DbOrTransaction } from '@one-piece/db';
 import { and, asc, eq, getTableColumns, gte, ilike, or, sql } from 'drizzle-orm';
 
+import { NotFoundError } from '../../discord/errors.js';
+
 import type { Inventory } from './types.js';
 
 export async function getInventory(playerId: number, client: DbOrTransaction = db): Promise<Inventory> {
@@ -59,7 +61,7 @@ export async function debitResourceByName(
     .from(resourceTemplate)
     .where(eq(resourceTemplate.name, name))
     .limit(1);
-  if (!template) return false;
+  if (!template) throw new NotFoundError(`Ressource introuvable : ${name}.`);
 
   const [updated] = await client
     .update(resourceInstance)

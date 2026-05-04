@@ -2,7 +2,7 @@ import type { ButtonInteraction } from 'discord.js';
 
 import type { ButtonHandler } from '../../../discord/types.js';
 import { assertMenuOwner, parseIntegerArg, parseMenuOwnerDiscordId } from '../../../discord/utils/index.js';
-import { buildUpgradeModuleView } from '../build-upgrade-ship-view.js';
+import { buildUpgradeModuleView } from '../build-upgrade-module-view.js';
 import { UPGRADE_SHIP_MODULE_BUTTON_NAME } from '../constants.js';
 import { parseShipModuleKey } from '../parse-ship-module-key.js';
 import { assertPlayerOwnsShip } from '../utils/index.js';
