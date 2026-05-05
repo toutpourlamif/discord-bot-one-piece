@@ -1,8 +1,5 @@
-import { ServerOnlyError } from './errors.js';
 import * as guildRepository from './repository.js';
 
-export async function ensureGuildExists(guildId: string | null): Promise<void> {
-  if (!guildId) throw new ServerOnlyError();
-
+export async function ensureGuildExists(guildId: string): Promise<void> {
   await guildRepository.insertGuildIfNotExists(guildId);
 }
