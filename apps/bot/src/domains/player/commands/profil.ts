@@ -5,9 +5,9 @@ import { findOrCreatePlayer } from '../service.js';
 
 export const profilCommand: Command = {
   name: 'profil',
-  async handler(message) {
+  async handler({ message }) {
     const target = getTargetUser(message);
-    const { player } = await findOrCreatePlayer(target.id, target.username, message.guildId!);
-    await message.reply(await buildProfilView(player.id, message.author.id));
+    const { player: targetPlayer } = await findOrCreatePlayer(target.id, target.username, message.guildId!);
+    await message.reply(await buildProfilView(targetPlayer.id, message.author.id));
   },
 };

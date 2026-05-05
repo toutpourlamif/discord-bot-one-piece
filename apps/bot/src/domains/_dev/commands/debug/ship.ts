@@ -6,10 +6,10 @@ import * as shipRepository from '../../../ship/repository.js';
 
 import { replyDebugData } from './utils.js';
 
-export const handleShip: Command['handler'] = async (message) => {
+export const handleShip: Command['handler'] = async ({ message }) => {
   const target = getTargetUser(message);
-  const { player } = await findOrCreatePlayer(target.id, target.username, message.guildId!);
-  const ship = await shipRepository.findByPlayerId(player.id);
+  const { player: targetPlayer } = await findOrCreatePlayer(target.id, target.username, message.guildId!);
+  const ship = await shipRepository.findByPlayerId(targetPlayer.id);
 
   if (!ship) {
     throw new NotFoundError('Ship introuvable.');

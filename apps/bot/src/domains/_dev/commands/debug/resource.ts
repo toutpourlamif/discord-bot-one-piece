@@ -5,7 +5,7 @@ import * as resourceRepository from '../../../resource/repository.js';
 
 import { replyDebugData } from './utils.js';
 
-export const handleResource: Command['handler'] = async (message, args) => {
+export const handleResource: Command['handler'] = async ({ message, args }) => {
   const id = parseIntegerArg(args[0]);
 
   const resource = await resourceRepository.findById(id);

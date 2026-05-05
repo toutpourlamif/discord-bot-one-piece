@@ -4,9 +4,9 @@ import { findOrCreatePlayer } from '../../../player/service.js';
 
 import { replyDebugData } from './utils.js';
 
-export const handlePlayer: Command['handler'] = async (message) => {
+export const handlePlayer: Command['handler'] = async ({ message }) => {
   const target = getTargetUser(message);
-  const { player } = await findOrCreatePlayer(target.id, target.username, message.guildId!);
+  const { player: targetPlayer } = await findOrCreatePlayer(target.id, target.username, message.guildId!);
 
-  await replyDebugData(message, player);
+  await replyDebugData(message, targetPlayer);
 };

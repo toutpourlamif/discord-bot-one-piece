@@ -5,14 +5,14 @@ import { runFishingAttempt } from '../service.js';
 
 export const fishingCommand: Command = {
   name: ['fishing', 'fish'],
-  async handler(message) {
+  async handler({ message }) {
     const user = getTargetUser(message);
-    const { player } = await findOrCreatePlayer(user.id, user.username, message.guildId!);
-    const result = await runFishingAttempt(player.id);
+    const { player: targetPlayer } = await findOrCreatePlayer(user.id, user.username, message.guildId!);
+    const result = await runFishingAttempt(targetPlayer.id);
 
     const embed = buildOpEmbed()
       .setTitle('🎣 Pêche')
-      .setDescription(`${player.name} a pêché ${result.quantity}x **${result.resourceName}** !`);
+      .setDescription(`${targetPlayer.name} a pêché ${result.quantity}x **${result.resourceName}** !`);
     await message.reply({ embeds: [embed] });
   },
 };

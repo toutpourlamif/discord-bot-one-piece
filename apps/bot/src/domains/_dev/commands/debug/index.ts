@@ -24,14 +24,14 @@ const handlers: Record<DebugSubcommand, Command['handler']> = {
 
 export const debugCommand: Command = {
   name: 'debug',
-  async handler(message, args) {
-    const subcommand = args[0];
+  async handler(ctx) {
+    const subcommand = ctx.args[0];
 
     if (!isDebugSubcommand(subcommand)) {
-      await message.reply(helpMessage);
+      await ctx.message.reply(helpMessage);
       return;
     }
 
-    await handlers[subcommand](message, args.slice(1));
+    await handlers[subcommand]({ ...ctx, args: ctx.args.slice(1) });
   },
 };

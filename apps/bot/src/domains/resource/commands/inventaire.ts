@@ -6,11 +6,11 @@ import { getInventory } from '../repository.js';
 
 export const inventaireCommand: Command = {
   name: 'inventaire',
-  async handler(message) {
+  async handler({ message }) {
     const target = getTargetUser(message);
-    const { player } = await findOrCreatePlayer(target.id, target.username, message.guildId!);
-    const inventory = await getInventory(player.id);
+    const { player: targetPlayer } = await findOrCreatePlayer(target.id, target.username, message.guildId!);
+    const inventory = await getInventory(targetPlayer.id);
 
-    await message.reply(buildInventoryView(player, inventory, 0, message.author.id));
+    await message.reply(buildInventoryView(targetPlayer, inventory, 0, message.author.id));
   },
 };

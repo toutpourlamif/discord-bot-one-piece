@@ -9,11 +9,11 @@ export const crewCommand: Command = {
   // TODO: Accept alias such as "!reserv" !"members"..
   // https://github.com/toutpourlamif/discord-bot-one-piece/issues/118
   name: 'crew',
-  async handler(message) {
+  async handler({ message }) {
     const target = getTargetUser(message);
-    const { player } = await findOrCreatePlayer(target.id, target.username, message.guildId!);
-    const ship = await shipRepository.findByPlayerIdOrThrow(player.id);
-    const characters = await getCharactersByPlayerId(player.id);
-    await message.reply(buildCrewView(player, ship, characters, 0, message.author.id));
+    const { player: targetPlayer } = await findOrCreatePlayer(target.id, target.username, message.guildId!);
+    const ship = await shipRepository.findByPlayerIdOrThrow(targetPlayer.id);
+    const characters = await getCharactersByPlayerId(targetPlayer.id);
+    await message.reply(buildCrewView(targetPlayer, ship, characters, 0, message.author.id));
   },
 };

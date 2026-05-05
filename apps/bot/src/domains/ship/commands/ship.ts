@@ -5,9 +5,9 @@ import { buildShipView } from '../ship-view.js';
 
 export const shipCommand: Command = {
   name: 'ship',
-  async handler(message) {
+  async handler({ message }) {
     const user = getTargetUser(message);
-    const { player } = await findOrCreatePlayer(user.id, user.username, message.guildId!);
-    await message.reply(await buildShipView(player.id, message.author.id));
+    const { player: targetPlayer } = await findOrCreatePlayer(user.id, user.username, message.guildId!);
+    await message.reply(await buildShipView(targetPlayer.id, message.author.id));
   },
 };
