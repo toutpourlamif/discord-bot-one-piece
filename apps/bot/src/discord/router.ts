@@ -43,7 +43,7 @@ export async function routeMessage(message: Message, prefix: string): Promise<vo
 
     if (command.adminOnly === true) {
       const user = getSelfUser(message);
-      const { player } = await findOrCreatePlayer(user.id, user.username);
+      const { player } = await findOrCreatePlayer(user.id, user.username, message.guildId!);
       if (!player.isAdmin) {
         throw new AdminOnlyError();
       }
