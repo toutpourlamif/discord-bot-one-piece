@@ -17,7 +17,7 @@ export const giveCharacterCommand: Command = {
       throw new NotFoundError(`Aucun personnage trouvé pour ${query}.`);
     }
 
-    const { player } = await findOrCreatePlayer(target.id, target.username);
+    const { player } = await findOrCreatePlayer(target.id, target.username, message.guildId!);
     const createdInstance = await characterRepository.createCharacterInstance(player.id, hit.entity.id);
 
     await message.reply({ embeds: [buildOpEmbed().setDescription(`${player.name} a reçu ${createdInstance.name}.`)] });

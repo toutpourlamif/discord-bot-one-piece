@@ -8,7 +8,7 @@ export const inventaireCommand: Command = {
   name: 'inventaire',
   async handler(message) {
     const target = getTargetUser(message);
-    const { player } = await findOrCreatePlayer(target.id, target.username);
+    const { player } = await findOrCreatePlayer(target.id, target.username, message.guildId!);
     const inventory = await getInventory(player.id);
 
     await message.reply(buildInventoryView(player, inventory, 0, message.author.id));

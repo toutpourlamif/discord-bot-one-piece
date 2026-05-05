@@ -8,7 +8,7 @@ export const renameShipCommand: Command = {
   name: 'renameship',
   async handler(message, args) {
     try {
-      const { player } = await findOrCreatePlayer(message.author.id, message.author.username);
+      const { player } = await findOrCreatePlayer(message.author.id, message.author.username, message.guildId!);
       const renamed = await renameShip(player.id, args.join(' '));
 
       const embed = buildOpEmbed().setTitle('Bateau renommé !').setDescription(`Ton bateau s'appelle maintenant **${renamed.name}**.`);
