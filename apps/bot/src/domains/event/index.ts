@@ -1,1 +1,1 @@
-export { updateState, type PendingEventInstance } from './repository.js';
+export { updateState } from './repository.js';
