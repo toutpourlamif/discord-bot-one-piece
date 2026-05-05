@@ -1,11 +1,10 @@
 import { db, type DbOrTransaction, type Ship } from '@one-piece/db';
 
+import { ValidationError } from '../../discord/errors.js';
 import { sanitizeName } from '../../shared/sanitize-name.js';
 
 import { MAX_SHIP_NAME_LENGTH } from './constants.js';
 import * as shipRepository from './repository.js';
-
-export class ShipNameValidationError extends Error {}
 
 type FindOrCreateResult = { ship: Ship; created: boolean };
 
@@ -23,10 +22,10 @@ export async function findOrCreateShip(
 export async function renameShip(playerId: number, newName: string): Promise<Ship> {
   const sanitized = sanitizeName(newName);
   if (sanitized.length === 0) {
-    throw new ShipNameValidationError('Tu dois donner un nom.');
+    throw new ValidationError('Tu dois donner un nom.');
   }
   if (sanitized.length > MAX_SHIP_NAME_LENGTH) {
-    throw new ShipNameValidationError(`Le nom du bateau ne peut pas dépasser ${MAX_SHIP_NAME_LENGTH} caractères.`);
+    throw new ValidationError(`Le nom du bateau ne peut pas dépasser ${MAX_SHIP_NAME_LENGTH} caractères.`);
   }
   const { ship } = await findOrCreateShip(playerId);
   return shipRepository.rename(ship.id, sanitized);
