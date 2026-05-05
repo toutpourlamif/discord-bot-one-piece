@@ -6,9 +6,7 @@ import * as shipRepository from '../../ship/repository.js';
 import { buildCrewView } from '../utils/build-crew-view.js';
 
 export const crewCommand: Command = {
-  // TODO: Accept alias such as "!reserv" !"members"..
-  // https://github.com/toutpourlamif/discord-bot-one-piece/issues/118
-  name: 'crew',
+  name: ['crew', 'equipage', 'team', 'equipe', 'reserve', 'reserv'],
   async handler({ message }) {
     const target = getTargetUser(message);
     const { player: targetPlayer } = await findOrCreatePlayer(target.id, target.username, message.guildId!);
