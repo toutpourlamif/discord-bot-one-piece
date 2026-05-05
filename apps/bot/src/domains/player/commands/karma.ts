@@ -6,7 +6,7 @@ import { findOrCreatePlayer } from '../service.js';
 export const karmaCommand: Command = {
   name: 'karma',
   async handler(message) {
-    const { player } = await findOrCreatePlayer(message.author.id, message.author.username);
+    const { player } = await findOrCreatePlayer(message.author.id, message.author.username, message.guildId!);
     const grade = getKarmaGrade(player.karma);
     await message.reply(`Karma: ${grade} (${player.karma})`);
   },

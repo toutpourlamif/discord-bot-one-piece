@@ -1,0 +1,1 @@
+ALTER TABLE "player" ADD COLUMN "last_processed_bucket_id" integer NOT NULL;
