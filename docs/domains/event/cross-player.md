@@ -19,13 +19,15 @@ Quand le moteur d'A processe ses buckets pendant un `!recap` :
 
 ## Première détection : INSERT pour les deux
 
+> // TODO: `encounter_id` n'est pas encore en schéma (cf `data-model.md`). Le mécanisme décrit ci-dessous est l'état cible.
+
 Quand A processe son bucket courant, le seed dit "encounter A-B", et B est synced past ce bucket :
 
 - INSERT `event_instance` pending **pour A** avec `encounter_id = X`.
 - INSERT `event_instance` pending **pour B** avec le même `encounter_id = X`.
 - `encounter_id = hash(bucket_id, sorted_player_ids)` → identique si B re-tire l'encounter de son côté plus tard.
 
-L'unicité `(player_id, type, bucket_id)` garantit pas de doublon : si B recap quelques secondes après A et re-tire le même encounter, l'INSERT échoue silencieusement.
+L'unicité `(player_id, event_key, bucket_id)` garantit pas de doublon : si B recap quelques secondes après A et re-tire le même encounter, l'INSERT échoue silencieusement.
 
 > **Race condition** = situation où le résultat dépend de l'ordre/timing entre opérations parallèles. Sans la contrainte d'unicité, deux INSERT simultanés pourraient créer des doublons. Avec, l'un gagne, l'autre échoue proprement.
 
