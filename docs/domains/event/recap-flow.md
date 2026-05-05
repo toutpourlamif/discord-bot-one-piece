@@ -75,7 +75,7 @@ Deux phases distinctes : **calcul** (rejouer les buckets, appliquer les effets, 
    - Sinon, continuer. Au dernier bucket processé, `last_processed_bucket_id = nowBucket - 1`.
 3. **Tout dans une seule transaction Drizzle.**
 
-> **Pourquoi marquer le bucket de l'interactive comme processé (et pas le précédent)** : le bucket interrompu a déjà été entièrement processé (passive matérialisés + interactive tiré). En l'enregistrant comme processé, on garantit qu'au prochain `!recap` (après résolution), l'engine reprend au bucket **suivant** et ne re-tire jamais ce bucket. Aucun risque de re-firer les passive déjà en queue ou déjà consommés. L'unicité `(player_id, type, bucket_id)` sur `event_instance` est un filet de sécurité, pas la défense de première ligne.
+> **Pourquoi marquer le bucket de l'interactive comme processé (et pas le précédent)** : le bucket interrompu a déjà été entièrement processé (passive matérialisés + interactive tiré). En l'enregistrant comme processé, on garantit qu'au prochain `!recap` (après résolution), l'engine reprend au bucket **suivant** et ne re-tire jamais ce bucket. Aucun risque de re-firer les passive déjà en queue ou déjà consommés. L'unicité `(player_id, event_key, bucket_id)` sur `event_instance` est un filet de sécurité, pas la défense de première ligne.
 
 > **Transaction** = bloc DB tout-ou-rien. Si l'INSERT d'un `event_instance` foire après application d'un effet passive (+50 berries), le joueur ne garde pas les berries sans la trace.
 
@@ -84,7 +84,7 @@ Deux phases distinctes : **calcul** (rejouer les buckets, appliquer les effets, 
 Lecture de la queue (ordonnée par `bucket_id`) et affichage du **premier** event :
 
 - **Queue vide** → "Vous n'avez aucun événement en attente."
-- **Passive en tête** → retrouver le générateur via `type`, appeler `render(state)`, afficher l'embed + bouton **Suivant**. Clic → DELETE l'`event_instance`, render le suivant.
+- **Passive en tête** → retrouver le générateur via `event_key`, appeler `render(state)`, afficher l'embed + bouton **Suivant**. Clic → DELETE l'`event_instance`, render le suivant.
 - **Interactive en tête** → appeler `steps[state.step].embed(state, ctx)` + boutons des choix. Clic sur un choix → appliquer les effets, DELETE `event_instance`, INSERT `history`, render le suivant (ou bien `goTo` une autre étape sans DELETE).
 
 Le joueur peut interrompre à tout moment : la queue persiste. Au prochain `!recap`, on recalcule les nouveaux buckets (s'il y en a) puis on reprend l'affichage en haut de queue. Pas de cooldown sur `!recap`.
