@@ -7,3 +7,4 @@ export { type DevilFruitTemplate } from './domains/devil_fruit/index.js';
 export { PLAYER_AS_CHARACTER_TEMPLATE_NAME, type CharacterInstance, type CharacterTemplate } from './domains/character/index.js';
 export { SHIP_MODULE_KEYS, SHIP_MODULE_LEVEL_COLUMNS, type Ship, type ShipModuleKey } from './domains/ship/index.js';
 export { type ResourceName, type ResourceTemplate } from './domains/resource/index.js';
+export { type EventInstance } from './domains/event/index.js';
