@@ -2,7 +2,7 @@
 
 ## Vue d'ensemble
 
-Le bot est structuré autour de **domaines métier** purs. La couche **`discord`** est un adaptateur : elle traduit les entrées Discord (slash commands, boutons, selects) en appels aux domaines, et formate les résultats en messages/embeds.
+Le bot est structuré autour de **domaines métier** purs. La couche **`discord`** est un adaptateur : elle traduit les entrées Discord (commandes préfixées, boutons) en appels aux domaines, et formate les résultats en messages/embeds.
 
 ```
 Discord UI  ──>  discord (adapter)  ──>  domains (logique métier)  ──>  persistence
@@ -18,11 +18,12 @@ On ouvre un domaine (dossier + doc) uniquement au moment où on commence à code
 | `ship`        | Navire du joueur : stats, modules, capacité de la réserve et de l'équipage                                                         |
 | `character`   | Personnages possédés (réserve) et leur arbre d'évolution                                                                           |
 | `crew`        | Personnages actifs embarqués sur le navire, moral d'équipage                                                                       |
-| `event`       | Événements déclenchés lors du `/récap` (AFK)                                                                                       |
+| `event`       | Événements déclenchés lors du `!recap` (AFK)                                                                                       |
 | `devil_fruit` | Fruits du Démon : bonus de stats et types additionnels pour un personnage                                                          |
 | `economy`     | Berry, shops, marchands                                                                                                            |
 | `resource`    | Matériaux de craft, artefacts de main story, FDD non consommés                                                                     |
-| `fishing`     | Action `/pêcher` à la demande : loot, events, avancée scénario                                                                     |
+| `fishing`     | Action `!fishing` à la demande : loot, events, avancée scénario                                                                    |
+| `history`     | HISTORIQUE DE tout ce qu'il se passe et qui peut servir plus tard pour analyser / pour des events                                  |
 
 D'autres domaines viendront s'ajouter quand le besoin apparaîtra (combat, world…). On ne les crée pas en amont.
 
@@ -36,9 +37,9 @@ Un dossier préfixé par `_` dans `domains/` n'est **pas un domaine métier**, c
 
 ## Adaptateurs
 
-| Dossier   | Rôle                                                      |
-| --------- | --------------------------------------------------------- |
-| `discord` | Couche Discord : slash commands, boutons, selects, embeds |
+| Dossier   | Rôle                                                  |
+| --------- | ----------------------------------------------------- |
+| `discord` | Couche Discord : commandes préfixées, boutons, embeds |
 
 ## Persistance
 

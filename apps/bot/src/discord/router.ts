@@ -4,14 +4,15 @@ import { devCommands } from '../domains/_dev/index.js';
 import { infoCommands } from '../domains/_info/index.js';
 import { crewCommands } from '../domains/crew/index.js';
 import { fishingCommands } from '../domains/fishing/index.js';
-import { playerCommands } from '../domains/player/index.js';
+import { ensureGuildExists } from '../domains/guild/index.js';
+import { findOrCreatePlayer, playerCommands } from '../domains/player/index.js';
 import { resourceCommands } from '../domains/resource/index.js';
 import { shipCommands } from '../domains/ship/commands/index.js';
 import { buildRegistry } from '../shared/build-registry.js';
 
-import { AppError } from './errors.js';
+import { AdminOnlyError, AppError } from './errors.js';
+import { getSelfUser } from './utils/get-self-user.js';
 import { buildOpEmbed } from './utils/index.js';
-
 const allCommands = [
   ...playerCommands,
   ...infoCommands,
@@ -31,7 +32,6 @@ export async function routeMessage(message: Message, prefix: string): Promise<vo
 
   const content = message.content.trim();
   if (!content.startsWith(prefix)) return;
-
   const [rawName, ...args] = content.slice(prefix.length).trim().split(/\s+/);
   if (!rawName) return;
 
@@ -39,6 +39,16 @@ export async function routeMessage(message: Message, prefix: string): Promise<vo
   if (!command) return;
 
   try {
+    await ensureGuildExists(message.guildId);
+
+    if (command.adminOnly === true) {
+      const user = getSelfUser(message);
+      const { player } = await findOrCreatePlayer(user.id, user.username);
+      if (!player.isAdmin) {
+        throw new AdminOnlyError();
+      }
+    }
+
     await command.handler(message, args);
   } catch (error) {
     if (error instanceof AppError) {

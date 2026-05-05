@@ -20,6 +20,7 @@
     "db:s": "pnpm db:studio",
     "db:studio": "pnpm -F @one-piece/db studio",
     "db:wipe": "docker exec one-piece-db psql -U one_piece -d postgres -c \"DROP DATABASE IF EXISTS one_piece WITH (FORCE)\" -c \"CREATE DATABASE one_piece\"",
+    "db:r": "pnpm db:reset",
     "db:reset": "pnpm db:wipe && pnpm db:m:a && pnpm db:seed",
     "prepare": "husky"
   },

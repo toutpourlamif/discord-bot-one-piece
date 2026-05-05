@@ -5,6 +5,8 @@ export type CommandName = string | Array<string>;
 export type Command = {
   name: CommandName;
   handler: (message: Message, args: Array<string>) => Promise<void>;
+  requiresSynchronization?: boolean; // défaut : true (cf #189)
+  adminOnly?: boolean; // défaut : false
 };
 
 export type ButtonHandler = {
