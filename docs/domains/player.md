@@ -12,6 +12,14 @@ Le joueur **existe aussi comme personnage dans le monde** : c'est le **PlayerAsC
 
 À la création d'un player (`findOrCreatePlayer`), son PlayerAsCharacter est créé dans la même transaction. Quand le joueur se rename, le `nickname` du PlayerAsCharacter est mis à jour pour rester cohérent avec son nom affiché.
 
+## Position courante
+
+Le joueur a une colonne `player.current_zone` (type `zone_enum`) qui indique **où il est en ce moment** : une île (Drum, Alabasta…) ou une mer (`sea_paradise`…) s'il est en transit.
+
+Mise à jour dans la même transaction qu'un INSERT `history.player.zone_changed`. Pas de table d'historique des zones : la règle "encounters seulement au bucket courant" (cf domaine `event` → `cross-player.md`) rend inutile la connaissance de "qui était où à un bucket passé". Si on veut un jour reconstruire l'historique des déplacements d'un joueur, on le dérive de `history.player.zone_changed`.
+
+Le détail des zones existantes et de comment on bouge entre elles vit dans le domaine `navigation`.
+
 ## Origin guild
 
 Le **serveur Discord d'origine** d'un joueur est figé à sa création (colonne `player.origin_guild_id`, settée par `findOrCreatePlayer`, jamais update). Stable même si le joueur devient ensuite actif sur d'autres serveurs.

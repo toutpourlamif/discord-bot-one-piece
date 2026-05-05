@@ -11,7 +11,7 @@ export const crewCommand: Command = {
   name: 'crew',
   async handler(message) {
     const target = getTargetUser(message);
-    const { player } = await findOrCreatePlayer(target.id, target.username);
+    const { player } = await findOrCreatePlayer(target.id, target.username, message.guildId!);
     const ship = await shipRepository.findByPlayerIdOrThrow(player.id);
     const characters = await getCharactersByPlayerId(player.id);
     await message.reply(buildCrewView(player, ship, characters, 0, message.author.id));

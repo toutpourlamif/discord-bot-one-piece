@@ -1,0 +1,2 @@
+ALTER TABLE "player" ADD COLUMN "origin_guild_id" varchar(32) NOT NULL;--> statement-breakpoint
+ALTER TABLE "player" ADD CONSTRAINT "player_origin_guild_id_guild_id_fk" FOREIGN KEY ("origin_guild_id") REFERENCES "public"."guild"("id") ON DELETE no action ON UPDATE no action;
