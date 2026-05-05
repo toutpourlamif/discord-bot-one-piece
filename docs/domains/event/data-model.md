@@ -1,6 +1,6 @@
 # Modèle de données
 
-Deux tables, chacune avec un rôle clair.
+Deux tables, chacune avec un rôle clair. La position courante des joueurs (utilisée pour les encounters cross-player) vit sur `player.current_zone` — voir le domaine `player`.
 
 ## `event_instance` — queue des events non consommés
 
@@ -12,7 +12,7 @@ Contient à la fois les passive en attente d'affichage et les interactive en att
 | `player_id`    | integer FK                     | propriétaire                                                                                     |
 | `type`         | text                           | identifiant du générateur (`mainstory.alabasta.find_map`)                                        |
 | `scope`        | enum `passive` / `interactive` | détermine le mode d'affichage (Suivant vs choix) et le timing des effets                         |
-| `bucket_id`    | bigint                         | bucket dans lequel l'event a été tiré (sert aussi à l'ordre d'affichage)                         |
+| `bucket_id`    | integer                        | bucket dans lequel l'event a été tiré (sert aussi à l'ordre d'affichage)                         |
 | `encounter_id` | bigint, null                   | relie les events cross-player (deux lignes liées)                                                |
 | `state`        | jsonb                          | passive : snapshot pour `render(state)` ; interactive multi-step : `{ step: 'haki_charged', … }` |
 | `created_at`   | timestamptz                    |                                                                                                  |

@@ -1,6 +1,6 @@
 {
-  "id": "9c4f0b56-7a09-4986-bc0a-84af1418c09a",
-  "prevId": "7d766a81-4b13-49e6-ba52-d7acc820a341",
+  "id": "f3062b89-5778-4a83-b1fa-87e3cf732a49",
+  "prevId": "9c4f0b56-7a09-4986-bc0a-84af1418c09a",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
@@ -635,6 +635,12 @@
           "type": "bigserial",
           "primaryKey": true,
           "notNull": true
+        },
+        "bucket_id": {
+          "name": "bucket_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
         },
         "occurred_at": {
           "name": "occurred_at",

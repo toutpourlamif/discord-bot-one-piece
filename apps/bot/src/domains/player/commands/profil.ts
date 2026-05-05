@@ -7,7 +7,7 @@ export const profilCommand: Command = {
   name: 'profil',
   async handler(message) {
     const target = getTargetUser(message);
-    const { player } = await findOrCreatePlayer(target.id, target.username);
+    const { player } = await findOrCreatePlayer(target.id, target.username, message.guildId!);
     await message.reply(await buildProfilView(player.id, message.author.id));
   },
 };

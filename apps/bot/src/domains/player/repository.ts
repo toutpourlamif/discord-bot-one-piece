@@ -22,9 +22,9 @@ export async function findByDiscordId(discordId: string): Promise<Player | undef
 // TODO: remplacer par bucketIdFromTimestamp (#174) une fois mergé
 const BUCKET_DURATION_SECONDS = 15 * 60;
 
-export async function create(discordId: string, name: string, transaction: DbOrTransaction = db): Promise<Player> {
+export async function create(discordId: string, name: string, originGuildId: string, transaction: DbOrTransaction = db): Promise<Player> {
   const lastProcessedBucketId = Math.floor(Date.now() / 1000 / BUCKET_DURATION_SECONDS);
-  const [row] = await transaction.insert(player).values({ discordId, name, lastProcessedBucketId }).returning();
+  const [row] = await transaction.insert(player).values({ discordId, name, originGuildId, lastProcessedBucketId }).returning();
   return row!;
 }
 
