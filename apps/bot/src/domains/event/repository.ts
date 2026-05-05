@@ -1,13 +1,8 @@
-import { db, eventInstance } from '@one-piece/db';
+import { db, eventInstance, type EventInstance } from '@one-piece/db';
 import { asc, eq } from 'drizzle-orm';
 
-export type PendingEventInstance = {
-  id: bigint;
-  eventKey: string;
-  isInteractive: boolean;
-  bucketId: number;
+export type PendingEventInstance = Omit<EventInstance, 'playerId' | 'state'> & {
   state: Record<string, unknown>;
-  createdAt: Date;
 };
 
 export async function getPendingEventsForPlayer(playerId: number): Promise<Array<PendingEventInstance>> {
