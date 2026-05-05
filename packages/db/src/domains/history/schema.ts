@@ -1,5 +1,5 @@
 import { sql } from 'drizzle-orm';
-import { bigserial, index, integer, jsonb, pgTable, text, timestamp } from 'drizzle-orm/pg-core';
+import { bigint, bigserial, index, integer, jsonb, pgTable, text, timestamp } from 'drizzle-orm/pg-core';
 
 import { player } from '../player/schema.js';
 
@@ -7,6 +7,7 @@ export const history = pgTable(
   'history',
   {
     id: bigserial('id', { mode: 'bigint' }).primaryKey(),
+    bucketId: bigint('bucket_id', { mode: 'bigint' }),
     occurredAt: timestamp('occurred_at', { withTimezone: true }).notNull().defaultNow(),
     eventType: text('event_type').notNull(),
     actorPlayerId: integer('actor_player_id').references(() => player.id, { onDelete: 'set null' }),
