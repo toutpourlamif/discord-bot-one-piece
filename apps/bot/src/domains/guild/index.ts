@@ -1,3 +1,1 @@
-export * from './errors.js';
-export * from './guards.js';
-export * from './repository.js';
+export { requireGuildId } from './guards.js';

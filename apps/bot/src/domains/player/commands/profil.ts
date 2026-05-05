@@ -1,6 +1,6 @@
 import type { Command } from '../../../discord/types.js';
-import { buildProfilView } from '../profil-view.js';
-import { resolveTargetPlayer } from '../utils/resolve-target-player.js';
+import { buildProfilView } from '../build-profil-view.js';
+import { resolveTargetPlayer } from '../utils/index.js';
 
 export const profilCommand: Command = {
   name: 'profil',
