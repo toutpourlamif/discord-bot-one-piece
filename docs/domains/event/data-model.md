@@ -1,6 +1,6 @@
 # Modèle de données
 
-Deux tables, chacune avec un rôle clair.
+Deux tables, chacune avec un rôle clair. La position courante des joueurs (utilisée pour les encounters cross-player) vit sur `player.current_zone` — voir le domaine `player`.
 
 ## `event_instance` — queue des events non consommés
 
