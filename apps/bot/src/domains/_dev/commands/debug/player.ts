@@ -1,12 +1,10 @@
 import type { Command } from '../../../../discord/types.js';
-import { getTargetUser } from '../../../../discord/utils/index.js';
-import { findOrCreatePlayer } from '../../../player/service.js';
+import { resolveTargetPlayer } from '../../../player/index.js';
 
 import { replyDebugData } from './utils.js';
 
-export const handlePlayer: Command['handler'] = async ({ message }) => {
-  const target = getTargetUser(message);
-  const { player: targetPlayer } = await findOrCreatePlayer(target.id, target.username, message.guildId!);
+export const handlePlayer: Command['handler'] = async (ctx) => {
+  const targetPlayer = await resolveTargetPlayer(ctx);
 
-  await replyDebugData(message, targetPlayer);
+  await replyDebugData(ctx.message, targetPlayer);
 };

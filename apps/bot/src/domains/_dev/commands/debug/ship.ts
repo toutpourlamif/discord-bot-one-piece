@@ -1,19 +1,17 @@
 import { NotFoundError } from '../../../../discord/errors.js';
 import type { Command } from '../../../../discord/types.js';
-import { getTargetUser } from '../../../../discord/utils/index.js';
-import { findOrCreatePlayer } from '../../../player/service.js';
+import { resolveTargetPlayer } from '../../../player/index.js';
 import * as shipRepository from '../../../ship/repository.js';
 
 import { replyDebugData } from './utils.js';
 
-export const handleShip: Command['handler'] = async ({ message }) => {
-  const target = getTargetUser(message);
-  const { player: targetPlayer } = await findOrCreatePlayer(target.id, target.username, message.guildId!);
+export const handleShip: Command['handler'] = async (ctx) => {
+  const targetPlayer = await resolveTargetPlayer(ctx);
   const ship = await shipRepository.findByPlayerId(targetPlayer.id);
 
   if (!ship) {
     throw new NotFoundError('Ship introuvable.');
   }
 
-  await replyDebugData(message, ship);
+  await replyDebugData(ctx.message, ship);
 };

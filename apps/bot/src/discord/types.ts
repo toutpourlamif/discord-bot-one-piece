@@ -1,4 +1,4 @@
-import type { Player } from '@one-piece/db';
+import type { Guild, Player } from '@one-piece/db';
 import type { ActionRowBuilder, ButtonBuilder, ButtonInteraction, EmbedBuilder, Message } from 'discord.js';
 
 export type CommandName = string | Array<string>;
@@ -7,6 +7,7 @@ export type CommandContext = {
   message: Message;
   args: Array<string>;
   player: Player;
+  guild: Guild;
 };
 
 export type Command = {

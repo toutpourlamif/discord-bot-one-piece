@@ -3,7 +3,8 @@ import type { Interaction, InteractionReplyOptions } from 'discord.js';
 import { devButtonHandlers } from '../domains/_dev/interactions/index.js';
 import { infoButtonHandlers } from '../domains/_info/index.js';
 import { crewButtonHandlers } from '../domains/crew/index.js';
-import { ensureGuildExists, requireGuildId } from '../domains/guild/index.js';
+import { requireGuildId } from '../domains/guild/index.js';
+import * as guildRepository from '../domains/guild/repository.js';
 import { playerButtonHandlers } from '../domains/player/index.js';
 import { resourceButtonHandlers } from '../domains/resource/index.js';
 import { shipButtonHandlers } from '../domains/ship/index.js';
@@ -28,7 +29,8 @@ const buttonRegistry = buildRegistry(allButtonHandlers, (h) => h.name);
 export async function routeInteraction(interaction: Interaction): Promise<void> {
   if (!interaction.isButton()) return;
   try {
-    await ensureGuildExists(requireGuildId(interaction.guildId));
+    // TODO: passer un ButtonContext { interaction, args, guild } aux handlers (symétrie avec CommandContext, guild déjà fetché ici)
+    await guildRepository.findOrCreate(requireGuildId(interaction.guildId));
     const [name, ...args] = interaction.customId.split(CUSTOM_ID_SEPARATOR);
     if (!name) throw new ValidationError(`nom pas trouvé: ${interaction.customId}`);
 

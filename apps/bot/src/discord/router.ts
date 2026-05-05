@@ -4,7 +4,8 @@ import { devCommands } from '../domains/_dev/index.js';
 import { infoCommands } from '../domains/_info/index.js';
 import { crewCommands } from '../domains/crew/index.js';
 import { fishingCommands } from '../domains/fishing/index.js';
-import { ensureGuildExists, requireGuildId } from '../domains/guild/index.js';
+import { requireGuildId } from '../domains/guild/index.js';
+import * as guildRepository from '../domains/guild/repository.js';
 import { playerCommands } from '../domains/player/index.js';
 import { findOrCreatePlayer } from '../domains/player/service.js';
 import { resourceCommands } from '../domains/resource/index.js';
@@ -42,9 +43,9 @@ export async function routeMessage(message: Message, prefix: string): Promise<vo
 
   try {
     const guildId = requireGuildId(message.guildId);
-    await ensureGuildExists(guildId);
-    const { player } = await findOrCreatePlayer(message.author.id, message.author.username, guildId);
-    await command.handler({ message, args, player });
+    const guild = await guildRepository.findOrCreate(guildId);
+    const { player } = await findOrCreatePlayer(message.author.id, message.author.username, guild.id);
+    await command.handler({ message, args, player, guild });
   } catch (error) {
     if (error instanceof AppError) {
       console[error.severity](error);
