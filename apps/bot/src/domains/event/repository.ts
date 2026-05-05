@@ -1,6 +1,8 @@
 import { db, eventInstance, type EventInstance } from '@one-piece/db';
 import { asc, eq } from 'drizzle-orm';
 
+import type { JSONFromSQL } from '../../shared/types.js';
+
 export type PendingEventInstance = Omit<EventInstance, 'playerId' | 'state'> & {
   state: Record<string, unknown>;
 };
@@ -20,4 +22,11 @@ export async function getPendingEventsForPlayer(playerId: number): Promise<Array
     state: row.state as Record<string, unknown>,
     createdAt: row.createdAt,
   }));
+}
+
+export async function updateState(id: number, state: JSONFromSQL): Promise<void> {
+  await db
+    .update(eventInstance)
+    .set({ state })
+    .where(eq(eventInstance.id, BigInt(id)));
 }
