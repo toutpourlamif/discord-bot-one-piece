@@ -26,7 +26,7 @@ ctx.history = {
 
 ## 2. Idempotence garantie par `event_instance`
 
-L'unicité `(player_id, type, bucket_id)` sur `event_instance` (cf [data-model.md](./data-model.md)) couvre tout : passive comme interactive y passent, donc un retry après échec ou un double `!recap` simultané se résout par un conflit refusé silencieusement.
+L'unicité `(player_id, event_key, bucket_id)` sur `event_instance` (cf [data-model.md](./data-model.md)) couvre tout : passive comme interactive y passent, donc un retry après échec ou un double `!recap` simultané se résout par un conflit refusé silencieusement.
 
 **Implémentation** : utiliser `INSERT ... ON CONFLICT DO NOTHING` côté engine. Sinon une ligne déjà tracée bloque toute la transaction du recap au moindre retry.
 
