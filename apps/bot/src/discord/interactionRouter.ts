@@ -39,9 +39,12 @@ export async function routeInteraction(interaction: Interaction): Promise<void> 
   } catch (error) {
     if (error instanceof AppError) {
       console[error.severity](error);
-      await replyWithEphemeralError(interaction, {
-        embeds: [buildOpEmbed(error.severity).setDescription(error.userMessage)],
-      });
+      await replyWithEphemeralError(
+        interaction,
+        error.userView ?? {
+          embeds: [buildOpEmbed(error.severity).setDescription(error.userMessage)],
+        },
+      );
     } else {
       console.error(error);
       await replyWithEphemeralError(interaction, {
