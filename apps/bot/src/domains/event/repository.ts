@@ -1,5 +1,5 @@
 import { db, eventInstance, type EventInstance } from '@one-piece/db';
-import { asc, eq } from 'drizzle-orm';
+import { asc, eq, and } from 'drizzle-orm';
 
 import type { JSONFromSQL } from '../../shared/types.js';
 
@@ -29,4 +29,25 @@ export async function updateState(id: number, state: JSONFromSQL): Promise<void>
     .update(eventInstance)
     .set({ state })
     .where(eq(eventInstance.id, BigInt(id)));
+}
+
+export async function findFirstInteractivePending(playerId: number): Promise<PendingEventInstance | null> {
+  const rows = await db
+    .select()
+    .from(eventInstance)
+    .where(and(eq(eventInstance.playerId, playerId), eq(eventInstance.isInteractive, true)))
+    .orderBy(asc(eventInstance.bucketId), asc(eventInstance.id))
+    .limit(1);
+
+  const row = rows[0];
+  if (!row) return null;
+
+  return {
+    id: row.id,
+    eventKey: row.eventKey,
+    isInteractive: row.isInteractive,
+    bucketId: row.bucketId,
+    state: row.state as Record<string, unknown>,
+    createdAt: row.createdAt,
+  };
 }
