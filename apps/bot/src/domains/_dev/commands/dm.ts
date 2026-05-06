@@ -6,7 +6,7 @@ import { sendDirectMessage } from '../../../discord/utils/send-direct-message.js
 
 export const dmCommand: Command = {
   name: 'dm',
-  async handler(message, args) {
+  async handler({ message, args }) {
     const target = getTargetUser(message);
     const queryArgs = message.mentions.users.first() ? args.slice(1) : args;
     const query = getQuery(queryArgs, { emptyMessage: 'Tu dois fournir un message.', minLength: 3 });

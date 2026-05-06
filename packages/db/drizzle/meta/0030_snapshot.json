@@ -1,6 +1,6 @@
 {
-  "id": "f3062b89-5778-4a83-b1fa-87e3cf732a49",
-  "prevId": "9c4f0b56-7a09-4986-bc0a-84af1418c09a",
+  "id": "67ea0478-9f1f-40d1-9465-1e246a8a4668",
+  "prevId": "2f9825ad-c5e9-47aa-b43f-2ce7b94d48fc",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
@@ -859,6 +859,14 @@
           "primaryKey": false,
           "notNull": true,
           "default": false
+        },
+        "current_zone": {
+          "name": "current_zone",
+          "type": "zone",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'foosha'"
         }
       },
       "indexes": {},
@@ -1229,6 +1237,22 @@
         "RARE",
         "VERY_RARE",
         "LEGENDARY"
+      ]
+    },
+    "public.zone": {
+      "name": "zone",
+      "schema": "public",
+      "values": [
+        "foosha",
+        "loguetown",
+        "reverse_mountain",
+        "whisky_peak",
+        "little_garden",
+        "drum",
+        "alabasta",
+        "sea_east_blue",
+        "sea_paradise",
+        "sea_new_world"
       ]
     }
   },

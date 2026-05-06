@@ -201,8 +201,22 @@
     {
       "idx": 28,
       "version": "7",
+      "when": 1777963215829,
+      "tag": "0028_kippa_floque_arsenal",
+      "breakpoints": true
+    },
+    {
+      "idx": 29,
+      "version": "7",
       "when": 1777973157121,
-      "tag": "0028_kippasteque",
+      "tag": "0029_kippasteque",
+      "breakpoints": true
+    },
+    {
+      "idx": 30,
+      "version": "7",
+      "when": 1778047068729,
+      "tag": "0030_maperf_2csc_cartonrouge_sortiesurciviere",
       "breakpoints": true
     }
   ]

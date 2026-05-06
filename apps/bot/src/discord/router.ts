@@ -4,7 +4,10 @@ import { devCommands } from '../domains/_dev/index.js';
 import { infoCommands } from '../domains/_info/index.js';
 import { crewCommands } from '../domains/crew/index.js';
 import { fishingCommands } from '../domains/fishing/index.js';
+import { requireGuildId } from '../domains/guild/index.js';
+import * as guildRepository from '../domains/guild/repository.js';
 import { playerCommands } from '../domains/player/index.js';
+import { findOrCreatePlayer } from '../domains/player/service.js';
 import { resourceCommands } from '../domains/resource/index.js';
 import { shipCommands } from '../domains/ship/commands/index.js';
 import { buildRegistry } from '../shared/build-registry.js';
@@ -39,7 +42,10 @@ export async function routeMessage(message: Message, prefix: string): Promise<vo
   if (!command) return;
 
   try {
-    await command.handler(message, args);
+    const guildId = requireGuildId(message.guildId);
+    const guild = await guildRepository.findOrCreate(guildId);
+    const { player } = await findOrCreatePlayer(message.author.id, message.author.username, guild.id);
+    await command.handler({ message, args, player, guild });
   } catch (error) {
     if (error instanceof AppError) {
       console[error.severity](error);

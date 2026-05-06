@@ -28,7 +28,7 @@ function getRandomIntegersExcluding(count: number, excludedNumbers: Array<number
 
 export const nombreCommand: Command = {
   name: 'nombre',
-  async handler(message, args) {
+  async handler({ message, args }) {
     const rawNumber = args[0];
 
     if (!rawNumber) {

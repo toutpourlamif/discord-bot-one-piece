@@ -1,10 +1,8 @@
-import { db, eventInstance, type EventInstance } from '@one-piece/db';
+import { db, eventInstance, type EventInstance, type JSONFromSQL } from '@one-piece/db';
 import { asc, eq, and } from 'drizzle-orm';
 
-import type { JSONFromSQL } from '../../shared/types.js';
-
 export type PendingEventInstance = Omit<EventInstance, 'playerId' | 'state'> & {
-  state: Record<string, unknown>;
+  state: JSONFromSQL;
 };
 
 export async function getPendingEventsForPlayer(playerId: number): Promise<Array<PendingEventInstance>> {
@@ -19,7 +17,7 @@ export async function getPendingEventsForPlayer(playerId: number): Promise<Array
     eventKey: row.eventKey,
     isInteractive: row.isInteractive,
     bucketId: row.bucketId,
-    state: row.state as Record<string, unknown>,
+    state: row.state,
     createdAt: row.createdAt,
   }));
 }
@@ -46,7 +44,7 @@ export async function findFirstInteractivePending(playerId: number): Promise<Pen
     eventKey: rows.eventKey,
     isInteractive: rows.isInteractive,
     bucketId: rows.bucketId,
-    state: rows.state as JSONFromSQL,
+    state: rows.state,
     createdAt: rows.createdAt,
   };
 }

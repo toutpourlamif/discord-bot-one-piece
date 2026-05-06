@@ -1,16 +1,14 @@
 import type { Command } from '../../../discord/types.js';
-import { getTargetUser } from '../../../discord/utils/index.js';
-import { findOrCreatePlayer } from '../../player/service.js';
+import { resolveTargetPlayer } from '../../player/index.js';
 import { buildInventoryView } from '../inventory-view.js';
 import { getInventory } from '../repository.js';
 
 export const inventaireCommand: Command = {
   name: 'inventaire',
-  async handler(message) {
-    const target = getTargetUser(message);
-    const { player } = await findOrCreatePlayer(target.id, target.username, message.guildId!);
-    const inventory = await getInventory(player.id);
+  async handler(ctx) {
+    const targetPlayer = await resolveTargetPlayer(ctx);
+    const inventory = await getInventory(targetPlayer.id);
 
-    await message.reply(buildInventoryView(player, inventory, 0, message.author.id));
+    await ctx.message.reply(buildInventoryView(targetPlayer, inventory, 0, ctx.message.author.id));
   },
 };

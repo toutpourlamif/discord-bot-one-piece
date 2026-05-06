@@ -1,1 +1,1 @@
-export { ensureGuildExists } from './service.js';
+export { requireGuildId } from './guards.js';
