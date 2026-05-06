@@ -15,8 +15,8 @@ C'est l'état par défaut. Si le joueur ne fait rien, il reste ancré indéfinim
 Le joueur a quitté une île et fait route vers une autre. Sa colonne `current_zone` pointe vers une mer (par exemple `sea_paradise`). Trois colonnes sur la table `player` racontent le voyage en cours :
 
 - `travel_target_zone` : l'île qu'il vise.
-- `travel_started_at` : le moment où il a quitté son île précédente.
-- `travel_eta_at` : le moment où il devrait arriver — **ETA** = _Estimated Time of Arrival_, l'heure estimée d'arrivée à destination.
+- `travel_started_bucket` : le `bucket_id` où il a quitté son île précédente.
+- `travel_eta_bucket` : le `bucket_id` auquel il devrait arriver — **ETA** = _Estimated Time of Arrival_, l'heure estimée d'arrivée à destination.
 
 Pendant le transit, il vit des événements en mer : tempêtes, calmes plats, rencontres avec d'autres marins. Au bout d'un certain temps (cf [travel-mechanics.md](./travel-mechanics.md)), il arrive — et bascule en ancré dans la zone de destination.
 
@@ -57,14 +57,14 @@ Déclenché quand l'item entre dans l'inventaire.
 Quand le joueur clique sur "Partir vers Drum", l'engine fait dans la même transaction :
 
 1. **Bascule la zone** : `recordZoneChange(player, 'sea_paradise')`.
-2. **Remplit les colonnes de voyage** sur `player` : `travel_target_zone = 'drum'`, `travel_started_at = now()`, `travel_eta_at = now() + duréeCalculée`.
+2. **Remplit les colonnes de voyage** sur `player` : `travel_target_zone = 'drum'`, `travel_started_bucket = currentBucket`, `travel_eta_bucket = currentBucket + round(duréeBuckets)`.
 3. **Trace dans `history`** : `event_type = 'travel.departed'`, payload avec origine, destination, durée estimée.
 
 À partir de là, le joueur est en transit. Les événements en mer peuvent commencer à le concerner.
 
 ## Comment on arrive à destination
 
-Tout au long du voyage, à chaque `!recap` l'engine vérifie : `now() >= player.travel_eta_at` ?
+Tout au long du voyage, à chaque `!recap` l'engine vérifie : `currentBucket >= player.travel_eta_bucket` ?
 
 Si oui, l'engine génère automatiquement un event d'arrivée :
 
