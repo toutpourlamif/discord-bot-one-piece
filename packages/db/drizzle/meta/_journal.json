@@ -204,6 +204,13 @@
       "when": 1777963215829,
       "tag": "0028_kippa_floque_arsenal",
       "breakpoints": true
+    },
+    {
+      "idx": 29,
+      "version": "7",
+      "when": 1777973157121,
+      "tag": "0029_kippasteque",
+      "breakpoints": true
     }
   ]
 }
