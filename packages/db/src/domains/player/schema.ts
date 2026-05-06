@@ -19,6 +19,7 @@ export const player = pgTable('player', {
   karma: integer('karma').notNull().default(0),
 
   name: varchar('name', { length: MAX_CHARACTER_NAME_LENGTH }).notNull(),
+  crewName: varchar('crew_name', { length: MAX_CHARACTER_NAME_LENGTH }),
   // drizzle et typescript ont du mal avec les bigint, donc on passe par sql`0`
   bounty: bigint('bounty', { mode: 'bigint' })
     .notNull()

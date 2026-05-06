@@ -32,3 +32,8 @@ export async function updateName(playerId: number, name: string, client: DbOrTra
   const [row] = await client.update(player).set({ name }).where(eq(player.id, playerId)).returning();
   return row!;
 }
+
+export async function updateCrewName(playerId: number, crewName: string, client: DbOrTransaction = db): Promise<Player> {
+  const [row] = await client.update(player).set({ crewName }).where(eq(player.id, playerId)).returning();
+  return row!;
+}
