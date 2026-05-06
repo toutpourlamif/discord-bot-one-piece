@@ -4,7 +4,7 @@ import { sanitizeName } from '../../shared/sanitize-name.js';
 import * as characterRepository from '../character/repository.js';
 import { findOrCreateShip } from '../ship/service.js';
 
-import { assertNameNotEmpty, assertNameWithinMaxLength } from './name.js';
+import { assertNameNotEmpty, assertNameWithinMaxLength } from './guards/index.js';
 import * as playerRepository from './repository.js';
 
 type FindOrCreateResult = {

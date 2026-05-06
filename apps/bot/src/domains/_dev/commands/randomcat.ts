@@ -11,7 +11,7 @@ const row = new ActionRowBuilder<ButtonBuilder>().addComponents(catButton);
 
 export const randomCatCommand: Command = {
   name: 'randomcat',
-  async handler(message) {
+  async handler({ message }) {
     const randomUrl = catImages[Math.floor(Math.random() * catImages.length)]!;
 
     const embed = buildOpEmbed().setTitle('UN CHAT 🐱 !').setImage(randomUrl);

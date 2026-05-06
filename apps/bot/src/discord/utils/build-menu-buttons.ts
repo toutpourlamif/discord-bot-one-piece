@@ -3,8 +3,8 @@ import { ActionRowBuilder } from 'discord.js';
 
 import { CREW_BUTTON_NAME } from '../../domains/crew/constants.js';
 import { buildCrewNavButton } from '../../domains/crew/utils/build-crew-nav-button.js';
+import { buildProfilButton } from '../../domains/player/build-profil-button.js';
 import { PROFIL_BUTTON_NAME } from '../../domains/player/constants.js';
-import { buildProfilButton } from '../../domains/player/profil-button.js';
 import { INVENTORY_BUTTON_NAME } from '../../domains/resource/constants.js';
 import { buildInventoryNavButton } from '../../domains/resource/inventory-nav-button.js';
 import { SHIP_BUTTON_NAME } from '../../domains/ship/constants.js';
