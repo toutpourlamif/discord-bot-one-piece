@@ -1,1 +1,1 @@
-export { getPendingEventsForPlayer, type PendingEventInstance } from './repository.js';
+export { getPendingEventsForPlayer } from './repository.js';
