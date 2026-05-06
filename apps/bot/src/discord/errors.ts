@@ -20,17 +20,18 @@ export class NotFoundError extends AppError {
     this.name = 'NotFoundError';
   }
 }
-export class ForbiddenError extends AppError {
-  constructor(message = 'Introuvable.') {
-    super(message, 'warn');
-    this.name = 'ForbiddenError';
-  }
-}
 
 export class ValidationError extends AppError {
   constructor(message: string) {
     super(message, 'warn');
     this.name = 'ValidationError';
+  }
+}
+
+export class ForbiddenError extends AppError {
+  constructor(message = "Tu n'as pas la permission de faire ça.") {
+    super(message, 'warn');
+    this.name = 'ForbiddenError';
   }
 }
 
