@@ -1,25 +1,14 @@
 import { db, eventInstance, type EventInstance, type JSONFromSQL } from '@one-piece/db';
 import { asc, eq, and } from 'drizzle-orm';
 
-export type PendingEventInstance = Omit<EventInstance, 'playerId' | 'state'> & {
-  state: JSONFromSQL;
-};
-
-export async function getPendingEventsForPlayer(playerId: number): Promise<Array<PendingEventInstance>> {
+export async function getPendingEventsForPlayer(playerId: number): Promise<Array<EventInstance>> {
   const rows = await db
     .select()
     .from(eventInstance)
     .where(eq(eventInstance.playerId, playerId))
     .orderBy(asc(eventInstance.bucketId), asc(eventInstance.id));
 
-  return rows.map((row) => ({
-    id: row.id,
-    eventKey: row.eventKey,
-    isInteractive: row.isInteractive,
-    bucketId: row.bucketId,
-    state: row.state,
-    createdAt: row.createdAt,
-  }));
+  return rows;
 }
 
 export async function updateState(id: number, state: JSONFromSQL): Promise<void> {
@@ -29,7 +18,7 @@ export async function updateState(id: number, state: JSONFromSQL): Promise<void>
     .where(eq(eventInstance.id, BigInt(id)));
 }
 
-export async function findFirstInteractivePending(playerId: number): Promise<PendingEventInstance | null> {
+export async function findFirstInteractivePending(playerId: number): Promise<EventInstance | null> {
   const [row] = await db
     .select()
     .from(eventInstance)
@@ -39,12 +28,5 @@ export async function findFirstInteractivePending(playerId: number): Promise<Pen
 
   if (!row) return null;
 
-  return {
-    id: row.id,
-    eventKey: row.eventKey,
-    isInteractive: row.isInteractive,
-    bucketId: row.bucketId,
-    state: row.state,
-    createdAt: row.createdAt,
-  };
+  return row;
 }
