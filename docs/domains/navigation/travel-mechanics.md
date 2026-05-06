@@ -60,10 +60,10 @@ Exemples :
 
 Le joueur part d'Alabasta vers Drum. Au milieu du voyage, il **perd Nami** (capturée), ou son **Log Pose est volé**, ou son **navire prend des dégâts**. On ne le bloque pas : il continue, mais l'**ETA est recalculée** à la volée.
 
-Principe : on connaît la **fraction du voyage déjà parcourue** via `(now() - travel_started_at) / (travel_eta_at - travel_started_at)`. On recalcule la durée totale avec les nouvelles conditions, et on n'applique le malus qu'à la part **restante** :
+Principe : on connaît la **fraction du voyage déjà parcourue** via `(bucketId - travel_started_bucket) / (travel_eta_bucket - travel_started_bucket)`. On recalcule la durée totale avec les nouvelles conditions, et on n'applique le malus qu'à la part **restante** :
 
 ```
-nouvelleETA = now() + nouvelleDuréeTotale × (1 - progressActuel)
+nouvelleEtaBucket = bucketId + nouvelleDuréeTotale × (1 - progressActuel)
 ```
 
 Pas de double pénalité pour le temps déjà passé. La fonction `recomputeTravelETA(playerId)` est appelée par les effets qui modifient l'état du voyage (perte de personnage, dégâts navire, perte d'item Log Pose, etc.) quand le joueur est en transit.
@@ -72,11 +72,11 @@ Pas de double pénalité pour le temps déjà passé. La fonction `recomputeTrav
 
 Pour que le voyage **se ressente** sans submerger le joueur, on calibre :
 
-| Cadence                                   | Détail                                                       |
-| ----------------------------------------- | ------------------------------------------------------------ |
-| Event en mer (tempête, calme, rencontre…) | ~1 par 15 buckets (~3h45)                                    |
-| Event "rebond" qui propose un re-routing  | ~1 par 30 buckets (~7h30), proba basse                       |
-| Event d'arrivée                           | Une fois quand `now() >= player.travel_eta_at`, automatique. |
+| Cadence                                   | Détail                                                              |
+| ----------------------------------------- | ------------------------------------------------------------------- |
+| Event en mer (tempête, calme, rencontre…) | ~1 par 15 buckets (~3h45)                                           |
+| Event "rebond" qui propose un re-routing  | ~1 par 30 buckets (~7h30), proba basse                              |
+| Event d'arrivée                           | Une fois quand `bucketId >= player.travel_eta_bucket`, automatique. |
 
 Sur un trajet de 30 buckets, ça donne **2 events en mer + 1 arrivée** en moyenne. Suffisant pour avoir l'impression de naviguer, sans noyer le joueur de notifications.
 

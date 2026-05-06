@@ -6,15 +6,15 @@ Ce que la navigation ajoute à la base de données.
 
 Trois colonnes pour suivre l'état de voyage du joueur :
 
-| Colonne              | Type             | Quand c'est rempli                                                |
-| -------------------- | ---------------- | ----------------------------------------------------------------- |
-| `travel_target_zone` | text NULL        | Si le joueur est en mer : l'île qu'il vise. NULL s'il est ancré.  |
-| `travel_started_at`  | timestamptz NULL | Le moment où il a quitté son île précédente. NULL s'il est ancré. |
-| `travel_eta_at`      | timestamptz NULL | Le moment où il devrait arriver. NULL s'il est ancré.             |
+| Colonne                 | Type         | Quand c'est rempli                                                |
+| ----------------------- | ------------ | ----------------------------------------------------------------- |
+| `travel_target_zone`    | text NULL    | Si le joueur est en mer : l'île qu'il vise. NULL s'il est ancré.  |
+| `travel_started_bucket` | integer NULL | Le bucket où il a quitté son île précédente. NULL s'il est ancré. |
+| `travel_eta_bucket`     | integer NULL | Le bucket auquel il devrait arriver. NULL s'il est ancré.         |
 
 Quand le joueur **part**, les trois colonnes se remplissent.
 Quand il **arrive** (ou qu'il **dérive**), les trois colonnes se vident.
-Quand il **change de cap pendant le trajet**, on garde `travel_started_at` mais on met à jour `travel_target_zone` et `travel_eta_at`.
+Quand il **change de cap pendant le trajet**, on garde `travel_started_bucket` mais on met à jour `travel_target_zone` et `travel_eta_bucket`.
 
 ## Nouveaux items dans l'inventaire
 
