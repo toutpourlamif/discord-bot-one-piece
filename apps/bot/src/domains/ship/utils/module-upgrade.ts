@@ -59,13 +59,9 @@ export function getShipModuleResourceCosts(moduleKey: ShipModuleKey, level: numb
 }
 
 export function assertIsNotMaxLevel(moduleKey: ShipModuleKey, level: number): void {
-  if (!isShipModuleMaxLevel(moduleKey, level)) return;
+  if (level < SHIP_MODULES[moduleKey].valueByLevel.length) return;
 
   throw new ValidationError('Ce module est déjà au niveau maximum.');
-}
-
-export function isShipModuleMaxLevel(moduleKey: ShipModuleKey, level: number): boolean {
-  return level >= SHIP_MODULES[moduleKey].valueByLevel.length;
 }
 
 function getResourceCostPreviews(moduleKey: ShipModuleKey, level: number, inventory: Inventory): Array<ResourceCostPreview> {

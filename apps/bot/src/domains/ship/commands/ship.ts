@@ -1,7 +1,7 @@
 import type { Command } from '../../../discord/types.js';
 import { getTargetUser } from '../../../discord/utils/index.js';
 import { findOrCreatePlayer } from '../../player/service.js';
-import { buildShipView } from '../ship-view.js';
+import { buildShipView } from '../views/ship-view.js';
 
 export const shipCommand: Command = {
   name: 'ship',

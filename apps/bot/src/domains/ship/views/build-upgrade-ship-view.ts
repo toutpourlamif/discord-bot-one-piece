@@ -2,12 +2,11 @@ import { SHIP_MODULE_KEYS, SHIP_MODULE_LEVEL_COLUMNS, type Ship } from '@one-pie
 import type { EmbedBuilder } from 'discord.js';
 import { ActionRowBuilder, ButtonBuilder, ButtonStyle } from 'discord.js';
 
-import type { View } from '../../discord/types.js';
-import { buildCustomId, buildOpEmbed } from '../../discord/utils/index.js';
-
-import { UPGRADE_MODULE_EMOJI, UPGRADE_SHIP_MODULE_BUTTON_NAME } from './constants.js';
-import { SHIP_MODULE_LABELS } from './modules.js';
-import { findByPlayerIdOrThrow } from './repository.js';
+import type { View } from '../../../discord/types.js';
+import { buildCustomId, buildOpEmbed } from '../../../discord/utils/index.js';
+import { UPGRADE_MODULE_EMOJI, UPGRADE_SHIP_MODULE_BUTTON_NAME } from '../constants.js';
+import { SHIP_MODULE_LABELS } from '../modules.js';
+import { findByPlayerIdOrThrow } from '../repository.js';
 
 export async function buildUpgradeShipView(playerId: number, ownerDiscordId: string): Promise<View> {
   const ship = await findByPlayerIdOrThrow(playerId);

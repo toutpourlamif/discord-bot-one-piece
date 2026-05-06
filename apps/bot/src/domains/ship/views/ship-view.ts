@@ -1,13 +1,12 @@
 import { SHIP_MODULE_KEYS, SHIP_MODULE_LEVEL_COLUMNS } from '@one-piece/db';
 import { ActionRowBuilder, ButtonBuilder, ButtonStyle } from 'discord.js';
 
-import type { View } from '../../discord/types.js';
-import { buildCustomId, buildMenuButtons, buildOpEmbed } from '../../discord/utils/index.js';
-import * as playerRepository from '../player/repository.js';
-
-import { SHIP_BUTTON_NAME, UPGRADE_MODULE_EMOJI, UPGRADE_SHIP_BUTTON_NAME } from './constants.js';
-import { SHIP_MODULE_LABELS, SHIP_MODULES } from './modules.js';
-import { findByPlayerIdOrThrow } from './repository.js';
+import type { View } from '../../../discord/types.js';
+import { buildCustomId, buildMenuButtons, buildOpEmbed } from '../../../discord/utils/index.js';
+import * as playerRepository from '../../player/repository.js';
+import { SHIP_BUTTON_NAME, UPGRADE_MODULE_EMOJI, UPGRADE_SHIP_BUTTON_NAME } from '../constants.js';
+import { SHIP_MODULE_LABELS, SHIP_MODULES } from '../modules.js';
+import { findByPlayerIdOrThrow } from '../repository.js';
 
 export async function buildShipView(playerId: number, ownerDiscordId: string): Promise<View> {
   const navRow = buildMenuButtons(SHIP_BUTTON_NAME, ownerDiscordId, playerId);

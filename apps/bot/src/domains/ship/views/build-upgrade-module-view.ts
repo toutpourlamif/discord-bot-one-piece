@@ -1,22 +1,24 @@
 import type { ShipModuleKey } from '@one-piece/db';
-import type { EmbedBuilder } from 'discord.js';
-import { ActionRowBuilder, ButtonBuilder, ButtonStyle } from 'discord.js';
+import type { EmbedBuilder, ActionRowBuilder } from 'discord.js';
+import { ButtonBuilder, ButtonStyle } from 'discord.js';
 
-import type { View } from '../../discord/types.js';
-import { buildCustomId, buildOpEmbed } from '../../discord/utils/index.js';
-import { formatBerry } from '../economy/utils/format-berry.js';
+import type { View } from '../../../discord/types.js';
+import { buildCustomId, buildOpEmbed } from '../../../discord/utils/index.js';
+import { formatBerry } from '../../economy/utils/format-berry.js';
+import { CONFIRM_SHIP_MODULE_UPGRADE_BUTTON_NAME } from '../constants.js';
+import { SHIP_MODULE_LABELS, SHIP_MODULES } from '../modules.js';
+import { findByPlayerIdOrThrow } from '../repository.js';
+import { getShipModuleUpgradePreview } from '../service.js';
+import type { ShipModuleUpgradePreview } from '../types.js';
+import { getShipModuleLevel } from '../utils/index.js';
 
-import { CONFIRM_SHIP_MODULE_UPGRADE_BUTTON_NAME, UPGRADE_SHIP_BUTTON_NAME } from './constants.js';
-import { SHIP_MODULE_LABELS } from './modules.js';
-import { findByPlayerIdOrThrow } from './repository.js';
-import { getShipModuleUpgradePreview } from './service.js';
-import type { ShipModuleUpgradePreview } from './types.js';
-import { getShipModuleLevel, isShipModuleMaxLevel } from './utils/index.js';
+import { buildBackAction } from './build-back-action.js';
+import { buildMaxLevelView } from './build-max-level-view.js';
 
 export async function buildUpgradeModuleView(playerId: number, ownerDiscordId: string, moduleKey: ShipModuleKey): Promise<View> {
   const ship = await findByPlayerIdOrThrow(playerId);
   const level = getShipModuleLevel(ship, moduleKey);
-  if (isShipModuleMaxLevel(moduleKey, level)) {
+  if (level >= SHIP_MODULES[moduleKey].valueByLevel.length) {
     return buildMaxLevelView(playerId, ownerDiscordId, moduleKey);
   }
 
@@ -25,17 +27,6 @@ export async function buildUpgradeModuleView(playerId: number, ownerDiscordId: s
   return {
     embeds: [buildUpgradeModuleEmbed(moduleKey, preview)],
     components: [buildUpgradeModuleActions(playerId, ownerDiscordId, moduleKey, preview)],
-  };
-}
-
-function buildMaxLevelView(playerId: number, ownerDiscordId: string, moduleKey: ShipModuleKey): View {
-  return {
-    embeds: [
-      buildOpEmbed('warn')
-        .setTitle(`${SHIP_MODULE_LABELS[moduleKey]} — niveau maximum`)
-        .setDescription('Ce module est déjà au niveau maximum.'),
-    ],
-    components: [buildBackAction(playerId, ownerDiscordId)],
   };
 }
 
@@ -81,14 +72,5 @@ function buildUpgradeModuleActions(
       .setLabel('Valider')
       .setStyle(ButtonStyle.Success)
       .setDisabled(!preview.canUpgrade),
-  );
-}
-
-function buildBackAction(playerId: number, ownerDiscordId: string): ActionRowBuilder<ButtonBuilder> {
-  return new ActionRowBuilder<ButtonBuilder>().addComponents(
-    new ButtonBuilder()
-      .setCustomId(buildCustomId(UPGRADE_SHIP_BUTTON_NAME, ownerDiscordId, playerId))
-      .setLabel('← Retour')
-      .setStyle(ButtonStyle.Secondary),
   );
 }
