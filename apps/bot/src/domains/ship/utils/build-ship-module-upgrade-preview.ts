@@ -1,9 +1,10 @@
-import { SHIP_MODULE_LEVEL_COLUMNS, type ResourceName, type Ship, type ShipModuleKey } from '@one-piece/db';
+import type { Ship, ShipModuleKey } from '@one-piece/db';
 
-import { ValidationError } from '../../../discord/errors.js';
 import type { Inventory } from '../../resource/types.js';
 import { SHIP_MODULES } from '../modules.js';
 import type { ResourceCostPreview, ShipModuleUpgradePreview } from '../types.js';
+
+import { getShipModuleBerryCost, getShipModuleLevel, getShipModuleResourceCosts, isShipModuleMaxLevel } from './ship-module-helpers.js';
 
 type BuildShipModuleUpgradePreviewParams = {
   ship: Ship;
@@ -17,9 +18,9 @@ export function buildShipModuleUpgradePreview({
   moduleKey,
   ownedBerries,
   inventory,
-}: BuildShipModuleUpgradePreviewParams): ShipModuleUpgradePreview {
+}: BuildShipModuleUpgradePreviewParams): ShipModuleUpgradePreview | null {
   const level = getShipModuleLevel(ship, moduleKey);
-  assertIsNotMaxLevel(moduleKey, level);
+  if (isShipModuleMaxLevel(moduleKey, level)) return null;
 
   const nextLevel = level + 1;
   const module = SHIP_MODULES[moduleKey];
@@ -40,38 +41,10 @@ export function buildShipModuleUpgradePreview({
   };
 }
 
-export function getShipModuleLevel(ship: Ship, moduleKey: ShipModuleKey): number {
-  return ship[SHIP_MODULE_LEVEL_COLUMNS[moduleKey]];
-}
-
-export function getShipModuleBerryCost(moduleKey: ShipModuleKey, level: number): bigint {
-  assertIsNotMaxLevel(moduleKey, level);
-
-  const cost = SHIP_MODULES[moduleKey].costByLevel[level - 1];
-  return BigInt(cost?.berry ?? 0);
-}
-
-export function getShipModuleResourceCosts(moduleKey: ShipModuleKey, level: number): Array<[ResourceName, number]> {
-  assertIsNotMaxLevel(moduleKey, level);
-
-  const cost = SHIP_MODULES[moduleKey].costByLevel[level - 1];
-  return Object.entries(cost?.resources ?? {}) as Array<[ResourceName, number]>;
-}
-
-export function assertIsNotMaxLevel(moduleKey: ShipModuleKey, level: number): void {
-  if (!isShipModuleMaxLevel(moduleKey, level)) return;
-
-  throw new ValidationError('Ce module est déjà au niveau maximum.');
-}
-
-export function isShipModuleMaxLevel(moduleKey: ShipModuleKey, level: number): boolean {
-  return level >= SHIP_MODULES[moduleKey].valueByLevel.length;
-}
-
 function getResourceCostPreviews(moduleKey: ShipModuleKey, level: number, inventory: Inventory): Array<ResourceCostPreview> {
   const inventoryByName = new Map(inventory.map((item) => [item.name, item.quantity]));
 
-  return getShipModuleResourceCosts(moduleKey, level).map(([name, requiredQuantity]) => {
+  return getShipModuleResourceCosts(moduleKey, level).map(({ name, quantity: requiredQuantity }) => {
     const ownedQuantity = inventoryByName.get(name) ?? 0;
 
     return {

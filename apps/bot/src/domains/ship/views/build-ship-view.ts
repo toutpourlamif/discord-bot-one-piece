@@ -1,27 +1,16 @@
-import { SHIP_MODULE_KEYS, SHIP_MODULE_LEVEL_COLUMNS } from '@one-piece/db';
+import { SHIP_MODULE_KEYS, SHIP_MODULE_LEVEL_COLUMNS, type Player } from '@one-piece/db';
 import { ActionRowBuilder, ButtonBuilder, ButtonStyle } from 'discord.js';
 
 import type { View } from '../../../discord/types.js';
 import { buildCustomId, buildMenuButtons, buildOpEmbed } from '../../../discord/utils/index.js';
-import * as playerRepository from '../../player/repository.js';
 import { SHIP_BUTTON_NAME, UPGRADE_MODULE_EMOJI, UPGRADE_SHIP_BUTTON_NAME } from '../constants.js';
 import { SHIP_MODULE_LABELS, SHIP_MODULES } from '../modules.js';
 import { findByPlayerIdOrThrow } from '../repository.js';
 
-export async function buildShipView(playerId: number, ownerDiscordId: string): Promise<View> {
-  const navRow = buildMenuButtons(SHIP_BUTTON_NAME, ownerDiscordId, playerId);
-  const ship = await findByPlayerIdOrThrow(playerId);
+export async function buildShipView(player: Player, ownerDiscordId: string): Promise<View> {
+  const ship = await findByPlayerIdOrThrow(player.id);
+
   const embed = buildOpEmbed().setTitle(`🚢 ${ship.name}`).setDescription(`HP : ${ship.hp}`);
-  const player = await playerRepository.findByIdOrThrow(playerId);
-
-  const components = [navRow];
-
-  appendUpgradeShipButton(components, {
-    isOwner: player.discordId === ownerDiscordId,
-    ownerDiscordId,
-    playerId,
-  });
-
   // TODO: Redesign this shit
   for (const key of SHIP_MODULE_KEYS) {
     const level = ship[SHIP_MODULE_LEVEL_COLUMNS[key]];
@@ -33,28 +22,19 @@ export async function buildShipView(playerId: number, ownerDiscordId: string): P
     });
   }
 
-  return { embeds: [embed], components };
+  const navRow = buildMenuButtons(SHIP_BUTTON_NAME, ownerDiscordId, player.id);
+  const isOwner = player.discordId === ownerDiscordId;
+  const upgradeRow = isOwner ? buildUpgradeShipButtonRow(player.id, ownerDiscordId) : null;
+
+  return { embeds: [embed], components: upgradeRow ? [upgradeRow, navRow] : [navRow] };
 }
 
-type AppendUpgradeShipButtonOptions = {
-  isOwner: boolean;
-  ownerDiscordId: string;
-  playerId: number;
-};
-
-function appendUpgradeShipButton(
-  components: Array<ActionRowBuilder<ButtonBuilder>>,
-  { isOwner, ownerDiscordId, playerId }: AppendUpgradeShipButtonOptions,
-): void {
-  if (!isOwner) return;
-
-  const upgradeRow = new ActionRowBuilder<ButtonBuilder>().addComponents(
+function buildUpgradeShipButtonRow(playerId: number, ownerDiscordId: string): ActionRowBuilder<ButtonBuilder> {
+  return new ActionRowBuilder<ButtonBuilder>().addComponents(
     new ButtonBuilder()
       .setCustomId(buildCustomId(UPGRADE_SHIP_BUTTON_NAME, ownerDiscordId, playerId))
       .setLabel('Améliorer')
       .setEmoji(UPGRADE_MODULE_EMOJI)
-      .setStyle(ButtonStyle.Primary),
+      .setStyle(ButtonStyle.Secondary),
   );
-
-  components.unshift(upgradeRow);
 }

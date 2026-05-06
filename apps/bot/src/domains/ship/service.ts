@@ -37,7 +37,7 @@ export async function renameShip(playerId: number, newName: string): Promise<Shi
   return shipRepository.rename(ship.id, sanitized);
 }
 
-export async function getShipModuleUpgradePreview(playerId: number, moduleKey: ShipModuleKey): Promise<ShipModuleUpgradePreview> {
+export async function getShipModuleUpgradePreview(playerId: number, moduleKey: ShipModuleKey): Promise<ShipModuleUpgradePreview | null> {
   const [ship, player, inventory] = await Promise.all([
     shipRepository.findByPlayerIdOrThrow(playerId),
     playerRepository.findByIdOrThrow(playerId),
@@ -66,11 +66,7 @@ export async function upgradeShipModule(playerId: number, moduleKey: ShipModuleK
       await economyRepository.debitBerry(playerId, berryCost, transaction);
     }
 
-    await debitResourcesByName(
-      playerId,
-      getShipModuleResourceCosts(moduleKey, level).map(([name, quantity]) => ({ name, quantity })),
-      transaction,
-    );
+    await debitResourcesByName(playerId, getShipModuleResourceCosts(moduleKey, level), transaction);
 
     return shipRepository.updateModuleLevel(ship.id, moduleKey, nextLevel, transaction);
   });

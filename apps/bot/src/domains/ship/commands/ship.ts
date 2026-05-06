@@ -6,6 +6,6 @@ export const shipCommand: Command = {
   name: 'ship',
   async handler(ctx) {
     const targetPlayer = await resolveTargetPlayer(ctx);
-    await ctx.message.reply(await buildShipView(targetPlayer.id, ctx.message.author.id));
+    await ctx.message.reply(await buildShipView(targetPlayer, ctx.message.author.id));
   },
 };

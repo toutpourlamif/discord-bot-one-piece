@@ -3,25 +3,20 @@ import type { EmbedBuilder, ActionRowBuilder } from 'discord.js';
 import { ButtonBuilder, ButtonStyle } from 'discord.js';
 
 import type { View } from '../../../discord/types.js';
-import { buildCustomId, buildOpEmbed } from '../../../discord/utils/index.js';
+import { buildBackAction, buildCustomId, buildOpEmbed } from '../../../discord/utils/index.js';
 import { formatBerry } from '../../economy/utils/format-berry.js';
-import { CONFIRM_SHIP_MODULE_UPGRADE_BUTTON_NAME } from '../constants.js';
+import { CONFIRM_SHIP_MODULE_UPGRADE_BUTTON_NAME, UPGRADE_SHIP_BUTTON_NAME } from '../constants.js';
 import { SHIP_MODULE_LABELS } from '../modules.js';
-import { findByPlayerIdOrThrow } from '../repository.js';
 import { getShipModuleUpgradePreview } from '../service.js';
 import type { ShipModuleUpgradePreview } from '../types.js';
-import { buildBackAction, getShipModuleLevel, isShipModuleMaxLevel } from '../utils/index.js';
 
 import { buildMaxLevelView } from './build-max-level-view.js';
 
 export async function buildUpgradeModuleView(playerId: number, ownerDiscordId: string, moduleKey: ShipModuleKey): Promise<View> {
-  const ship = await findByPlayerIdOrThrow(playerId);
-  const level = getShipModuleLevel(ship, moduleKey);
-  if (isShipModuleMaxLevel(moduleKey, level)) {
+  const preview = await getShipModuleUpgradePreview(playerId, moduleKey);
+  if (preview === null) {
     return buildMaxLevelView(playerId, ownerDiscordId, moduleKey);
   }
-
-  const preview = await getShipModuleUpgradePreview(playerId, moduleKey);
 
   return {
     embeds: [buildUpgradeModuleEmbed(moduleKey, preview)],
@@ -37,6 +32,7 @@ function buildUpgradeModuleEmbed(moduleKey: ShipModuleKey, preview: ShipModuleUp
         `Niveau ${preview.level} → ${preview.nextLevel}`,
         `Bonus : ${preview.currentValue ?? '—'} → ${preview.nextValue ?? '—'}`,
         '',
+        // TODO: brancher le check capacity
         '🔒 Capacité requise (à venir)',
         '',
         '**Coût**',
@@ -65,7 +61,7 @@ function buildUpgradeModuleActions(
   moduleKey: ShipModuleKey,
   preview: ShipModuleUpgradePreview,
 ): ActionRowBuilder<ButtonBuilder> {
-  return buildBackAction(playerId, ownerDiscordId).addComponents(
+  return buildBackAction(buildCustomId(UPGRADE_SHIP_BUTTON_NAME, ownerDiscordId, playerId)).addComponents(
     new ButtonBuilder()
       .setCustomId(buildCustomId(CONFIRM_SHIP_MODULE_UPGRADE_BUTTON_NAME, ownerDiscordId, playerId, moduleKey, preview.level))
       .setLabel('Valider')

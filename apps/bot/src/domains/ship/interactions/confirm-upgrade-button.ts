@@ -7,7 +7,7 @@ import { assertInteractorIsTheOwner, parseIntegerArg, parseOwnerDiscordId } from
 import { CONFIRM_SHIP_MODULE_UPGRADE_BUTTON_NAME } from '../constants.js';
 import { SHIP_MODULE_LABELS } from '../modules.js';
 import { upgradeShipModule } from '../service.js';
-import { assertPlayerOwnsShip, parseShipModuleKey } from '../utils/index.js';
+import { parseShipModuleKey } from '../utils/index.js';
 
 async function handle(interaction: ButtonInteraction, args: Array<string>): Promise<void> {
   const ownerDiscordId = parseOwnerDiscordId(args[0]);
@@ -16,7 +16,6 @@ async function handle(interaction: ButtonInteraction, args: Array<string>): Prom
   const moduleKey = parseShipModuleKey(args[2]);
   const expectedUpgradeLevel = parseIntegerArg(args[3]);
 
-  await assertPlayerOwnsShip(playerId, interaction.user.id);
   await interaction.deferUpdate();
   const upgradedShip = await upgradeShipModule(playerId, moduleKey, expectedUpgradeLevel);
   const upgradedLevel = upgradedShip[SHIP_MODULE_LEVEL_COLUMNS[moduleKey]];

@@ -1,9 +1,9 @@
 import type { ShipModuleKey } from '@one-piece/db';
 
 import type { View } from '../../../discord/types.js';
-import { buildOpEmbed } from '../../../discord/utils/index.js';
+import { buildBackAction, buildCustomId, buildOpEmbed } from '../../../discord/utils/index.js';
+import { UPGRADE_SHIP_BUTTON_NAME } from '../constants.js';
 import { SHIP_MODULE_LABELS } from '../modules.js';
-import { buildBackAction } from '../utils/index.js';
 
 export function buildMaxLevelView(playerId: number, ownerDiscordId: string, moduleKey: ShipModuleKey): View {
   return {
@@ -12,6 +12,6 @@ export function buildMaxLevelView(playerId: number, ownerDiscordId: string, modu
         .setTitle(`${SHIP_MODULE_LABELS[moduleKey]} — niveau maximum`)
         .setDescription('Ce module est déjà au niveau maximum.'),
     ],
-    components: [buildBackAction(playerId, ownerDiscordId)],
+    components: [buildBackAction(buildCustomId(UPGRADE_SHIP_BUTTON_NAME, ownerDiscordId, playerId))],
   };
 }

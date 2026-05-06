@@ -1,4 +1,4 @@
-import type { ResourceTemplateInsert } from './schema.js';
+type ResourceSeed = { readonly name: string; readonly imageUrl: string | null };
 
 export const RESOURCE_TEMPLATES_DATA = [
   {
@@ -14,6 +14,6 @@ export const RESOURCE_TEMPLATES_DATA = [
   { name: 'Eternal Pose - Little Garden', imageUrl: null },
   { name: 'Eternal Pose - Drum', imageUrl: null },
   { name: 'Eternal Pose - Alabasta', imageUrl: null },
-] as const satisfies ReadonlyArray<ResourceTemplateInsert>;
+] as const satisfies ReadonlyArray<ResourceSeed>;
 
 export type ResourceName = (typeof RESOURCE_TEMPLATES_DATA)[number]['name'];
