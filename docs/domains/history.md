@@ -65,6 +65,7 @@ appendHistory({
   actorPlayerId: player.id,
   target: { type: 'character_instance', id: instanceId },
   client: transaction, // optionnel — voir ci-dessous
+  occurredAt: date, // optionnel — par défaut now() côté DB
 });
 ```
 
@@ -101,4 +102,17 @@ payload: {
 }
 target: { type: 'character_instance', id: <nouveau capitaine> }
 actorPlayerId: <joueur>
+```
+
+### `player.zone_changed`
+
+La zone courante d'un joueur change.
+
+```ts
+payload: {
+  from: Zone;
+  to: Zone;
+}
+actorPlayerId: <joueur>
+bucketId: <bucket du changement>
 ```

@@ -13,4 +13,5 @@ export async function closeDb() {
 }
 export type Db = typeof db;
 type Transaction = Parameters<Parameters<Db['transaction']>[0]>[0];
-export type DbOrTransaction = Db | Transaction;
+export type DrizzleTx = Transaction;
+export type DbOrTransaction = Db | DrizzleTx;
