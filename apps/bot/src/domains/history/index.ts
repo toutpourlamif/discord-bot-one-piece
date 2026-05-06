@@ -1,1 +1,1 @@
-export { appendHistory, writeEventResolution } from './repository.js';
+export { appendHistory } from './repository.js';
