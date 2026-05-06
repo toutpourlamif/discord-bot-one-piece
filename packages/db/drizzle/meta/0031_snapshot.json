@@ -1,6 +1,6 @@
 {
-  "id": "67ea0478-9f1f-40d1-9465-1e246a8a4668",
-  "prevId": "2f9825ad-c5e9-47aa-b43f-2ce7b94d48fc",
+  "id": "e833bf96-f606-4bb9-9701-e4e0ec4287ae",
+  "prevId": "67ea0478-9f1f-40d1-9465-1e246a8a4668",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
@@ -867,6 +867,25 @@
           "primaryKey": false,
           "notNull": true,
           "default": "'foosha'"
+        },
+        "travel_target_zone": {
+          "name": "travel_target_zone",
+          "type": "zone",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "travel_started_bucket": {
+          "name": "travel_started_bucket",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "travel_eta_bucket": {
+          "name": "travel_eta_bucket",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
         }
       },
       "indexes": {},
