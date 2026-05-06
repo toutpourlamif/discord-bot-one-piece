@@ -3,6 +3,7 @@ import type { Interaction, InteractionReplyOptions } from 'discord.js';
 import { devButtonHandlers } from '../domains/_dev/interactions/index.js';
 import { infoButtonHandlers } from '../domains/_info/index.js';
 import { crewButtonHandlers } from '../domains/crew/index.js';
+import { eventButtonHandlers } from '../domains/event/index.js';
 import { requireGuildId } from '../domains/guild/index.js';
 import * as guildRepository from '../domains/guild/repository.js';
 import { playerButtonHandlers } from '../domains/player/index.js';
@@ -21,6 +22,7 @@ const allButtonHandlers: Array<ButtonHandler> = [
   ...shipButtonHandlers,
   ...resourceButtonHandlers,
   ...crewButtonHandlers,
+  ...eventButtonHandlers,
   ...devButtonHandlers,
 ];
 const buttonRegistry = buildRegistry(allButtonHandlers, (h) => h.name);
