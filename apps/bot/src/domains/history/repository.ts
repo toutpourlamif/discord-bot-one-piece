@@ -22,15 +22,13 @@ export async function appendHistory({ type, payload, actorPlayerId, target, clie
   });
 }
 
-export type DrizzleTx = DbOrTransaction;
-
 type WriteEventResolutionInput = {
   actorPlayerId: number;
   eventType: string;
   bucketId: number;
   payload?: JSONFromSQL | null;
   target?: HistoryTarget;
-  tx?: DrizzleTx;
+  client?: DbOrTransaction;
 };
 
 export async function writeEventResolution({
@@ -39,10 +37,8 @@ export async function writeEventResolution({
   bucketId,
   payload,
   target,
-  tx,
+  client = db,
 }: WriteEventResolutionInput): Promise<void> {
-  const client = tx ?? db;
-
   await client.insert(history).values({
     actorPlayerId,
     eventType,
