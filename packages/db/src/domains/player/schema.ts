@@ -29,6 +29,7 @@ export const player = pgTable('player', {
   ...timestamps(),
   lastProcessedBucketId: integer('last_processed_bucket_id').notNull(),
   isAdmin: boolean('is_admin').notNull().default(false),
+  currentZone: zoneEnum('current_zone').notNull().default('foosha'),
   travelTargetZone: zoneEnum('travel_target_zone'),
   travelStartedBucket: integer('travel_started_bucket'),
   travelEtaBucket: integer('travel_eta_bucket'),
