@@ -3,7 +3,7 @@ import { buildOpEmbed } from '../../../discord/utils/index.js';
 
 export const embedCommand: Command = {
   name: 'embed',
-  async handler(message) {
+  async handler({ message }) {
     const dateUnix = Math.floor(Date.now() / 1000);
 
     const embed = buildOpEmbed()

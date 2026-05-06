@@ -5,7 +5,7 @@ import * as devilFruitRepository from '../../../devil_fruit/repository.js';
 
 import { replyDebugData } from './utils.js';
 
-export const handleDf: Command['handler'] = async (message, args) => {
+export const handleDf: Command['handler'] = async ({ message, args }) => {
   const id = parseIntegerArg(args[0]);
 
   const devilFruit = await devilFruitRepository.findById(id);

@@ -1,6 +1,7 @@
 import { sql } from 'drizzle-orm';
 import { bigserial, index, integer, jsonb, pgTable, text, timestamp } from 'drizzle-orm/pg-core';
 
+import type { JSONFromSQL } from '../../shared/types.js';
 import { player } from '../player/schema.js';
 
 export const history = pgTable(
@@ -14,6 +15,7 @@ export const history = pgTable(
     targetType: text('target_type'),
     targetId: integer('target_id'),
     payload: jsonb('payload')
+      .$type<JSONFromSQL>()
       .notNull()
       .default(sql`'{}'::jsonb`),
   },

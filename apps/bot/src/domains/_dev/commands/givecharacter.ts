@@ -7,7 +7,7 @@ import { findOrCreatePlayer } from '../../player/service.js';
 // TODO: supprimer avant la prod
 export const giveCharacterCommand: Command = {
   name: 'givecharacter',
-  async handler(message, args) {
+  async handler({ message, args }) {
     const target = getTargetUser(message);
     const queryArgs = message.mentions.users.first() ? args.slice(1) : args;
     const query = getQuery(queryArgs, { emptyMessage: 'Tu dois fournir un nom.' });
@@ -17,9 +17,9 @@ export const giveCharacterCommand: Command = {
       throw new NotFoundError(`Aucun personnage trouvé pour ${query}.`);
     }
 
-    const { player } = await findOrCreatePlayer(target.id, target.username, message.guildId!);
-    const createdInstance = await characterRepository.createCharacterInstance(player.id, hit.entity.id);
+    const { player: targetPlayer } = await findOrCreatePlayer(target.id, target.username, message.guildId!);
+    const createdInstance = await characterRepository.createCharacterInstance(targetPlayer.id, hit.entity.id);
 
-    await message.reply({ embeds: [buildOpEmbed().setDescription(`${player.name} a reçu ${createdInstance.name}.`)] });
+    await message.reply({ embeds: [buildOpEmbed().setDescription(`${targetPlayer.name} a reçu ${createdInstance.name}.`)] });
   },
 };

@@ -1,7 +1,5 @@
-import { db, eventInstance, type EventInstance } from '@one-piece/db';
+import { db, eventInstance, type EventInstance, type JSONFromSQL } from '@one-piece/db';
 import { asc, eq } from 'drizzle-orm';
-
-import type { JSONFromSQL } from '../../shared/types.js';
 
 export type PendingEventInstance = Omit<EventInstance, 'playerId' | 'state'> & {
   state: Record<string, unknown>;

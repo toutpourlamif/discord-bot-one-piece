@@ -57,14 +57,14 @@ Déclenché quand l'item entre dans l'inventaire.
 Quand le joueur clique sur "Partir vers Drum", l'engine fait dans la même transaction :
 
 1. **Bascule la zone** : `recordZoneChange(player, 'sea_paradise')`.
-2. **Remplit les colonnes de voyage** sur `player` : `travel_target_zone = 'drum'`, `travel_started_bucket = bucketId`, `travel_eta_bucket = bucketId + duréeCalculée`.
+2. **Remplit les colonnes de voyage** sur `player` : `travel_target_zone = 'drum'`, `travel_started_bucket = currentBucket`, `travel_eta_bucket = currentBucket + round(duréeBuckets)`.
 3. **Trace dans `history`** : `event_type = 'travel.departed'`, payload avec origine, destination, durée estimée.
 
 À partir de là, le joueur est en transit. Les événements en mer peuvent commencer à le concerner.
 
 ## Comment on arrive à destination
 
-Tout au long du voyage, à chaque `!recap` l'engine vérifie : `bucketId >= player.travel_eta_bucket` ?
+Tout au long du voyage, à chaque `!recap` l'engine vérifie : `currentBucket >= player.travel_eta_bucket` ?
 
 Si oui, l'engine génère automatiquement un event d'arrivée :
 

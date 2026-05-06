@@ -6,11 +6,13 @@ Ce que la navigation ajoute à la base de données.
 
 Trois colonnes pour suivre l'état de voyage du joueur :
 
-| Colonne                 | Type         | Quand c'est rempli                                                |
-| ----------------------- | ------------ | ----------------------------------------------------------------- |
-| `travel_target_zone`    | text NULL    | Si le joueur est en mer : l'île qu'il vise. NULL s'il est ancré.  |
-| `travel_started_bucket` | integer NULL | Le bucket où il a quitté son île précédente. NULL s'il est ancré. |
-| `travel_eta_bucket`     | integer NULL | Le bucket auquel il devrait arriver. NULL s'il est ancré.         |
+| Colonne                 | Type         | Quand c'est rempli                                                     |
+| ----------------------- | ------------ | ---------------------------------------------------------------------- |
+| `travel_target_zone`    | text NULL    | Si le joueur est en mer : l'île qu'il vise. NULL s'il est ancré.       |
+| `travel_started_bucket` | integer NULL | Le `bucket_id` où il a quitté son île précédente. NULL s'il est ancré. |
+| `travel_eta_bucket`     | integer NULL | Le `bucket_id` auquel il devrait arriver. NULL s'il est ancré.         |
+
+On stocke des `bucket_id` (entiers) et pas des timestamps : tout le moteur d'events raisonne en buckets (`event_instance.bucket_id`, `last_processed_bucket_id`, `history.bucket_id`), les durées d'arêtes sont déjà en buckets (`baseDurationBuckets`), et le check d'arrivée devient une comparaison d'entiers (`currentBucket >= travel_eta_bucket`).
 
 Quand le joueur **part**, les trois colonnes se remplissent.
 Quand il **arrive** (ou qu'il **dérive**), les trois colonnes se vident.
