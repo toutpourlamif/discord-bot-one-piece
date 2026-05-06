@@ -4,7 +4,7 @@ import type { ButtonHandler } from '../../../discord/types.js';
 import { assertInteractorIsTheOwner, parseIntegerArg, parseOwnerDiscordId } from '../../../discord/utils/index.js';
 import { UPGRADE_SHIP_BUTTON_NAME } from '../constants.js';
 import { assertPlayerOwnsShip } from '../utils/index.js';
-import { buildUpgradeShipView } from '../views/build-upgrade-ship-view.js';
+import { buildUpgradeShipView } from '../views/index.js';
 
 async function handle(interaction: ButtonInteraction, args: Array<string>): Promise<void> {
   const ownerDiscordId = parseOwnerDiscordId(args[0]);

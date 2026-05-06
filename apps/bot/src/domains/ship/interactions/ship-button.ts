@@ -3,7 +3,7 @@ import type { ButtonInteraction } from 'discord.js';
 import type { ButtonHandler } from '../../../discord/types.js';
 import { assertInteractorIsTheOwner, parseIntegerArg, parseOwnerDiscordId } from '../../../discord/utils/index.js';
 import { SHIP_BUTTON_NAME } from '../constants.js';
-import { buildShipView } from '../views/ship-view.js';
+import { buildShipView } from '../views/index.js';
 
 async function handle(interaction: ButtonInteraction, args: Array<string>): Promise<void> {
   const ownerDiscordId = parseOwnerDiscordId(args[0]);

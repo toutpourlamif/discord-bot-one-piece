@@ -1,5 +1,5 @@
 import type { Command } from '../../../discord/types.js';
-import { buildUpgradeShipView } from '../../ship/views/build-upgrade-ship-view.js';
+import { buildUpgradeShipView } from '../../ship/views/index.js';
 
 export const upgradeShipCommand: Command = {
   name: 'upgrade-ship',

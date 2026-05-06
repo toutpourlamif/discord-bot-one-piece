@@ -6,19 +6,18 @@ import type { View } from '../../../discord/types.js';
 import { buildCustomId, buildOpEmbed } from '../../../discord/utils/index.js';
 import { formatBerry } from '../../economy/utils/format-berry.js';
 import { CONFIRM_SHIP_MODULE_UPGRADE_BUTTON_NAME } from '../constants.js';
-import { SHIP_MODULE_LABELS, SHIP_MODULES } from '../modules.js';
+import { SHIP_MODULE_LABELS } from '../modules.js';
 import { findByPlayerIdOrThrow } from '../repository.js';
 import { getShipModuleUpgradePreview } from '../service.js';
 import type { ShipModuleUpgradePreview } from '../types.js';
-import { getShipModuleLevel } from '../utils/index.js';
+import { buildBackAction, getShipModuleLevel, isShipModuleMaxLevel } from '../utils/index.js';
 
-import { buildBackAction } from './build-back-action.js';
 import { buildMaxLevelView } from './build-max-level-view.js';
 
 export async function buildUpgradeModuleView(playerId: number, ownerDiscordId: string, moduleKey: ShipModuleKey): Promise<View> {
   const ship = await findByPlayerIdOrThrow(playerId);
   const level = getShipModuleLevel(ship, moduleKey);
-  if (level >= SHIP_MODULES[moduleKey].valueByLevel.length) {
+  if (isShipModuleMaxLevel(moduleKey, level)) {
     return buildMaxLevelView(playerId, ownerDiscordId, moduleKey);
   }
 

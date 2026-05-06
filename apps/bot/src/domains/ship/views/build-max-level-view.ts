@@ -3,8 +3,7 @@ import type { ShipModuleKey } from '@one-piece/db';
 import type { View } from '../../../discord/types.js';
 import { buildOpEmbed } from '../../../discord/utils/index.js';
 import { SHIP_MODULE_LABELS } from '../modules.js';
-
-import { buildBackAction } from './build-back-action.js';
+import { buildBackAction } from '../utils/index.js';
 
 export function buildMaxLevelView(playerId: number, ownerDiscordId: string, moduleKey: ShipModuleKey): View {
   return {
