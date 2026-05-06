@@ -3,6 +3,7 @@ import { sql } from 'drizzle-orm';
 
 import type { HistoryTarget } from './types/common.js';
 import type { Log } from './types/index.js';
+import { parseHistoryTargetId } from './utils.js';
 
 type AppendHistoryArgs = Log & {
   actorPlayerId?: number;
@@ -15,7 +16,7 @@ export async function appendHistory({ type, payload, actorPlayerId, target, clie
     eventType: type,
     actorPlayerId,
     targetType: target?.type,
-    targetId: target?.id,
+    targetId: parseHistoryTargetId(target?.id),
     payload,
   });
 }
@@ -52,18 +53,4 @@ export async function writeEventResolution({
     targetType: targetType ?? null,
     targetId: parseHistoryTargetId(targetId),
   });
-}
-
-function parseHistoryTargetId(targetId: string | null | undefined): number | null {
-  if (targetId == null) {
-    return null;
-  }
-
-  const parsed = Number(targetId);
-
-  if (!Number.isInteger(parsed)) {
-    throw new TypeError('history targetId must be an integer string');
-  }
-
-  return parsed;
 }
