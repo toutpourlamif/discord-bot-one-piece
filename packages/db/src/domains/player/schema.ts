@@ -1,9 +1,10 @@
 import { sql } from 'drizzle-orm';
-import { pgTable, serial, varchar, bigint, integer, boolean } from 'drizzle-orm/pg-core';
+import { pgTable, serial, varchar, bigint, integer, boolean, timestamp } from 'drizzle-orm/pg-core';
 
 import { MAX_CHARACTER_NAME_LENGTH } from '../../shared/constants.js';
 import { timestamps } from '../../shared/helpers.js';
 import { guild } from '../guild/schema.js';
+import { zoneEnum } from '../navigation/schema.js';
 
 export const player = pgTable('player', {
   id: serial('id').primaryKey(),
@@ -28,6 +29,9 @@ export const player = pgTable('player', {
   ...timestamps(),
   lastProcessedBucketId: integer('last_processed_bucket_id').notNull(),
   isAdmin: boolean('is_admin').notNull().default(false),
+  travelTargetZone: zoneEnum('travel_target_zone'),
+  travelStartedAt: timestamp('travel_started_at', { withTimezone: true }),
+  travelEtaAt: timestamp('travel_eta_at', { withTimezone: true }),
 });
 
 export type Player = typeof player.$inferSelect;
