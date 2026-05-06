@@ -15,7 +15,7 @@ export function buildResourceInfoEmbed(template: ResourceTemplate): EmbedBuilder
   }
 
   if (template.imageUrl) {
-    embed.setThumbnail(buildAssetUrl(template.imageUrl));
+    embed.setImage(buildAssetUrl(template.imageUrl));
   }
 
   return embed;
