@@ -5,7 +5,6 @@ import type { JSONFromSQL } from '../../shared/types.js';
 
 import type { HistoryTarget } from './types/common.js';
 import type { Log } from './types/index.js';
-import { parseHistoryTargetId } from './utils.js';
 
 type AppendHistoryArgs = Log & {
   actorPlayerId?: number;
@@ -18,7 +17,7 @@ export async function appendHistory({ type, payload, actorPlayerId, target, clie
     eventType: type,
     actorPlayerId,
     targetType: target?.type,
-    targetId: parseHistoryTargetId(target?.id),
+    targetId: target?.id,
     payload,
   });
 }
@@ -30,8 +29,7 @@ type WriteEventResolutionInput = {
   eventType: string;
   bucketId: number;
   payload?: JSONFromSQL | null;
-  targetType?: string | null;
-  targetId?: string | null;
+  target?: HistoryTarget;
   tx?: DrizzleTx;
 };
 
@@ -40,8 +38,7 @@ export async function writeEventResolution({
   eventType,
   bucketId,
   payload,
-  targetType,
-  targetId,
+  target,
   tx,
 }: WriteEventResolutionInput): Promise<void> {
   const client = tx ?? db;
@@ -52,7 +49,7 @@ export async function writeEventResolution({
     bucketId,
     occurredAt: sql`now()`,
     payload: payload ?? {},
-    targetType: targetType ?? null,
-    targetId: parseHistoryTargetId(targetId),
+    targetType: target?.type,
+    targetId: target?.id,
   });
 }
