@@ -1,0 +1,1 @@
+ALTER TABLE "player" ADD COLUMN "current_zone" "zone" DEFAULT 'foosha' NOT NULL;
