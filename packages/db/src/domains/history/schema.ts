@@ -1,18 +1,21 @@
 import { sql } from 'drizzle-orm';
 import { bigserial, index, integer, jsonb, pgTable, text, timestamp } from 'drizzle-orm/pg-core';
 
+import type { JSONFromSQL } from '../../shared/types.js';
 import { player } from '../player/schema.js';
 
 export const history = pgTable(
   'history',
   {
     id: bigserial('id', { mode: 'bigint' }).primaryKey(),
+    bucketId: integer('bucket_id'),
     occurredAt: timestamp('occurred_at', { withTimezone: true }).notNull().defaultNow(),
     eventType: text('event_type').notNull(),
     actorPlayerId: integer('actor_player_id').references(() => player.id, { onDelete: 'set null' }),
     targetType: text('target_type'),
     targetId: integer('target_id'),
     payload: jsonb('payload')
+      .$type<JSONFromSQL>()
       .notNull()
       .default(sql`'{}'::jsonb`),
   },

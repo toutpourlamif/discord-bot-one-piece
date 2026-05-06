@@ -1,3 +1,5 @@
+import type { View } from './types.js';
+
 export type AppErrorSeverity = 'warn' | 'error';
 
 export class AppError extends Error {
@@ -5,6 +7,7 @@ export class AppError extends Error {
     message: string,
     readonly severity: AppErrorSeverity,
     readonly userMessage = message,
+    readonly userView?: View,
   ) {
     super(message);
     this.name = 'AppError';

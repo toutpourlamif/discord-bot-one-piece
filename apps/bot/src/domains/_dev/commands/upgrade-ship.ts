@@ -7,7 +7,7 @@ export const upgradeShipCommand: Command = {
   name: 'upgrade-ship',
   async handler(message) {
     const user = getSelfUser(message);
-    const { player } = await findOrCreatePlayer(user.id, user.username);
+    const { player } = await findOrCreatePlayer(user.id, user.username, message.guildId!);
     await message.reply(await buildUpgradeShipView(player.id, user.id));
   },
 };

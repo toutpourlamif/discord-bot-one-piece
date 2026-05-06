@@ -4,14 +4,14 @@ import { devCommands } from '../domains/_dev/index.js';
 import { infoCommands } from '../domains/_info/index.js';
 import { crewCommands } from '../domains/crew/index.js';
 import { fishingCommands } from '../domains/fishing/index.js';
-import { findOrCreatePlayer, playerCommands } from '../domains/player/index.js';
+import { playerCommands } from '../domains/player/index.js';
 import { resourceCommands } from '../domains/resource/index.js';
 import { shipCommands } from '../domains/ship/commands/index.js';
 import { buildRegistry } from '../shared/build-registry.js';
 
-import { AdminOnlyError, AppError } from './errors.js';
-import { getSelfUser } from './utils/get-self-user.js';
+import { AppError } from './errors.js';
 import { buildOpEmbed } from './utils/index.js';
+
 const allCommands = [
   ...playerCommands,
   ...infoCommands,
@@ -39,21 +39,14 @@ export async function routeMessage(message: Message, prefix: string): Promise<vo
   if (!command) return;
 
   try {
-    if (command.adminOnly === true) {
-      const user = getSelfUser(message);
-      const { player } = await findOrCreatePlayer(user.id, user.username);
-      if (!player.isAdmin) {
-        throw new AdminOnlyError();
-      }
-    }
     await command.handler(message, args);
   } catch (error) {
     if (error instanceof AppError) {
       console[error.severity](error);
-      await message.reply({ embeds: [buildOpEmbed(error.severity).setDescription(error.userMessage)] });
+      await message.reply({ embeds: [buildOpEmbed(error.severity).setDescription(error.userMessage)], failIfNotExists: false });
     } else {
       console.error(error);
-      await message.reply({ embeds: [buildOpEmbed('error').setDescription('Une erreur est survenue.')] });
+      await message.reply({ embeds: [buildOpEmbed('error').setDescription('Une erreur est survenue.')], failIfNotExists: false });
     }
   }
 }

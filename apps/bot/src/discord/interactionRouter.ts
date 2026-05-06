@@ -3,6 +3,7 @@ import type { Interaction, InteractionReplyOptions } from 'discord.js';
 import { devButtonHandlers } from '../domains/_dev/interactions/index.js';
 import { infoButtonHandlers } from '../domains/_info/index.js';
 import { crewButtonHandlers } from '../domains/crew/index.js';
+import { ensureGuildExists } from '../domains/guild/index.js';
 import { playerButtonHandlers } from '../domains/player/index.js';
 import { resourceButtonHandlers } from '../domains/resource/index.js';
 import { shipButtonHandlers } from '../domains/ship/index.js';
@@ -26,8 +27,8 @@ const buttonRegistry = buildRegistry(allButtonHandlers, (h) => h.name);
 /** Dispatche une interaction vers le bon handler. Voir `docs/discord.md`. */
 export async function routeInteraction(interaction: Interaction): Promise<void> {
   if (!interaction.isButton()) return;
-
   try {
+    await ensureGuildExists(interaction.guildId);
     const [name, ...args] = interaction.customId.split(CUSTOM_ID_SEPARATOR);
     if (!name) throw new ValidationError(`nom pas trouvé: ${interaction.customId}`);
 
@@ -38,9 +39,12 @@ export async function routeInteraction(interaction: Interaction): Promise<void> 
   } catch (error) {
     if (error instanceof AppError) {
       console[error.severity](error);
-      await replyWithEphemeralError(interaction, {
-        embeds: [buildOpEmbed(error.severity).setDescription(error.userMessage)],
-      });
+      await replyWithEphemeralError(
+        interaction,
+        error.userView ?? {
+          embeds: [buildOpEmbed(error.severity).setDescription(error.userMessage)],
+        },
+      );
     } else {
       console.error(error);
       await replyWithEphemeralError(interaction, {

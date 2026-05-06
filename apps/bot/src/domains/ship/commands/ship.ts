@@ -7,7 +7,7 @@ export const shipCommand: Command = {
   name: 'ship',
   async handler(message) {
     const user = getTargetUser(message);
-    const { player } = await findOrCreatePlayer(user.id, user.username);
+    const { player } = await findOrCreatePlayer(user.id, user.username, message.guildId!);
     await message.reply(await buildShipView(player.id, message.author.id));
   },
 };

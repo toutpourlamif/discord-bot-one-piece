@@ -15,7 +15,7 @@ export const changeCaptainCommand: Command = {
   name: 'changecaptain',
   async handler(message) {
     const user = getSelfUser(message);
-    const { player } = await findOrCreatePlayer(user.id, user.username);
+    const { player } = await findOrCreatePlayer(user.id, user.username, message.guildId!);
     const crew = await getCrewByPlayerId(player.id);
 
     if (crew.length === 1) {

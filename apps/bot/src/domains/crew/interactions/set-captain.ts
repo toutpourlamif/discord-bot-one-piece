@@ -15,7 +15,7 @@ async function handle(interaction: ButtonInteraction, args: Array<string>): Prom
   const targetInstanceId = parseIntegerArg(args[0]);
 
   const interactionUser = interaction.user;
-  const { player } = await findOrCreatePlayer(interactionUser.id, interactionUser.username);
+  const { player } = await findOrCreatePlayer(interactionUser.id, interactionUser.username, interaction.guildId!);
 
   const targetInstance = await crewRepository.findCharacterInstanceById(targetInstanceId);
   const ownerPlayerId = targetInstance?.playerId;

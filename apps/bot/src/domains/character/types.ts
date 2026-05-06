@@ -5,6 +5,7 @@ export type CharacterRow = {
   instanceId: number;
   name: string;
   nickname: string | null;
+  imageUrl: string | null;
   hp: number;
   combat: number;
   joinedCrewAt: Date | null;

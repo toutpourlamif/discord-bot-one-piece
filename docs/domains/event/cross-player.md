@@ -1,61 +1,33 @@
 # Cross-player : rencontres entre joueurs
 
-Quand deux joueurs sont dans la même zone et que le seed dit "rencontre", on matérialise l'event **pour les deux**.
+Quand deux joueurs sont **actuellement** dans la même zone et que le seed dit "rencontre", on matérialise l'event **pour les deux**.
 
-## Comment on sait qui est où
+## Position courante
 
-Chaque joueur a sa zone courante stockée sur `player.current_zone`. Une simple requête répond à "qui est dans Z en ce moment" :
+Chaque joueur a une colonne `player.current_zone` (cf domaine `player`) qui pointe sur la zone où il est en ce moment. Lookup O(1), pas d'historique d'intervalles à maintenir.
 
-```sql
-SELECT id FROM player WHERE current_zone = 'foosha';
-```
+## La règle d'or : encounters seulement au bucket courant
 
-> **Pourquoi pas une table d'historique des zones (type `zone_presence`)** : la règle clé ci-dessous (encounter uniquement avec un joueur synced past le bucket courant) garantit qu'on n'a **jamais** besoin de savoir où était quelqu'un dans le passé — on ne s'intéresse qu'à où il est maintenant. Une simple colonne sur `player` suffit.
+Quand le moteur d'A processe ses buckets pendant un `!recap` :
 
-Tout changement de zone : UPDATE `player.current_zone` + INSERT `history.player.zone_changed` dans la même transaction. Si on veut un jour reconstruire le déplacement d'un joueur, on le dérive du log `history`.
+- Sur **tous les buckets passés** (entre `last_recap_at` et `now() - 1 bucket`) → **aucun check d'encounter**. Juste les passifs et interactifs perso d'A.
+- Sur le **dernier bucket** processé (= le bucket courant, là où A rattrape `now()`) → check des encounters : "qui d'autre est actuellement dans la même zone que moi ET synced past ce bucket ?".
 
-## Règle clé : encounter possible uniquement avec un joueur synced past le bucket
+> **Pourquoi seulement le bucket courant** : sinon on rétroactivement modifie le passé d'autres joueurs déjà synchros. Exemple : Rayan synced à 18h, Hakim recap depuis 12h. Si Hakim "attaque Rayan à 15h", Rayan a déjà processé son bucket 15h sans cet event et a peut-être agi entre 15h et 18h sur la base d'un état périmé. Inconsistance temporelle pure. La règle "bucket courant uniquement" empêche tout ça.
 
-Quand le moteur d'A processe le bucket B et veut un encounter avec X :
-
-> `X.last_processed_bucket_id >= B` ?
-
-- **Oui** → X a vécu ce moment dans son timeline → encounter généré, `event_instance` insérée pour A et X.
-- **Non** → X est en retard → **skip**. X n'existe pas dans le monde à ce moment-là.
-
-**Game design : on ne croise que des joueurs déjà synchros à ce moment.** Les AFK sont invisibles aux encounters tant qu'ils ne sont pas synchros.
-
-### Pourquoi cette règle élimine les conflits
-
-Sans elle : Hakim recap à 14h, encounter avec Rayan AFK, Hakim résout un combat. Rayan revient, recap, sa timeline diverge (mainstory à 13h30 → Drum). Conflit avec le combat à 14h.
-
-Avec : Hakim au bucket 14h voit `Rayan.last_processed_bucket_id` correspondant à 12h → skip. **Aucun encounter n'est jamais généré pour un AFK.** Aucun conflit possible.
-
-### Conséquence : encounters AFK différés (pas perdus)
-
-L'encounter Hakim-Rayan ne disparaît pas. Quand Rayan recap au-delà de 14h, son moteur tire le seed du bucket 14h. Si "rencontre Hakim" et que Hakim est synced past 14h, encounter généré pour les deux **à ce moment-là** (au recap de Rayan).
-
-### Encounters temps réel
-
-Quand les deux sont actifs et synchros au bucket courant, le premier qui recap (au prochain bucket complété, donc ~15 min) voit l'autre comme synced et insère pour les deux. L'autre reçoit un DM ou voit l'event au prochain `!recap`. Comme la règle "must be synced" force un recap fréquent, l'event est traité dans la foulée.
-
-### Trade-off accepté : monde "plus vide"
-
-Si la moitié des joueurs sont AFK, le monde paraît plus vide pour les actifs. Sain : peuplé par ceux qui jouent, pas par des fantômes. Un AFK qui revient et `!recap` redevient visible aux autres dès que son `last_processed_bucket_id` rattrape leur fenêtre.
-
-## Cohérence temporelle automatique
-
-Comme **aucun joueur ne peut agir sans être synced**, deux joueurs qui s'encountent sont forcément à jour dans leur timeline. `player.current_zone` et `history` sont alignés sur ce qui s'est passé jusqu'à leur `last_processed_bucket_id`. Aucune incohérence à gérer.
+> **Conséquence** : un encounter cross-player n'arrive **que** quand les deux joueurs sont actifs et synchros à peu près en même temps.
 
 ## Première détection : INSERT pour les deux
 
-Quand A recap, seed dit "encounter A-B au bucket 14h", B est synced past 14h00 :
+> // TODO: `encounter_id` n'est pas encore en schéma (cf `data-model.md`). Le mécanisme décrit ci-dessous est l'état cible.
+
+Quand A processe son bucket courant, le seed dit "encounter A-B", et B est synced past ce bucket :
 
 - INSERT `event_instance` pending **pour A** avec `encounter_id = X`.
 - INSERT `event_instance` pending **pour B** avec le même `encounter_id = X`.
-- `encounter_id = hash(bucket_id, sorted_player_ids)` → identique si B re-tire l'encounter plus tard.
+- `encounter_id = hash(bucket_id, sorted_player_ids)` → identique si B re-tire l'encounter de son côté plus tard.
 
-L'unicité `(player_id, type, bucket_id)` garantit pas de doublon : si B recap après A et re-tire, INSERT échoue silencieusement.
+L'unicité `(player_id, event_key, bucket_id)` garantit pas de doublon : si B recap quelques secondes après A et re-tire le même encounter, l'INSERT échoue silencieusement.
 
 > **Race condition** = situation où le résultat dépend de l'ordre/timing entre opérations parallèles. Sans la contrainte d'unicité, deux INSERT simultanés pourraient créer des doublons. Avec, l'un gagne, l'autre échoue proprement.
 
@@ -96,15 +68,15 @@ const piratesAlliance: EventGenerator = {
 };
 ```
 
-> **Tous les générateurs cross-player utilisent `seedScope: 'zone'`** — c'est ce qui permet à A et B (tirant chacun de leur côté) d'arriver à la même conclusion ("encounter au bucket 14h") sans table partagée.
+> **Tous les générateurs cross-player utilisent `seedScope: 'zone'`** — c'est ce qui permet à A et B (tirant chacun de leur côté) d'arriver à la même conclusion ("encounter au bucket B") sans table partagée.
 
 `appliesTo` = `conditions` mais pour les paires.
 
 ## Encounters globaux (inter-serveur)
 
-Les rencontres se produisent entre **tous les joueurs du bot**, peu importe leur serveur Discord. Rayan sur "OnePieceFR" peut croiser Hakim sur "PirateLand" tant qu'ils sont dans la même zone au même bucket.
+Les rencontres se produisent entre **tous les joueurs du bot**, peu importe leur serveur Discord. Rayan sur "OnePieceFR" peut croiser Hakim sur "PirateLand" tant qu'ils sont dans la même zone au même bucket courant.
 
-> **Pourquoi inter-serveur** : avec must-be-synced + même zone + même bucket comme contraintes, restreindre aussi à la même guild rendrait les rencontres trop rares dans la pratique. La densité de rencontres est ce qui rend le monde vivant. Inter-serveur permet aussi de tomber sur des inconnus, ce qui est thématiquement fidèle à One Piece.
+> **Pourquoi inter-serveur** : avec must-be-synced + même zone + même bucket courant comme contraintes, restreindre aussi à la même guild rendrait les rencontres trop rares dans la pratique. La densité de rencontres est ce qui rend le monde vivant. Inter-serveur permet aussi de tomber sur des inconnus, ce qui est thématiquement fidèle à One Piece.
 
 > **Indépendant du leaderboard** : le `!leaderboard` reste **par serveur** (liste les membres présents sur le serveur courant qui ont joué — voir le domaine `guild_player` pour le tracking présence joueur/serveur). Un joueur peut donc apparaître dans plusieurs leaderboards locaux sans que ça change quoi que ce soit aux encounters.
 
