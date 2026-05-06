@@ -2,7 +2,7 @@ export { closeDb, db, type Db, type DbOrTransaction } from './client.js';
 export { MAX_CHARACTER_NAME_LENGTH } from './shared/constants.js';
 export { type JSONFromSQL } from './shared/types.js';
 export * from './schema.js';
-export { type Guild } from './domains/guild/index.js';
+export { MAX_GUILD_PREFIX_LENGTH, type Guild } from './domains/guild/index.js';
 export { ISLANDS, SEAS, ZONES, type Island, type Sea, type Zone } from './domains/navigation/index.js';
 export { type Player } from './domains/player/index.js';
 export { type DevilFruitTemplate } from './domains/devil_fruit/index.js';

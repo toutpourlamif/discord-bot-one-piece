@@ -4,7 +4,7 @@ import { devCommands } from '../domains/_dev/index.js';
 import { infoCommands } from '../domains/_info/index.js';
 import { crewCommands } from '../domains/crew/index.js';
 import { fishingCommands } from '../domains/fishing/index.js';
-import { requireGuildId } from '../domains/guild/index.js';
+import { guildCommands, requireGuildId } from '../domains/guild/index.js';
 import * as guildRepository from '../domains/guild/repository.js';
 import { playerCommands } from '../domains/player/index.js';
 import { findOrCreatePlayer } from '../domains/player/service.js';
@@ -23,27 +23,29 @@ const allCommands = [
   ...resourceCommands,
   ...fishingCommands,
   ...crewCommands,
+  ...guildCommands,
 ];
 const registry = buildRegistry(allCommands, (command) =>
   Array.isArray(command.name) ? command.name.map((name) => name.toLowerCase()) : command.name.toLowerCase(),
 );
 
 /** Dispatche un message vers le bon handler de commande. Voir `docs/discord.md`. */
-export async function routeMessage(message: Message, prefix: string): Promise<void> {
+export async function routeMessage(message: Message): Promise<void> {
   if (message.author.bot) return;
-
-  const content = message.content.trim();
-  if (!content.startsWith(prefix)) return;
-
-  const [rawName, ...args] = content.slice(prefix.length).trim().split(/\s+/);
-  if (!rawName) return;
-
-  const command = registry.get(rawName.toLowerCase());
-  if (!command) return;
 
   try {
     const guildId = requireGuildId(message.guildId);
     const guild = await guildRepository.findOrCreate(guildId);
+
+    const content = message.content.trim();
+    if (!content.startsWith(guild.prefix)) return;
+
+    const [rawName, ...args] = content.slice(guild.prefix.length).trim().split(/\s+/);
+    if (!rawName) return;
+
+    const command = registry.get(rawName.toLowerCase());
+    if (!command) return;
+
     const { player } = await findOrCreatePlayer(message.author.id, message.author.username, guild.id);
     await command.handler({ message, args, player, guild });
   } catch (error) {
