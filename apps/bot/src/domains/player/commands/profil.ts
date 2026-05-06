@@ -1,13 +1,11 @@
 import type { Command } from '../../../discord/types.js';
-import { getTargetUser } from '../../../discord/utils/index.js';
-import { buildProfilView } from '../profil-view.js';
-import { findOrCreatePlayer } from '../service.js';
+import { buildProfilView } from '../build-profil-view.js';
+import { resolveTargetPlayer } from '../utils/index.js';
 
 export const profilCommand: Command = {
   name: 'profil',
-  async handler(message) {
-    const target = getTargetUser(message);
-    const { player } = await findOrCreatePlayer(target.id, target.username, message.guildId!);
-    await message.reply(await buildProfilView(player.id, message.author.id));
+  async handler(ctx) {
+    const targetPlayer = await resolveTargetPlayer(ctx);
+    await ctx.message.reply(await buildProfilView(targetPlayer.id, ctx.message.author.id));
   },
 };
