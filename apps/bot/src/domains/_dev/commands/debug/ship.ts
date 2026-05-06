@@ -8,7 +8,7 @@ import { replyDebugData } from './utils.js';
 
 export const handleShip: Command['handler'] = async (message) => {
   const target = getTargetUser(message);
-  const { player } = await findOrCreatePlayer(target.id, target.username);
+  const { player } = await findOrCreatePlayer(target.id, target.username, message.guildId!);
   const ship = await shipRepository.findByPlayerId(player.id);
 
   if (!ship) {

@@ -43,10 +43,10 @@ export async function routeMessage(message: Message, prefix: string): Promise<vo
   } catch (error) {
     if (error instanceof AppError) {
       console[error.severity](error);
-      await message.reply({ embeds: [buildOpEmbed(error.severity).setDescription(error.userMessage)] });
+      await message.reply({ embeds: [buildOpEmbed(error.severity).setDescription(error.userMessage)], failIfNotExists: false });
     } else {
       console.error(error);
-      await message.reply({ embeds: [buildOpEmbed('error').setDescription('Une erreur est survenue.')] });
+      await message.reply({ embeds: [buildOpEmbed('error').setDescription('Une erreur est survenue.')], failIfNotExists: false });
     }
   }
 }

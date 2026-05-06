@@ -1,0 +1,2 @@
+CREATE TYPE "public"."character_race" AS ENUM('HUMAN', 'MINK', 'FISHMAN', 'GIANT', 'LUNARIAN', 'SKYPIEAN', 'CYBORG', 'MERMAID', 'DWARF');--> statement-breakpoint
+ALTER TABLE "character_template" ADD COLUMN "race" character_race NOT NULL;

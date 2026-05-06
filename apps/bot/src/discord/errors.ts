@@ -1,3 +1,5 @@
+import type { View } from './types.js';
+
 export type AppErrorSeverity = 'warn' | 'error';
 
 export class AppError extends Error {
@@ -5,6 +7,7 @@ export class AppError extends Error {
     message: string,
     readonly severity: AppErrorSeverity,
     readonly userMessage = message,
+    readonly userView?: View,
   ) {
     super(message);
     this.name = 'AppError';
@@ -15,6 +18,12 @@ export class NotFoundError extends AppError {
   constructor(message = 'Introuvable.') {
     super(message, 'warn');
     this.name = 'NotFoundError';
+  }
+}
+export class ForbiddenError extends AppError {
+  constructor(message = 'Introuvable.') {
+    super(message, 'warn');
+    this.name = 'ForbiddenError';
   }
 }
 
@@ -29,5 +38,12 @@ export class InternalError extends AppError {
   constructor(message: string) {
     super(message, 'error', 'Une erreur est survenue, veuillez contacter un admin.');
     this.name = 'InternalError';
+  }
+}
+
+export class AdminOnlyError extends AppError {
+  constructor() {
+    super('Cette commande est réservée aux admins.', 'warn');
+    this.name = 'AdminOnlyError';
   }
 }

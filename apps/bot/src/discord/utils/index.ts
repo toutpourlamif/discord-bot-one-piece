@@ -6,5 +6,5 @@ export * from './get-query.js';
 export * from './get-target-user.js';
 export * from './paginate.js';
 export * from './parse-integer-arg.js';
-export * from './assert-menu-owner.js';
-export * from './parse-menu-owner-discord-id.js';
+export * from './assert-interactor-is-the-owner.js';
+export * from './parse-owner-discord-id.js';

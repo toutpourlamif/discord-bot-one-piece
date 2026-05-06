@@ -1,5 +1,7 @@
+import { buyCommand } from './buy.js';
 import { colorCommand } from './color.js';
 import { debugCommand } from './debug/index.js';
+import { dmCommand } from './dm.js';
 import { embedCommand } from './embed.js';
 import { emojiCommand } from './emoji.js';
 import { giveCharacterCommand } from './givecharacter.js';
@@ -9,6 +11,7 @@ import { onePieceCommand } from './onepiece.js';
 import { randomCommand } from './random.js';
 import { randomCatCommand } from './randomcat.js';
 import { repeatCommand } from './repeat.js';
+import { sellCommand } from './sell.js';
 
 export const devCommands = [
   onePieceCommand,
@@ -22,4 +25,7 @@ export const devCommands = [
   randomCommand,
   debugCommand,
   emojiCommand,
-];
+  buyCommand,
+  sellCommand,
+  dmCommand,
+].map((cmd) => ({ ...cmd, adminOnly: true }));

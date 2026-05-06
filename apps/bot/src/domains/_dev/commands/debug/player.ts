@@ -6,7 +6,7 @@ import { replyDebugData } from './utils.js';
 
 export const handlePlayer: Command['handler'] = async (message) => {
   const target = getTargetUser(message);
-  const { player } = await findOrCreatePlayer(target.id, target.username);
+  const { player } = await findOrCreatePlayer(target.id, target.username, message.guildId!);
 
   await replyDebugData(message, player);
 };

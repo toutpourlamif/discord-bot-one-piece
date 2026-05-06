@@ -13,6 +13,7 @@ type CharacterTemplateSeed = Omit<CharacterTemplateInsert, 'devilFruitTemplateId
 export const CHARACTER_TEMPLATES_DATA: Array<CharacterTemplateSeed> = [
   {
     name: PLAYER_AS_CHARACTER_TEMPLATE_NAME,
+    race: 'HUMAN',
     hp: 10,
     combat: 10,
     imageUrl: null,
@@ -21,19 +22,25 @@ export const CHARACTER_TEMPLATES_DATA: Array<CharacterTemplateSeed> = [
     name: 'Monkey D. Luffy',
     hp: 10,
     combat: 10,
-    imageUrl: 'devil-fruits/gomu-gomu-no-mi.webp',
+    race: 'HUMAN',
+    imageUrl: null,
     devilFruitName: 'Gomu Gomu no Mi',
+    description: 'Homme ÉLastique qui adore le bezelouf',
   },
   {
     name: 'Roronoa Zoro',
     hp: 10,
     combat: 10,
+    race: 'HUMAN',
     imageUrl: null,
+    description: 'épéiste avec des origine dz',
   },
   {
     name: 'Shanks',
     hp: 10,
     combat: 10,
+    race: 'HUMAN',
     imageUrl: null,
+    description: 'rouqin boosté',
   },
 ];

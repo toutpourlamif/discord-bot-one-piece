@@ -1,8 +1,11 @@
 export { closeDb, db, type Db, type DbOrTransaction } from './client.js';
 export { MAX_CHARACTER_NAME_LENGTH } from './shared/constants.js';
 export * from './schema.js';
+export { type Guild } from './domains/guild/index.js';
+export { ISLANDS, SEAS, ZONES, type Island, type Sea, type Zone } from './domains/navigation/index.js';
 export { type Player } from './domains/player/index.js';
 export { type DevilFruitTemplate } from './domains/devil_fruit/index.js';
 export { PLAYER_AS_CHARACTER_TEMPLATE_NAME, type CharacterInstance, type CharacterTemplate } from './domains/character/index.js';
 export { SHIP_MODULE_KEYS, SHIP_MODULE_LEVEL_COLUMNS, type Ship, type ShipModuleKey } from './domains/ship/index.js';
 export { type ResourceName, type ResourceTemplate } from './domains/resource/index.js';
+export { type EventInstance } from './domains/event/index.js';
