@@ -30,21 +30,21 @@ export async function updateState(id: number, state: JSONFromSQL): Promise<void>
 }
 
 export async function findFirstInteractivePending(playerId: number): Promise<PendingEventInstance | null> {
-  const [rows] = await db
+  const [row] = await db
     .select()
     .from(eventInstance)
     .where(and(eq(eventInstance.playerId, playerId), eq(eventInstance.isInteractive, true)))
     .orderBy(asc(eventInstance.bucketId), asc(eventInstance.id))
     .limit(1);
 
-  if (!rows) return null;
+  if (!row) return null;
 
   return {
-    id: rows.id,
-    eventKey: rows.eventKey,
-    isInteractive: rows.isInteractive,
-    bucketId: rows.bucketId,
-    state: rows.state,
-    createdAt: rows.createdAt,
+    id: row.id,
+    eventKey: row.eventKey,
+    isInteractive: row.isInteractive,
+    bucketId: row.bucketId,
+    state: row.state,
+    createdAt: row.createdAt,
   };
 }
