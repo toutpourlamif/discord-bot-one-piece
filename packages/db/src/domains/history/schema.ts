@@ -7,6 +7,7 @@ export const history = pgTable(
   'history',
   {
     id: bigserial('id', { mode: 'bigint' }).primaryKey(),
+    bucketId: integer('bucket_id'),
     occurredAt: timestamp('occurred_at', { withTimezone: true }).notNull().defaultNow(),
     eventType: text('event_type').notNull(),
     actorPlayerId: integer('actor_player_id').references(() => player.id, { onDelete: 'set null' }),
