@@ -1,13 +1,12 @@
-import { db, history, type DbOrTransaction } from '@one-piece/db';
+import { db, history, type DbOrTransaction, type JSONFromSQL } from '@one-piece/db';
 import { asc, eq } from 'drizzle-orm';
-
-import type { JSONFromSQL } from '../../shared/types.js';
 
 import type { HistoryTarget } from './types/common.js';
 import type { Log } from './types/index.js';
 
 type AppendHistoryArgs = Log & {
   actorPlayerId?: number;
+  bucketId?: number;
   target?: HistoryTarget;
   client?: DbOrTransaction;
 };
@@ -16,13 +15,14 @@ export type HistoryEntry = {
   eventType: string;
   occurredAt: Date;
   bucketId: number | null;
-  payload: JSONFromSQL | null;
+  payload: JSONFromSQL;
 };
 
-export async function appendHistory({ type, payload, actorPlayerId, target, client = db }: AppendHistoryArgs): Promise<void> {
+export async function appendHistory({ type, payload, actorPlayerId, bucketId, target, client = db }: AppendHistoryArgs): Promise<void> {
   await client.insert(history).values({
     eventType: type,
     actorPlayerId,
+    bucketId,
     targetType: target?.type,
     targetId: target?.id,
     payload,
@@ -30,7 +30,7 @@ export async function appendHistory({ type, payload, actorPlayerId, target, clie
 }
 
 export async function loadAllForPlayer(playerId: number): Promise<Array<HistoryEntry>> {
-  const rows = await db
+  return db
     .select({
       eventType: history.eventType,
       occurredAt: history.occurredAt,
@@ -40,9 +40,4 @@ export async function loadAllForPlayer(playerId: number): Promise<Array<HistoryE
     .from(history)
     .where(eq(history.actorPlayerId, playerId))
     .orderBy(asc(history.occurredAt));
-
-  return rows.map((row) => ({
-    ...row,
-    payload: row.payload as JSONFromSQL | null,
-  }));
 }
