@@ -1,5 +1,5 @@
 export { closeDb, db, type Db, type DbOrTransaction, type Transaction } from './client.js';
-export { MAX_CHARACTER_NAME_LENGTH } from './shared/constants.js';
+export { MAX_CHARACTER_NAME_LENGTH, MAX_CREW_NAME_LENGTH } from './shared/constants.js';
 export { type JSONFromSQL } from './shared/types.js';
 export * from './schema.js';
 export { type Guild } from './domains/guild/index.js';

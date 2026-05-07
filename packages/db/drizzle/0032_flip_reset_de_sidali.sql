@@ -1,0 +1,1 @@
+ALTER TABLE "player" ADD COLUMN "crew_name" varchar(64);
