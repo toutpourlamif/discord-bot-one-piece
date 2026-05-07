@@ -1,7 +1,7 @@
 import { sql } from 'drizzle-orm';
 import { pgTable, serial, varchar, bigint, integer, boolean } from 'drizzle-orm/pg-core';
 
-import { MAX_CHARACTER_NAME_LENGTH } from '../../shared/constants.js';
+import { MAX_CHARACTER_NAME_LENGTH, MAX_CREW_NAME_LENGTH } from '../../shared/constants.js';
 import { timestamps } from '../../shared/helpers.js';
 import { guild } from '../guild/schema.js';
 import { zoneEnum } from '../navigation/schema.js';
@@ -19,6 +19,7 @@ export const player = pgTable('player', {
   karma: integer('karma').notNull().default(0),
 
   name: varchar('name', { length: MAX_CHARACTER_NAME_LENGTH }).notNull(),
+  crewName: varchar('crew_name', { length: MAX_CREW_NAME_LENGTH }),
   // drizzle et typescript ont du mal avec les bigint, donc on passe par sql`0`
   bounty: bigint('bounty', { mode: 'bigint' })
     .notNull()

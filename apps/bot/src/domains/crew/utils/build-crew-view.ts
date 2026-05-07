@@ -8,6 +8,7 @@ import { getCharacterInstanceName } from '../../character/utils/index.js';
 import { CREW_BUTTON_NAME } from '../constants.js';
 
 import { getCrewCapacity } from './get-crew-capacity.js';
+import { getCrewDisplayName } from './get-crew-display-name.js';
 
 export function buildCrewView(player: Player, ship: Ship, characters: Array<CharacterRow>, page: number, ownerDiscordId: string): View {
   const menuRow = buildMenuButtons(CREW_BUTTON_NAME, ownerDiscordId, player.id);
@@ -24,7 +25,7 @@ export function buildCrewView(player: Player, ship: Ship, characters: Array<Char
 
   if (isCrewPage) {
     const crewCapacity = getCrewCapacity(ship);
-    embed.setTitle(`Équipage de ${player.name} (${crew.length}/${crewCapacity})`).setDescription(crew.map(formatLine).join('\n'));
+    embed.setTitle(`${getCrewDisplayName(player)} (${crew.length}/${crewCapacity})`).setDescription(crew.map(formatLine).join('\n'));
     const captain = crew.find((character) => character.isCaptain);
     if (captain?.imageUrl) {
       embed.setThumbnail(buildAssetUrl(captain.imageUrl));

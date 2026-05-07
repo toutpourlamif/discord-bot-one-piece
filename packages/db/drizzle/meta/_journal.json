@@ -225,6 +225,13 @@
       "when": 1778046150266,
       "tag": "0031_urbansoccer_asniere",
       "breakpoints": true
+    },
+    {
+      "idx": 32,
+      "version": "7",
+      "when": 1778070909894,
+      "tag": "0032_flip_reset_de_sidali",
+      "breakpoints": true
     }
   ]
 }
