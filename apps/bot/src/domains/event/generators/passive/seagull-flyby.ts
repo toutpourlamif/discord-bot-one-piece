@@ -8,7 +8,7 @@ export const seagullFlyby: PassiveGenerator = {
   isInteractive: false,
   seedScope: 'player',
   conditions: (ctx) => ctx.zone === 'sea_east_blue',
-  cooldown: 1800,
+  cooldownBuckets: 2,
   probability: () => 0.3,
 
   compute: computeNothing,

@@ -22,7 +22,7 @@ export type GeneratorContext = {
   history: {
     has: (type: string) => boolean;
     lastResolutionOf: (prefix: string) => string | undefined;
-    countSince: (type: string, sec: number) => number;
+    countSinceBuckets: (type: string, buckets: number) => number;
   };
   bucketId: number;
   zone: Zone;
@@ -34,7 +34,7 @@ type GeneratorBase = {
   isInteractive: boolean;
   seedScope: SeedScope;
   conditions?: (ctx: GeneratorContext) => boolean;
-  cooldown?: number;
+  cooldownBuckets?: number;
   oneTime?: boolean;
   probability: (ctx: GeneratorContext) => number;
 };
