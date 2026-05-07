@@ -4,12 +4,11 @@ import type { EmbedBuilder } from 'discord.js';
 import type { CharacterRow } from '../character/types.js';
 import type { Inventory } from '../resource/types.js';
 
+import type { EventEffect } from './effects/types.js';
+
 type SeedScope = 'zone' | 'player';
 
 export type Rng = { next: () => number };
-
-// TODO: remplacer par l'union discriminée du framework Effect (cf docs/domains/event/generators.md §Effets)
-export type Effect = { type: string; [k: string]: unknown };
 
 export type GeneratorContext = {
   player: Player;
@@ -42,13 +41,13 @@ type GeneratorBase = {
 
 export type PassiveGenerator = GeneratorBase & {
   isInteractive: false;
-  build: (ctx: GeneratorContext, rng: Rng) => { effects: Array<Effect>; state: Record<string, unknown> };
+  build: (ctx: GeneratorContext, rng: Rng) => { effects: Array<EventEffect>; state: Record<string, unknown> };
   render: (state: Record<string, unknown>) => EmbedBuilder;
 };
 
 export type Resolution = {
   embed: EmbedBuilder;
-  effects: Array<Effect>;
+  effects: Array<EventEffect>;
   resolutionType: string;
 };
 
