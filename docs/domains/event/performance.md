@@ -18,7 +18,8 @@ const playerHistory = await client.select().from(history).where(eq(history.actor
 ctx.history = {
   has: (type) => playerHistory.some((e) => e.eventType === type),
   lastResolutionOf: (prefix) => playerHistory.filter((e) => e.eventType.startsWith(prefix)).at(-1)?.eventType,
-  countSince: (type, sec) => playerHistory.filter((e) => e.eventType === type && e.occurredAt > Date.now() - sec * 1000).length,
+  countSinceBuckets: (type, buckets) =>
+    playerHistory.filter((e) => e.eventType === type && e.bucketId !== null && e.bucketId > currentBucket - buckets).length,
 };
 ```
 
@@ -34,7 +35,7 @@ L'unicité `(player_id, event_key, bucket_id)` sur `event_instance` (cf [data-mo
 
 ## 3. Index `history` pour le hot path
 
-Les filtres `cooldown` et `oneTime` font `WHERE actor_player_id = ? AND event_type = ?`. L'index existant `(actor_player_id, occurred_at desc)` aide pour le tri mais pas pour le filtre `event_type`.
+Les filtres `cooldownBuckets` et `oneTime` font `WHERE actor_player_id = ? AND event_type = ?`. L'index existant `(actor_player_id, occurred_at desc)` aide pour le tri mais pas pour le filtre `event_type`.
 
 Avec l'optim 1 (pré-agrégation), c'est moins critique. Pour les requêtes ad-hoc (debug, analytics) :
 
@@ -69,12 +70,12 @@ Sans : `goTo: 'haki_charegd'` (typo) → erreur uniquement au runtime, sur le bu
 ```ts
 function validateGenerators(generators: Array<EventGenerator>) {
   for (const gen of generators) {
-    if (gen.scope !== 'interactive') continue;
+    if (!gen.isInteractive) continue;
     const stepNames = Object.keys(gen.steps);
     for (const [stepName, step] of Object.entries(gen.steps)) {
       for (const choice of step.choices(/* ctx fake */)) {
         if (choice.goTo && !stepNames.includes(choice.goTo)) {
-          throw new Error(`Generator ${gen.type}, step ${stepName}, choice ${choice.id}: goTo '${choice.goTo}' n'existe pas dans steps`);
+          throw new Error(`Generator ${gen.key}, step ${stepName}, choice ${choice.id}: goTo '${choice.goTo}' n'existe pas dans steps`);
         }
       }
     }
