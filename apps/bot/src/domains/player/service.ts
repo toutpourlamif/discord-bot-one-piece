@@ -1,7 +1,9 @@
-import { db, type Player } from '@one-piece/db';
+import { db, type DbOrTransaction, type Player, type Zone } from '@one-piece/db';
 
+import { ValidationError } from '../../discord/errors.js';
 import { sanitizeName } from '../../shared/sanitize-name.js';
 import * as characterRepository from '../character/repository.js';
+import * as historyRepository from '../history/index.js';
 import { findOrCreateShip } from '../ship/service.js';
 
 import { assertNameNotEmpty, assertNameWithinMaxLength } from './guards/index.js';
@@ -37,5 +39,21 @@ export async function renamePlayer(playerId: number, rawName: string): Promise<P
     const updated = await playerRepository.updateName(playerId, sanitizedName, transaction);
     await characterRepository.updatePlayerAsCharacterNickname(playerId, sanitizedName, transaction);
     return updated;
+  });
+}
+
+export async function recordZoneChange(playerId: number, newZone: Zone, bucketId: number, client: DbOrTransaction = db): Promise<void> {
+  const currentPlayer = await playerRepository.findByIdOrThrow(playerId, client);
+  const from = currentPlayer.currentZone;
+
+  if (from === newZone) throw new ValidationError('Vous êtes déjà à cet endroit');
+
+  await playerRepository.updateZone(playerId, newZone, client);
+  await historyRepository.appendHistory({
+    type: 'player.zone_changed',
+    actorPlayerId: playerId,
+    bucketId,
+    payload: { from, to: newZone },
+    client,
   });
 }

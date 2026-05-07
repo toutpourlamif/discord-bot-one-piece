@@ -65,6 +65,7 @@ appendHistory({
   actorPlayerId: player.id,
   target: { type: 'character_instance', id: instanceId },
   client: transaction, // optionnel — voir ci-dessous
+  occurredAt: date, // optionnel — par défaut now() côté DB
 });
 ```
 

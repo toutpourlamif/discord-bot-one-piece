@@ -9,9 +9,18 @@ type AppendHistoryArgs = Log & {
   bucketId?: number;
   target?: HistoryTarget;
   client?: DbOrTransaction;
+  occurredAt?: Date;
 };
 
-export async function appendHistory({ type, payload, actorPlayerId, bucketId, target, client = db }: AppendHistoryArgs): Promise<void> {
+export async function appendHistory({
+  type,
+  payload,
+  actorPlayerId,
+  bucketId,
+  target,
+  client = db,
+  occurredAt,
+}: AppendHistoryArgs): Promise<void> {
   await client.insert(history).values({
     eventType: type,
     actorPlayerId,
@@ -19,6 +28,7 @@ export async function appendHistory({ type, payload, actorPlayerId, bucketId, ta
     targetType: target?.type,
     targetId: target?.id,
     payload,
+    occurredAt,
   });
 }
 
