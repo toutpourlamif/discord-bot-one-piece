@@ -78,3 +78,7 @@ export async function recordZoneChange(input: RecordZoneChangeInput): Promise<vo
 
   await db.transaction(run);
 }
+
+export async function setLastProcessedBucketId(playerId: number, bucketId: number, client: DbOrTransaction = db): Promise<void> {
+  await client.update(player).set({ lastProcessedBucketId: bucketId }).where(eq(player.id, playerId));
+}

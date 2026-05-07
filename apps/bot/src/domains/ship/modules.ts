@@ -58,3 +58,10 @@ export const SHIP_MODULES = {
     ],
   },
 } as const satisfies Record<ShipModuleKey, ShipModuleConfig>;
+export const SHIP_MODULE_LABELS = {
+  hull: 'Coque',
+  sail: 'Voile',
+  decks: 'Ponts',
+  cabins: 'Chambres',
+  cargo: 'Cale',
+} as const satisfies Record<ShipModuleKey, string>;
