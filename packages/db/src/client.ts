@@ -12,6 +12,5 @@ export async function closeDb() {
   await queryClient.end();
 }
 export type Db = typeof db;
-type Transaction = Parameters<Parameters<Db['transaction']>[0]>[0];
-export type DrizzleTx = Transaction;
-export type DbOrTransaction = Db | DrizzleTx;
+export type Transaction = Parameters<Parameters<Db['transaction']>[0]>[0];
+export type DbOrTransaction = Db | Transaction;
