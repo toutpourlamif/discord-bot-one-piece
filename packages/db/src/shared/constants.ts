@@ -1,1 +1,2 @@
 export const MAX_CHARACTER_NAME_LENGTH = 64;
+export const MAX_CREW_NAME_LENGTH = 64;

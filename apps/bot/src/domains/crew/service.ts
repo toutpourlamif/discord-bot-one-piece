@@ -7,7 +7,7 @@ import type { CharacterRow } from '../character/types.js';
 import * as historyRepository from '../history/index.js';
 import * as playerRepository from '../player/repository.js';
 
-import { MAX_CREW_NAME_LENGTH } from './constants.js';
+import { MAX_CREW_NAME_LENGTH, MIN_CREW_NAME_LENGTH } from './constants.js';
 import * as crewRepository from './repository.js';
 
 export async function getCrewByPlayerId(playerId: number): Promise<Array<CharacterRow>> {
@@ -47,6 +47,9 @@ export async function renameCrew(playerId: number, rawName: string): Promise<Pla
   const sanitizedName = sanitizeName(rawName);
   if (sanitizedName.length === 0) {
     throw new ValidationError('Tu dois donner un nom.');
+  }
+  if (sanitizedName.length < MIN_CREW_NAME_LENGTH) {
+    throw new ValidationError(`Le nom de l'équipage doit faire au moins ${MIN_CREW_NAME_LENGTH} caractères.`);
   }
   if (sanitizedName.length > MAX_CREW_NAME_LENGTH) {
     throw new ValidationError(`Le nom de l'équipage ne peut pas dépasser ${MAX_CREW_NAME_LENGTH} caractères.`);
