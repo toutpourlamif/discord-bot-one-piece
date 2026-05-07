@@ -1,5 +1,6 @@
 import { db, type DbOrTransaction, type Player, type Zone } from '@one-piece/db';
 
+import { ValidationError } from '../../discord/errors.js';
 import { sanitizeName } from '../../shared/sanitize-name.js';
 import * as characterRepository from '../character/repository.js';
 import * as historyRepository from '../history/index.js';
@@ -45,7 +46,7 @@ export async function recordZoneChange(playerId: number, newZone: Zone, bucketId
   const currentPlayer = await playerRepository.findByIdOrThrow(playerId, client);
   const from = currentPlayer.currentZone;
 
-  if (from === newZone) return;
+  if (from === newZone) throw new ValidationError('Vous êtes déjà à cet endroit');
 
   await playerRepository.updateZone(playerId, newZone, client);
   await historyRepository.appendHistory({
