@@ -6,6 +6,7 @@ export { buildPaginationButtons } from './build-pagination-buttons.js';
 export { getQuery } from './get-query.js';
 export { getTargetUser } from './get-target-user.js';
 export { splitIntoPages, clampPage } from './paginate.js';
+export { parseBigintArg } from './parse-bigint-arg.js';
 export { parseIntegerArg } from './parse-integer-arg.js';
 export { assertInteractorIsTheOwner } from './assert-interactor-is-the-owner.js';
 export { parseOwnerDiscordId } from './parse-owner-discord-id.js';
