@@ -37,7 +37,7 @@ export class ForbiddenError extends AppError {
 
 export class InternalError extends AppError {
   constructor(message = 'Une erreur est survenue, veuillez contacter un admin.') {
-    super(message, 'error');
+    super(message, 'error', 'Une erreur est survenue, veuillez contacter un admin.');
     this.name = 'InternalError';
   }
 }
