@@ -22,7 +22,7 @@ export type GeneratorContext = {
   history: {
     has: (type: string) => boolean;
     lastResolutionOf: (prefix: string) => string | undefined;
-    countSince: (type: string, sec: number) => number;
+    countSinceBuckets: (type: string, buckets: number) => number;
   };
   bucketId: number;
   zone: Zone;
@@ -30,18 +30,18 @@ export type GeneratorContext = {
 };
 
 type GeneratorBase = {
-  type: string;
+  key: string;
   isInteractive: boolean;
   seedScope: SeedScope;
   conditions?: (ctx: GeneratorContext) => boolean;
-  cooldown?: number;
+  cooldownBuckets?: number;
   oneTime?: boolean;
   probability: (ctx: GeneratorContext) => number;
 };
 
 export type PassiveGenerator = GeneratorBase & {
   isInteractive: false;
-  build: (ctx: GeneratorContext, rng: Rng) => { effects: Array<EventEffect>; state: Record<string, unknown> };
+  compute: (ctx: GeneratorContext, rng: Rng) => { effects: Array<EventEffect>; state: Record<string, unknown> };
   render: (state: Record<string, unknown>) => EmbedBuilder;
 };
 
