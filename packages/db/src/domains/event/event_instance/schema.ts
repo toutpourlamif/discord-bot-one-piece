@@ -1,6 +1,7 @@
 import { sql } from 'drizzle-orm';
 import { bigserial, boolean, integer, jsonb, pgTable, text, timestamp, uniqueIndex } from 'drizzle-orm/pg-core';
 
+import type { JSONFromSQL } from '../../../shared/types.js';
 import { player } from '../../player/schema.js';
 
 export const eventInstance = pgTable(
@@ -14,6 +15,7 @@ export const eventInstance = pgTable(
     isInteractive: boolean('is_interactive').notNull(),
     bucketId: integer('bucket_id').notNull(),
     state: jsonb('state')
+      .$type<JSONFromSQL>()
       .notNull()
       .default(sql`'{}'::jsonb`),
     createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
