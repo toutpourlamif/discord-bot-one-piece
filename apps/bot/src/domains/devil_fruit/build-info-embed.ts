@@ -23,7 +23,7 @@ export function buildDevilFruitInfoEmbed(fruit: DevilFruitTemplate): EmbedBuilde
     );
 
   if (fruit.imageUrl) {
-    embed.setThumbnail(buildAssetUrl(fruit.imageUrl));
+    embed.setImage(buildAssetUrl(fruit.imageUrl));
   }
 
   return embed;
