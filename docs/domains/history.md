@@ -103,16 +103,3 @@ payload: {
 target: { type: 'character_instance', id: <nouveau capitaine> }
 actorPlayerId: <joueur>
 ```
-
-### `player.zone_changed`
-
-La zone courante d'un joueur change.
-
-```ts
-payload: {
-  from: Zone;
-  to: Zone;
-}
-actorPlayerId: <joueur>
-bucketId: <bucket du changement>
-```
