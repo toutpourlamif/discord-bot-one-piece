@@ -1,2 +1,2 @@
-export { eventButtonHandlers } from './interactions/index.js';
+export { eventButtonHandlers } from './interactions/registry.js';
 export { getPendingEventsForPlayer, type PendingEventInstance } from './repository.js';

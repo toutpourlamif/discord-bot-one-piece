@@ -26,6 +26,11 @@ export async function updateState(id: bigint, state: JSONFromSQL): Promise<void>
   await db.update(eventInstance).set({ state }).where(eq(eventInstance.id, id));
 }
 
+export async function findById(id: bigint): Promise<EventInstance | null> {
+  const [row] = await db.select().from(eventInstance).where(eq(eventInstance.id, id)).limit(1);
+  return row ?? null;
+}
+
 export async function findFirstInteractivePending(playerId: number): Promise<EventInstance | null> {
   const [row] = await db
     .select()
