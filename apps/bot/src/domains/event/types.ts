@@ -6,9 +6,6 @@ import type { Inventory } from '../resource/types.js';
 
 import type { EventEffect } from './effects/types.js';
 
-/** La seed doit être unique par joueur ? ou commun à tous les players de la zone? (exemple : si il pleut à Skypiea, tous les joueurs
- * à skypiea au même bucket auront la même seed => ils vont tous tirer la même chose = cohérence
-) */
 type SeedScope = 'zone' | 'player';
 
 export type Rng = { next: () => number };
