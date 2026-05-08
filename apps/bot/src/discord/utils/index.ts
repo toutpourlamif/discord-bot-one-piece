@@ -6,5 +6,6 @@ export * from './get-query.js';
 export * from './get-target-user.js';
 export * from './paginate.js';
 export * from './parse-integer-arg.js';
+export * from './assert-has-administrator-permission.js';
 export * from './assert-interactor-is-the-owner.js';
 export * from './parse-owner-discord-id.js';
