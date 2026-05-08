@@ -13,8 +13,8 @@ export type CommandContext = {
 export type Command = {
   name: CommandName;
   handler: (ctx: CommandContext) => Promise<void>;
-  requiresSynchronization?: boolean; // défaut : true (cf #189)
-  adminOnly?: boolean; // défaut : false
+  requiresSynchronization?: boolean;
+  requiresAdmin?: boolean;
 };
 
 export type ButtonHandler = {

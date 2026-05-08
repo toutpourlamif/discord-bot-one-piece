@@ -18,23 +18,27 @@ import { evaluateGeneratorHappening } from './evaluate-generator-happening.js';
 import { pickRandomWithSeed, seedFromBucketAndPlayer } from './rng.js';
 
 export type SyncResult =
-  | { kind: 'already_caught_up' }
-  | { kind: 'caught_up'; generatedPassiveCount: number }
-  | { kind: 'blocked_on_interactive'; generatedPassiveCount: number; interactiveKey: string };
+  | { status: 'already_caught_up' }
+  | { status: 'caught_up'; generatedPassiveCount: number }
+  | { status: 'blocked_on_interactive'; generatedPassiveCount: number; interactiveKey: string };
 
+/**
+ * Rejoue les buckets en attente du joueur (depuis `lastProcessedBucketId`, jusqu'à `lastProcessableBucketId`) :
+ * applique les passives au fur et à mesure, et s'arrête au premier interactif tiré. Le tout en une transaction.
+ */
 export async function synchronizePlayer(playerId: number): Promise<SyncResult> {
   return db.transaction(async (tx) => {
     const player = await playerRepository.findByIdOrThrow(playerId, tx, { forUpdate: true });
 
     const interactivePending = await eventRepository.findFirstInteractivePending(playerId, tx);
     if (interactivePending) {
-      return { kind: 'blocked_on_interactive', generatedPassiveCount: 0, interactiveKey: interactivePending.eventKey };
+      return { status: 'blocked_on_interactive', generatedPassiveCount: 0, interactiveKey: interactivePending.eventKey };
     }
 
     const latestProcessableBucket = getLatestProcessableBucket();
     let fromBucket = player.lastProcessedBucketId + 1;
     if (fromBucket > latestProcessableBucket) {
-      return { kind: 'already_caught_up' };
+      return { status: 'already_caught_up' };
     }
     fromBucket = clampToReplayWindow(fromBucket, latestProcessableBucket);
 
@@ -96,11 +100,11 @@ export async function synchronizePlayer(playerId: number): Promise<SyncResult> {
           tx,
         );
         await playerRepository.setLastProcessedBucketId(playerId, bucketId, tx);
-        return { kind: 'blocked_on_interactive', generatedPassiveCount, interactiveKey: picked.key };
+        return { status: 'blocked_on_interactive', generatedPassiveCount, interactiveKey: picked.key };
       }
     }
 
     await playerRepository.setLastProcessedBucketId(playerId, latestProcessableBucket, tx);
-    return { kind: 'caught_up', generatedPassiveCount };
+    return { status: 'caught_up', generatedPassiveCount };
   });
 }

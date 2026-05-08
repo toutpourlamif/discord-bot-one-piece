@@ -42,9 +42,9 @@ export class InternalError extends AppError {
   }
 }
 
-export class AdminOnlyError extends AppError {
+export class RequiresAdminError extends ForbiddenError {
   constructor() {
-    super('Cette commande est réservée aux admins.', 'warn');
-    this.name = 'AdminOnlyError';
+    super('Cette commande est réservée aux admins.');
+    this.name = 'RequiresAdminError';
   }
 }

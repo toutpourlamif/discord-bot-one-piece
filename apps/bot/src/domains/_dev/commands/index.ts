@@ -30,4 +30,4 @@ export const devCommands = [
   sellCommand,
   upgradeShipCommand,
   dmCommand,
-].map((cmd) => ({ ...cmd, adminOnly: true }));
+].map((cmd) => ({ ...cmd, requiresAdmin: true, requiresSynchronization: false }));
