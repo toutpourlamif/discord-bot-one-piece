@@ -1,9 +1,11 @@
-import { db, type Player } from '@one-piece/db';
+import { db, type DbOrTransaction, type Player, type Zone } from '@one-piece/db';
 
+import { ValidationError } from '../../discord/errors.js';
 import { sanitizeName } from '../../shared/sanitize-name.js';
 import * as characterRepository from '../character/repository.js';
 import { bucketIdFromTimestamp } from '../event/engine/bucket.js';
 import * as eventRepository from '../event/repository.js';
+import * as historyRepository from '../history/index.js';
 import { findOrCreateShip } from '../ship/service.js';
 
 import { assertNameNotEmpty, assertNameWithinMaxLength } from './guards/index.js';
@@ -53,4 +55,20 @@ export async function isPlayerUpToDate(playerId: number): Promise<boolean> {
   const interactivePending = await eventRepository.findFirstInteractivePending(playerId);
 
   return interactivePending === null;
+}
+
+export async function recordZoneChange(playerId: number, newZone: Zone, bucketId: number, client: DbOrTransaction = db): Promise<void> {
+  const currentPlayer = await playerRepository.findByIdOrThrow(playerId, client);
+  const from = currentPlayer.currentZone;
+
+  if (from === newZone) throw new ValidationError('Vous êtes déjà à cet endroit');
+
+  await playerRepository.updateZone(playerId, newZone, client);
+  await historyRepository.appendHistory({
+    type: 'player.zone_changed',
+    actorPlayerId: playerId,
+    bucketId,
+    payload: { from, to: newZone },
+    client,
+  });
 }

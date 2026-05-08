@@ -19,7 +19,7 @@ export function buildCharacterInfoEmbed(template: CharacterTemplateInfo): EmbedB
     );
 
   if (template.imageUrl) {
-    embed.setThumbnail(buildAssetUrl(template.imageUrl));
+    embed.setImage(buildAssetUrl(template.imageUrl));
   }
 
   if (template.description !== null) {

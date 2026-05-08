@@ -1,3 +1,6 @@
+export const EVENT_BUTTON_NAME = 'evt';
+
+// TODO: ENLEVER CA, CETAIT A LANCIENNE
 export const EVENT_TYPES = {
   BARREL_FOUND: 'barrel_found',
   ISLAND_FOUND: 'island_found',
