@@ -26,23 +26,19 @@ Avec : **le joueur traverse son passé avant d'altérer le présent.** Conséque
 - Pas besoin de `target_effects` dans `history` pour les cross-player : les deux joueurs sont synchros par construction → INSERT direct pour les deux.
 - Pas de fast-forward d'autres joueurs : un joueur observé est forcément à jour à son `last_processed_bucket_id`.
 
-### Implémentation : middleware
+### Implémentation : auto-sync dans le routeur
 
-Appliqué aux commandes "actives" au routeur Discord (toutes sauf `!recap`, `!profil`, `!aide`) :
+Le routeur Discord (`apps/bot/src/discord/router.ts`) appelle `synchronizePlayer(player.id)` avant chaque commande, sauf si la commande opte explicitement out via `requiresSynchronization: false` sur le type `Command` (cas des domaines `_info`, `_dev`, et de la future `!recap`).
 
-```ts
-async function requireSyncedPlayer(playerId, message): Promise<boolean> {
-  if (await playerRepository.isPlayerCaughtUp(playerId)) return true;
-  await message.reply({
-    embeds: [
-      /* "tape !recap d'abord" */
-    ],
-  });
-  return false;
-}
-```
+Selon le `SyncResult` :
 
-`isPlayerCaughtUp` vérifie les deux conditions ci-dessus.
+- `already_caught_up` → on enchaîne sur le handler, rien à dire.
+- `caught_up` avec `generatedPassiveCount > 0` → on envoie un message séparé `📜 Ton équipage a vécu N événement(s). Tape !recap pour les revivre.` **avant** d'enchaîner sur le handler. Les passives ont déjà été appliqués pendant la sync — pas besoin de bloquer.
+- `blocked_on_interactive` → on `throw new OutOfSyncError(message.author.id)`. Le `catch` du routeur rend l'`userView` portée par l'erreur (cf #188) : un embed warn + un bouton "Voir mes events" (`recap-shortcut`) qui ramène vers `!recap`.
+
+> **Pourquoi un message séparé pour le footer plutôt qu'un append à la réponse de la commande** : éviter de coupler chaque handler (pêche, recrutement, etc.) à une logique de footer. UX-wise, deux messages restent fluides, et l'ordre temporel est naturel (footer avant la réponse de l'action).
+
+> **Atomicité** : `synchronizePlayer` tourne dans sa propre transaction. Si le handler échoue après, la sync reste — pas de rollback. Le joueur retape la commande, `already_caught_up` court-circuite et on passe direct à l'action.
 
 ### UX au retour d'AFK
 

@@ -3,6 +3,7 @@ import type { Message } from 'discord.js';
 import { devCommands } from '../domains/_dev/index.js';
 import { infoCommands } from '../domains/_info/index.js';
 import { crewCommands } from '../domains/crew/index.js';
+import { autoSyncBeforeAction } from '../domains/event/index.js';
 import { fishingCommands } from '../domains/fishing/index.js';
 import { requireGuildId } from '../domains/guild/index.js';
 import * as guildRepository from '../domains/guild/repository.js';
@@ -45,11 +46,19 @@ export async function routeMessage(message: Message, prefix: string): Promise<vo
     const guildId = requireGuildId(message.guildId);
     const guild = await guildRepository.findOrCreate(guildId);
     const { player } = await findOrCreatePlayer(message.author.id, message.author.username, guild.id);
+
+    if (command.requiresSynchronization !== false) {
+      await autoSyncBeforeAction(message, player.id);
+    }
+
     await command.handler({ message, args, player, guild });
   } catch (error) {
     if (error instanceof AppError) {
       console[error.severity](error);
-      await message.reply({ embeds: [buildOpEmbed(error.severity).setDescription(error.userMessage)], failIfNotExists: false });
+      await message.reply({
+        ...(error.userView ?? { embeds: [buildOpEmbed(error.severity).setDescription(error.userMessage)] }),
+        failIfNotExists: false,
+      });
     } else {
       console.error(error);
       await message.reply({ embeds: [buildOpEmbed('error').setDescription('Une erreur est survenue.')], failIfNotExists: false });
