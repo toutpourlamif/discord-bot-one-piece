@@ -5,7 +5,7 @@ import { buildShipView } from '../views/index.js';
 export const shipCommand: Command = {
   name: 'ship',
   async handler(ctx) {
-    const targetPlayer = await resolveTargetPlayer(ctx);
+    const { targetPlayer } = await resolveTargetPlayer(ctx);
     await ctx.message.reply(await buildShipView(targetPlayer, ctx.message.author.id));
   },
 };

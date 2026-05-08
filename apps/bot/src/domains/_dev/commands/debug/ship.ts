@@ -6,7 +6,7 @@ import * as shipRepository from '../../../ship/repository.js';
 import { replyDebugData } from './utils.js';
 
 export const handleShip: Command['handler'] = async (ctx) => {
-  const targetPlayer = await resolveTargetPlayer(ctx);
+  const { targetPlayer } = await resolveTargetPlayer(ctx);
   const ship = await shipRepository.findByPlayerId(targetPlayer.id);
 
   if (!ship) {
