@@ -1,0 +1,1 @@
+CREATE UNIQUE INDEX "history_actor_event_bucket_uniq" ON "history" USING btree ("actor_player_id","event_type","bucket_id") WHERE "history"."actor_player_id" IS NOT NULL AND "history"."bucket_id" IS NOT NULL;

@@ -18,8 +18,8 @@ const playerHistory = await client.select().from(history).where(eq(history.actor
 ctx.history = {
   has: (type) => playerHistory.some((e) => e.eventType === type),
   lastResolutionOf: (prefix) => playerHistory.filter((e) => e.eventType.startsWith(prefix)).at(-1)?.eventType,
-  countSinceBuckets: (type, buckets) =>
-    playerHistory.filter((e) => e.eventType === type && e.bucketId !== null && e.bucketId > currentBucket - buckets).length,
+  countSinceNBuckets: (type, bucketsAgo) =>
+    playerHistory.filter((e) => e.eventType === type && e.bucketId !== null && e.bucketId > currentBucket - bucketsAgo).length,
 };
 ```
 

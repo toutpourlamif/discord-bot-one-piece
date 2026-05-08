@@ -205,16 +205,16 @@ Pas un gros event "Alabasta". Une **suite d'events distincts** qui se débloquen
 
 ## `ctx` : objet contexte
 
-| Champ              | Contenu                                                                               |
-| ------------------ | ------------------------------------------------------------------------------------- |
-| `ctx.player`       | ligne `player` actuelle                                                               |
-| `ctx.crew`         | `members: Array<CharacterRow>` + helpers `has(name)`, `getByName(name)`               |
-| `ctx.ship`         | navire et modules                                                                     |
-| `ctx.inventory`    | ressources                                                                            |
-| `ctx.history`      | helpers : `has(type)`, `lastResolutionOf(prefix)`, `countSinceBuckets(type, buckets)` |
-| `ctx.bucketId`     | bucket en cours                                                                       |
-| `ctx.zone`         | zone du joueur à ce bucket                                                            |
-| `ctx.othersInZone` | autres joueurs présents dans la zone au bucket (tous serveurs confondus)              |
+| Champ              | Contenu                                                                                   |
+| ------------------ | ----------------------------------------------------------------------------------------- |
+| `ctx.player`       | ligne `player` actuelle                                                                   |
+| `ctx.crew`         | `members: Array<CharacterRow>` + helpers `has(name)`, `getByName(name)`                   |
+| `ctx.ship`         | navire et modules                                                                         |
+| `ctx.inventory`    | ressources                                                                                |
+| `ctx.history`      | helpers : `has(type)`, `lastResolutionOf(prefix)`, `countSinceNBuckets(type, bucketsAgo)` |
+| `ctx.bucketId`     | bucket en cours                                                                           |
+| `ctx.zone`         | zone du joueur à ce bucket                                                                |
+| `ctx.othersInZone` | autres joueurs présents dans la zone au bucket (tous serveurs confondus)                  |
 
 > **Pourquoi un objet plutôt que des paramètres positionnels** : ajouter `ctx.weather` ne casse aucun générateur existant.
 
@@ -234,7 +234,7 @@ type EventEffect =
 
 > **État courant** : seuls `addBerries` et `spendBerries` sont implémentés (cf `apps/bot/src/domains/event/effects/types.ts`). Le reste est roadmap.
 
-L'engine a `applyEffects(effects, playerId, tx)` qui dispatch chaque variante.
+L'engine a `applyEffects(effects, ctx, tx)` qui dispatch chaque variante. Chaque effet **persiste** la modification en DB **et** mute `ctx` en place (ex: `ctx.player.berries += amount`) pour que les générateurs suivants voient l'état à jour sans refetch.
 
 > **Pourquoi pas `ctx.player.berries += 50` dans `resolve`** : couple le générateur à Drizzle / aux transactions, disperse le code (impossible de retrouver tous les effets sur les berries), difficile à tester. Avec Effects en data : pure logique métier d'un côté, persistance de l'autre.
 

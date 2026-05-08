@@ -22,7 +22,7 @@ export type GeneratorContext = {
   history: {
     has: (type: string) => boolean;
     lastResolutionOf: (prefix: string) => string | undefined;
-    countSinceBuckets: (type: string, buckets: number) => number;
+    countSinceNBuckets: (type: string, bucketsAgo: number) => number;
   };
   bucketId: number;
   zone: Zone;

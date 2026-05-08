@@ -9,10 +9,11 @@ import * as playerRepository from '../player/repository.js';
 
 import { MAX_CREW_NAME_LENGTH, MIN_CREW_NAME_LENGTH } from './constants.js';
 import * as crewRepository from './repository.js';
+import { isInCrewFilter } from './utils/is-in-crew-filter.js';
 
 export async function getCrewByPlayerId(playerId: number): Promise<Array<CharacterRow>> {
   const characters = await characterRepository.getCharactersByPlayerId(playerId);
-  const crew = characters.filter((character) => character.joinedCrewAt !== null);
+  const crew = characters.filter(isInCrewFilter);
 
   if (crew.length === 0) {
     throw new NotFoundError("Tu n'as aucun personnage dans ton équipage.");
