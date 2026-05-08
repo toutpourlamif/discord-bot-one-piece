@@ -6,7 +6,7 @@ import { getInventory } from '../repository.js';
 export const inventaireCommand: Command = {
   name: 'inventaire',
   async handler(ctx) {
-    const targetPlayer = await resolveTargetPlayer(ctx);
+    const { targetPlayer } = await resolveTargetPlayer(ctx);
     const inventory = await getInventory(targetPlayer.id);
 
     await ctx.message.reply(buildInventoryView(targetPlayer, inventory, 0, ctx.message.author.id));
