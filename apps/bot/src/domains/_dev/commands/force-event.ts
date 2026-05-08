@@ -1,21 +1,15 @@
-import { db, eventInstance } from '@one-piece/db';
+import { db } from '@one-piece/db';
 
 import { NotFoundError, ValidationError } from '../../../discord/errors.js';
 import type { Command } from '../../../discord/types.js';
 import { getTargetUser } from '../../../discord/utils/index.js';
-import * as characterRepository from '../../character/repository.js';
-import { isInCrewFilter } from '../../crew/utils/is-in-crew-filter.js';
-import { applyEffects } from '../../event/effects/apply-effects.js';
 import { bucketIdFromTimestamp } from '../../event/engine/bucket.js';
-import { buildCrewAccessor, buildHistoryAccessor } from '../../event/engine/context-builders.js';
-import { createRng, seedFromBucketAndPlayer, seedFromBucketAndZone } from '../../event/engine/rng.js';
+import { buildGeneratorContext, fetchGeneratorContextData } from '../../event/engine/context-builders.js';
+import { recordInteractive, recordPassive } from '../../event/engine/record-event.js';
+import { createRngForGenerator } from '../../event/engine/rng.js';
 import { allGenerators } from '../../event/generators/registry.js';
-import type { GeneratorContext } from '../../event/types.js';
-import * as historyRepository from '../../history/index.js';
 import * as playerRepository from '../../player/repository.js';
 import { findOrCreatePlayer } from '../../player/service.js';
-import * as resourceRepository from '../../resource/repository.js';
-import * as shipRepository from '../../ship/repository.js';
 
 export const forceEventCommand: Command = {
   name: ['forceEvent', 'force-event'],
@@ -39,36 +33,16 @@ export const forceEventCommand: Command = {
 
     await db.transaction(async (tx) => {
       const player = await playerRepository.findByIdOrThrow(targetPlayer.id, tx, { forUpdate: true });
-      const ship = await shipRepository.findByPlayerIdOrThrow(player.id, tx);
-      const inventory = await resourceRepository.getInventory(player.id, tx);
-      const allCharacters = await characterRepository.getCharactersByPlayerId(player.id, tx);
-      const historyLogs = await historyRepository.loadAllForPlayer(player.id, tx);
-
-      const ctxForGenerator: GeneratorContext = {
-        player,
-        crew: buildCrewAccessor(allCharacters.filter(isInCrewFilter)),
-        ship,
-        inventory,
-        history: buildHistoryAccessor(historyLogs, () => bucketId),
-        bucketId,
-        zone: player.currentZone,
-        othersInZone: [],
-      };
-
-      const seed =
-        gen.seedScope === 'zone' ? seedFromBucketAndZone(bucketId, ctxForGenerator.zone) : seedFromBucketAndPlayer(bucketId, player.id);
-      const rng = createRng(seed);
+      const ctxData = await fetchGeneratorContextData(player, tx);
+      const ctxForGenerator = buildGeneratorContext(ctxData, bucketId);
 
       if (gen.isInteractive) {
-        await tx
-          .insert(eventInstance)
-          .values({ playerId: player.id, eventKey: gen.key, isInteractive: true, bucketId, state: { step: gen.initial } });
+        await recordInteractive(gen, ctxForGenerator, tx);
         return;
       }
 
-      const { effects, state } = gen.compute(ctxForGenerator, rng);
-      await tx.insert(eventInstance).values({ playerId: player.id, eventKey: gen.key, isInteractive: false, bucketId, state });
-      await applyEffects(effects, ctxForGenerator, tx);
+      const rng = createRngForGenerator(gen, ctxForGenerator);
+      await recordPassive(gen, ctxForGenerator, ctxData, rng, tx);
     });
 
     await ctx.message.reply(`Évènement ajouté à la queue de ${targetPlayer.name}.`);
