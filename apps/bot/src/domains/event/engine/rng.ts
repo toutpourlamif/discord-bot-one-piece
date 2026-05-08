@@ -62,3 +62,9 @@ export function createRng(seed: number): Rng {
     },
   };
 }
+
+/** Tirage déterministe d'un élément à partir d'une graine. Équivalent seeded de `lodash.sample`. */
+export function pickRandomWithSeed<T>(seed: number, items: Array<T>): T {
+  if (items.length === 0) throw new Error('pickRandomWithSeed: items is empty');
+  return items[Math.floor(createRng(seed).next() * items.length)]!;
+}

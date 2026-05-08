@@ -14,8 +14,8 @@ import { InternalError, NotFoundError } from '../../discord/errors.js';
 
 import type { CharacterRow, CharacterTemplateInfo } from './types.js';
 
-export async function getCharactersByPlayerId(playerId: number): Promise<Array<CharacterRow>> {
-  return db
+export async function getCharactersByPlayerId(playerId: number, client: DbOrTransaction = db): Promise<Array<CharacterRow>> {
+  return client
     .select({
       instanceId: characterInstance.id,
       name: characterTemplate.name,

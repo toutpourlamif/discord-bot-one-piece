@@ -3,13 +3,22 @@ import { eq } from 'drizzle-orm';
 
 import { NotFoundError } from '../../discord/errors.js';
 
-export async function findById(id: number, client: DbOrTransaction = db): Promise<Player | undefined> {
+type FindByIdOptions = {
+  forUpdate?: boolean;
+};
+
+export async function findById(id: number, client: DbOrTransaction = db, options: FindByIdOptions = {}): Promise<Player | undefined> {
+  if (options.forUpdate) {
+    const [row] = await client.select().from(player).where(eq(player.id, id)).limit(1).for('update');
+    return row;
+  }
+
   const [row] = await client.select().from(player).where(eq(player.id, id)).limit(1);
   return row;
 }
 
-export async function findByIdOrThrow(id: number, client: DbOrTransaction = db): Promise<Player> {
-  const row = await findById(id, client);
+export async function findByIdOrThrow(id: number, client: DbOrTransaction = db, options: FindByIdOptions = {}): Promise<Player> {
+  const row = await findById(id, client, options);
   if (!row) throw new NotFoundError('Joueur introuvable.');
   return row;
 }
