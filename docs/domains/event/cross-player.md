@@ -50,8 +50,8 @@ Tous les events cross-player ne s'appliquent pas à toutes les paires (combat pi
 
 ```ts
 const piratesEncounter: EventGenerator = {
-  type: 'combat.pirates_encounter',
-  scope: 'interactive',
+  key: 'combat.pirates_encounter',
+  isInteractive: true,
   seedScope: 'zone', // tirage partagé entre tous les joueurs présents dans la zone
   appliesTo: (a, b) => a.status === 'PIRATE' && b.status === 'PIRATE',
   probability: (a, b) => 0.3,
@@ -59,8 +59,8 @@ const piratesEncounter: EventGenerator = {
 };
 
 const piratesAlliance: EventGenerator = {
-  type: 'alliance.pirates',
-  scope: 'interactive',
+  key: 'alliance.pirates',
+  isInteractive: true,
   seedScope: 'zone',
   appliesTo: (a, b) => a.status === 'PIRATE' && b.status === 'PIRATE',
   probability: () => 0.02, // rare

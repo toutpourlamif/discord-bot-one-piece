@@ -4,15 +4,15 @@ Un **générateur** définit quand et comment un event apparaît. **Un fichier p
 
 ## Champs communs
 
-| Champ         | Obligatoire | Rôle                                                                                                                                                                     |
-| ------------- | ----------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `type`        | oui         | identifiant unique du générateur (ex: `passive.seagull_flyby`)                                                                                                           |
-| `scope`       | oui         | `'passive'` ou `'interactive'` (mode d'affichage et timing des effets — cf [architecture.md](./architecture.md))                                                         |
-| `seedScope`   | oui         | `'zone'` (tirage partagé entre tous les joueurs de la zone) ou `'player'` (tirage isolé à un joueur). Détails : [architecture.md](./architecture.md#3-seed-déterministe) |
-| `conditions`  | non         | `(ctx) => boolean` — filtre dur basé sur l'état du joueur                                                                                                                |
-| `cooldown`    | non         | délai en secondes avant qu'un même type puisse re-déclencher (lookup `history`)                                                                                          |
-| `oneTime`     | non         | `true` = ne se déclenche qu'une seule fois dans la vie du joueur                                                                                                         |
-| `probability` | oui         | `(ctx) => number` ∈ [0,1], tirage final                                                                                                                                  |
+| Champ             | Obligatoire | Rôle                                                                                                                                                                     |
+| ----------------- | ----------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `key`             | oui         | identifiant unique du générateur (ex: `passive.seagull_flyby`)                                                                                                           |
+| `isInteractive`   | oui         | `false` (passive) ou `true` (interactive) — mode d'affichage et timing des effets, cf [architecture.md](./architecture.md)                                               |
+| `seedScope`       | oui         | `'zone'` (tirage partagé entre tous les joueurs de la zone) ou `'player'` (tirage isolé à un joueur). Détails : [architecture.md](./architecture.md#3-seed-déterministe) |
+| `conditions`      | non         | `(ctx) => boolean` — filtre dur basé sur l'état du joueur                                                                                                                |
+| `cooldownBuckets` | non         | délai en **buckets** avant qu'un même `key` puisse re-déclencher (lookup `history`). Ex: `2` ≈ 30 min @ 15 min/bucket.                                                   |
+| `oneTime`         | non         | `true` = ne se déclenche qu'une seule fois dans la vie du joueur                                                                                                         |
+| `probability`     | oui         | `(ctx) => number` ∈ [0,1], tirage final                                                                                                                                  |
 
 Choix typique du `seedScope` :
 
@@ -23,44 +23,41 @@ Choix typique du `seedScope` :
 
 Deux fonctions distinctes :
 
-- `build(ctx, rng)` → appelée au calcul (engine). Retourne `{ effects, state }`. Le `state` capture **tout ce qui dépend de `ctx` ou `rng`** au moment du bucket.
+- `compute(ctx, rng)` → appelée au calcul (engine). Retourne `{ effects, state }`. Le `state` capture **tout ce qui dépend de `ctx` ou `rng`** au moment du bucket.
 - `render(state)` → appelée au clic "Suivant". Pure : `state → embed`. **Ne reçoit pas `ctx`.**
 
 ```ts
 const seagullFlyby: PassiveGenerator = {
-  type: 'passive.seagull_flyby',
-  scope: 'passive',
+  key: 'passive.seagull_flyby',
+  isInteractive: false,
   seedScope: 'player', // mouette perso, pas un événement de zone
-  conditions: (ctx) => ctx.zone === 'east_blue', // optionnel
-  cooldown: 1800, // optionnel : 30 min via history
+  conditions: (ctx) => ctx.zone === 'sea_east_blue', // optionnel
+  cooldownBuckets: 2, // optionnel : ≈ 30 min @ 15 min/bucket via history
   probability: () => 0.3, // 30% / bucket éligible
 
-  build: () => ({
+  compute: () => ({
     effects: [],
     state: {},
   }),
 
   render: () =>
-    makeEmbed({
-      title: 'Une mouette passe au-dessus du navire.',
-      image: { url: 'https://cdn.../seagull.png' },
-    }),
+    buildOpEmbed('info').setTitle('Une mouette passe au-dessus du navire.').setImage(buildAssetUrl('events/passive/seagull-flyby.webp')),
 };
 ```
 
 ### Passive avec contenu stochastique ou ctx-dépendant
 
-Tout ce qui vient de `rng` ou `ctx` doit être **figé dans `state`** au `build`, pour que `render` puisse le retrouver à l'identique au clic.
+Tout ce qui vient de `rng` ou `ctx` doit être **figé dans `state`** au `compute`, pour que `render` puisse le retrouver à l'identique au clic.
 
 ```ts
 const fishingHaul: PassiveGenerator = {
-  type: 'passive.fishing_haul',
-  scope: 'passive',
+  key: 'passive.fishing_haul',
+  isInteractive: false,
   seedScope: 'player',
-  conditions: (ctx) => ctx.zone === 'east_blue',
+  conditions: (ctx) => ctx.zone === 'sea_east_blue',
   probability: () => 0.2,
 
-  build: (ctx, rng) => {
+  compute: (ctx, rng) => {
     const hasFishman = ctx.crew.has('fishman');
     const base = 50 + Math.floor(rng.next() * 50);
     const bonus = hasFishman ? base : 0; // homme-poisson double la prise
@@ -73,12 +70,14 @@ const fishingHaul: PassiveGenerator = {
 
   render: (state) =>
     state.hadFishman
-      ? makeEmbed(`Ton homme-poisson plonge et ramène ${state.base + state.bonus} berries (${state.base} + ${state.bonus} bonus).`)
-      : makeEmbed(`Tu pêches ${state.base} berries.`),
+      ? buildOpEmbed('info').setTitle(
+          `Ton homme-poisson plonge et ramène ${state.base + state.bonus} berries (${state.base} + ${state.bonus} bonus).`,
+        )
+      : buildOpEmbed('info').setTitle(`Tu pêches ${state.base} berries.`),
 };
 ```
 
-> **Pourquoi `render` n'a pas `ctx`** : un event passive est un snapshot du passé. Si `render` lisait le ctx actuel, on aurait des incohérences narratives ("Ton homme-poisson plonge…" alors qu'il a quitté l'équipage entre-temps), ou pire un embed qui ne correspond plus à l'effet réellement appliqué. Tout ce qui est nécessaire au rendu doit être figé dans `state` au `build`.
+> **Pourquoi `render` n'a pas `ctx`** : un event passive est un snapshot du passé. Si `render` lisait le ctx actuel, on aurait des incohérences narratives ("Ton homme-poisson plonge…" alors qu'il a quitté l'équipage entre-temps), ou pire un embed qui ne correspond plus à l'effet réellement appliqué. Tout ce qui est nécessaire au rendu doit être figé dans `state` au `compute`.
 
 > **Cas limite — afficher du présent** (ex: "Tu as maintenant X berries au total") : ça relève d'un message de suivi, pas du contenu de l'event. À gérer hors générateur, dans le code qui orchestre l'affichage de la queue.
 
@@ -86,14 +85,14 @@ const fishingHaul: PassiveGenerator = {
 
 ```ts
 const barrelFound: EventGenerator = {
-  type: 'fishing.barrel_found',
-  scope: 'interactive',
+  key: 'fishing.barrel_found',
+  isInteractive: true,
   seedScope: 'player',
   probability: () => 0.1,
   initial: 'choice',
   steps: {
     choice: {
-      embed: () => makeEmbed('Un baril flotte près du navire.'),
+      embed: () => buildOpEmbed('info').setTitle('Un baril flotte près du navire.'),
       choices: () => [
         { id: 'open', label: 'Ouvrir', resolve: openBarrel },
         { id: 'leave', label: 'Laisser', resolve: leaveBarrel },
@@ -105,7 +104,7 @@ const barrelFound: EventGenerator = {
 function openBarrel(ctx, rng) {
   const berries = 50 + Math.floor(rng.next() * 100);
   return {
-    embed: makeEmbed(`Tu trouves ${berries} berries dans le baril.`),
+    embed: buildOpEmbed('info').setTitle(`Tu trouves ${berries} berries dans le baril.`),
     effects: [{ type: 'addBerries', amount: BigInt(berries) }],
     resolutionType: 'fishing.barrel_found.opened',
   };
@@ -114,30 +113,30 @@ function openBarrel(ctx, rng) {
 
 À retenir :
 
-- **Passive** : `build(ctx, rng)` au calcul, `render(state)` au clic. `render` est pure sur `state`.
+- **Passive** : `compute(ctx, rng)` au calcul, `render(state)` au clic. `render` est pure sur `state`.
 - **Interactive** : graphe de `steps` nommées. Chaque étape : `embed(state, ctx)` + `choices(state, ctx)`. Chaque choix : `goTo` (transition) ou `resolve` (résolution finale).
-- `resolve(ctx, rng)` retourne `{ embed, effects, resolutionType }`. C'est là que les effets interactive sont appliqués (≠ passive où c'est au `build`).
+- `resolve(ctx, rng)` retourne `{ embed, effects, resolutionType }`. C'est là que les effets interactive sont appliqués (≠ passive où c'est au `compute`).
 
 ## Forme interactive multi-étapes (graphe)
 
 ```ts
 const defeatCrocodile: EventGenerator = {
-  type: 'mainstory.alabasta.defeat_crocodile',
-  scope: 'interactive',
+  key: 'mainstory.alabasta.defeat_crocodile',
+  isInteractive: true,
   seedScope: 'player', // mainstory perso
   conditions: (ctx) => ctx.history.has('mainstory.alabasta.save_vivi.resolved') && ctx.player.hasItem('haki_basic'),
   probability: () => 1.0,
   initial: 'opener',
   steps: {
     opener: {
-      embed: () => makeEmbed('Crocodile se dresse devant toi.'),
+      embed: () => buildOpEmbed('info').setTitle('Crocodile se dresse devant toi.'),
       choices: () => [
         { id: 'haki', label: 'Charger ton Haki', goTo: 'haki_charged' },
         { id: 'attack', label: 'Attaquer direct', resolve: fightLow },
       ],
     },
     haki_charged: {
-      embed: () => makeEmbed("Ton Haki s'éveille. Tu sens une faille dans sa garde."),
+      embed: () => buildOpEmbed('info').setTitle("Ton Haki s'éveille. Tu sens une faille dans sa garde."),
       choices: () => [{ id: 'strike', label: 'Frapper', resolve: fightHigh }],
     },
   },
@@ -180,12 +179,12 @@ choices: (ctx) =>
 
 Évalués en ordre, premier qui échoue → skip.
 
-| Filtre             | Type                 | Effet                                                 |
-| ------------------ | -------------------- | ----------------------------------------------------- |
-| `conditions(ctx)`  | dur (gameplay)       | `false` → skip. Aucune proba ne rattrape.             |
-| `cooldown: 86400`  | anti-spam (sec)      | `history` "déclenché dans les N sec ?" → skip si oui. |
-| `oneTime: true`    | unique à vie         | `history` "déjà déclenché une fois ?" → skip si oui.  |
-| `probability(ctx)` | tirage final ∈ [0,1] | comparé à `rng.next()` ; échec → skip.                |
+| Filtre                | Type                 | Effet                                                       |
+| --------------------- | -------------------- | ----------------------------------------------------------- |
+| `conditions(ctx)`     | dur (gameplay)       | `false` → skip. Aucune proba ne rattrape.                   |
+| `cooldownBuckets: 96` | anti-spam (buckets)  | `history` "déclenché dans les N derniers buckets ?" → skip. |
+| `oneTime: true`       | unique à vie         | `history` "déjà déclenché une fois ?" → skip si oui.        |
+| `probability(ctx)`    | tirage final ∈ [0,1] | comparé à `rng.next()` ; échec → skip.                      |
 
 **Tous lus depuis `history`.** Pas de colonne par compteur sur `player` (`barrel_count_24h`, `kraken_count_lifetime`, …). Avantage immense : ajouter un filtre ne demande aucune migration.
 
@@ -194,10 +193,10 @@ choices: (ctx) =>
 Pas un gros event "Alabasta". Une **suite d'events distincts** qui se débloquent par leurs `conditions` :
 
 ```ts
-{ type: 'mainstory.alabasta.find_map',         conditions: ..., oneTime: true,  probability: 0.95 }
-{ type: 'mainstory.alabasta.save_vivi',        conditions: history.has('...find_map.resolved') && crew.has('vivi'), oneTime: true, probability: 0.95 }
-{ type: 'mainstory.alabasta.defeat_crocodile', conditions: history.has('...save_vivi.resolved') && hasItem('haki'), probability: 1.0 }
-{ type: 'mainstory.alabasta.retry_crocodile',  conditions: lastResolutionOf('...defeat_crocodile') === 'lost', cooldown: 7200 }
+{ key: 'mainstory.alabasta.find_map',         conditions: ..., oneTime: true,  probability: 0.95 }
+{ key: 'mainstory.alabasta.save_vivi',        conditions: history.has('...find_map.resolved') && crew.has('vivi'), oneTime: true, probability: 0.95 }
+{ key: 'mainstory.alabasta.defeat_crocodile', conditions: history.has('...save_vivi.resolved') && hasItem('haki'), probability: 1.0 }
+{ key: 'mainstory.alabasta.retry_crocodile',  conditions: lastResolutionOf('...defeat_crocodile') === 'lost', cooldownBuckets: 8 }
 ```
 
 `probability` haute (0.95–1.0) : pas d'attente RNG hostile une fois éligible.
@@ -206,16 +205,16 @@ Pas un gros event "Alabasta". Une **suite d'events distincts** qui se débloquen
 
 ## `ctx` : objet contexte
 
-| Champ              | Contenu                                                                    |
-| ------------------ | -------------------------------------------------------------------------- |
-| `ctx.player`       | ligne `player` actuelle                                                    |
-| `ctx.crew`         | personnages embarqués + `has(name)`, `getByName(name)`                     |
-| `ctx.ship`         | navire et modules                                                          |
-| `ctx.inventory`    | ressources                                                                 |
-| `ctx.history`      | helpers : `has(type)`, `lastResolutionOf(prefix)`, `countSince(type, sec)` |
-| `ctx.bucket_id`    | bucket en cours                                                            |
-| `ctx.zone`         | zone du joueur à ce bucket                                                 |
-| `ctx.othersInZone` | autres joueurs présents dans la zone au bucket (tous serveurs confondus)   |
+| Champ              | Contenu                                                                               |
+| ------------------ | ------------------------------------------------------------------------------------- |
+| `ctx.player`       | ligne `player` actuelle                                                               |
+| `ctx.crew`         | `members: Array<CharacterRow>` + helpers `has(name)`, `getByName(name)`               |
+| `ctx.ship`         | navire et modules                                                                     |
+| `ctx.inventory`    | ressources                                                                            |
+| `ctx.history`      | helpers : `has(type)`, `lastResolutionOf(prefix)`, `countSinceBuckets(type, buckets)` |
+| `ctx.bucketId`     | bucket en cours                                                                       |
+| `ctx.zone`         | zone du joueur à ce bucket                                                            |
+| `ctx.othersInZone` | autres joueurs présents dans la zone au bucket (tous serveurs confondus)              |
 
 > **Pourquoi un objet plutôt que des paramètres positionnels** : ajouter `ctx.weather` ne casse aucun générateur existant.
 
@@ -224,7 +223,7 @@ Pas un gros event "Alabasta". Une **suite d'events distincts** qui se débloquen
 Les conséquences mécaniques sont **déclarées en data**, jamais appliquées par le générateur.
 
 ```ts
-type Effect =
+type EventEffect =
   | { type: 'addBerries'; amount: bigint }
   | { type: 'spendBerries'; amount: bigint }
   | { type: 'addBounty'; amount: bigint }
@@ -233,7 +232,9 @@ type Effect =
   | { type: 'addMorale'; amount: number };
 ```
 
-L'engine a `applyEffects(effects, ctx, transaction)` qui dispatch chaque variante.
+> **État courant** : seuls `addBerries` et `spendBerries` sont implémentés (cf `apps/bot/src/domains/event/effects/types.ts`). Le reste est roadmap.
+
+L'engine a `applyEffects(effects, playerId, tx)` qui dispatch chaque variante.
 
 > **Pourquoi pas `ctx.player.berries += 50` dans `resolve`** : couple le générateur à Drizzle / aux transactions, disperse le code (impossible de retrouver tous les effets sur les berries), difficile à tester. Avec Effects en data : pure logique métier d'un côté, persistance de l'autre.
 
@@ -248,20 +249,20 @@ Une ligne `history` est écrite (cf doc dédiée `history.md`) :
 
 Champs :
 
-- `event_type` = type passive (ex: `passive.fishing_haul`) ou `resolutionType` du choix interactive (ex: `mainstory.alabasta.defeat_crocodile.won`).
+- `event_type` (DB) = `key` du générateur passive (ex: `passive.fishing_haul`) ou `resolutionType` du choix interactive (ex: `mainstory.alabasta.defeat_crocodile.won`).
 - `actor_player_id` = joueur déclencheur, ou `NULL` pour events système.
 - `target_type` + `target_id` = optionnel.
 - `bucket_id` = bucket d'origine.
 - `payload` = données utiles (montant gagné, choix fait, qui a perdu…).
 
-C'est cette table qui rend possibles `conditions`, `cooldown`, `oneTime`, mainstory, et tout event qui réagit au passé.
+C'est cette table qui rend possibles `conditions`, `cooldownBuckets`, `oneTime`, mainstory, et tout event qui réagit au passé.
 
 ## Ajouter un nouvel event
 
 1. Créer `generators/<famille>/<nom>.ts`.
 2. Exporter un `EventGenerator` qui respecte le contrat (`types.ts`).
 3. L'ajouter dans `registry.ts`.
-4. Si nouveau type d'effet : étendre l'union `Effect` + ajouter le handler dans `apply-effects.ts`.
+4. Si nouveau type d'effet : étendre l'union `EventEffect` + ajouter le handler dans `apply-effects.ts`.
 5. Si nouveau `resolutionType` : déclarer le payload dans `apps/bot/src/domains/history/types/event.ts` (cf `history.md`).
 
 Pas de migration, sauf nouveau type d'effet inédit.

@@ -46,7 +46,7 @@ Cf doc dédiée `history.md`. Lignes pertinentes pour le domaine event :
 | `bucket_id`                 | bucket d'origine de l'event                                                                    |
 | `payload`                   | données utiles aux futurs lookups (montant gagné, choix fait, qui a perdu…)                    |
 
-`history` rend possibles : `conditions`, `cooldown`, `oneTime`, mainstory, et tout event qui réagit au passé.
+`history` rend possibles : `conditions`, `cooldownBuckets`, `oneTime`, mainstory, et tout event qui réagit au passé.
 
 ## Transactions
 

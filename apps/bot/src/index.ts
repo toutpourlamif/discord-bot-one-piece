@@ -3,6 +3,10 @@ import { Client, Events, GatewayIntentBits } from 'discord.js';
 import { setBotIconUrl } from './discord/branding.js';
 import { routeInteraction } from './discord/interactionRouter.js';
 import { routeMessage } from './discord/router.js';
+import { validateGeneratorsPaths } from './domains/event/engine/validate-generators-paths.js';
+import { interactiveGenerators } from './domains/event/generators/registry.js';
+
+validateGeneratorsPaths(interactiveGenerators);
 
 const token = process.env.DISCORD_TOKEN;
 if (!token) {

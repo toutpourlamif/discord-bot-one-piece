@@ -1,5 +1,6 @@
 import type { View } from '../../discord/types.js';
 import { buildMenuButtons, buildOpEmbed } from '../../discord/utils/index.js';
+import { getCrewDisplayName } from '../crew/utils/get-crew-display-name.js';
 import { formatBerry } from '../economy/utils/format-berry.js';
 
 import { PROFIL_BUTTON_NAME } from './constants.js';
@@ -14,6 +15,7 @@ export async function buildProfilView(playerId: number, ownerDiscordId: string):
     .addFields(
       { name: '💰 Bounty', value: formatBerry(player.bounty), inline: true },
       { name: '⚖️ Karma', value: `${player.karma} (${getKarmaGrade(player.karma)})`, inline: true },
+      { name: '🏴‍☠️ Équipage', value: getCrewDisplayName(player), inline: true },
     );
   return { embeds: [embed], components: [navRow] };
 }

@@ -20,12 +20,6 @@ export class NotFoundError extends AppError {
     this.name = 'NotFoundError';
   }
 }
-export class ForbiddenError extends AppError {
-  constructor(message = 'Introuvable.') {
-    super(message, 'warn');
-    this.name = 'ForbiddenError';
-  }
-}
 
 export class ValidationError extends AppError {
   constructor(message: string) {
@@ -34,8 +28,15 @@ export class ValidationError extends AppError {
   }
 }
 
+export class ForbiddenError extends AppError {
+  constructor(message = "Tu n'as pas la permission de faire ça.") {
+    super(message, 'warn');
+    this.name = 'ForbiddenError';
+  }
+}
+
 export class InternalError extends AppError {
-  constructor(message: string) {
+  constructor(message = 'Une erreur est survenue, veuillez contacter un admin.') {
     super(message, 'error', 'Une erreur est survenue, veuillez contacter un admin.');
     this.name = 'InternalError';
   }
