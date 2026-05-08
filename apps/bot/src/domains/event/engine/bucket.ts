@@ -4,6 +4,10 @@ export function getBucketIdFromDate(date: Date): number {
   return Math.floor(date.getTime() / 1000 / BUCKET_DURATION_SEC);
 }
 
+export function bucketIdFromTimestamp(timestamp: Date): number {
+  return getBucketIdFromDate(timestamp);
+}
+
 export function getStartDateOfBucket(bucketId: number): Date {
   return new Date(bucketId * BUCKET_DURATION_SEC * 1000);
 }
