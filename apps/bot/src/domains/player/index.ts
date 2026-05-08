@@ -1,4 +1,4 @@
-export { findOrCreatePlayer } from './service.js';
+export { findOrCreatePlayer, isPlayerUpToDate } from './service.js';
 export { getKarmaGrade } from './karma.js';
 export * from './commands/index.js';
 export * from './interactions/index.js';

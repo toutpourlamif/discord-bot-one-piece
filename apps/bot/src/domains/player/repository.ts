@@ -2,6 +2,7 @@ import { db, player, type DbOrTransaction, type Player, type Zone } from '@one-p
 import { eq } from 'drizzle-orm';
 
 import { NotFoundError } from '../../discord/errors.js';
+import { bucketIdFromTimestamp } from '../event/engine/bucket.js';
 
 type FindByIdOptions = {
   forUpdate?: boolean;
@@ -28,11 +29,8 @@ export async function findByDiscordId(discordId: string): Promise<Player | undef
   return row;
 }
 
-// TODO: remplacer par bucketIdFromTimestamp (#174) une fois mergé
-const BUCKET_DURATION_SECONDS = 15 * 60;
-
 export async function create(discordId: string, name: string, originGuildId: string, transaction: DbOrTransaction = db): Promise<Player> {
-  const lastProcessedBucketId = Math.floor(Date.now() / 1000 / BUCKET_DURATION_SECONDS);
+  const lastProcessedBucketId = bucketIdFromTimestamp(new Date());
   const [row] = await transaction.insert(player).values({ discordId, name, originGuildId, lastProcessedBucketId }).returning();
   return row!;
 }
