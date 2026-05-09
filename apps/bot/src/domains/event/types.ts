@@ -62,7 +62,7 @@ type InteractiveStep = {
 
 export type InteractiveGenerator = GeneratorBase & {
   isInteractive: true;
-  initial: string;
+  initialStep: string;
   steps: Record<string, InteractiveStep>;
 };
 
