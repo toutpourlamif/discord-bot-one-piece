@@ -84,12 +84,12 @@ const fishingHaul: PassiveGenerator = {
 ## Forme interactive 1 étape
 
 ```ts
-const barrelFound: EventGenerator = {
+const barrelFound: InteractiveGenerator = {
   key: 'fishing.barrel_found',
   isInteractive: true,
   seedScope: 'player',
   probability: () => 0.1,
-  initial: 'choice',
+  initialStep: 'choice',
   steps: {
     choice: {
       embed: () => buildOpEmbed('info').setTitle('Un baril flotte près du navire.'),
@@ -120,13 +120,13 @@ function openBarrel(ctx, rng) {
 ## Forme interactive multi-étapes (graphe)
 
 ```ts
-const defeatCrocodile: EventGenerator = {
+const defeatCrocodile: InteractiveGenerator = {
   key: 'mainstory.alabasta.defeat_crocodile',
   isInteractive: true,
   seedScope: 'player', // mainstory perso
   conditions: (ctx) => ctx.history.has('mainstory.alabasta.save_vivi.resolved') && ctx.player.hasItem('haki_basic'),
   probability: () => 1.0,
-  initial: 'opener',
+  initialStep: 'opener',
   steps: {
     opener: {
       embed: () => buildOpEmbed('info').setTitle('Crocodile se dresse devant toi.'),
@@ -260,7 +260,7 @@ C'est cette table qui rend possibles `conditions`, `cooldownBuckets`, `oneTime`,
 ## Ajouter un nouvel event
 
 1. Créer `generators/<famille>/<nom>.ts`.
-2. Exporter un `EventGenerator` qui respecte le contrat (`types.ts`).
+2. Exporter un `Genrator` qui respecte le contrat (`types.ts`).
 3. L'ajouter dans `registry.ts`.
 4. Si nouveau type d'effet : étendre l'union `EventEffect` + ajouter le handler dans `apply-effects.ts`.
 5. Si nouveau `resolutionType` : déclarer le payload dans `apps/bot/src/domains/history/types/event.ts` (cf `history.md`).
