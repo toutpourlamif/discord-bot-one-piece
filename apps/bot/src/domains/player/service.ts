@@ -46,9 +46,9 @@ export async function renamePlayer(playerId: number, rawName: string): Promise<P
 
 export async function isPlayerUpToDate(playerId: number): Promise<boolean> {
   const player = await playerRepository.findByIdOrThrow(playerId);
-  const lastCompleteBucketId = getLatestProcessableBucket();
+  const latestProcessableBucketId = getLatestProcessableBucket();
 
-  if (player.lastProcessedBucketId < lastCompleteBucketId) {
+  if (player.lastProcessedBucketId < latestProcessableBucketId) {
     return false;
   }
 
