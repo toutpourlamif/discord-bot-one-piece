@@ -4,8 +4,8 @@ export function getBucketIdFromDate(date: Date): number {
   return Math.floor(date.getTime() / 1000 / BUCKET_DURATION_SEC);
 }
 
-export function bucketIdFromTimestamp(timestamp: Date): number {
-  return getBucketIdFromDate(timestamp);
+export function getNowBucketId(): number {
+  return getBucketIdFromDate(new Date());
 }
 
 export function getStartDateOfBucket(bucketId: number): Date {
@@ -18,5 +18,5 @@ export function getEndDateOfBucket(bucketId: number): Date {
 
 /** Dernier bucket complet (= courant - 1). Le bucket en cours n'est pas traité tant qu'il n'est pas terminé. */
 export function getLatestProcessableBucket(): number {
-  return getBucketIdFromDate(new Date()) - 1;
+  return getNowBucketId() - 1;
 }

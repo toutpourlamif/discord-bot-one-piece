@@ -3,7 +3,7 @@ import { db, type DbOrTransaction, type Player, type Zone } from '@one-piece/db'
 import { ValidationError } from '../../discord/errors.js';
 import { sanitizeName } from '../../shared/sanitize-name.js';
 import * as characterRepository from '../character/repository.js';
-import { bucketIdFromTimestamp } from '../event/engine/bucket.js';
+import { getLatestProcessableBucket } from '../event/engine/bucket.js';
 import * as eventRepository from '../event/repository.js';
 import * as historyRepository from '../history/index.js';
 import { findOrCreateShip } from '../ship/service.js';
@@ -46,7 +46,7 @@ export async function renamePlayer(playerId: number, rawName: string): Promise<P
 
 export async function isPlayerUpToDate(playerId: number): Promise<boolean> {
   const player = await playerRepository.findByIdOrThrow(playerId);
-  const lastCompleteBucketId = bucketIdFromTimestamp(new Date()) - 1;
+  const lastCompleteBucketId = getLatestProcessableBucket();
 
   if (player.lastProcessedBucketId < lastCompleteBucketId) {
     return false;
