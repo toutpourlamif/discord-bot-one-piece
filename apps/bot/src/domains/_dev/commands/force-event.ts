@@ -1,8 +1,8 @@
-import { db, type Player } from '@one-piece/db';
+import { db } from '@one-piece/db';
 
-import { DISCORD_ID_REGEX } from '../../../discord/constants.js';
 import { NotFoundError, ValidationError } from '../../../discord/errors.js';
 import type { Command } from '../../../discord/types.js';
+import { buildOpEmbed } from '../../../discord/utils/build-op-embed.js';
 import { getNowBucketId } from '../../event/engine/bucket.js';
 import { buildGeneratorContext, fetchGeneratorContextData } from '../../event/engine/context-builders.js';
 import { recordInteractive, recordPassive } from '../../event/engine/record-event.js';
@@ -10,34 +10,15 @@ import { createRngForGenerator } from '../../event/engine/rng.js';
 import { allGenerators } from '../../event/generators/registry.js';
 import { resolveTargetPlayer } from '../../player/index.js';
 import * as playerRepository from '../../player/repository.js';
-import { findOrCreatePlayer } from '../../player/service.js';
 
 export const forceEventCommand: Command = {
   name: ['forceEvent', 'force-event'],
   async handler(ctx) {
-    let targetPlayer: Player;
-    let eventKey: string | undefined;
-
-    if (ctx.message.mentions.users.size > 0) {
-      const resolved = await resolveTargetPlayer(ctx);
-      targetPlayer = resolved.targetPlayer;
-      [eventKey] = resolved.rest;
-    } else {
-      const [rawTargetId, rawEventKey] = ctx.args;
-      if (!rawTargetId || !DISCORD_ID_REGEX.test(rawTargetId)) {
-        throw new ValidationError('Usage: !force-event <mention ou id joueur> <clé évènement>');
-      }
-
-      const targetUser = await ctx.message.client.users.fetch(rawTargetId).catch(() => null);
-      if (!targetUser) throw new NotFoundError(`Joueur introuvable: ${rawTargetId}`);
-
-      const result = await findOrCreatePlayer(targetUser.id, targetUser.username, ctx.guild.id);
-      targetPlayer = result.player;
-      eventKey = rawEventKey;
-    }
+    const { targetPlayer, rest } = await resolveTargetPlayer(ctx);
+    const [eventKey] = rest;
 
     if (!eventKey) {
-      throw new ValidationError('Usage: !force-event <mention ou id joueur> <clé évènement>');
+      throw new ValidationError('Usage: !force-event <@user> <clé évènement>');
     }
 
     const gen = allGenerators.find((candidate) => candidate.key === eventKey);
@@ -60,7 +41,7 @@ export const forceEventCommand: Command = {
       const rng = createRngForGenerator(gen, ctxForGenerator);
       await recordPassive(gen, ctxForGenerator, ctxData, rng, tx);
     });
-
-    await ctx.message.reply(`Évènement ajouté à la queue de ${targetPlayer.name}.`);
+    const successMessage = `Évènement ${gen.key} ajouté à la queue de ${targetPlayer.name}`;
+    await ctx.message.reply({ embeds: [buildOpEmbed('success').setDescription(successMessage)] });
   },
 };

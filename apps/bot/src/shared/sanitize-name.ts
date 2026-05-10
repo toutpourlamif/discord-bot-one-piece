@@ -1,4 +1,4 @@
-import { DISCORD_FORMATTING_CHARS_REGEX } from '../discord/constants.js';
+const DISCORD_FORMATTING_CHARS_REGEX = /[*_`~|><@/"[\]()\\]/g;
 
 const MULTIPLE_SPACES = /\s+/g;
 
