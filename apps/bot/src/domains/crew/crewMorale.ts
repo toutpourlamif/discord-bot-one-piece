@@ -20,7 +20,7 @@ const CREW_MORALE_GRADES = [
   'Détérminé',
   'Combatif',
   'Enthousiaste',
-  'Invicible',
+  'Invincible',
   'Légendaire',
 ] as const;
 
