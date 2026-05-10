@@ -2,12 +2,7 @@ import type { ButtonInteraction } from 'discord.js';
 
 import { ValidationError } from '../../../discord/errors.js';
 import type { ButtonHandler } from '../../../discord/types.js';
-import {
-  assertInteractorIsTheOwner,
-  assertPermissionsHaveAdministrator,
-  buildOpEmbed,
-  parseOwnerDiscordId,
-} from '../../../discord/utils/index.js';
+import { assertGuildMemberIsAdmin, assertInteractorIsTheOwner, buildOpEmbed, parseOwnerDiscordId } from '../../../discord/utils/index.js';
 import { CONFIRM_SET_PREFIX_BUTTON_NAME } from '../constants.js';
 import { requireGuildId } from '../guards.js';
 import * as guildRepository from '../repository.js';
@@ -15,7 +10,7 @@ import * as guildRepository from '../repository.js';
 async function handle(interaction: ButtonInteraction, args: Array<string>): Promise<void> {
   const ownerDiscordId = parseOwnerDiscordId(args[0]);
   assertInteractorIsTheOwner(interaction, ownerDiscordId);
-  assertPermissionsHaveAdministrator(interaction.memberPermissions);
+  assertGuildMemberIsAdmin(interaction.member);
 
   const prefix = requireGuildPrefix(args[1]);
   const guildId = requireGuildId(interaction.guildId);

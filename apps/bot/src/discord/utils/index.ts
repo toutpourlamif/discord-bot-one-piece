@@ -1,4 +1,4 @@
-export { assertGuildMemberIsAdmin, assertPermissionsHaveAdministrator } from './assert-guild-member-is-admin.js';
+export { assertGuildMemberIsAdmin } from './assert-guild-member-is-admin.js';
 export { assertInteractorIsTheOwner } from './assert-interactor-is-the-owner.js';
 export { buildBackAction, buildBackButton } from './build-back-action.js';
 export { buildCustomId } from './build-custom-id.js';
