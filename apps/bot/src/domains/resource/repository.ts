@@ -50,6 +50,17 @@ export async function findById(id: number): Promise<ResourceTemplate | undefined
   return row;
 }
 
+export async function hasResourceByName(playerId: number, name: ResourceName, client: DbOrTransaction = db): Promise<boolean> {
+  const [row] = await client
+    .select({ id: resourceInstance.id })
+    .from(resourceInstance)
+    .innerJoin(resourceTemplate, eq(resourceInstance.templateId, resourceTemplate.id))
+    .where(and(eq(resourceInstance.playerId, playerId), eq(resourceTemplate.name, name), gte(resourceInstance.quantity, 1)))
+    .limit(1);
+
+  return row !== undefined;
+}
+
 export async function debitResourceByName(
   playerId: number,
   name: ResourceName,

@@ -1,4 +1,4 @@
-export { findOrCreatePlayer, isPlayerUpToDate } from './service.js';
+export { completeTravel, findOrCreatePlayer, isPlayerUpToDate, recordZoneChange } from './service.js';
 export { getKarmaGrade } from './karma.js';
 export * from './commands/index.js';
 export * from './interactions/index.js';
