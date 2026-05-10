@@ -1,10 +1,10 @@
-import { MAX_GUILD_PREFIX_LENGTH } from '@one-piece/db';
+import { MAX_GUILD_PREFIX_LENGTH, MIN_GUILD_PREFIX_LENGTH } from '@one-piece/db';
 import { ActionRowBuilder, ButtonBuilder, ButtonStyle } from 'discord.js';
 
 import { CUSTOM_ID_SEPARATOR } from '../../../discord/constants.js';
 import { ValidationError } from '../../../discord/errors.js';
 import type { Command } from '../../../discord/types.js';
-import { assertHasAdministratorPermission, buildCustomId, buildOpEmbed } from '../../../discord/utils/index.js';
+import { assertGuildMemberIsAdmin, buildCustomId, buildOpEmbed } from '../../../discord/utils/index.js';
 import { CANCEL_SET_PREFIX_BUTTON_NAME, CONFIRM_SET_PREFIX_BUTTON_NAME } from '../constants.js';
 
 const WHITESPACE_REGEX = /\s/;
@@ -12,9 +12,9 @@ const WHITESPACE_REGEX = /\s/;
 export const setPrefixCommand: Command = {
   name: 'setprefix',
   async handler({ message, args, guild }) {
-    assertHasAdministratorPermission(message.member?.permissions);
+    assertGuildMemberIsAdmin(message.member);
 
-    const prefix = requireGuildPrefixArg(args);
+    const prefix = parseGuildPrefixArg(args);
 
     const embed = buildOpEmbed('warn')
       .setTitle('Changer le préfixe ?')
@@ -35,19 +35,19 @@ export const setPrefixCommand: Command = {
   },
 };
 
-function requireGuildPrefixArg(args: Array<string>): string {
+function parseGuildPrefixArg(args: Array<string>): string {
   if (args.length !== 1) {
     throw new ValidationError('Donne exactement un mot. Ex: !setprefix $');
   }
 
   const prefix = args[0]!;
-  assertValidGuildPrefix(prefix);
+  assertPrefixIsValid(prefix);
   return prefix;
 }
 
-function assertValidGuildPrefix(prefix: string): void {
-  if (prefix.length < 1 || prefix.length > MAX_GUILD_PREFIX_LENGTH) {
-    throw new ValidationError('Le préfixe doit faire entre 1 et 8 caractères.');
+function assertPrefixIsValid(prefix: string): void {
+  if (prefix.length < MIN_GUILD_PREFIX_LENGTH || prefix.length > MAX_GUILD_PREFIX_LENGTH) {
+    throw new ValidationError(`Le préfixe doit faire entre ${MIN_GUILD_PREFIX_LENGTH} et ${MAX_GUILD_PREFIX_LENGTH} caractères.`);
   }
 
   if (WHITESPACE_REGEX.test(prefix)) {
