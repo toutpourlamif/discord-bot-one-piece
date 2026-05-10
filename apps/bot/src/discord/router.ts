@@ -44,7 +44,7 @@ export async function routeMessage(message: Message, prefix: string): Promise<vo
 
   try {
     const guildId = requireGuildId(message.guildId);
-    const guild = await guildRepository.findOrCreate(guildId);
+    const guild = await guildRepository.findOrCreate(guildId, message.guild!.name);
     const { player } = await findOrCreatePlayer(message.author.id, message.author.username, guild.id);
 
     if (command.requiresSynchronization !== false) {
