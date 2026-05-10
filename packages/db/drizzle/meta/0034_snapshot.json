@@ -1,5 +1,5 @@
 {
-  "id": "f4d03fb4-06f1-4cef-8ee6-913981199115",
+  "id": "704d6722-c453-4e8f-86b4-ada64a6b6d8b",
   "prevId": "428dfca7-517c-4c54-8ac9-72e6efc90cb6",
   "version": "7",
   "dialect": "postgresql",
@@ -589,6 +589,13 @@
           "primaryKey": true,
           "notNull": true
         },
+        "name": {
+          "name": "name",
+          "type": "varchar(200)",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'Unknown'"
+        },
         "language": {
           "name": "language",
           "type": "varchar(8)",
@@ -836,13 +843,6 @@
         },
         "karma": {
           "name": "karma",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true,
-          "default": 0
-        },
-        "crew_morale": {
-          "name": "crew_morale",
           "type": "integer",
           "primaryKey": false,
           "notNull": true,
