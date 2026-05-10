@@ -1,3 +1,4 @@
+import { bucketsCommand } from './buckets.js';
 import { buyCommand } from './buy.js';
 import { colorCommand } from './color.js';
 import { debugCommand } from './debug/index.js';
@@ -26,6 +27,7 @@ export const devCommands = [
   randomCommand,
   debugCommand,
   emojiCommand,
+  bucketsCommand,
   buyCommand,
   sellCommand,
   upgradeShipCommand,
