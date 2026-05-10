@@ -96,7 +96,7 @@ export async function synchronizePlayer(playerId: number): Promise<SyncResult> {
         const picked = pickRandomWithSeed(seedFromBucketAndPlayer(bucketId, playerId), candidates);
 
         await eventRepository.insertWithIdempotence(
-          { playerId, eventKey: picked.key, isInteractive: true, bucketId, state: { step: picked.initial } },
+          { playerId, eventKey: picked.key, isInteractive: true, bucketId, state: { step: picked.initialStep } },
           tx,
         );
         await playerRepository.setLastProcessedBucketId(playerId, bucketId, tx);
