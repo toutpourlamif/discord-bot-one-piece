@@ -1,7 +1,6 @@
-import type { ResourceName } from '@one-piece/db';
-import { type Island, type Sea } from '@one-piece/db';
+import type { ResourceName, Island, Sea } from '@one-piece/db';
 
-type TravailRequirement = { kind: 'item'; name: ResourceName };
+type TravelRequirement = { kind: 'item'; name: ResourceName };
 
 type TravelModifier = { kind: 'no_navigator'; multiplier: number };
 
@@ -10,8 +9,8 @@ type Edge = {
   to: Island;
   via: Sea;
   baseDurationBuckets: number;
-  requires?: Array<TravailRequirement>;
-  Modifiers?: Array<TravelModifier>;
+  requirements?: Array<TravelRequirement>;
+  modifiers?: Array<TravelModifier>;
 };
 
 export const ZONE_GRAPH = [
@@ -22,27 +21,27 @@ export const ZONE_GRAPH = [
     to: 'whisky_peak',
     via: 'sea_paradise',
     baseDurationBuckets: 12,
-    requires: [{ kind: 'item', name: 'Log Pose' }],
+    requirements: [{ kind: 'item', name: 'Log Pose' }],
   },
   {
     from: 'whisky_peak',
     to: 'little_garden',
     via: 'sea_paradise',
     baseDurationBuckets: 18,
-    requires: [{ kind: 'item', name: 'Log Pose' }],
+    requirements: [{ kind: 'item', name: 'Log Pose' }],
   },
   {
     from: 'little_garden',
     to: 'drum',
     via: 'sea_paradise',
     baseDurationBuckets: 25,
-    requires: [{ kind: 'item', name: 'Log Pose' }],
+    requirements: [{ kind: 'item', name: 'Log Pose' }],
   },
   {
     from: 'drum',
     to: 'alabasta',
     via: 'sea_paradise',
     baseDurationBuckets: 30,
-    requires: [{ kind: 'item', name: 'Log Pose' }],
+    requirements: [{ kind: 'item', name: 'Log Pose' }],
   },
 ] satisfies Array<Edge>;
