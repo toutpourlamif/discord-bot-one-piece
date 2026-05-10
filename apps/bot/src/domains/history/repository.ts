@@ -57,12 +57,18 @@ type WriteEventResolutionArgs = {
   // TODO: renommer en `kind` quand history.event_type sera renommé (cf packages/db/src/domains/history/schema.ts)
   eventType: string;
   bucketId: number;
+  payload?: JSONFromSQL;
 };
 
 export async function writeEventResolution(args: WriteEventResolutionArgs, client: DbOrTransaction = db): Promise<void> {
   await client
     .insert(history)
-    .values(args)
+    .values({
+      actorPlayerId: args.actorPlayerId,
+      eventType: args.eventType,
+      bucketId: args.bucketId,
+      ...(args.payload === undefined ? {} : { payload: args.payload }),
+    })
     .onConflictDoNothing({
       target: [history.actorPlayerId, history.eventType, history.bucketId],
       where: sql`${history.actorPlayerId} IS NOT NULL AND ${history.bucketId} IS NOT NULL`,

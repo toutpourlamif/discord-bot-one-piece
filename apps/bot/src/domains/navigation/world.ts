@@ -1,10 +1,10 @@
 import type { ResourceName, Island, Sea } from '@one-piece/db';
 
-type TravelRequirement = { kind: 'item'; name: ResourceName };
+export type TravelRequirement = { kind: 'item'; name: ResourceName };
 
-type TravelModifier = { kind: 'no_navigator'; multiplier: number };
+export type TravelModifier = { kind: 'no_navigator'; multiplier: number };
 
-type Edge = {
+export type Edge = {
   from: Island;
   to: Island;
   via: Sea;

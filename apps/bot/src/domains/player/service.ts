@@ -5,7 +5,6 @@ import { sanitizeName } from '../../shared/sanitize-name.js';
 import * as characterRepository from '../character/repository.js';
 import { getLatestProcessableBucket } from '../event/engine/bucket.js';
 import * as eventRepository from '../event/repository.js';
-import * as historyRepository from '../history/index.js';
 import { findOrCreateShip } from '../ship/service.js';
 
 import { assertNameNotEmpty, assertNameWithinMaxLength } from './guards/index.js';
@@ -58,17 +57,8 @@ export async function isPlayerUpToDate(playerId: number): Promise<boolean> {
 }
 
 export async function recordZoneChange(playerId: number, newZone: Zone, bucketId: number, client: DbOrTransaction = db): Promise<void> {
-  const currentPlayer = await playerRepository.findByIdOrThrow(playerId, client);
-  const from = currentPlayer.currentZone;
+  const player = await playerRepository.findByIdOrThrow(playerId, client);
+  if (player.currentZone === newZone) throw new ValidationError('Vous êtes déjà à cet endroit');
 
-  if (from === newZone) throw new ValidationError('Vous êtes déjà à cet endroit');
-
-  await playerRepository.updateZone(playerId, newZone, client);
-  await historyRepository.appendHistory({
-    type: 'player.zone_changed',
-    actorPlayerId: playerId,
-    bucketId,
-    payload: { from, to: newZone },
-    client,
-  });
+  await playerRepository.recordZoneChange({ playerId, newZone, bucketId, client });
 }
