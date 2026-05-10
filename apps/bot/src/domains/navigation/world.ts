@@ -1,8 +1,7 @@
-import { ISLANDS, SEAS, ZONES, type Island, type Sea, type Zone } from '@one-piece/db';
+import type { ResourceName } from '@one-piece/db';
+import { type Island, type Sea } from '@one-piece/db';
 
-export { ISLANDS, SEAS, ZONES, type Island, type Sea, type Zone };
-
-type TravelCondition = { kind: 'item'; name: string };
+type TravailRequirement = { kind: 'item'; name: ResourceName };
 
 type TravelModifier = { kind: 'no_navigator'; multiplier: number };
 
@@ -11,8 +10,8 @@ type Edge = {
   to: Island;
   via: Sea;
   baseDurationBuckets: number;
-  requires?: Array<TravelCondition>;
-  softModifiers?: Array<TravelModifier>;
+  requires?: Array<TravailRequirement>;
+  Modifiers?: Array<TravelModifier>;
 };
 
 export const ZONE_GRAPH = [
