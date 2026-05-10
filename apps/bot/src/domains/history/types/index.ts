@@ -1,4 +1,5 @@
 import type { CrewLog } from './crew.js';
+import type { FishingLog } from './fishing.js';
 import type { PlayerLog } from './player.js';
 
-export type Log = CrewLog | PlayerLog;
+export type Log = CrewLog | PlayerLog | FishingLog;
