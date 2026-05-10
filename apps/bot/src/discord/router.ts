@@ -48,7 +48,7 @@ export async function routeMessage(message: Message, prefix: string): Promise<vo
     const { player } = await findOrCreatePlayer(message.author.id, message.author.username, guild.id);
 
     if (command.requiresSynchronization !== false) {
-      await autoSyncBeforeAction(message, player.id);
+      await autoSyncBeforeAction(message, player);
     }
 
     await command.handler({ message, args, player, guild });
