@@ -1,13 +1,6 @@
-import type { DevilFruitName } from '../../devil_fruit/devil_fruit_template/data.js';
-
 import { PLAYER_AS_CHARACTER_TEMPLATE_NAME } from './constants.js';
-import type { CharacterTemplateInsert } from './schema.js';
-
-/** Nom du template spéciale qui représente le player (voir doc) */
-
-type CharacterTemplateSeed = Omit<CharacterTemplateInsert, 'devilFruitTemplateId'> & {
-  devilFruitName?: DevilFruitName;
-};
+import { FAKE_STRAW_HATS_DATA } from './data/fake-straw-hats.js';
+import type { CharacterTemplateSeed } from './data/types.js';
 
 // TODO: supprimer/modifier en prod
 export const CHARACTER_TEMPLATES_DATA: Array<CharacterTemplateSeed> = [
@@ -89,4 +82,5 @@ export const CHARACTER_TEMPLATES_DATA: Array<CharacterTemplateSeed> = [
     imageUrl: null,
     description: "Chef pirate de l'East Blue, dangereux surtout par son arsenal.",
   },
+  ...FAKE_STRAW_HATS_DATA,
 ];
