@@ -31,7 +31,7 @@ export async function recordPassive(
 /** Enregistre un interactif : insère l'event_instance avec son step initial. La résolution s'écrira au moment du choix. */
 export async function recordInteractive(gen: InteractiveGenerator, ctx: GeneratorContext, tx: Transaction): Promise<void> {
   await eventRepository.insertWithIdempotence(
-    { playerId: ctx.player.id, eventKey: gen.key, isInteractive: true, bucketId: ctx.bucketId, state: { step: gen.initial } },
+    { playerId: ctx.player.id, eventKey: gen.key, isInteractive: true, bucketId: ctx.bucketId, state: { step: gen.initialStep } },
     tx,
   );
 }
