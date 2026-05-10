@@ -1,5 +1,6 @@
 import sample from 'lodash/sample.js';
 
+import * as historyRepository from '../history/index.js';
 import * as resourceRepository from '../resource/repository.js';
 
 export type FishingResult = { quantity: number; resourceName: string };
@@ -12,5 +13,14 @@ export async function runFishingAttempt(playerId: number): Promise<FishingResult
   if (!picked) throw new Error('Aucun resource_template en base — exécute le seed avant de pêcher.');
 
   await resourceRepository.addResourceToPlayer(playerId, picked.id, 1);
+  // TODO: SUPPRIMER EN PROD — log de test pour valider history
+  await historyRepository.appendHistory({
+    type: 'fishing.attempt',
+    payload: {
+      quantity: 1,
+      resourceName: picked.name,
+    },
+    actorPlayerId: playerId,
+  });
   return { quantity: 1, resourceName: picked.name };
 }

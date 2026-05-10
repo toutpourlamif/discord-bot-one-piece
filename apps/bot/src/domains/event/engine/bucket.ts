@@ -1,3 +1,5 @@
+import type { GeneratorContext } from '../types.js';
+
 export const BUCKET_DURATION_SEC = 15 * 60;
 
 export function getBucketIdFromDate(date: Date): number {
@@ -19,4 +21,9 @@ export function getEndDateOfBucket(bucketId: number): Date {
 /** Dernier bucket complet (= courant - 1). Le bucket en cours n'est pas traité tant qu'il n'est pas terminé. */
 export function getLatestProcessableBucket(): number {
   return getNowBucketId() - 1;
+}
+
+export function bucketsUntilEta(ctx: GeneratorContext): number {
+  if (ctx.player.travelEtaBucket === null) return Number.POSITIVE_INFINITY;
+  return ctx.player.travelEtaBucket - ctx.bucketId;
 }
