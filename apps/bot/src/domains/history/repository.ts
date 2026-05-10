@@ -52,6 +52,12 @@ export async function loadAllForPlayer(playerId: number, client: DbOrTransaction
     .orderBy(asc(history.occurredAt));
 }
 
+export type FullHistoryEntry = typeof history.$inferSelect;
+
+export async function loadFullForPlayer(playerId: number, client: DbOrTransaction = db): Promise<Array<FullHistoryEntry>> {
+  return client.select().from(history).where(eq(history.actorPlayerId, playerId)).orderBy(asc(history.occurredAt));
+}
+
 type WriteEventResolutionArgs = {
   actorPlayerId: number;
   // TODO: renommer en `kind` quand history.event_type sera renommé (cf packages/db/src/domains/history/schema.ts)
