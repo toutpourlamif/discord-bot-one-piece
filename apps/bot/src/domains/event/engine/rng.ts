@@ -1,3 +1,5 @@
+import type { EventGenerator, GeneratorContext } from '../types.js';
+
 /**
  * Un générateur de nombres pseudo-aléatoires (PRNG) qui produit des nombres dans [0, 1).
  */
@@ -61,6 +63,13 @@ export function createRng(seed: number): Rng {
       return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
     },
   };
+}
+
+/** Crée le RNG d'un générateur pour un bucket donné, en suivant son `seedScope` (zone ou player). */
+export function createRngForGenerator(gen: EventGenerator, ctx: GeneratorContext): Rng {
+  const seed =
+    gen.seedScope === 'zone' ? seedFromBucketAndZone(ctx.bucketId, ctx.zone) : seedFromBucketAndPlayer(ctx.bucketId, ctx.player.id);
+  return createRng(seed);
 }
 
 /** Tirage déterministe d'un élément à partir d'une graine. Équivalent seeded de `lodash.sample`. */

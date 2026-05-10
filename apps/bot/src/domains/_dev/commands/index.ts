@@ -5,6 +5,7 @@ import { debugCommand } from './debug/index.js';
 import { dmCommand } from './dm.js';
 import { embedCommand } from './embed.js';
 import { emojiCommand } from './emoji.js';
+import { forceEventCommand } from './force-event.js';
 import { giveCharacterCommand } from './givecharacter.js';
 import { moiCommand } from './moi.js';
 import { nombreCommand } from './nombre.js';
@@ -25,6 +26,7 @@ export const devCommands = [
   colorCommand,
   randomCatCommand,
   randomCommand,
+  forceEventCommand,
   debugCommand,
   emojiCommand,
   bucketsCommand,
