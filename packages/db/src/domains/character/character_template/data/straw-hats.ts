@@ -1,5 +1,6 @@
 import type { CharacterTemplateSeed } from './types.js';
 
+//TODO: ajouter le fruit du démon des persos
 export const STRAW_HATS_DATA: Array<CharacterTemplateSeed> = [
   {
     name: 'Nico Robin',
