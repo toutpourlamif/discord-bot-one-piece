@@ -1,5 +1,5 @@
 import { db, player, type DbOrTransaction, type Player, type Zone } from '@one-piece/db';
-import { and, asc, eq, sql } from 'drizzle-orm';
+import { eq } from 'drizzle-orm';
 
 import { NotFoundError } from '../../discord/errors.js';
 import { getNowBucketId } from '../event/engine/bucket.js';
@@ -27,15 +27,6 @@ export async function findByIdOrThrow(id: number, client: DbOrTransaction = db, 
 export async function findByDiscordId(discordId: string): Promise<Player | undefined> {
   const [row] = await db.select().from(player).where(eq(player.discordId, discordId)).limit(1);
   return row;
-}
-
-export async function findManyByName(name: string, originGuildId: string, client: DbOrTransaction = db): Promise<Array<Player>> {
-  return client
-    .select()
-    .from(player)
-    .where(and(eq(player.originGuildId, originGuildId), sql`lower(${player.name}) = lower(${name})`))
-    .orderBy(asc(player.id))
-    .limit(5);
 }
 
 export async function create(discordId: string, name: string, originGuildId: string, transaction: DbOrTransaction = db): Promise<Player> {
