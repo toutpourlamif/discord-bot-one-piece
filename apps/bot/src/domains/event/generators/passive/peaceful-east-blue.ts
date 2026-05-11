@@ -1,11 +1,7 @@
 import { buildOpEmbed } from '../../../../discord/utils/build-op-embed.js';
 import { buildAssetUrl } from '../../../../shared/build-asset-url.js';
-import type { GeneratorContext, PassiveGenerator } from '../../types.js';
+import type { PassiveGenerator } from '../../types.js';
 import { computeNothing } from '../utils.js';
-
-function isPastDepartureBucket(ctx: GeneratorContext): boolean {
-  return ctx.player.travelStartedBucket === null || ctx.bucketId > ctx.player.travelStartedBucket;
-}
 
 export const peacefulEastBlue: PassiveGenerator = {
   key: 'passive.peaceful_east_blue',
@@ -13,7 +9,7 @@ export const peacefulEastBlue: PassiveGenerator = {
   seedScope: 'player',
   conditions: (ctx) => ctx.zone === 'sea_east_blue',
   oneTime: true,
-  probability: (ctx) => (isPastDepartureBucket(ctx) ? 0.05 : 0),
+  probability: () => 0.05,
 
   compute: computeNothing,
 
