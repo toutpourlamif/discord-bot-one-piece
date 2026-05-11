@@ -3,6 +3,7 @@ import { db, SHIP_MODULE_LEVEL_COLUMNS, type DbOrTransaction, type Ship, type Sh
 import { ValidationError } from '../../discord/errors.js';
 import { sanitizeName } from '../../shared/sanitize-name.js';
 import * as economyRepository from '../economy/repository.js';
+import * as historyRepository from '../history/index.js';
 import * as playerRepository from '../player/repository.js';
 import * as resourceRepository from '../resource/repository.js';
 import { debitResourcesByName } from '../resource/service.js';
@@ -33,8 +34,23 @@ export async function renameShip(playerId: number, newName: string): Promise<Shi
   if (sanitized.length > MAX_SHIP_NAME_LENGTH) {
     throw new ValidationError(`Le nom du bateau ne peut pas dépasser ${MAX_SHIP_NAME_LENGTH} caractères.`);
   }
-  const { ship } = await findOrCreateShip(playerId);
-  return shipRepository.rename(ship.id, sanitized);
+  return db.transaction(async (transaction) => {
+    const { ship } = await findOrCreateShip(playerId, undefined, transaction);
+    const renamed = await shipRepository.rename(ship.id, sanitized, transaction);
+
+    await historyRepository.appendHistory({
+      type: 'ship.renamed',
+      payload: {
+        oldName: ship.name,
+        newName: renamed.name,
+      },
+      actorPlayerId: playerId,
+      target: { type: 'ship', id: renamed.id },
+      client: transaction,
+    });
+
+    return renamed;
+  });
 }
 
 export async function getShipModuleUpgradePreview(playerId: number, moduleKey: ShipModuleKey): Promise<ShipModuleUpgradePreview | null> {
