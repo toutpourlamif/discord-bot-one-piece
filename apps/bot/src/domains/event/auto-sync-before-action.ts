@@ -8,6 +8,17 @@ import { getEndDateOfBucket } from './engine/bucket.js';
 import { synchronizePlayer } from './engine/synchronize-player.js';
 import { OutOfSyncError } from './errors.js';
 
+const HOUR_MS = 60 * 60 * 1000;
+const MINUTE_MS = 60 * 1000;
+const DAY_MS = 24 * HOUR_MS;
+const WEEK_MS = 7 * DAY_MS;
+
+const LONG_AWAY_PHRASES = [
+  'depuis une longue traversée loin des regards',
+  "depuis le retour d'une longue absence en mer",
+  "depuis un vieux récit rapporté par l'équipage",
+];
+
 export async function autoSyncBeforeAction(message: Message, player: Player): Promise<void> {
   const result = await synchronizePlayer(player.id);
 
@@ -30,17 +41,6 @@ export async function autoSyncBeforeAction(message: Message, player: Player): Pr
     });
   }
 }
-
-const HOUR_MS = 60 * 60 * 1000;
-const MINUTE_MS = 60 * 1000;
-const DAY_MS = 24 * HOUR_MS;
-const WEEK_MS = 7 * DAY_MS;
-
-const LONG_AWAY_PHRASES = [
-  'depuis une longue traversée loin des regards',
-  "depuis le retour d'une longue absence en mer",
-  "depuis un vieux récit rapporté par l'équipage",
-];
 
 function pluralize(value: number, singular: string, plural: string): string {
   return `${value} ${value === 1 ? singular : plural}`;
