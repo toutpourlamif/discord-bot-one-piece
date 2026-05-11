@@ -7,7 +7,7 @@ export const barrelFound: InteractiveGenerator = {
   isInteractive: true,
   seedScope: 'player',
   cooldownBuckets: 2,
-  probability: () => 0.1,
+  probability: () => 0,
 
   initialStep: 'openOrLeave',
   steps: {
