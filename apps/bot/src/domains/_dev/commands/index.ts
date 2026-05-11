@@ -14,6 +14,7 @@ import { randomCommand } from './random.js';
 import { randomCatCommand } from './randomcat.js';
 import { repeatCommand } from './repeat.js';
 import { sellCommand } from './sell.js';
+import { showHistoryCommand } from './show-history.js';
 import { upgradeShipCommand } from './upgrade-ship.js';
 
 export const devCommands = [
@@ -34,4 +35,5 @@ export const devCommands = [
   sellCommand,
   upgradeShipCommand,
   dmCommand,
+  showHistoryCommand,
 ].map((cmd) => ({ ...cmd, requiresAdmin: true, requiresSynchronization: false }));
