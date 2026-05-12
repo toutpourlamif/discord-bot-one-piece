@@ -14,7 +14,7 @@ import { getPendingEventsForPlayer, type PendingEventInstance } from '../reposit
 import type { GeneratorContext, InteractiveGenerator, PassiveGenerator } from '../types.js';
 import { buildEventInteractiveChoiceCustomId, buildEventPassiveNextCustomId } from '../utils/build-event-custom-id.js';
 
-import { getRandomCalmTextByZone as getRandomCalmTextByZone } from './get-random-calm-text-by-zone.js';
+import { getRandomCalmTextByZone } from './get-random-calm-text-by-zone.js';
 
 export async function buildRecapView(player: Player): Promise<View> {
   const pendingEvents = await getPendingEventsForPlayer(player.id);
