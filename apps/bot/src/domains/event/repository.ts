@@ -44,8 +44,8 @@ export async function findFirstInteractivePending(playerId: number, client: DbOr
   return row;
 }
 
-export async function deleteById(id: bigint): Promise<{ deleted: boolean }> {
-  const rows = await db.delete(eventInstance).where(eq(eventInstance.id, id)).returning({ id: eventInstance.id });
+export async function deleteById(id: bigint, client: DbOrTransaction = db): Promise<{ deleted: boolean }> {
+  const rows = await client.delete(eventInstance).where(eq(eventInstance.id, id)).returning({ id: eventInstance.id });
   return { deleted: rows.length > 0 };
 }
 

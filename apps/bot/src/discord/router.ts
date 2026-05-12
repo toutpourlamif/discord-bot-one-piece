@@ -3,7 +3,7 @@ import type { Message } from 'discord.js';
 import { devCommands } from '../domains/_dev/index.js';
 import { infoCommands } from '../domains/_info/index.js';
 import { crewCommands } from '../domains/crew/index.js';
-import { autoSyncBeforeAction } from '../domains/event/index.js';
+import { autoSyncBeforeAction, eventCommands } from '../domains/event/index.js';
 import { fishingCommands } from '../domains/fishing/index.js';
 import { requireGuildId } from '../domains/guild/index.js';
 import * as guildRepository from '../domains/guild/repository.js';
@@ -24,6 +24,7 @@ const allCommands = [
   ...resourceCommands,
   ...fishingCommands,
   ...crewCommands,
+  ...eventCommands,
 ];
 const registry = buildRegistry(allCommands, (command) =>
   Array.isArray(command.name) ? command.name.map((name) => name.toLowerCase()) : command.name.toLowerCase(),
