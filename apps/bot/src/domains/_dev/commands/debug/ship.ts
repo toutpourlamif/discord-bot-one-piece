@@ -1,9 +1,8 @@
 import { NotFoundError } from '../../../../discord/errors.js';
 import type { Command } from '../../../../discord/types.js';
+import { replyDebugData } from '../../../../discord/utils/index.js';
 import { resolveTargetPlayer } from '../../../player/index.js';
 import * as shipRepository from '../../../ship/repository.js';
-
-import { replyDebugData } from './utils.js';
 
 export const handleShip: Command['handler'] = async (ctx) => {
   const { targetPlayer } = await resolveTargetPlayer(ctx);

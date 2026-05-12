@@ -1,9 +1,7 @@
 import { NotFoundError } from '../../../../discord/errors.js';
 import type { Command } from '../../../../discord/types.js';
-import { parseIntegerArg } from '../../../../discord/utils/index.js';
+import { parseIntegerArg, replyDebugData } from '../../../../discord/utils/index.js';
 import * as devilFruitRepository from '../../../devil_fruit/repository.js';
-
-import { replyDebugData } from './utils.js';
 
 export const handleDf: Command['handler'] = async ({ message, args }) => {
   const id = parseIntegerArg(args[0]);

@@ -32,14 +32,14 @@ export async function appendHistory({
   });
 }
 
-export type HistoryEntry = {
+export type HistoryLog = {
   eventType: string;
   occurredAt: Date;
   bucketId: number | null;
   payload: JSONFromSQL;
 };
 
-export async function loadAllForPlayer(playerId: number, client: DbOrTransaction = db): Promise<Array<HistoryEntry>> {
+export async function loadAllForPlayer(playerId: number, client: DbOrTransaction = db): Promise<Array<HistoryLog>> {
   return client
     .select({
       eventType: history.eventType,

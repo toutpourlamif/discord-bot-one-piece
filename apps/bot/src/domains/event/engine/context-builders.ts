@@ -4,14 +4,14 @@ import * as characterRepository from '../../character/repository.js';
 import type { CharacterRow } from '../../character/types.js';
 import { isInCrewFilter } from '../../crew/utils/is-in-crew-filter.js';
 import * as historyRepository from '../../history/index.js';
-import type { HistoryEntry } from '../../history/repository.js';
+import type { HistoryLog } from '../../history/repository.js';
 import * as resourceRepository from '../../resource/repository.js';
 import type { Inventory } from '../../resource/types.js';
 import * as shipRepository from '../../ship/repository.js';
 import type { GeneratorContext } from '../types.js';
 
 // TODO: renommer le champ `eventType` → `kind` quand history.event_type sera renommé (cf packages/db/src/domains/history/schema.ts)
-type HistoryRow = Pick<HistoryEntry, 'eventType' | 'bucketId'>;
+type HistoryRow = Pick<HistoryLog, 'eventType' | 'bucketId'>;
 
 export type GeneratorContextData = {
   player: Player;
