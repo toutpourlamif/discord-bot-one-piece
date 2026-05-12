@@ -4,7 +4,7 @@ import { index, integer, pgTable, serial, varchar, text } from 'drizzle-orm/pg-c
 import { imageUrl, timestamps } from '../../../shared/helpers.js';
 import { rarity } from '../../../shared/rarity.js';
 import { devilFruitTemplate } from '../../devil_fruit/devil_fruit_template/schema.js';
-import { characterRaceEnum } from '../enum.js';
+import { characterRaceEnum, characterSkillEnum } from '../enum.js';
 export const characterTemplate = pgTable(
   'character_template',
   {
@@ -19,6 +19,10 @@ export const characterTemplate = pgTable(
     rarity: rarity('rarity').notNull().default('COMMON'),
 
     race: characterRaceEnum('race').notNull(),
+    ...imageUrl(),
+    ...timestamps(),
+
+    skill: characterSkillEnum('skill').notNull().array(),
     ...imageUrl(),
     ...timestamps(),
   },

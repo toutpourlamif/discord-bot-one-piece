@@ -13,4 +13,8 @@ export const characterRaceEnum = pgEnum('character_race', [
   'DWARF',
 ]);
 
+// TODO: liste non exhaustive, à compléter
+export const characterSkillEnum = pgEnum('character_skill', ['MAÇON', 'SUPER MAÇON', 'NAVIGATEUR', 'HAKI DES ROIS', 'ARCHÉOLOGUE']);
+
 export type Race = (typeof characterRaceEnum.enumValues)[number];
+export type Skill = (typeof characterSkillEnum.enumValues)[number];
