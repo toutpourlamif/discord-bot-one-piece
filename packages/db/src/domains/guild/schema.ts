@@ -6,10 +6,13 @@ import { MAX_GUILD_PREFIX_LENGTH } from './constants.js';
 
 const DEFAULT_GUILD_LANGUAGE = 'fr';
 const DEFAULT_GUILD_PREFIX = '!';
+const DEFAULT_GUILD_NAME = 'Unknown';
+const MAX_GUILD_NAME_LENGTH = 200;
 
 export const guild = pgTable('guild', {
   id: varchar('id', { length: 32 }).primaryKey(),
 
+  name: varchar('name', { length: MAX_GUILD_NAME_LENGTH }).notNull().default(DEFAULT_GUILD_NAME),
   language: varchar('language', { length: 8 }).notNull().default(DEFAULT_GUILD_LANGUAGE),
   prefix: varchar('prefix', { length: MAX_GUILD_PREFIX_LENGTH }).notNull().default(DEFAULT_GUILD_PREFIX),
 

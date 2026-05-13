@@ -6,7 +6,7 @@ import { runFishingAttempt } from '../service.js';
 export const fishingCommand: Command = {
   name: ['fishing', 'fish'],
   async handler(ctx) {
-    const targetPlayer = await resolveTargetPlayer(ctx);
+    const { targetPlayer } = await resolveTargetPlayer(ctx);
     const result = await runFishingAttempt(targetPlayer.id);
 
     const embed = buildOpEmbed()

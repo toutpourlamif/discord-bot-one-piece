@@ -84,12 +84,12 @@ const fishingHaul: PassiveGenerator = {
 ## Forme interactive 1 étape
 
 ```ts
-const barrelFound: EventGenerator = {
+const barrelFound: InteractiveGenerator = {
   key: 'fishing.barrel_found',
   isInteractive: true,
   seedScope: 'player',
   probability: () => 0.1,
-  initial: 'choice',
+  initialStep: 'choice',
   steps: {
     choice: {
       embed: () => buildOpEmbed('info').setTitle('Un baril flotte près du navire.'),
@@ -120,13 +120,13 @@ function openBarrel(ctx, rng) {
 ## Forme interactive multi-étapes (graphe)
 
 ```ts
-const defeatCrocodile: EventGenerator = {
+const defeatCrocodile: InteractiveGenerator = {
   key: 'mainstory.alabasta.defeat_crocodile',
   isInteractive: true,
   seedScope: 'player', // mainstory perso
   conditions: (ctx) => ctx.history.has('mainstory.alabasta.save_vivi.resolved') && ctx.player.hasItem('haki_basic'),
   probability: () => 1.0,
-  initial: 'opener',
+  initialStep: 'opener',
   steps: {
     opener: {
       embed: () => buildOpEmbed('info').setTitle('Crocodile se dresse devant toi.'),
@@ -205,16 +205,16 @@ Pas un gros event "Alabasta". Une **suite d'events distincts** qui se débloquen
 
 ## `ctx` : objet contexte
 
-| Champ              | Contenu                                                                               |
-| ------------------ | ------------------------------------------------------------------------------------- |
-| `ctx.player`       | ligne `player` actuelle                                                               |
-| `ctx.crew`         | `members: Array<CharacterRow>` + helpers `has(name)`, `getByName(name)`               |
-| `ctx.ship`         | navire et modules                                                                     |
-| `ctx.inventory`    | ressources                                                                            |
-| `ctx.history`      | helpers : `has(type)`, `lastResolutionOf(prefix)`, `countSinceBuckets(type, buckets)` |
-| `ctx.bucketId`     | bucket en cours                                                                       |
-| `ctx.zone`         | zone du joueur à ce bucket                                                            |
-| `ctx.othersInZone` | autres joueurs présents dans la zone au bucket (tous serveurs confondus)              |
+| Champ              | Contenu                                                                                   |
+| ------------------ | ----------------------------------------------------------------------------------------- |
+| `ctx.player`       | ligne `player` actuelle                                                                   |
+| `ctx.crew`         | `members: Array<CharacterRow>` + helpers `has(name)`, `getByName(name)`                   |
+| `ctx.ship`         | navire et modules                                                                         |
+| `ctx.inventory`    | ressources                                                                                |
+| `ctx.history`      | helpers : `has(type)`, `lastResolutionOf(prefix)`, `countSinceNBuckets(type, bucketsAgo)` |
+| `ctx.bucketId`     | bucket en cours                                                                           |
+| `ctx.zone`         | zone du joueur à ce bucket                                                                |
+| `ctx.othersInZone` | autres joueurs présents dans la zone au bucket (tous serveurs confondus)                  |
 
 > **Pourquoi un objet plutôt que des paramètres positionnels** : ajouter `ctx.weather` ne casse aucun générateur existant.
 
@@ -234,7 +234,7 @@ type EventEffect =
 
 > **État courant** : seuls `addBerries` et `spendBerries` sont implémentés (cf `apps/bot/src/domains/event/effects/types.ts`). Le reste est roadmap.
 
-L'engine a `applyEffects(effects, playerId, tx)` qui dispatch chaque variante.
+L'engine a `applyEffects(effects, ctx, tx)` qui dispatch chaque variante. Chaque effet **persiste** la modification en DB **et** mute `ctx` en place (ex: `ctx.player.berries += amount`) pour que les générateurs suivants voient l'état à jour sans refetch.
 
 > **Pourquoi pas `ctx.player.berries += 50` dans `resolve`** : couple le générateur à Drizzle / aux transactions, disperse le code (impossible de retrouver tous les effets sur les berries), difficile à tester. Avec Effects en data : pure logique métier d'un côté, persistance de l'autre.
 
@@ -260,7 +260,7 @@ C'est cette table qui rend possibles `conditions`, `cooldownBuckets`, `oneTime`,
 ## Ajouter un nouvel event
 
 1. Créer `generators/<famille>/<nom>.ts`.
-2. Exporter un `EventGenerator` qui respecte le contrat (`types.ts`).
+2. Exporter un `Genrator` qui respecte le contrat (`types.ts`).
 3. L'ajouter dans `registry.ts`.
 4. Si nouveau type d'effet : étendre l'union `EventEffect` + ajouter le handler dans `apply-effects.ts`.
 5. Si nouveau `resolutionType` : déclarer le payload dans `apps/bot/src/domains/history/types/event.ts` (cf `history.md`).

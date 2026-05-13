@@ -33,7 +33,7 @@ export async function routeInteraction(interaction: Interaction): Promise<void> 
   if (!interaction.isButton()) return;
   try {
     // TODO: passer un ButtonContext { interaction, args, guild } aux handlers (symétrie avec CommandContext, guild déjà fetché ici)
-    await guildRepository.findOrCreate(requireGuildId(interaction.guildId));
+    await guildRepository.findOrCreate(requireGuildId(interaction.guildId), interaction.guild!.name);
     const [name, ...args] = interaction.customId.split(CUSTOM_ID_SEPARATOR);
     if (!name) throw new ValidationError(`nom pas trouvé: ${interaction.customId}`);
 

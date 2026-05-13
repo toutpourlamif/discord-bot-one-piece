@@ -1,4 +1,4 @@
-import { db, eventInstance, type EventInstance, type JSONFromSQL } from '@one-piece/db';
+import { db, eventInstance, type DbOrTransaction, type EventInstance, type JSONFromSQL } from '@one-piece/db';
 import { asc, eq, and } from 'drizzle-orm';
 
 export type PendingEventInstance = Omit<EventInstance, 'playerId' | 'state'> & {
@@ -31,8 +31,8 @@ export async function findById(id: bigint): Promise<EventInstance | null> {
   return row ?? null;
 }
 
-export async function findFirstInteractivePending(playerId: number): Promise<EventInstance | null> {
-  const [row] = await db
+export async function findFirstInteractivePending(playerId: number, client: DbOrTransaction = db): Promise<EventInstance | null> {
+  const [row] = await client
     .select()
     .from(eventInstance)
     .where(and(eq(eventInstance.playerId, playerId), eq(eventInstance.isInteractive, true)))
@@ -44,7 +44,22 @@ export async function findFirstInteractivePending(playerId: number): Promise<Eve
   return row;
 }
 
-export async function deleteById(id: bigint): Promise<{ deleted: boolean }> {
-  const rows = await db.delete(eventInstance).where(eq(eventInstance.id, id)).returning({ id: eventInstance.id });
+export async function deleteById(id: bigint, client: DbOrTransaction = db): Promise<{ deleted: boolean }> {
+  const rows = await client.delete(eventInstance).where(eq(eventInstance.id, id)).returning({ id: eventInstance.id });
   return { deleted: rows.length > 0 };
+}
+
+type InsertWithIdempotenceArgs = {
+  playerId: number;
+  eventKey: string;
+  isInteractive: boolean;
+  bucketId: number;
+  state: JSONFromSQL;
+};
+
+export async function insertWithIdempotence(args: InsertWithIdempotenceArgs, client: DbOrTransaction = db): Promise<void> {
+  await client
+    .insert(eventInstance)
+    .values(args)
+    .onConflictDoNothing({ target: [eventInstance.playerId, eventInstance.eventKey, eventInstance.bucketId] });
 }

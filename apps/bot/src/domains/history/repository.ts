@@ -1,5 +1,5 @@
 import { db, history, type DbOrTransaction, type JSONFromSQL } from '@one-piece/db';
-import { asc, eq } from 'drizzle-orm';
+import { asc, eq, sql } from 'drizzle-orm';
 
 import type { HistoryTarget } from './types/common.js';
 import type { Log } from './types/index.js';
@@ -32,15 +32,15 @@ export async function appendHistory({
   });
 }
 
-type HistoryEntry = {
+export type HistoryLog = {
   eventType: string;
   occurredAt: Date;
   bucketId: number | null;
   payload: JSONFromSQL;
 };
 
-export async function loadAllForPlayer(playerId: number): Promise<Array<HistoryEntry>> {
-  return db
+export async function loadAllForPlayer(playerId: number, client: DbOrTransaction = db): Promise<Array<HistoryLog>> {
+  return client
     .select({
       eventType: history.eventType,
       occurredAt: history.occurredAt,
@@ -50,4 +50,21 @@ export async function loadAllForPlayer(playerId: number): Promise<Array<HistoryE
     .from(history)
     .where(eq(history.actorPlayerId, playerId))
     .orderBy(asc(history.occurredAt));
+}
+
+type WriteEventResolutionArgs = {
+  actorPlayerId: number;
+  // TODO: renommer en `kind` quand history.event_type sera renommé (cf packages/db/src/domains/history/schema.ts)
+  eventType: string;
+  bucketId: number;
+};
+
+export async function writeEventResolution(args: WriteEventResolutionArgs, client: DbOrTransaction = db): Promise<void> {
+  await client
+    .insert(history)
+    .values(args)
+    .onConflictDoNothing({
+      target: [history.actorPlayerId, history.eventType, history.bucketId],
+      where: sql`${history.actorPlayerId} IS NOT NULL AND ${history.bucketId} IS NOT NULL`,
+    });
 }

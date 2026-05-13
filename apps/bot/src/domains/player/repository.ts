@@ -2,14 +2,24 @@ import { db, player, type DbOrTransaction, type Player, type Zone } from '@one-p
 import { eq } from 'drizzle-orm';
 
 import { NotFoundError } from '../../discord/errors.js';
+import { getNowBucketId } from '../event/engine/bucket.js';
 
-export async function findById(id: number, client: DbOrTransaction = db): Promise<Player | undefined> {
+type FindByIdOptions = {
+  forUpdate?: boolean;
+};
+
+export async function findById(id: number, client: DbOrTransaction = db, options: FindByIdOptions = {}): Promise<Player | undefined> {
+  if (options.forUpdate) {
+    const [row] = await client.select().from(player).where(eq(player.id, id)).limit(1).for('update');
+    return row;
+  }
+
   const [row] = await client.select().from(player).where(eq(player.id, id)).limit(1);
   return row;
 }
 
-export async function findByIdOrThrow(id: number, client: DbOrTransaction = db): Promise<Player> {
-  const row = await findById(id, client);
+export async function findByIdOrThrow(id: number, client: DbOrTransaction = db, options: FindByIdOptions = {}): Promise<Player> {
+  const row = await findById(id, client, options);
   if (!row) throw new NotFoundError('Joueur introuvable.');
   return row;
 }
@@ -19,11 +29,8 @@ export async function findByDiscordId(discordId: string): Promise<Player | undef
   return row;
 }
 
-// TODO: remplacer par bucketIdFromTimestamp (#174) une fois mergé
-const BUCKET_DURATION_SECONDS = 15 * 60;
-
 export async function create(discordId: string, name: string, originGuildId: string, transaction: DbOrTransaction = db): Promise<Player> {
-  const lastProcessedBucketId = Math.floor(Date.now() / 1000 / BUCKET_DURATION_SECONDS);
+  const lastProcessedBucketId = getNowBucketId();
   const [row] = await transaction.insert(player).values({ discordId, name, originGuildId, lastProcessedBucketId }).returning();
   return row!;
 }

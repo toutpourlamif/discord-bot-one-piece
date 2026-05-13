@@ -12,3 +12,4 @@ export { parseBigintArg } from './parse-bigint-arg.js';
 export { parseIntegerArg } from './parse-integer-arg.js';
 export { parseOwnerDiscordId } from './parse-owner-discord-id.js';
 export { parseStringArg } from './parse-string-arg.js';
+export { replyDebugData } from './reply-debug-data.js';

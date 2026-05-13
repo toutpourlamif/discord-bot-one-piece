@@ -16,7 +16,7 @@ const fakeCtx: GeneratorContext = {
   history: {
     has: () => false,
     lastResolutionOf: () => undefined,
-    countSinceBuckets: () => 0,
+    countSinceNBuckets: () => 0,
   },
   bucketId: 0,
   zone: 'sea_east_blue' as Zone,

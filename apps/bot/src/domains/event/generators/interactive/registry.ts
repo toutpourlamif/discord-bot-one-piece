@@ -1,3 +1,5 @@
 import type { InteractiveGenerator } from '../../types.js';
 
-export const interactiveGenerators: Array<InteractiveGenerator> = [];
+import { barrelFound } from './barrel-found.js';
+
+export const interactiveGenerators: Array<InteractiveGenerator> = [barrelFound];

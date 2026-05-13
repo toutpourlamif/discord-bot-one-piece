@@ -1,0 +1,1 @@
+ALTER TABLE "guild" ADD COLUMN "name" varchar(200) DEFAULT 'Unknown' NOT NULL;
