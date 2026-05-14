@@ -10,6 +10,7 @@ import { giveCharacterCommand } from './givecharacter.js';
 import { moiCommand } from './moi.js';
 import { nombreCommand } from './nombre.js';
 import { onePieceCommand } from './onepiece.js';
+import { pseudoCommand } from './pseudo.js';
 import { randomCommand } from './random.js';
 import { randomCatCommand } from './randomcat.js';
 import { repeatCommand } from './repeat.js';
@@ -36,4 +37,5 @@ export const devCommands = [
   upgradeShipCommand,
   dmCommand,
   showHistoryCommand,
+  pseudoCommand,
 ].map((cmd) => ({ ...cmd, requiresAdmin: true, requiresSynchronization: false }));
