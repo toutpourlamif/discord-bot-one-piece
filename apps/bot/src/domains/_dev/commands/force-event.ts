@@ -1,18 +1,18 @@
 import { db } from '@one-piece/db';
 
-import { NotFoundError, ValidationError } from '../../../discord/errors.js';
+import { ValidationError } from '../../../discord/errors.js';
 import type { Command } from '../../../discord/types.js';
 import { buildOpEmbed } from '../../../discord/utils/build-op-embed.js';
 import { getNowBucketId } from '../../event/engine/bucket.js';
 import { buildGeneratorContext, fetchGeneratorContextData } from '../../event/engine/context-builders.js';
 import { recordInteractive, recordPassive } from '../../event/engine/record-event.js';
 import { createRngForGenerator } from '../../event/engine/rng.js';
-import { allGenerators } from '../../event/generators/registry.js';
+import { findGeneratorByKeyOrThrow } from '../../event/generators/registry.js';
 import { resolveTargetPlayer } from '../../player/index.js';
 import * as playerRepository from '../../player/repository.js';
 
 export const forceEventCommand: Command = {
-  name: ['forceEvent', 'force-event'],
+  name: ['forceEvent', 'force-event', 'fe'],
   async handler(ctx) {
     const { targetPlayer, rest } = await resolveTargetPlayer(ctx);
     const [eventKey] = rest;
@@ -21,10 +21,7 @@ export const forceEventCommand: Command = {
       throw new ValidationError('Usage: !force-event <@user> <clé évènement>');
     }
 
-    const gen = allGenerators.find((candidate) => candidate.key === eventKey);
-    if (!gen) {
-      throw new NotFoundError(`Clé d'évènement inconnue: ${eventKey}`);
-    }
+    const gen = findGeneratorByKeyOrThrow(eventKey);
 
     const bucketId = getNowBucketId();
 
