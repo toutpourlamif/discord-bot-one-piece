@@ -26,7 +26,7 @@ export async function buildRecapView(player: Player): Promise<View> {
     return {
       embeds: [
         buildOpEmbed('info')
-          .setTitle(`Vous n'avez ucun évènement à consulter.`)
+          .setTitle(`Vous n'avez aucun évènement à consulter.`)
           .setDescription('Revenez plus tard.')
           .setFooter({ text: getRandomCalmTextByZone(player.currentZone) }),
       ],
