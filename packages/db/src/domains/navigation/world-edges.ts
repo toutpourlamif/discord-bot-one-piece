@@ -4,7 +4,7 @@ type TravelRequirement = { kind: 'item'; name: ResourceName };
 
 type TravelModifier = { kind: 'no_navigator'; multiplier: number };
 
-type Edge = {
+export type Edge = {
   from: Island;
   to: Island;
   via: Sea;
@@ -13,7 +13,7 @@ type Edge = {
   modifiers?: Array<TravelModifier>;
 };
 
-export const ZONE_GRAPH = [
+export const WORLD_EDGES = [
   { from: 'foosha', to: 'loguetown', via: 'sea_east_blue', baseDurationBuckets: 6 },
   { from: 'loguetown', to: 'reverse_mountain', via: 'sea_east_blue', baseDurationBuckets: 8 },
   {
