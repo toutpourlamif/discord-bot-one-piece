@@ -2,20 +2,33 @@ import { readFileSync, writeFileSync } from 'node:fs';
 import { createRequire } from 'node:module';
 import path from 'node:path';
 
+import { ZONE_LABELS } from '@one-piece/db';
 import open from 'open';
 
 import { ZONE_GRAPH } from '../src/domains/navigation/world.js';
 
 const require = createRequire(import.meta.url);
 const cytoscapeJs = readFileSync(require.resolve('cytoscape/dist/cytoscape.min.js'), 'utf-8');
+const dagreJs = readFileSync(require.resolve('dagre/dist/dagre.min.js'), 'utf-8');
+const cytoscapeDagreJs = readFileSync(require.resolve('cytoscape-dagre'), 'utf-8');
 
 const nodes = [...new Set(ZONE_GRAPH.flatMap((edge) => [edge.from, edge.to]))].map((id) => ({
-  data: { id, label: id },
+  data: { id, label: ZONE_LABELS[id] },
 }));
+
+const BUCKET_DURATION_MIN = 15;
+
+function formatDuration(buckets: number): string {
+  const totalMin = buckets * BUCKET_DURATION_MIN;
+  const h = Math.floor(totalMin / 60);
+  const m = totalMin % 60;
+  const human = h === 0 ? `~${m}min` : m === 0 ? `~${h}h` : `~${h}h${String(m).padStart(2, '0')}`;
+  return `${human}`;
+}
 
 const edges = ZONE_GRAPH.map((edge) => {
   const requirementLabel = edge.requirements?.map((r) => r.name).join(', ') ?? '';
-  const lines = [edge.via, `${edge.baseDurationBuckets} buckets`];
+  const lines = [ZONE_LABELS[edge.via], formatDuration(edge.baseDurationBuckets)];
   if (requirementLabel) lines.push(`needs: ${requirementLabel}`);
   return {
     data: {
@@ -28,22 +41,25 @@ const edges = ZONE_GRAPH.map((edge) => {
   };
 });
 
+const BG = '#1e5b8a';
+
 const html = `<!doctype html>
 <html lang="fr">
   <head>
     <meta charset="utf-8" />
     <title>World — One Piece Bot</title>
     <style>
-      html, body { margin: 0; height: 100%; background: #0e1116; color: #e6edf3; font: 14px system-ui, sans-serif; }
+      html, body { margin: 0; height: 100%; background: ${BG}; color: #f8fafc; font: 14px system-ui, sans-serif; }
       #cy { width: 100vw; height: 100vh; }
       .legend {
-        position: fixed; top: 12px; left: 12px;
-        background: rgba(20, 24, 32, 0.92); padding: 10px 14px;
-        border-radius: 8px; line-height: 1.6;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+        position: fixed; top: 16px; left: 16px;
+        background: rgba(8, 30, 48, 0.92); padding: 12px 16px;
+        border-radius: 10px; line-height: 1.7;
+        box-shadow: 0 6px 18px rgba(0, 0, 0, 0.5);
+        border: 1px solid rgba(255, 255, 255, 0.08);
       }
-      .legend strong { color: #58a6ff; }
-      .legend .req { color: #ffa657; }
+      .legend strong { color: #fbbf24; }
+      .legend .req { color: #fbbf24; }
     </style>
   </head>
   <body>
@@ -54,29 +70,40 @@ const html = `<!doctype html>
     </div>
     <div id="cy"></div>
     <script>${cytoscapeJs}</script>
+    <script>${dagreJs}</script>
+    <script>${cytoscapeDagreJs}</script>
     <script>
+      cytoscape.use(cytoscapeDagre);
       cytoscape({
         container: document.getElementById('cy'),
         elements: {
           nodes: ${JSON.stringify(nodes)},
           edges: ${JSON.stringify(edges)},
         },
-        layout: { name: 'breadthfirst', directed: true, padding: 40, spacingFactor: 1.5 },
+        layout: {
+          name: 'dagre',
+          rankDir: 'LR',
+          nodeSep: 100,
+          rankSep: 200,
+          edgeSep: 50,
+        },
         style: [
           {
             selector: 'node',
             style: {
-              'background-color': '#58a6ff',
+              'background-color': '#c9a37c',
+              'border-width': 4,
+              'border-color': '#7c5a3a',
               'label': 'data(label)',
-              'color': '#fff',
+              'color': '#3a2a18',
               'text-valign': 'center',
               'text-halign': 'center',
               'font-weight': 'bold',
-              'font-size': 12,
-              'width': 90,
-              'height': 90,
+              'font-size': 13,
+              'width': 110,
+              'height': 110,
               'text-wrap': 'wrap',
-              'text-max-width': 80,
+              'text-max-width': 95,
             },
           },
           {
@@ -84,26 +111,28 @@ const html = `<!doctype html>
             style: {
               'curve-style': 'bezier',
               'target-arrow-shape': 'triangle',
-              'width': 2,
-              'line-color': '#6e7681',
-              'target-arrow-color': '#6e7681',
+              'width': 3,
+              'line-color': '#e2e8f0',
+              'target-arrow-color': '#e2e8f0',
               'label': 'data(label)',
-              'font-size': 10,
-              'color': '#e6edf3',
+              'font-size': 15,
+              'font-weight': 'bold',
+              'color': '#f8fafc',
               'text-rotation': 'autorotate',
               'text-wrap': 'wrap',
-              'text-margin-y': -10,
-              'text-background-color': '#0e1116',
-              'text-background-opacity': 0.85,
-              'text-background-padding': 4,
+              'text-margin-y': -14,
+              'text-background-color': '${BG}',
+              'text-background-opacity': 0.92,
+              'text-background-padding': 6,
             },
           },
           {
             selector: 'edge[?hasRequirement]',
             style: {
-              'line-color': '#ffa657',
-              'target-arrow-color': '#ffa657',
+              'line-color': '#fbbf24',
+              'target-arrow-color': '#fbbf24',
               'line-style': 'dashed',
+              'width': 3,
             },
           },
         ],
