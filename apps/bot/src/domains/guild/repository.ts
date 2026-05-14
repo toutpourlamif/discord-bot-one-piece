@@ -13,3 +13,8 @@ export async function findOrCreate(guildId: string, name: string): Promise<Guild
     .returning();
   return upserted!;
 }
+
+export async function updatePrefix(guildId: string, prefix: string): Promise<Guild> {
+  const [updated] = await db.update(guild).set({ prefix }).where(eq(guild.id, guildId)).returning();
+  return updated!;
+}

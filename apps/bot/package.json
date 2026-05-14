@@ -7,6 +7,7 @@
     "dev": "tsx watch --env-file=.env.local src/index.ts",
     "start": "tsx --env-file=.env.local src/index.ts",
     "smoke-test": "tsx scripts/smoke-test.ts",
+    "world": "tsx scripts/render-world.ts",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
@@ -16,6 +17,10 @@
     "lodash": "^4.18.1"
   },
   "devDependencies": {
-    "@types/lodash": "^4.17.24"
+    "@types/lodash": "^4.17.24",
+    "cytoscape": "^3.33.3",
+    "cytoscape-dagre": "^2.5.0",
+    "dagre": "^0.8.5",
+    "open": "^11.0.0"
   }
 }
