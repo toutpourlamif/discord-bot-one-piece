@@ -8,4 +8,12 @@ type PlayerZoneChangedLog = {
   };
 };
 
-export type PlayerLog = PlayerZoneChangedLog;
+type PlayerRenamedLog = {
+  type: 'player.renamed';
+  payload: {
+    from: string;
+    to: string;
+  };
+};
+
+export type PlayerLog = PlayerZoneChangedLog | PlayerRenamedLog;
