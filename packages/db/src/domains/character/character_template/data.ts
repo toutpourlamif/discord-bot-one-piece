@@ -1,5 +1,6 @@
 import { PLAYER_AS_CHARACTER_TEMPLATE_NAME } from './constants.js';
 import { FAKE_STRAW_HATS_DATA } from './data/fake-straw-hats.js';
+import { STRAW_HATS_DATA } from './data/straw-hats.js';
 import type { CharacterTemplateSeed } from './data/types.js';
 
 // TODO: supprimer/modifier en prod
@@ -85,4 +86,5 @@ export const CHARACTER_TEMPLATES_DATA: Array<CharacterTemplateSeed> = [
     description: "Chef pirate de l'East Blue, dangereux surtout par son arsenal.",
   },
   ...FAKE_STRAW_HATS_DATA,
+  ...STRAW_HATS_DATA,
 ];

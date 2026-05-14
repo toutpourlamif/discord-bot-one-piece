@@ -1,0 +1,1 @@
+ALTER TABLE "player" ADD COLUMN "crew_morale" integer DEFAULT 0 NOT NULL;
