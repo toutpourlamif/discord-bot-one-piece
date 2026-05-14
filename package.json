@@ -6,6 +6,7 @@
   "packageManager": "pnpm@10.32.1",
   "scripts": {
     "dev": "pnpm -F @one-piece/bot dev",
+    "world": "pnpm -F @one-piece/bot world",
     "tc": "pnpm typecheck",
     "typecheck": "pnpm -r typecheck",
     "lint": "eslint .",
