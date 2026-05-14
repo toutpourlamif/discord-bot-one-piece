@@ -24,7 +24,12 @@ export async function buildRecapView(player: Player): Promise<View> {
       buildProfilButton(player.discordId, player.id, { label: 'Voir mon profil' }),
     );
     return {
-      embeds: [buildOpEmbed('info').setTitle('Vous êtes à jour').setDescription(getRandomCalmTextByZone(player.currentZone))],
+      embeds: [
+        buildOpEmbed('info')
+          .setTitle(`Vous n'avez ucun évènement à consulter.`)
+          .setDescription('Revenez plus tard.')
+          .setFooter({ text: getRandomCalmTextByZone(player.currentZone) }),
+      ],
       components: [profilRow],
     };
   }

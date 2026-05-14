@@ -4,7 +4,7 @@ import type { PassiveGenerator } from '../../types.js';
 import { computeNothing } from '../utils.js';
 
 export const peacefulEastBlue: PassiveGenerator = {
-  key: 'passive.peaceful_east_blue',
+  key: 'peacefulEastBlue',
   isInteractive: false,
   seedScope: 'player',
   conditions: (ctx) => ctx.zone === 'sea_east_blue',

@@ -3,7 +3,7 @@ import type { PassiveGenerator } from '../../types.js';
 import { computeNothing, isSea } from '../utils.js';
 
 export const calmSea: PassiveGenerator = {
-  key: 'passive.calm_sea',
+  key: 'calmSea',
   isInteractive: false,
   seedScope: 'zone',
   conditions: (ctx) => isSea(ctx.zone),
