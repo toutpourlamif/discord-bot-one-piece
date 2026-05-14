@@ -17,6 +17,8 @@ export const player = pgTable('player', {
 
   // Karma interne : -1000 à +1000 (contrôlé côté app)
   karma: integer('karma').notNull().default(0),
+  // CrewMorale interne : -100/+100 (contrôlé côté app)
+  crewMorale: integer('crew_morale').notNull().default(0),
 
   name: varchar('name', { length: MAX_CHARACTER_NAME_LENGTH }).notNull(),
   crewName: varchar('crew_name', { length: MAX_CREW_NAME_LENGTH }),
