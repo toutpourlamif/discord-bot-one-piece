@@ -2,9 +2,17 @@ import type { ResourceName, Island, Sea } from '@one-piece/db';
 
 type TravelRequirement = { kind: 'item'; name: ResourceName };
 
-type TravelModifier = { kind: 'no_navigator'; multiplier: number };
+export type TravelModifierKind = 'no_navigator';
 
-type Edge = {
+export type TravelModifier = {
+  kind: TravelModifierKind;
+  /** Multiplicateur (%) de durée du voyage. */
+  durationMultiplier?: number;
+  /** Ajout à la probabilité de dérive */
+  driftDelta?: number;
+};
+
+export type Edge = {
   from: Island;
   to: Island;
   via: Sea;
