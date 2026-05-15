@@ -32,6 +32,7 @@ export async function getCharactersByPlayerId(playerId: number, client: DbOrTran
     .orderBy(desc(characterInstance.isCaptain), sql`${characterInstance.joinedCrewAt} asc nulls last`, asc(characterTemplate.name));
 }
 
+// TODO: multi-statement → service avec tx
 export async function createCharacterInstance(playerId: number, templateId: number): Promise<CharacterRow> {
   const [created] = await db
     .insert(characterInstance)
@@ -100,6 +101,7 @@ export async function getPlayerAsCharacterTemplate(): Promise<CharacterTemplate>
   return row;
 }
 
+// TODO: multi-statement → service avec tx
 export async function createPlayerAsCharacterInstance(
   playerId: number,
   nickname: string,
@@ -119,6 +121,7 @@ export async function createPlayerAsCharacterInstance(
   return row!;
 }
 
+// TODO: multi-statement → service avec tx
 export async function updatePlayerAsCharacterNickname(playerId: number, nickname: string, client: DbOrTransaction = db): Promise<void> {
   const playerAsCharacterTemplate = await getPlayerAsCharacterTemplate();
   await client
