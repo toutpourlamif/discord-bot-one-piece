@@ -22,7 +22,7 @@ export async function appendHistory({
   occurredAt,
 }: AppendHistoryArgs): Promise<void> {
   await client.insert(history).values({
-    eventType: type,
+    kind: type,
     actorPlayerId,
     bucketId,
     targetType: target?.type,
@@ -33,7 +33,7 @@ export async function appendHistory({
 }
 
 export type HistoryLog = {
-  eventType: string;
+  kind: string;
   occurredAt: Date;
   bucketId: number | null;
   payload: JSONFromSQL;
@@ -42,7 +42,7 @@ export type HistoryLog = {
 export async function loadAllForPlayer(playerId: number, client: DbOrTransaction = db): Promise<Array<HistoryLog>> {
   return client
     .select({
-      eventType: history.eventType,
+      kind: history.kind,
       occurredAt: history.occurredAt,
       bucketId: history.bucketId,
       payload: history.payload,
@@ -54,8 +54,7 @@ export async function loadAllForPlayer(playerId: number, client: DbOrTransaction
 
 type WriteEventResolutionArgs = {
   actorPlayerId: number;
-  // TODO: renommer en `kind` quand history.event_type sera renommé (cf packages/db/src/domains/history/schema.ts)
-  eventType: string;
+  kind: string;
   bucketId: number;
 };
 
@@ -64,7 +63,7 @@ export async function writeEventResolution(args: WriteEventResolutionArgs, clien
     .insert(history)
     .values(args)
     .onConflictDoNothing({
-      target: [history.actorPlayerId, history.eventType, history.bucketId],
+      target: [history.actorPlayerId, history.kind, history.bucketId],
       where: sql`${history.actorPlayerId} IS NOT NULL AND ${history.bucketId} IS NOT NULL`,
     });
 }
