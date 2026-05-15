@@ -1,0 +1,1 @@
+ALTER TABLE "character_template" ADD COLUMN "skill" character_skill[];
