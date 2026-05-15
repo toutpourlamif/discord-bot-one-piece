@@ -1,13 +1,12 @@
 import { type Island, type Transaction } from '@one-piece/db';
 
 import { ValidationError } from '../../../discord/errors.js';
-import { isSea } from '../../event/generators/utils.js';
 import type { Rng } from '../../event/types.js';
 import * as historyRepository from '../../history/index.js';
 import * as playerRepository from '../../player/repository.js';
 import * as resourceRepository from '../../resource/repository.js';
 import * as shipRepository from '../../ship/repository.js';
-import { computeDriftProbability, pickDriftIsland } from '../utils/index.js';
+import { computeDriftProbability, isSea, pickDriftIsland } from '../utils/index.js';
 
 import { recordZoneChange } from './record-zone-change.js';
 
