@@ -15,4 +15,9 @@ type TravelDriftedLog = {
   payload: TravelPayloadBase & { intendedTo: Island; actualTo: Island };
 };
 
-export type NavigationLog = TravelArrivedLog | TravelDriftedLog;
+type TravelReroutedLog = {
+  type: 'travel.rerouted';
+  payload: { from: Island; originalTo: Island; newTo: Island };
+};
+
+export type NavigationLog = TravelArrivedLog | TravelDriftedLog | TravelReroutedLog;
