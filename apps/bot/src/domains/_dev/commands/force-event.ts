@@ -7,7 +7,7 @@ import { getNowBucketId } from '../../event/engine/bucket.js';
 import { buildGeneratorContext, fetchGeneratorContextData } from '../../event/engine/context-builders.js';
 import { recordInteractive, recordPassive } from '../../event/engine/record-event.js';
 import { createRngForGenerator } from '../../event/engine/rng.js';
-import { findGeneratorByKeyOrThrow } from '../../event/generators/registry.js';
+import { findGeneratorByFuzzyKeyOrThrow } from '../../event/generators/registry.js';
 import { resolveTargetPlayer } from '../../player/index.js';
 import * as playerRepository from '../../player/repository.js';
 
@@ -21,7 +21,7 @@ export const forceEventCommand: Command = {
       throw new ValidationError('Usage: !force-event <@user> <clé évènement>');
     }
 
-    const gen = findGeneratorByKeyOrThrow(eventKey);
+    const gen = findGeneratorByFuzzyKeyOrThrow(eventKey);
 
     const bucketId = getNowBucketId();
 
