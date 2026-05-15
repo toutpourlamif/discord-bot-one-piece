@@ -8,7 +8,9 @@ export const renameCommand: Command = {
     const name = getQuery(args, { emptyMessage: 'Tu dois donner un nom.' });
     const renamed = await renamePlayer(player.id, name);
 
-    const embed = buildOpEmbed().setTitle('Joueur renommé !').setDescription(`Tu t'appelles maintenant **${renamed.name}**.`);
+    const embed = buildOpEmbed('success')
+      .setTitle('Changement de nom effectué !')
+      .setDescription(`On vous connait désormais sous le nom de **${renamed.name}**.`);
     await message.reply({ embeds: [embed] });
   },
 };
