@@ -1,4 +1,5 @@
 import { buildOpEmbed } from '../../../../discord/utils/build-op-embed.js';
+import { inBuckets } from '../../engine/bucket.js';
 import type { GeneratorContext, InteractiveGenerator, Resolution, Rng } from '../../types.js';
 import { getRandomIntBetween } from '../utils.js';
 
@@ -6,8 +7,8 @@ export const barrelFound: InteractiveGenerator = {
   key: 'barrelFound',
   isInteractive: true,
   seedScope: 'player',
-  cooldownBuckets: 2,
-  probability: () => 0,
+  cooldownBuckets: inBuckets('3d'),
+  probability: () => 0.1,
 
   initialStep: 'openOrLeave',
   steps: {
