@@ -260,6 +260,13 @@
       "when": 1778870923870,
       "tag": "0036_volatile_norman_osborn",
       "breakpoints": true
+    },
+    {
+      "idx": 37,
+      "version": "7",
+      "when": 1778952316762,
+      "tag": "0037_pale_master_chief",
+      "breakpoints": true
     }
   ]
 }
