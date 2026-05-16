@@ -79,7 +79,7 @@ export function pickRandomWithSeed<T>(seed: number, items: Array<T>): T {
 }
 
 /** Tirage déterministe d'un élément en consommant un `Rng` existant. Équivalent de `lodash.sample`. */
-export function pickRandom<T>(rng: Rng, items: Array<T>): T {
+export function pickRandom<T>(rng: Rng, items: Array<T> | Readonly<Array<T>>): T {
   if (items.length === 0) throw new Error('pickRandom: items is empty');
   return items[Math.floor(rng.next() * items.length)]!;
 }
