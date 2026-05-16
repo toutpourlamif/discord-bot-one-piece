@@ -1,4 +1,4 @@
-type ResourceSeed = { readonly name: string; readonly imageUrl: string | null };
+type ResourceSeed = { readonly name: string; readonly imageUrl: string | null; readonly description?: string };
 
 export const RESOURCE_TEMPLATES_DATA = [
   // TODO: Voir si on ajoute une ressource par rapport à l'Arbre de mille ans
@@ -7,8 +7,9 @@ export const RESOURCE_TEMPLATES_DATA = [
     imageUrl: null,
   },
   {
-    name: `Bois d'Adam`, // Le bois le plus résistant et précieux du monde, sa vente est illégale, on ne le trouve que sur le marché noir.
+    name: `Bois d'Adam`,
     imageUrl: null,
+    description: 'Le bois le plus résistant et précieux du monde, sa vente est illégale, on ne le trouve que sur le marché noir.',
   },
   { name: `Bois d'Ève`, imageUrl: null },
   {
