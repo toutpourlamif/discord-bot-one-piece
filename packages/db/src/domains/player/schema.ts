@@ -5,6 +5,7 @@ import { MAX_CHARACTER_NAME_LENGTH, MAX_CREW_NAME_LENGTH } from '../../shared/co
 import { timestamps } from '../../shared/helpers.js';
 import { guild } from '../guild/schema.js';
 import { zoneEnum } from '../navigation/schema.js';
+import type { Island } from '../navigation/zones.js';
 
 export const player = pgTable('player', {
   id: serial('id').primaryKey(),
@@ -17,6 +18,8 @@ export const player = pgTable('player', {
 
   // Karma interne : -1000 à +1000 (contrôlé côté app)
   karma: integer('karma').notNull().default(0),
+  // CrewMorale interne : -100/+100 (contrôlé côté app)
+  crewMorale: integer('crew_morale').notNull().default(0),
 
   name: varchar('name', { length: MAX_CHARACTER_NAME_LENGTH }).notNull(),
   crewName: varchar('crew_name', { length: MAX_CREW_NAME_LENGTH }),
@@ -31,7 +34,7 @@ export const player = pgTable('player', {
   lastProcessedBucketId: integer('last_processed_bucket_id').notNull(),
   isAdmin: boolean('is_admin').notNull().default(false),
   currentZone: zoneEnum('current_zone').notNull().default('foosha'),
-  travelTargetZone: zoneEnum('travel_target_zone'),
+  travelTargetZone: zoneEnum('travel_target_zone').$type<Island>(),
   travelStartedBucket: integer('travel_started_bucket'),
   travelEtaBucket: integer('travel_eta_bucket'),
 });

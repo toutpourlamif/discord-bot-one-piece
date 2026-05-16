@@ -3,7 +3,7 @@ import type { GeneratorContext, InteractiveGenerator, Resolution, Rng } from '..
 import { getRandomIntBetween } from '../utils.js';
 
 export const barrelFound: InteractiveGenerator = {
-  key: 'fishing.barrel_found',
+  key: 'barrelFound',
   isInteractive: true,
   seedScope: 'player',
   cooldownBuckets: 2,
@@ -26,7 +26,7 @@ function openBarrel(_ctx: GeneratorContext, rng: Rng): Resolution {
   return {
     embed: buildOpEmbed('success').setTitle(`Tu trouves ${berries} berries dans le baril.`),
     effects: [{ type: 'addBerries', amount: BigInt(berries) }],
-    resolutionType: 'fishing.barrel_found.opened',
+    resolutionType: 'barrelFound.opened',
   };
 }
 
@@ -34,6 +34,6 @@ function leaveBarrel(): Resolution {
   return {
     embed: buildOpEmbed('info').setTitle('Tu passes ton chemin.'),
     effects: [],
-    resolutionType: 'fishing.barrel_found.left',
+    resolutionType: 'barrelFound.left',
   };
 }
