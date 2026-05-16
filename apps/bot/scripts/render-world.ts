@@ -4,17 +4,15 @@ import { readFileSync, writeFileSync } from 'node:fs';
 import { createRequire } from 'node:module';
 import path from 'node:path';
 
-import { ZONE_LABELS } from '@one-piece/db';
+import { WORLD_EDGES, ZONE_LABELS } from '@one-piece/db';
 import open from 'open';
-
-import { ZONE_GRAPH } from '../src/domains/navigation/world.js';
 
 const require = createRequire(import.meta.url);
 const cytoscapeJs = readFileSync(require.resolve('cytoscape/dist/cytoscape.min.js'), 'utf-8');
 const dagreJs = readFileSync(require.resolve('dagre/dist/dagre.min.js'), 'utf-8');
 const cytoscapeDagreJs = readFileSync(require.resolve('cytoscape-dagre'), 'utf-8');
 
-const nodes = [...new Set(ZONE_GRAPH.flatMap((edge) => [edge.from, edge.to]))].map((id) => ({
+const nodes = [...new Set(WORLD_EDGES.flatMap((edge) => [edge.from, edge.to]))].map((id) => ({
   data: { id, label: ZONE_LABELS[id] },
 }));
 
@@ -28,7 +26,7 @@ function formatDuration(buckets: number): string {
   return `${human}`;
 }
 
-const edges = ZONE_GRAPH.map((edge) => {
+const edges = WORLD_EDGES.map((edge) => {
   const requirementLabel = edge.requirements?.map((r) => r.name).join(', ') ?? '';
   const lines = [ZONE_LABELS[edge.via], formatDuration(edge.baseDurationBuckets)];
   if (requirementLabel) lines.push(`needs: ${requirementLabel}`);
@@ -67,7 +65,7 @@ const html = `<!doctype html>
   <body>
     <div class="legend">
       <strong>World graph</strong><br/>
-      ${nodes.length} îles, ${ZONE_GRAPH.length} arêtes<br/>
+      ${nodes.length} îles, ${WORLD_EDGES.length} arêtes<br/>
       <span class="req">— — —</span> arête avec requirement
     </div>
     <div id="cy"></div>

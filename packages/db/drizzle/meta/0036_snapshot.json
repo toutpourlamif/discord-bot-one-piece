@@ -1,5 +1,5 @@
 {
-  "id": "99d6a55b-8dd0-4da9-ba24-adab9192ca28",
+  "id": "cb7035cd-765a-45f4-9f71-640999b8ad54",
   "prevId": "d5890c74-aa03-4c33-bba2-39659c661c3c",
   "version": "7",
   "dialect": "postgresql",
@@ -233,13 +233,6 @@
           "primaryKey": false,
           "notNull": true,
           "default": "now()"
-        },
-        "skill": {
-          "name": "skill",
-          "type": "character_skill[]",
-          "typeSchema": "public",
-          "primaryKey": false,
-          "notNull": false
         }
       },
       "indexes": {
@@ -663,8 +656,8 @@
           "notNull": true,
           "default": "now()"
         },
-        "event_type": {
-          "name": "event_type",
+        "kind": {
+          "name": "kind",
           "type": "text",
           "primaryKey": false,
           "notNull": true
@@ -711,11 +704,11 @@
           "method": "btree",
           "with": {}
         },
-        "history_event_type_occurred_at_idx": {
-          "name": "history_event_type_occurred_at_idx",
+        "history_kind_occurred_at_idx": {
+          "name": "history_kind_occurred_at_idx",
           "columns": [
             {
-              "expression": "event_type",
+              "expression": "kind",
               "isExpression": false,
               "asc": true,
               "nulls": "last"
@@ -776,8 +769,8 @@
           "method": "btree",
           "with": {}
         },
-        "history_actor_event_bucket_uniq": {
-          "name": "history_actor_event_bucket_uniq",
+        "history_actor_kind_bucket_uniq": {
+          "name": "history_actor_kind_bucket_uniq",
           "columns": [
             {
               "expression": "actor_player_id",
@@ -786,7 +779,7 @@
               "nulls": "last"
             },
             {
-              "expression": "event_type",
+              "expression": "kind",
               "isExpression": false,
               "asc": true,
               "nulls": "last"

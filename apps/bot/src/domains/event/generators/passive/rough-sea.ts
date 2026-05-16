@@ -1,9 +1,10 @@
 import { buildOpEmbed } from '../../../../discord/utils/build-op-embed.js';
+import { isSea } from '../../../navigation/utils/index.js';
 import type { PassiveGenerator } from '../../types.js';
-import { computeNothing, isSea } from '../utils.js';
+import { computeNothing } from '../utils.js';
 
 export const roughSea: PassiveGenerator = {
-  key: 'passive.rough_sea',
+  key: 'roughSea',
   isInteractive: false,
   seedScope: 'zone',
   conditions: (ctx) => isSea(ctx.zone),
