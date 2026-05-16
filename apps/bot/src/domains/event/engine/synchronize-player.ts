@@ -11,6 +11,7 @@ import { buildGeneratorContext, fetchGeneratorContextData } from './context-buil
 import { evaluateGeneratorHappening } from './evaluate-generator-happening.js';
 import { recordInteractive, recordPassive } from './record-event.js';
 import { pickRandomWithSeed, seedFromBucketAndPlayer } from './rng.js';
+import { tryCompleteTravel } from './try-complete-travel.js';
 
 export type SyncResult =
   | { status: 'already_caught_up' }
@@ -42,6 +43,8 @@ export async function synchronizePlayer(playerId: number): Promise<SyncResult> {
 
     for (let bucketId = fromBucket; bucketId <= latestProcessableBucket; bucketId++) {
       const ctx = buildGeneratorContext(ctxData, bucketId);
+
+      await tryCompleteTravel({ ctx, ctxData, tx });
 
       for (const gen of passiveGenerators) {
         const rng = evaluateGeneratorHappening(gen, ctx);

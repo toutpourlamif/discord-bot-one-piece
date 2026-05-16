@@ -1,6 +1,5 @@
 import { type Transaction } from '@one-piece/db';
 
-import { InternalError } from '../../../discord/errors.js';
 import * as economyRepository from '../../economy/repository.js';
 import { completeTravel } from '../../navigation/services/complete-travel.js';
 import { startTravel } from '../../navigation/services/start-travel.js';
@@ -32,17 +31,14 @@ export async function applyEffects(effects: Array<EventEffect>, ctx: GeneratorCo
         ctx.player.currentZone = effect.edge.via;
         ctx.zone = effect.edge.via;
         break;
-      case 'completeTravel': {
-        if (ctx.player.travelTargetZone === null) {
-          throw new InternalError('completeTravel effect emitted but player.travelTargetZone is null.');
-        }
-        const drifted = effect.drifted ?? false;
-        const intendedTo = effect.intendedTo ?? ctx.player.travelTargetZone;
+      case 'completeTravel':
         await completeTravel({
           playerId: ctx.player.id,
+          fromSea: effect.fromSea,
+          startedBucket: effect.startedBucket,
           arrivedZone: effect.arrivedZone,
-          drifted,
-          intendedTo,
+          drifted: effect.drifted,
+          intendedTo: effect.intendedTo,
           bucketId: ctx.bucketId,
           tx,
         });
@@ -52,7 +48,6 @@ export async function applyEffects(effects: Array<EventEffect>, ctx: GeneratorCo
         ctx.player.currentZone = effect.arrivedZone;
         ctx.zone = effect.arrivedZone;
         break;
-      }
       case 'updateTravelTarget':
         await updateTravelTarget({
           playerId: ctx.player.id,
