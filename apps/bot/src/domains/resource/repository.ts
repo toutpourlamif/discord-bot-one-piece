@@ -50,6 +50,7 @@ export async function findById(id: number): Promise<ResourceTemplate | undefined
   return row;
 }
 
+// TODO: multi-statement → service avec tx
 export async function debitResourceByName(
   playerId: number,
   name: ResourceName,

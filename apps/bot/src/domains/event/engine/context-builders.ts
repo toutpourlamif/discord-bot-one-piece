@@ -10,8 +10,7 @@ import type { Inventory } from '../../resource/types.js';
 import * as shipRepository from '../../ship/repository.js';
 import type { GeneratorContext } from '../types.js';
 
-// TODO: renommer le champ `eventType` → `kind` quand history.event_type sera renommé (cf packages/db/src/domains/history/schema.ts)
-type HistoryRow = Pick<HistoryLog, 'eventType' | 'bucketId'>;
+type HistoryRow = Pick<HistoryLog, 'kind' | 'bucketId'>;
 
 export type GeneratorContextData = {
   player: Player;
@@ -59,11 +58,11 @@ function buildCrewAccessor(members: Array<CharacterRow>): GeneratorContext['crew
 
 function buildHistoryAccessor(historyLogs: Array<HistoryRow>, currentBucketId: number): GeneratorContext['history'] {
   return {
-    has: (type) => historyLogs.some((log) => log.eventType === type),
-    lastResolutionOf: (prefix) => historyLogs.findLast((log) => log.eventType.startsWith(prefix))?.eventType,
+    has: (type) => historyLogs.some((log) => log.kind === type),
+    lastResolutionOf: (prefix) => historyLogs.findLast((log) => log.kind.startsWith(prefix))?.kind,
     countSinceNBuckets: (type, nBuckets) => {
       const minBucket = currentBucketId - nBuckets;
-      return historyLogs.filter((log) => log.eventType === type && log.bucketId !== null && log.bucketId > minBucket).length;
+      return historyLogs.filter((log) => log.kind === type && log.bucketId !== null && log.bucketId > minBucket).length;
     },
   };
 }

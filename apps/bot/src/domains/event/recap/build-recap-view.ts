@@ -6,6 +6,7 @@ import { DISCORD_ACTION_ROW_MAX_BUTTONS, PAGINATION } from '../../../discord/con
 import { InternalError } from '../../../discord/errors.js';
 import type { View } from '../../../discord/types.js';
 import { buildOpEmbed } from '../../../discord/utils/index.js';
+import { buildProfilButton } from '../../player/build-profil-button.js';
 import { getNowBucketId } from '../engine/bucket.js';
 import { buildGeneratorContext, fetchGeneratorContextData } from '../engine/context-builders.js';
 import { findGeneratorByKeyOrThrow } from '../generators/registry.js';
@@ -13,13 +14,23 @@ import { getPendingEventsForPlayer, type PendingEventInstance } from '../reposit
 import type { GeneratorContext, InteractiveGenerator, PassiveGenerator } from '../types.js';
 import { buildEventInteractiveChoiceCustomId, buildEventPassiveNextCustomId } from '../utils/build-event-custom-id.js';
 
+import { getRandomCalmTextByZone } from './get-random-calm-text-by-zone.js';
+
 export async function buildRecapView(player: Player): Promise<View> {
   const pendingEvents = await getPendingEventsForPlayer(player.id);
   const firstPendingEvent = pendingEvents[0];
   if (!firstPendingEvent) {
+    const profilRow = new ActionRowBuilder<ButtonBuilder>().addComponents(
+      buildProfilButton(player.discordId, player.id, { label: 'Voir mon profil' }),
+    );
     return {
-      embeds: [buildOpEmbed('info').setDescription("Vous n'avez aucun évènement en attente.")],
-      components: [],
+      embeds: [
+        buildOpEmbed('info')
+          .setTitle(`Vous n'avez aucun évènement à consulter.`)
+          .setDescription('Revenez plus tard.')
+          .setFooter({ text: getRandomCalmTextByZone(player.currentZone) }),
+      ],
+      components: [profilRow],
     };
   }
 
