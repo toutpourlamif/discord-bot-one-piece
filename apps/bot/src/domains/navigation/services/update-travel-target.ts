@@ -1,11 +1,10 @@
-import { player, type Transaction } from '@one-piece/db';
+import { player, type Edge, type Transaction } from '@one-piece/db';
 import { eq } from 'drizzle-orm';
 
 import { ValidationError } from '../../../discord/errors.js';
 import * as historyRepository from '../../history/index.js';
 import * as playerRepository from '../../player/repository.js';
 import { isSea } from '../utils/index.js';
-import type { Edge } from '../world.js';
 
 import { recordZoneChange } from './record-zone-change.js';
 

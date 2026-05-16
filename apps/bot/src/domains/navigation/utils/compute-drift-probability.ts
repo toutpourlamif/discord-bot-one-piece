@@ -1,8 +1,7 @@
-import type { Island, Sea, Ship } from '@one-piece/db';
+import type { Edge, Island, Sea, Ship, TravelModifier } from '@one-piece/db';
 import clamp from 'lodash/clamp.js';
 
 import type { Inventory } from '../../resource/types.js';
-import type { Edge, TravelModifier } from '../world.js';
 
 import { hasLogOrEternalPoseForIsland, findEdge } from './index.js';
 

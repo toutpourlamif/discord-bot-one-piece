@@ -1,4 +1,6 @@
-import type { ResourceName, Island, Sea } from '@one-piece/db';
+import type { ResourceName } from '../resource/resource_template/data.js';
+
+import type { Island, Sea } from './zones.js';
 
 type TravelRequirement = { kind: 'item'; name: ResourceName };
 
@@ -21,7 +23,7 @@ export type Edge = {
   modifiers?: Array<TravelModifier>;
 };
 
-export const ZONE_GRAPH = [
+export const WORLD_EDGES: Array<Edge> = [
   { from: 'foosha', to: 'loguetown', via: 'sea_east_blue', baseDurationBuckets: 6 },
   { from: 'loguetown', to: 'reverse_mountain', via: 'sea_east_blue', baseDurationBuckets: 8 },
   {
@@ -52,4 +54,4 @@ export const ZONE_GRAPH = [
     baseDurationBuckets: 30,
     requirements: [{ kind: 'item', name: 'Log Pose' }],
   },
-] satisfies Array<Edge>;
+];
