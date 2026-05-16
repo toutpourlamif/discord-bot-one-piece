@@ -1,6 +1,6 @@
 {
-  "id": "bd859874-c206-4369-8322-1bc9751d0b98",
-  "prevId": "cb7035cd-765a-45f4-9f71-640999b8ad54",
+  "id": "12c34ebd-3173-4695-ba5a-dbe59ae8a73a",
+  "prevId": "bd859874-c206-4369-8322-1bc9751d0b98",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
@@ -1285,6 +1285,17 @@
         "CYBORG",
         "MERMAID",
         "DWARF"
+      ]
+    },
+    "public.character_skill": {
+      "name": "character_skill",
+      "schema": "public",
+      "values": [
+        "MASON",
+        "SUPER_MASON",
+        "NAVIGATOR",
+        "CONQUERORS_HAKI",
+        "ARCHAEOLOGIST"
       ]
     },
     "public.devil_fruit_type": {
