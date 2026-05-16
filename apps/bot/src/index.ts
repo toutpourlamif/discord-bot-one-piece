@@ -5,17 +5,14 @@ import { routeInteraction } from './discord/interactionRouter.js';
 import { routeMessage } from './discord/router.js';
 import { validateGeneratorsPaths } from './domains/event/engine/validate-generators-paths.js';
 import { interactiveGenerators } from './domains/event/generators/registry.js';
+import { validateNavigationWorld } from './domains/navigation/validate-navigation-world.js';
 
 validateGeneratorsPaths(interactiveGenerators);
+validateNavigationWorld();
 
 const token = process.env.DISCORD_TOKEN;
 if (!token) {
   throw new Error('DISCORD_TOKEN manquant dans apps/bot/.env.local');
-}
-
-export const prefix = process.env.COMMAND_PREFIX;
-if (!prefix) {
-  throw new Error('COMMAND_PREFIX manquant dans apps/bot/.env.local');
 }
 
 const client = new Client({
@@ -27,7 +24,7 @@ client.once(Events.ClientReady, (c) => {
   console.log(`Bot connecté : ${c.user.tag}`);
 });
 
-client.on(Events.MessageCreate, (message) => routeMessage(message, prefix));
+client.on(Events.MessageCreate, (message) => routeMessage(message));
 client.on(Events.InteractionCreate, (interaction) => routeInteraction(interaction));
 
 await client.login(token);

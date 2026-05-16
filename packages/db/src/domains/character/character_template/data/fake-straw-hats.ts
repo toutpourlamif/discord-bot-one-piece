@@ -17,7 +17,7 @@ export const FAKE_STRAW_HATS_DATA: Array<CharacterTemplateSeed> = [
     race: 'HUMAN',
     rarity: 'COMMON',
     imageUrl: 'characters/fake-straw-hats/manjaro.webp',
-    description: 'Épéeiste à trois sabres sans en maîtriser un seul.',
+    description: 'Épéiste à trois sabres sans en maîtriser un seul.',
   },
   {
     name: 'Nico Robin (Cocoa)',
@@ -35,7 +35,7 @@ export const FAKE_STRAW_HATS_DATA: Array<CharacterTemplateSeed> = [
     race: 'HUMAN',
     rarity: 'COMMON',
     imageUrl: 'characters/fake-straw-hats/mounblutain.webp',
-    description: "Le tireur le précis de Grand Line, on raconte qu'il est capable de rater une cible à bout portant",
+    description: "Le tireur le moins précis de Grand Line, on raconte qu'il est capable de rater une cible à bout portant",
   },
   // TODO: Ajouter drip, chocolat nora gitsune
 ];
