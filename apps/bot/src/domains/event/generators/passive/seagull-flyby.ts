@@ -1,7 +1,8 @@
 import { buildOpEmbed } from '../../../../discord/utils/build-op-embed.js';
 import { buildAssetUrl } from '../../../../shared/build-asset-url.js';
+import { isSea } from '../../../navigation/utils/index.js';
 import type { PassiveGenerator } from '../../types.js';
-import { computeNothing, isSea } from '../utils.js';
+import { computeNothing } from '../utils.js';
 
 export const seagullFlyby: PassiveGenerator = {
   key: 'seagullFlyby',
