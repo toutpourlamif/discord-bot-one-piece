@@ -1,8 +1,9 @@
-import type { Island, Player, Ship } from '@one-piece/db';
+import type { Player, Ship } from '@one-piece/db';
 
 import { ValidationError } from '../../../discord/errors.js';
 import type { Rng } from '../../event/types.js';
 import type { Inventory } from '../../resource/types.js';
+import type { TravelOutcome } from '../types.js';
 
 import { computeDriftProbability } from './compute-drift-probability.js';
 import { isSea } from './is-sea.js';
@@ -13,12 +14,6 @@ type DecideTravelOutcomeInput = {
   ship: Ship;
   inventory: Inventory;
   rng: Rng;
-};
-
-type TravelOutcome = {
-  arrivedZone: Island;
-  drifted: boolean;
-  intendedTo: Island;
 };
 
 /** Décide si le joueur arrive à destination ou dérive. À appeler par les générateurs avant d'émettre un effet `completeTravel`. */
