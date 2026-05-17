@@ -1,5 +1,6 @@
 // Code généré par I.A et pas vraiment relu, c'est du code interne pas exposé dans le bot, c'est seulement pour
 // Générer un graph visuel avec la commande : pnpm world
+// TODO: déplacer dans packages/db/scripts/ (à côté de studio.ts)
 import { readFileSync, writeFileSync } from 'node:fs';
 import { createRequire } from 'node:module';
 import path from 'node:path';
