@@ -4,9 +4,8 @@ import { CUSTOM_ID_SEPARATOR } from '../../../discord/constants.js';
 import { ValidationError } from '../../../discord/errors.js';
 import type { Command } from '../../../discord/types.js';
 import { assertGuildMemberIsAdmin, buildOpEmbed, buildCustomId } from '../../../discord/utils/index.js';
+import { MULTIPLE_SPACES } from '../../../shared/sanitize-name.js';
 import { CANCEL_SET_LANGUAGE_BUTTON_NAME, CONFIRM_SET_LANGUAGE_BUTTON_NAME } from '../constants.js';
-
-const WHITESPACE_REGEX = /\s/;
 
 export const setLanguageCommand: Command = {
   name: 'setlanguage',
@@ -49,7 +48,7 @@ function assertLanguageIsValid(language: string): void {
     throw new ValidationError('Le langage doit faire 2 caractères.');
   }
 
-  if (WHITESPACE_REGEX.test(language)) {
+  if (MULTIPLE_SPACES.test(language)) {
     throw new ValidationError("Le langage ne peut pas contenir d'espace.");
   }
 
