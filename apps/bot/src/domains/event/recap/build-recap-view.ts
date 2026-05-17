@@ -7,7 +7,7 @@ import { InternalError } from '../../../discord/errors.js';
 import type { View } from '../../../discord/types.js';
 import { buildOpEmbed } from '../../../discord/utils/index.js';
 import { buildProfilButton } from '../../player/build-profil-button.js';
-import { getNowBucketId } from '../engine/bucket.js';
+import { getNowBucketId, getStartDateOfBucket } from '../engine/bucket.js';
 import { buildGeneratorContext, fetchGeneratorContextData } from '../engine/context-builders.js';
 import { findGeneratorByKeyOrThrow } from '../generators/registry.js';
 import { getPendingEventsForPlayer, type PendingEventInstance } from '../repository.js';
@@ -16,22 +16,11 @@ import { buildEventInteractiveChoiceCustomId, buildEventPassiveNextCustomId } fr
 
 import { getRandomCalmTextByZone } from './get-random-calm-text-by-zone.js';
 
-export async function buildRecapView(player: Player): Promise<View> {
+export async function buildRecapView(player: Player, isContinuation = false): Promise<View> {
   const pendingEvents = await getPendingEventsForPlayer(player.id);
   const firstPendingEvent = pendingEvents[0];
   if (!firstPendingEvent) {
-    const profilRow = new ActionRowBuilder<ButtonBuilder>().addComponents(
-      buildProfilButton(player.discordId, player.id, { label: 'Voir mon profil' }),
-    );
-    return {
-      embeds: [
-        buildOpEmbed('info')
-          .setTitle(`Vous n'avez aucun évènement à consulter.`)
-          .setDescription('Revenez plus tard.')
-          .setFooter({ text: getRandomCalmTextByZone(player.currentZone) }),
-      ],
-      components: [profilRow],
-    };
+    return buildEmptyView(player, isContinuation);
   }
 
   const generator = findGeneratorByKeyOrThrow(firstPendingEvent.eventKey);
@@ -42,8 +31,23 @@ export async function buildRecapView(player: Player): Promise<View> {
   return buildInteractiveView(generator, firstPendingEvent, player);
 }
 
+function buildEmptyView(player: Player, isContinuation: boolean): View {
+  const profilRow = new ActionRowBuilder<ButtonBuilder>().addComponents(
+    buildProfilButton(player.discordId, player.id, { label: 'Voir mon profil' }),
+  );
+  const title = isContinuation ? "Plus d'évènements à consulter !" : "Aucun évènement à consulter pour l'instant.";
+  return {
+    embeds: [
+      buildOpEmbed('info')
+        .setTitle(title)
+        .setDescription(`*${getRandomCalmTextByZone(player.currentZone)}*`),
+    ],
+    components: [profilRow],
+  };
+}
+
 function buildPassiveView(generator: PassiveGenerator, instance: PendingEventInstance): View {
-  const embed = generator.render(instance.state);
+  const embed = generator.render(instance.state).setTimestamp(getStartDateOfBucket(instance.bucketId));
   const row = new ActionRowBuilder<ButtonBuilder>().addComponents(
     new ButtonBuilder()
       .setCustomId(buildEventPassiveNextCustomId(instance.id))
@@ -61,7 +65,7 @@ async function buildInteractiveView(generator: InteractiveGenerator, instance: P
   if (!step) throw new InternalError(`Step introuvable: ${stepKey} pour ${generator.key}`);
 
   const ctx = await buildCtxForPlayer(player);
-  const embed = step.embed(instance.state, ctx);
+  const embed = step.embed(instance.state, ctx).setTimestamp(getStartDateOfBucket(instance.bucketId));
   const buttons = step
     .choices(instance.state, ctx)
     .map((choice) =>

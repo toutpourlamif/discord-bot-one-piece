@@ -1,8 +1,9 @@
 import { db } from '@one-piece/db';
-import type { ButtonInteraction } from 'discord.js';
+import { ActionRowBuilder, ButtonBuilder, ButtonStyle, type ButtonInteraction } from 'discord.js';
 
+import { PAGINATION } from '../../../discord/constants.js';
 import { InternalError } from '../../../discord/errors.js';
-import type { ButtonHandler } from '../../../discord/types.js';
+import type { ButtonHandler, View } from '../../../discord/types.js';
 import { parseBigintArg } from '../../../discord/utils/index.js';
 import * as historyRepository from '../../history/index.js';
 import * as playerRepository from '../../player/repository.js';
@@ -11,9 +12,12 @@ import { applyEffects } from '../effects/apply-effects.js';
 import { getNowBucketId } from '../engine/bucket.js';
 import { buildGeneratorContext, fetchGeneratorContextData } from '../engine/context-builders.js';
 import { createRngForGenerator } from '../engine/rng.js';
+import { synchronizePlayer } from '../engine/synchronize-player.js';
 import { findGeneratorByKeyOrThrow } from '../generators/registry.js';
 import { buildRecapView } from '../recap/build-recap-view.js';
 import * as eventRepository from '../repository.js';
+import type { Resolution } from '../types.js';
+import { buildEventNextCustomId } from '../utils/build-event-custom-id.js';
 
 export const eventChoiceButtonHandler: ButtonHandler = {
   name: EVENT_BUTTON_NAME,
@@ -33,7 +37,7 @@ export const eventChoiceButtonHandler: ButtonHandler = {
     if (!generator.isInteractive) {
       const player = await playerRepository.findByIdOrThrow(instance.playerId);
       await eventRepository.deleteById(instance.id);
-      await interaction.editReply(await buildRecapView(player));
+      await interaction.editReply(await buildRecapView(player, true));
       return;
     }
 
@@ -71,7 +75,19 @@ export const eventChoiceButtonHandler: ButtonHandler = {
       return;
     }
 
-    const nextView = await buildRecapView(result.player);
-    await interaction.editReply({ embeds: [result.resolution.embed, ...nextView.embeds], components: nextView.components });
+    await synchronizePlayer(result.player.id);
+
+    await interaction.editReply(buildResolutionView(result.resolution, result.player.discordId));
   },
 };
+
+function buildResolutionView(resolution: Resolution, ownerDiscordId: string): View {
+  const row = new ActionRowBuilder<ButtonBuilder>().addComponents(
+    new ButtonBuilder()
+      .setCustomId(buildEventNextCustomId(ownerDiscordId))
+      .setEmoji(PAGINATION.next.emoji)
+      .setLabel(PAGINATION.next.label)
+      .setStyle(ButtonStyle.Primary),
+  );
+  return { embeds: [resolution.embed], components: [row] };
+}

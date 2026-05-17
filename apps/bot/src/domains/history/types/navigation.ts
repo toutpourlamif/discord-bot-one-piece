@@ -5,6 +5,11 @@ type TravelPayloadBase = {
   actualDurationBuckets: number;
 };
 
+type TravelDepartedLog = {
+  type: 'travel.departed';
+  payload: { from: Island; to: Island; via: Sea; etaBucket: number };
+};
+
 type TravelArrivedLog = {
   type: 'travel.arrived';
   payload: TravelPayloadBase & { to: Island };
@@ -20,4 +25,4 @@ type TravelReroutedLog = {
   payload: { from: Island; originalTo: Island; newTo: Island };
 };
 
-export type NavigationLog = TravelArrivedLog | TravelDriftedLog | TravelReroutedLog;
+export type NavigationLog = TravelDepartedLog | TravelArrivedLog | TravelDriftedLog | TravelReroutedLog;

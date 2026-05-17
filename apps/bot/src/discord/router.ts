@@ -50,6 +50,10 @@ export async function routeMessage(message: Message): Promise<void> {
 
     const { player } = await findOrCreatePlayer(message.author.id, message.author.username, guild.id);
 
+    if (command.requiresOpAdmin) {
+      // assertPlayerIsAdmin(player); TODO: réactiver en prod
+    }
+
     if (command.requiresSynchronization !== false) {
       await autoSyncBeforeAction(message, player);
     }
