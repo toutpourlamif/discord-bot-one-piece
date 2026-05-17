@@ -54,4 +54,11 @@ export const WORLD_EDGES: Array<Edge> = [
     baseDurationBuckets: 30,
     requirements: [{ kind: 'item', name: 'Log Pose' }],
   },
+  // TODO: remove, fake data
+  {
+    from: 'alabasta',
+    to: 'wano',
+    via: 'sea_paradise',
+    baseDurationBuckets: 1,
+  },
 ];
