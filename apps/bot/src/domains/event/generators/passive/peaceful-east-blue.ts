@@ -1,17 +1,17 @@
 import { buildOpEmbed } from '../../../../discord/utils/build-op-embed.js';
 import { buildAssetUrl } from '../../../../shared/build-asset-url.js';
 import type { PassiveGenerator } from '../../types.js';
-import { computeNothing } from '../utils.js';
+import { noCompute } from '../utils.js';
 
 export const peacefulEastBlue: PassiveGenerator = {
-  key: 'passive.peaceful_east_blue',
+  key: 'peacefulEastBlue',
   isInteractive: false,
   seedScope: 'player',
   conditions: (ctx) => ctx.zone === 'sea_east_blue',
   oneTime: true,
   probability: () => 0.05,
 
-  compute: computeNothing,
+  compute: noCompute,
 
   render: () => {
     return (

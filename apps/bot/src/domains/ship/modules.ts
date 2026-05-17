@@ -11,6 +11,8 @@ type ShipModuleConfig = {
 };
 
 // TODO: Équilibrer les valeurs, ajouter des vrais ressources
+// TODO: déplacer `SHIP_MODULES` (data statique du schéma) dans `packages/db/src/domains/ship/`,
+// au même titre que `WORLD_EDGES` / `ZONES`. Les labels FR restent côté bot.
 export const SHIP_MODULES = {
   hull: {
     valueByLevel: [100, 150, 220, 320, 450],
@@ -58,6 +60,7 @@ export const SHIP_MODULES = {
     ],
   },
 } as const satisfies Record<ShipModuleKey, ShipModuleConfig>;
+
 export const SHIP_MODULE_LABELS = {
   hull: 'Coque',
   sail: 'Voile',

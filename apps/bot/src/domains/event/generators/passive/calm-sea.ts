@@ -1,10 +1,11 @@
 import { buildOpEmbed } from '../../../../discord/utils/build-op-embed.js';
+import { isSea } from '../../../navigation/utils/index.js';
 import { inBuckets } from '../../engine/bucket.js';
 import type { PassiveGenerator } from '../../types.js';
-import { computeNothing, isSea } from '../utils.js';
+import { noCompute } from '../utils.js';
 
 export const calmSea: PassiveGenerator = {
-  key: 'passive.calm_sea',
+  key: 'calmSea',
   isInteractive: false,
   seedScope: 'zone',
   conditions: (ctx) => isSea(ctx.zone),
@@ -12,7 +13,7 @@ export const calmSea: PassiveGenerator = {
   probability: () => 0.15,
 
   // TODO: appliquer +1 moral via un effet `addMorale` quand morale est implémenté
-  compute: computeNothing,
+  compute: noCompute,
 
   render: () => {
     return buildOpEmbed('info').setTitle("La mer est calme aujourd'hui. L'équipage se détend (+1 moral).");
