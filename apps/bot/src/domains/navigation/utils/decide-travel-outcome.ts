@@ -1,37 +1,23 @@
-import type { Island, Player, Ship } from '@one-piece/db';
+import type { Island, Sea, Ship } from '@one-piece/db';
 
-import { ValidationError } from '../../../discord/errors.js';
 import type { Rng } from '../../event/types.js';
 import type { Inventory } from '../../resource/types.js';
+import type { TravelOutcome } from '../types.js';
 
 import { computeDriftProbability } from './compute-drift-probability.js';
-import { isSea } from './is-sea.js';
 import { pickDriftIsland } from './pick-drift-island.js';
 
-type DecideTravelOutcomeInput = {
-  player: Player;
+type DecideTravelOutcomeParams = {
+  fromSea: Sea;
+  intendedTo: Island;
   ship: Ship;
   inventory: Inventory;
   rng: Rng;
 };
 
-type TravelOutcome = {
-  arrivedZone: Island;
-  drifted: boolean;
-  intendedTo: Island;
-};
-
-/** Décide si le joueur arrive à destination ou dérive. À appeler par les générateurs avant d'émettre un effet `completeTravel`. */
-export function decideTravelOutcome({ player, ship, inventory, rng }: DecideTravelOutcomeInput): TravelOutcome {
-  if (player.travelTargetZone === null) {
-    throw new ValidationError("Le joueur n'a pas de voyage en cours.");
-  }
-  if (!isSea(player.currentZone)) {
-    throw new ValidationError('Le joueur doit être en mer pour terminer un voyage.');
-  }
-
-  const intendedTo = player.travelTargetZone;
-  const fromSea = player.currentZone;
+/** Décide si le joueur arrive à destination ou dérive. Appelée par `tryCompleteTravel` qui a déjà validé l'état. */
+export function decideTravelOutcome(params: DecideTravelOutcomeParams): TravelOutcome {
+  const { fromSea, intendedTo, ship, inventory, rng } = params;
   const driftProbability = computeDriftProbability({ ship, inventory, fromSea, intendedZone: intendedTo });
   const drifted = rng.next() < driftProbability;
   const arrivedZone = drifted ? pickDriftIsland(fromSea, intendedTo, rng) : intendedTo;

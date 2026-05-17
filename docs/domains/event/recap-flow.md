@@ -33,7 +33,7 @@ Le routeur Discord (`apps/bot/src/discord/router.ts`) appelle `synchronizePlayer
 Selon le `SyncResult` :
 
 - `already_caught_up` → on enchaîne sur le handler, rien à dire.
-- `caught_up` avec `generatedPassiveCount > 0` → on envoie un message séparé `📜 Ton équipage a vécu N événement(s). Tape !recap pour les revivre.` **avant** d'enchaîner sur le handler. Les passives ont déjà été appliqués pendant la sync — pas besoin de bloquer.
+- `caught_up` avec `generatedPassiveCount > 0` → on envoie un message séparé `📜 Votre équipage a vécu N événement(s). Tapez !recap pour les revivre.` **avant** d'enchaîner sur le handler. Les passives ont déjà été appliqués pendant la sync — pas besoin de bloquer.
 - `blocked_on_interactive` → on `throw new OutOfSyncError(message.author.id)`. Le `catch` du routeur rend l'`userView` portée par l'erreur (cf #188) : un embed warn + un bouton "Voir mes events" (`recap-shortcut`) qui ramène vers `!recap`.
 
 > **Pourquoi un message séparé pour le footer plutôt qu'un append à la réponse de la commande** : éviter de coupler chaque handler (pêche, recrutement, etc.) à une logique de footer. UX-wise, deux messages restent fluides, et l'ordre temporel est naturel (footer avant la réponse de l'action).
@@ -79,9 +79,9 @@ Deux phases distinctes : **calcul** (rejouer les buckets, appliquer les effets, 
 
 Lecture de la queue (ordonnée par `bucket_id`) et affichage du **premier** event :
 
-- **Queue vide** → "Vous n'avez aucun événement en attente."
+- **Queue vide** → deux variantes selon le contexte : "Aucun évènement à consulter pour l'instant." (entrée fraîche dans `!recap`) ou "Plus d'évènements à consulter !" (fin de file après avoir déroulé). `buildRecapView(player, isContinuation)` porte le booléen.
 - **Passive en tête** → retrouver le générateur via `event_key`, appeler `render(state)`, afficher l'embed + bouton **Suivant**. Clic → DELETE l'`event_instance`, render le suivant.
-- **Interactive en tête** → appeler `steps[state.step].embed(state, ctx)` + boutons des choix. Clic sur un choix → appliquer les effets, DELETE `event_instance`, INSERT `history`, render le suivant (ou bien `goTo` une autre étape sans DELETE).
+- **Interactive en tête** → appeler `steps[state.step].embed(state, ctx)` + boutons des choix. Clic sur un choix → appliquer les effets, DELETE `event_instance`, INSERT `history`, **relancer `synchronizePlayer`** (le moteur s'était arrêté sur cet interactif, il faut rejouer les buckets suivants), puis afficher la **résolution seule + bouton Suivant**. Le clic Suivant reprend l'affichage en haut de queue. (Ou bien `goTo` une autre étape sans DELETE.)
 
 Le joueur peut interrompre à tout moment : la queue persiste. Au prochain `!recap`, on recalcule les nouveaux buckets (s'il y en a) puis on reprend l'affichage en haut de queue. Pas de cooldown sur `!recap`.
 

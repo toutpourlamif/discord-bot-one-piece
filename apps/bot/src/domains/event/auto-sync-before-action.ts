@@ -35,7 +35,7 @@ export async function autoSyncBeforeAction(message: Message, player: Player): Pr
       embeds: [
         buildOpEmbed('info').setDescription(
           // TODO: remplacer par le préfixe de la guild
-          `📜 Ton équipage a vécu ${eventCountText} ${elapsed}. Tape \`!recap\` pour les revivre.`,
+          `📜 Votre équipage a vécu ${eventCountText} ${elapsed}. Tapez \`!recap\` pour les revivre.`,
         ),
       ],
     });
