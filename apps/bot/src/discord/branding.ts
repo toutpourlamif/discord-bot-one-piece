@@ -1,11 +1,10 @@
 // TODO: Décider la bonne couleur et le bon nom pour le bot discord
 export const BOT_NAME = 'One Piece Bot';
-export const BOT_COLOR = 0x5284de;
 
 export const EMBED_COLORS = {
-  default: BOT_COLOR,
+  default: 0x99aab5,
   error: 0xed4245,
-  info: 0x99aab5,
+  info: 0x5284de,
   success: 0x57f287,
   warn: 0xfee75c,
 } as const;

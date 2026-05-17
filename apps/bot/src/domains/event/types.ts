@@ -1,4 +1,4 @@
-import type { Player, Ship, Zone } from '@one-piece/db';
+import type { JSONFromSQL, Player, Ship, Zone } from '@one-piece/db';
 import type { EmbedBuilder } from 'discord.js';
 
 import type { CharacterRow } from '../character/types.js';
@@ -41,8 +41,8 @@ type GeneratorBase = {
 
 export type PassiveGenerator = GeneratorBase & {
   isInteractive: false;
-  compute: (ctx: GeneratorContext, rng: Rng) => { effects: Array<EventEffect>; state: Record<string, unknown> };
-  render: (state: Record<string, unknown>) => EmbedBuilder;
+  compute: (ctx: GeneratorContext, rng: Rng) => { effects: Array<EventEffect>; state: JSONFromSQL };
+  render: (state: JSONFromSQL) => EmbedBuilder;
 };
 
 export type Resolution = {
@@ -56,8 +56,8 @@ type Choice =
   | { id: string; label: string; resolve: (ctx: GeneratorContext, rng: Rng) => Resolution };
 
 type InteractiveStep = {
-  embed: (state: Record<string, unknown>, ctx: GeneratorContext) => EmbedBuilder;
-  choices: (state: Record<string, unknown>, ctx: GeneratorContext) => Array<Choice>;
+  embed: (state: JSONFromSQL, ctx: GeneratorContext) => EmbedBuilder;
+  choices: (state: JSONFromSQL, ctx: GeneratorContext) => Array<Choice>;
 };
 
 export type InteractiveGenerator = GeneratorBase & {

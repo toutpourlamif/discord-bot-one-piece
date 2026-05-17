@@ -19,6 +19,8 @@ Bot Discord autour de l'univers One Piece. Le joueur recrute un équipage, amél
 
 - `type`, jamais `interface`
 - N'exporter un `type` que s'il est importé ailleurs
+- `Array<T>`, jamais `T[]` (ESLint actif)
+- Helpers et fonctions top-level : `function foo() {}`, pas `const foo = () => {}`
 - Pas de commentaires qui décrivent **ce que** fait le code — uniquement **pourquoi** quand le « pourquoi » est non évident
 - **YAGNI** (_You Aren't Gonna Need It_) : on n'ajoute pas une feature, une dep, un helper, un validator tant qu'un code actuel ne l'utilise pas. Pas d'abstractions spéculatives — 3 lignes similaires valent mieux qu'un helper prématuré.
 - Les erreurs : gérer aux frontières (entrée Discord, APIs externes, DB). Faire confiance au code interne.
@@ -27,6 +29,9 @@ Bot Discord autour de l'univers One Piece. Le joueur recrute un équipage, amél
 - **Signatures de fonctions** :
   - **1–2 args métier** : positionnels, `options: OptionsType = {}` en dernier. Ex : `clearTravel(playerId, options)`.
   - **3+ args métier** : un seul param object `{...}` typé via un `type FooParams = {...; options?: OptionsType}`. Ex : `completeTravel({ playerId, bucketId, rng, options })`.
+- **Handlers Discord** : `deferUpdate()` / `deferReply()` **avant** toute opération DB ou réseau (sinon l'interaction expire).
+- **Pas de logique métier dans `discord/`** : c'est un adaptateur (routage + formatage des messages/embeds). La logique vit dans `domains/`.
+- **Commandes** : flags sur `Command`. Par défaut, le routeur sync le joueur avant le handler — s'il a un interactif pending, ça bloque la commande (`OutOfSyncError`). `requiresSynchronization: false` opt-out des deux (sync + gate), pour `!recap`, `_info`, `_dev`. `requiresOpAdmin: true` exige `player.isAdmin` (cf `assertPlayerIsAdmin`). Détails : `docs/domains/event/recap-flow.md`.
 
 ## Structure
 
