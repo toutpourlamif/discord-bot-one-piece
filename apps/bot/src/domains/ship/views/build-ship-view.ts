@@ -41,7 +41,7 @@ function buildLocationFields(player: Player): Array<APIEmbedField> {
     positionField,
     {
       name: '🚢 Destination',
-      value: `${ZONE_LABELS[player.travelTargetZone]}(~${buildDiscordTimestamp(arrivalAt)})`,
+      value: `${ZONE_LABELS[player.travelTargetZone]}(Arrivée prévue dans ~${buildDiscordTimestamp(arrivalAt)})`,
       inline: true,
     },
   ];
