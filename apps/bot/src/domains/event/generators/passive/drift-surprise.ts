@@ -15,7 +15,6 @@ export const driftSurprise: PassiveGenerator = {
   key: 'driftSurprise',
   isInteractive: false,
   seedScope: 'player',
-  // TODO: créer un util callback pour rien compute
   probability: noProbability,
   compute: (_ctx, rng) => {
     const message = pickRandom(rng, DRIFT_SURPRISE_MESSAGES);

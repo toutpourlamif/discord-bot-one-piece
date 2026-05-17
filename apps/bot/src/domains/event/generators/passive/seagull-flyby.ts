@@ -2,7 +2,7 @@ import { buildOpEmbed } from '../../../../discord/utils/build-op-embed.js';
 import { buildAssetUrl } from '../../../../shared/build-asset-url.js';
 import { isSea } from '../../../navigation/utils/index.js';
 import type { PassiveGenerator } from '../../types.js';
-import { computeNothing } from '../utils.js';
+import { noCompute } from '../utils.js';
 
 export const seagullFlyby: PassiveGenerator = {
   key: 'seagullFlyby',
@@ -12,7 +12,7 @@ export const seagullFlyby: PassiveGenerator = {
   cooldownBuckets: 2,
   probability: () => 0.3,
 
-  compute: computeNothing,
+  compute: noCompute,
 
   render: () => {
     return buildOpEmbed('info')

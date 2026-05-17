@@ -1,6 +1,6 @@
 import type { Rng } from '../types.js';
 
-export function computeNothing() {
+export function noCompute() {
   return { effects: [], state: {} };
 }
 

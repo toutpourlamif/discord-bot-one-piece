@@ -3,7 +3,7 @@ import camelCase from 'lodash/camelCase.js';
 
 import { buildOpEmbed } from '../../../../../discord/utils/build-op-embed.js';
 import type { PassiveGenerator } from '../../../types.js';
-import { computeNothing, noProbability } from '../../utils.js';
+import { noCompute, noProbability } from '../../utils.js';
 
 type ArrivalContent = {
   text: string;
@@ -16,7 +16,7 @@ export function buildArrivalGenerator(island: Island, content: ArrivalContent): 
     isInteractive: false,
     seedScope: 'player',
     probability: noProbability,
-    compute: computeNothing,
+    compute: noCompute,
     render: () => buildOpEmbed('info').setTitle(content.text).setImage(content.imageUrl),
   };
 }
