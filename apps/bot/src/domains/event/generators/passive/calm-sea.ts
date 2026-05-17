@@ -16,6 +16,6 @@ export const calmSea: PassiveGenerator = {
   compute: noCompute,
 
   render: () => {
-    return buildOpEmbed('info').setTitle("La mer est calme aujourd'hui. L'équipage se détend (+1 moral).");
+    return buildOpEmbed('info').setTitle("La mer a été calme. Votre équipage s'est détendu (+1 moral).");
   },
 };
