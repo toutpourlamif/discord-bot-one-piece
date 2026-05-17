@@ -16,6 +16,6 @@ export const roughSea: PassiveGenerator = {
   compute: noCompute,
 
   render: () => {
-    return buildOpEmbed('info').setTitle('Une vague secoue le navire (-1 moral).');
+    return buildOpEmbed('info').setTitle('Une vague a secoué le navire (-1 moral).');
   },
 };

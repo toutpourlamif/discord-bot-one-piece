@@ -16,8 +16,6 @@ export const seagullFlyby: PassiveGenerator = {
   compute: noCompute,
 
   render: () => {
-    return buildOpEmbed('info')
-      .setTitle('Une mouette passe au-dessus du navire.')
-      .setImage(buildAssetUrl('events/passive/seagull-flyby.webp'));
+    return buildOpEmbed('info').setTitle('Une mouette a survolé le navire.').setImage(buildAssetUrl('events/passive/seagull-flyby.webp'));
   },
 };

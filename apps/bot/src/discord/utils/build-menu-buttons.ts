@@ -16,7 +16,7 @@ export function buildMenuButtons(currentKey: string, ownerDiscordId: string, pla
   return new ActionRowBuilder<ButtonBuilder>().addComponents(
     buildProfilButton(ownerDiscordId, playerId, { disabled: currentKey === PROFIL_BUTTON_NAME }),
     buildShipButton(ownerDiscordId, playerId, { disabled: currentKey === SHIP_BUTTON_NAME }),
-    buildInventoryNavButton(ownerDiscordId, playerId, { disabled: currentKey === INVENTORY_BUTTON_NAME }),
     buildCrewNavButton(ownerDiscordId, playerId, { disabled: currentKey === CREW_BUTTON_NAME }),
+    buildInventoryNavButton(ownerDiscordId, playerId, { disabled: currentKey === INVENTORY_BUTTON_NAME }),
   );
 }

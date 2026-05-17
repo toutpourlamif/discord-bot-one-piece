@@ -16,7 +16,7 @@ export const peacefulEastBlue: PassiveGenerator = {
   render: () => {
     return (
       buildOpEmbed('info')
-        .setTitle("East Blue s'étire sous un ciel paisible. L'équipage profite du paysage.")
+        .setTitle("East Blue s'est étendue sous un ciel paisible — votre équipage en a profité.")
         //TODO Changer le gif de golmon
         .setImage(buildAssetUrl('events/passive/peaceful-east-blue.webp'))
     );
