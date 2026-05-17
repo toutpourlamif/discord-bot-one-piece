@@ -1,5 +1,6 @@
 import type { Island } from '@one-piece/db';
 
+import { buildAssetUrl } from '../../../../../shared/build-asset-url.js';
 import type { PassiveGenerator } from '../../../types.js';
 
 import { buildArrivalGenerator } from './build-arrival-generator.js';
@@ -18,6 +19,7 @@ export const arrivalByIsland: Record<Island, PassiveGenerator> = {
   little_garden: buildArrivalGenerator('little_garden', TEMPLATE_ARRIVAL),
   drum: buildArrivalGenerator('drum', TEMPLATE_ARRIVAL),
   alabasta: buildArrivalGenerator('alabasta', TEMPLATE_ARRIVAL),
+  wano: buildArrivalGenerator('wano', { text: 'Vous découvrez le pays des Wa.', imageUrl: buildAssetUrl('events/arrival/wano.webp') }),
 };
 
 export const arrivalGenerators: Array<PassiveGenerator> = Object.values(arrivalByIsland);
