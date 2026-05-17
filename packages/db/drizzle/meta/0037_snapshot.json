@@ -234,8 +234,8 @@
           "notNull": true,
           "default": "now()"
         },
-        "skill": {
-          "name": "skill",
+        "skills": {
+          "name": "skills",
           "type": "character_skill[]",
           "typeSchema": "public",
           "primaryKey": false,

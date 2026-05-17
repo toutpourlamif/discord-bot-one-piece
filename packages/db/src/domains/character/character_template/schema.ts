@@ -23,7 +23,7 @@ export const characterTemplate = pgTable(
     ...imageUrl(),
     ...timestamps(),
 
-    skill: characterSkillEnum('skill').notNull().array(),
+    skills: characterSkillEnum('skills').notNull().array(),
   },
   (table) => [index('character_template_name_trgm_idx').using('gin', sql`${table.name} gin_trgm_ops`)],
 );
