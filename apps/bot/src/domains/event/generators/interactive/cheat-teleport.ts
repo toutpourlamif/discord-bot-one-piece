@@ -15,16 +15,14 @@ export const cheatTeleport: InteractiveGenerator = {
   steps: {
     pickDestination: {
       embed: (_state, ctx) =>
-        buildOpEmbed('info')
-          .setTitle('🛠️ Cheat — choisir une destination')
-          .setDescription(
-            isSea(ctx.zone)
-              ? `Vous êtes en mer (${ZONE_LABELS[ctx.zone]}). Attendez d'arriver pour pouvoir repartir.`
-              : `Position actuelle : **${ZONE_LABELS[ctx.zone]}**`,
-          ),
+        buildOpEmbed('info').setDescription(
+          isSea(ctx.zone)
+            ? `Vous êtes déjà en mer (${ZONE_LABELS[ctx.zone]}).\nOù souhaitez-vous aller ?`
+            : `Vous êtes à : **${ZONE_LABELS[ctx.zone]}**\nOù souhaitez-vous aller ?`,
+        ),
       choices: (_state, ctx) => {
         if (isSea(ctx.zone)) {
-          return [{ id: 'cancel', label: 'Fermer', resolve: buildCancelResolution }];
+          return [{ id: 'cancel', label: 'Rester où je suis', resolve: buildCancelResolution }];
         }
         const edges = findPossibleEdges(ctx.zone);
         if (edges.length === 0) {
@@ -32,7 +30,7 @@ export const cheatTeleport: InteractiveGenerator = {
         }
         return edges.map((edge) => ({
           id: edge.to,
-          label: ZONE_LABELS[edge.to],
+          label: `Partir vers ${ZONE_LABELS[edge.to]}`,
           resolve: (resolveCtx: GeneratorContext) => buildStartTravelResolution(resolveCtx, edge),
         }));
       },
