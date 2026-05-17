@@ -36,4 +36,4 @@ export const devCommands = [
   upgradeShipCommand,
   dmCommand,
   showHistoryCommand,
-].map((cmd) => ({ ...cmd, requiresAdmin: true, requiresSynchronization: false }));
+].map((cmd) => ({ ...cmd, requiresOpAdmin: true, requiresSynchronization: false }));

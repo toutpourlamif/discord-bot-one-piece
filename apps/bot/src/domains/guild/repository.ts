@@ -1,7 +1,7 @@
 import { db, guild, type Guild } from '@one-piece/db';
 import { eq } from 'drizzle-orm';
 
-// TODO: MOVE DANS UN SERVICE
+// TODO: multi-statement → service avec tx
 export async function findOrCreate(guildId: string, name: string): Promise<Guild> {
   const [existing] = await db.select().from(guild).where(eq(guild.id, guildId)).limit(1);
   if (existing?.name === name) return existing;

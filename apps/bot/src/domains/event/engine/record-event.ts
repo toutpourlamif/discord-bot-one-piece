@@ -24,8 +24,8 @@ export async function recordPassive(
 
   await applyEffects(effects, ctx, tx);
   await eventRepository.insertWithIdempotence({ playerId, eventKey: gen.key, isInteractive: false, bucketId, state }, tx);
-  await historyRepository.writeEventResolution({ actorPlayerId: playerId, eventType: gen.key, bucketId }, tx);
-  ctxData.historyLogs.push({ eventType: gen.key, bucketId });
+  await historyRepository.writeEventResolution({ actorPlayerId: playerId, kind: gen.key, bucketId }, tx);
+  ctxData.historyLogs.push({ kind: gen.key, bucketId });
 }
 
 /** Enregistre un interactif : insère l'event_instance avec son step initial. La résolution s'écrira au moment du choix. */

@@ -1,5 +1,5 @@
 import { buildCustomId } from '../../../discord/utils/index.js';
-import { EVENT_BUTTON_NAME } from '../constants.js';
+import { EVENT_BUTTON_NAME, EVENT_NEXT_BUTTON_NAME } from '../constants.js';
 
 /** @return evt:230212 */
 export function buildEventPassiveNextCustomId(eventInstanceId: bigint): string {
@@ -9,4 +9,9 @@ export function buildEventPassiveNextCustomId(eventInstanceId: bigint): string {
 /** @return evt:230213:attackCrocodile */
 export function buildEventInteractiveChoiceCustomId(eventInstanceId: bigint, choiceId: string): string {
   return buildCustomId(EVENT_BUTTON_NAME, eventInstanceId.toString(), choiceId);
+}
+
+/** @return evt-next:123456789 */
+export function buildEventNextCustomId(ownerDiscordId: string): string {
+  return buildCustomId(EVENT_NEXT_BUTTON_NAME, ownerDiscordId);
 }

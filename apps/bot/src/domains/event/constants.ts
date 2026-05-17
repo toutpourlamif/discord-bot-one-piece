@@ -1,4 +1,5 @@
 export const EVENT_BUTTON_NAME = 'evt';
+export const EVENT_NEXT_BUTTON_NAME = 'evt-next';
 
 // TODO: ENLEVER CA, CETAIT A LANCIENNE
 export const EVENT_TYPES = {

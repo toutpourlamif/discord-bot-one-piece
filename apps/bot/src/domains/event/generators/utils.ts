@@ -1,14 +1,10 @@
-import { SEAS, type Sea, type Zone } from '@one-piece/db';
-
 import type { Rng } from '../types.js';
 
-export function computeNothing() {
+export function noCompute() {
   return { effects: [], state: {} };
 }
 
-export function isSea(zone: Zone): zone is Sea {
-  return (SEAS as ReadonlyArray<Zone>).includes(zone);
-}
+export const noProbability = () => 0;
 
 /** Entier dans [min, max] (bornes incluses) tiré depuis le rng fourni. */
 export function getRandomIntBetween(rng: Rng, min: number, max: number): number {

@@ -5,8 +5,10 @@ import { routeInteraction } from './discord/interactionRouter.js';
 import { routeMessage } from './discord/router.js';
 import { validateGeneratorsPaths } from './domains/event/engine/validate-generators-paths.js';
 import { interactiveGenerators } from './domains/event/generators/registry.js';
+import { validateNavigationWorld } from './domains/navigation/validate-navigation-world.js';
 
 validateGeneratorsPaths(interactiveGenerators);
+validateNavigationWorld();
 
 const token = process.env.DISCORD_TOKEN;
 if (!token) {
