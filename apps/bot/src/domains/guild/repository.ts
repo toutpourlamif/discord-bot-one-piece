@@ -1,6 +1,8 @@
 import { db, guild, type Guild } from '@one-piece/db';
 import { eq } from 'drizzle-orm';
 
+import { type SupportedLanguage } from './constants.js';
+
 // TODO: multi-statement → service avec tx
 export async function findOrCreate(guildId: string, name: string): Promise<Guild> {
   const [existing] = await db.select().from(guild).where(eq(guild.id, guildId)).limit(1);
@@ -19,7 +21,7 @@ export async function updatePrefix(guildId: string, prefix: string): Promise<Gui
   return updated!;
 }
 
-export async function updateLanguage(guildId: string, rawLanguage: string): Promise<Guild> {
-  const [updated] = await db.update(guild).set({ language: rawLanguage }).where(eq(guild.id, guildId)).returning();
+export async function updateLanguage(guildId: string, language: SupportedLanguage): Promise<Guild> {
+  const [updated] = await db.update(guild).set({ language: language }).where(eq(guild.id, guildId)).returning();
   return updated!;
 }
