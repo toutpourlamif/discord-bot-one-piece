@@ -3,8 +3,21 @@ import { and, eq, isNotNull } from 'drizzle-orm';
 
 import { InternalError } from '../../discord/errors.js';
 
-export async function findCharacterInstanceById(instanceId: number): Promise<CharacterInstance | undefined> {
-  const [row] = await db.select().from(characterInstance).where(eq(characterInstance.id, instanceId)).limit(1);
+type FindCharacterInstanceByIdOptions = {
+  forUpdate?: boolean;
+};
+
+export async function findCharacterInstanceById(
+  instanceId: number,
+  client: DbOrTransaction = db,
+  options: FindCharacterInstanceByIdOptions = {},
+): Promise<CharacterInstance | undefined> {
+  if (options.forUpdate) {
+    const [row] = await client.select().from(characterInstance).where(eq(characterInstance.id, instanceId)).limit(1).for('update');
+    return row;
+  }
+
+  const [row] = await client.select().from(characterInstance).where(eq(characterInstance.id, instanceId)).limit(1);
   return row;
 }
 
@@ -26,4 +39,8 @@ export async function setCaptain(playerId: number, instanceId: number, client: D
     .where(and(eq(characterInstance.id, instanceId), eq(characterInstance.playerId, playerId), isNotNull(characterInstance.joinedCrewAt)));
 
   return result.count > 0;
+}
+
+export async function setCharacterCrewMembership(instanceId: number, joinedAt: Date | null, client: DbOrTransaction = db): Promise<void> {
+  await client.update(characterInstance).set({ joinedCrewAt: joinedAt }).where(eq(characterInstance.id, instanceId));
 }
