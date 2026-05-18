@@ -41,6 +41,6 @@ export async function setCaptain(playerId: number, instanceId: number, client: D
   return result.count > 0;
 }
 
-export async function setCharacterCrewMembership(instanceId: number, joinedAt: Date | null, client: DbOrTransaction = db): Promise<void> {
+export async function setCharacterJoinedAt(instanceId: number, joinedAt: Date | null, client: DbOrTransaction = db): Promise<void> {
   await client.update(characterInstance).set({ joinedCrewAt: joinedAt }).where(eq(characterInstance.id, instanceId));
 }
