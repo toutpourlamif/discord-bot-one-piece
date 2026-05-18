@@ -5,6 +5,13 @@ import { inBuckets } from '../../engine/bucket.js';
 import type { PassiveGenerator } from '../../types.js';
 import { noCompute } from '../utils.js';
 
+const SEAGULL_FLYBY_MESSAGE = [
+  "Le cri d'une mouette se fait entendre pas loin du navire...",
+  'Une mouette a survolé le navire.',
+  'Plusieurs mouettes chassent des poissons près du bâteau.',
+  'Vous voyez une mouette sur le mas.',
+] as const;
+
 export const seagullFlyby: PassiveGenerator = {
   key: 'seagullFlyby',
   isInteractive: false,
