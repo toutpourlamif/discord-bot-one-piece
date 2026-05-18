@@ -6,6 +6,7 @@ import { CANCEL_SET_LANGUAGE_BUTTON_NAME, EN_BUTTON_NAME, FR_BUTTON_NAME, LANGUA
 
 export const setLanguageCommand: Command = {
   name: 'setlanguage',
+  requiresSynchronization: false,
   async handler({ message, guild }) {
     assertGuildMemberIsAdmin(message.member);
 
