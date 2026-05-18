@@ -5,11 +5,12 @@ import type { ButtonHandler } from '../../../discord/types.js';
 import {
   assertGuildMemberIsAdmin,
   assertInteractorIsTheOwner,
+  buildCancelButton,
   buildCustomId,
   buildOpEmbed,
   parseOwnerDiscordId,
 } from '../../../discord/utils/index.js';
-import { CANCEL_SET_LANGUAGE_BUTTON_NAME, CONFIRM_SET_LANGUAGE_BUTTON_NAME, LANGUAGE_NAMES } from '../constants.js';
+import { CONFIRM_SET_LANGUAGE_BUTTON_NAME, LANGUAGE_NAMES } from '../constants.js';
 
 function createHandle(language: SupportedLanguage) {
   return async function handle(interaction: ButtonInteraction, args: Array<string>): Promise<void> {
@@ -19,10 +20,7 @@ function createHandle(language: SupportedLanguage) {
     await interaction.deferUpdate();
 
     const row = new ActionRowBuilder<ButtonBuilder>().addComponents(
-      new ButtonBuilder()
-        .setCustomId(buildCustomId(CANCEL_SET_LANGUAGE_BUTTON_NAME, interaction.user.id))
-        .setLabel('Annuler')
-        .setStyle(ButtonStyle.Secondary),
+      buildCancelButton(interaction.user.id),
       new ButtonBuilder()
         .setCustomId(buildCustomId(CONFIRM_SET_LANGUAGE_BUTTON_NAME, interaction.user.id, language))
         .setLabel('Confirmer')

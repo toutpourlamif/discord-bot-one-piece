@@ -1,9 +1,7 @@
 import type { SupportedLanguage } from '@one-piece/db';
 
 export const CONFIRM_SET_PREFIX_BUTTON_NAME = 'setprefixconfirm';
-export const CANCEL_SET_PREFIX_BUTTON_NAME = 'setprefixcancel';
 export const CONFIRM_SET_LANGUAGE_BUTTON_NAME = 'setlanguageconfirm';
-export const CANCEL_SET_LANGUAGE_BUTTON_NAME = 'setlanguagecancel';
 
 export const LANGUAGE_FLAGS: Record<SupportedLanguage, string> = {
   fr: '🇫🇷',
