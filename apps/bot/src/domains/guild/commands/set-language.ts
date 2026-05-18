@@ -2,7 +2,7 @@ import { SUPPORTED_LANGUAGES } from '@one-piece/db';
 import { ActionRowBuilder, ButtonBuilder, ButtonStyle } from 'discord.js';
 
 import type { Command } from '../../../discord/types.js';
-import { assertGuildMemberIsAdmin, buildCancelButton, buildOpEmbed, buildCustomId } from '../../../discord/utils/index.js';
+import { assertGuildMemberIsAdmin, buildCancelButton, buildCustomId, buildOpEmbed } from '../../../discord/utils/index.js';
 import { LANGUAGE_FLAGS } from '../constants.js';
 
 export const setLanguageCommand: Command = {
