@@ -23,11 +23,22 @@ export async function getCharactersByPlayerId(playerId: number, client: DbOrTran
       imageUrl: characterTemplate.imageUrl,
       hp: characterTemplate.hp,
       combat: characterTemplate.combat,
+      devilFruit: {
+        hpBonus: devilFruitTemplate.hpBonus,
+        combatBonus: devilFruitTemplate.combatBonus,
+      },
       joinedCrewAt: characterInstance.joinedCrewAt,
       isCaptain: characterInstance.isCaptain,
     })
     .from(characterInstance)
     .innerJoin(characterTemplate, eq(characterInstance.templateId, characterTemplate.id))
+    .leftJoin(
+      devilFruitTemplate,
+      eq(
+        devilFruitTemplate.id,
+        sql<number>`coalesce(${characterTemplate.devilFruitTemplateId}, ${characterInstance.devilFruitTemplateId})`,
+      ),
+    )
     .where(eq(characterInstance.playerId, playerId))
     .orderBy(desc(characterInstance.isCaptain), sql`${characterInstance.joinedCrewAt} asc nulls last`, asc(characterTemplate.name));
 }
@@ -51,11 +62,22 @@ export async function createCharacterInstance(playerId: number, templateId: numb
       imageUrl: characterTemplate.imageUrl,
       hp: characterTemplate.hp,
       combat: characterTemplate.combat,
+      devilFruit: {
+        hpBonus: devilFruitTemplate.hpBonus,
+        combatBonus: devilFruitTemplate.combatBonus,
+      },
       joinedCrewAt: characterInstance.joinedCrewAt,
       isCaptain: characterInstance.isCaptain,
     })
     .from(characterInstance)
     .innerJoin(characterTemplate, eq(characterInstance.templateId, characterTemplate.id))
+    .leftJoin(
+      devilFruitTemplate,
+      eq(
+        devilFruitTemplate.id,
+        sql<number>`coalesce(${characterTemplate.devilFruitTemplateId}, ${characterInstance.devilFruitTemplateId})`,
+      ),
+    )
     .where(eq(characterInstance.id, created.id))
     .limit(1);
   if (!createdRow) throw new InternalError('Impossible de récupérer le personnage créé.');
@@ -87,6 +109,10 @@ export async function findById(id: number): Promise<CharacterTemplateInfo | unde
       ...getTableColumns(characterTemplate),
       devilFruitName: devilFruitTemplate.name,
       devilFruitTypes: devilFruitTemplate.types,
+      devilFruit: {
+        hpBonus: devilFruitTemplate.hpBonus,
+        combatBonus: devilFruitTemplate.combatBonus,
+      },
     })
     .from(characterTemplate)
     .leftJoin(devilFruitTemplate, eq(devilFruitTemplate.id, characterTemplate.devilFruitTemplateId))
