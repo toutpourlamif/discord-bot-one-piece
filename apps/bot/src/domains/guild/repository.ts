@@ -1,7 +1,5 @@
-import { db, guild, type Guild } from '@one-piece/db';
+import { db, guild, type Guild, type SupportedLanguage } from '@one-piece/db';
 import { eq } from 'drizzle-orm';
-
-import { type SupportedLanguage } from './constants.js';
 
 // TODO: multi-statement → service avec tx
 export async function findOrCreate(guildId: string, name: string): Promise<Guild> {

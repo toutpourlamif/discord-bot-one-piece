@@ -23,13 +23,13 @@ export const setPrefixCommand: Command = {
 
     const row = new ActionRowBuilder<ButtonBuilder>().addComponents(
       new ButtonBuilder()
-        .setCustomId(buildCustomId(CONFIRM_SET_PREFIX_BUTTON_NAME, message.author.id, prefix))
-        .setLabel('Confirmer')
-        .setStyle(ButtonStyle.Success),
-      new ButtonBuilder()
         .setCustomId(buildCustomId(CANCEL_SET_PREFIX_BUTTON_NAME, message.author.id))
         .setLabel('Annuler')
         .setStyle(ButtonStyle.Secondary),
+      new ButtonBuilder()
+        .setCustomId(buildCustomId(CONFIRM_SET_PREFIX_BUTTON_NAME, message.author.id, prefix))
+        .setLabel('Confirmer')
+        .setStyle(ButtonStyle.Success),
     );
 
     await message.reply({ embeds: [embed], components: [row] });

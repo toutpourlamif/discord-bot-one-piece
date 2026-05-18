@@ -1,3 +1,4 @@
+import { SUPPORTED_LANGUAGES, type SupportedLanguage } from '@one-piece/db';
 import type { ButtonInteraction } from 'discord.js';
 
 import { ValidationError } from '../../../discord/errors.js';
@@ -9,7 +10,7 @@ import {
   parseOwnerDiscordId,
   parseStringArg,
 } from '../../../discord/utils/index.js';
-import { CONFIRM_SET_LANGUAGE_BUTTON_NAME, SUPPORTED_LANGUAGES, type SupportedLanguage } from '../constants.js';
+import { CONFIRM_SET_LANGUAGE_BUTTON_NAME, LANGUAGE_NAMES } from '../constants.js';
 import { requireGuildId } from '../guards.js';
 import * as guildService from '../service.js';
 
@@ -19,17 +20,17 @@ async function handle(interaction: ButtonInteraction, args: Array<string>): Prom
   assertGuildMemberIsAdmin(interaction.member);
   await interaction.deferUpdate();
 
-  const language = parseStringArg(args[1], 'Langage introuvable.');
-  const guildId = requireGuildId(interaction.guildId);
-  const foundLanguage = SUPPORTED_LANGUAGES.includes(language as SupportedLanguage);
-  if (!foundLanguage) {
+  const rawLanguage = parseStringArg(args[1], 'Langage introuvable.');
+  if (!SUPPORTED_LANGUAGES.includes(rawLanguage as SupportedLanguage)) {
     throw new ValidationError(`Ce langage n'est pas supporté.`);
   }
-  await guildService.setGuildLanguage(guildId, language as SupportedLanguage);
+  const language = rawLanguage as SupportedLanguage;
+  const guildId = requireGuildId(interaction.guildId);
+  await guildService.setGuildLanguage(guildId, language);
 
   const embed = buildOpEmbed('success')
-    .setTitle('Langue modifiée !')
-    .setDescription(`Le langage du serveur est maintenant \`${language}\`.`);
+    .setTitle('Langue mise à jour !')
+    .setDescription(`Le serveur est désormais en ${LANGUAGE_NAMES[language]}.`);
   await interaction.editReply({ embeds: [embed], components: [] });
 }
 

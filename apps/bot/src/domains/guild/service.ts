@@ -1,4 +1,5 @@
-import { type SupportedLanguage } from './constants.js';
+import { type SupportedLanguage } from '@one-piece/db';
+
 import * as guildRepository from './repository.js';
 
 // TODO: brancher la lecture de guild.language sur les renderers (i18n) — issue à venir

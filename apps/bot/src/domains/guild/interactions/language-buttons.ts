@@ -1,3 +1,4 @@
+import { SUPPORTED_LANGUAGES, type SupportedLanguage } from '@one-piece/db';
 import { ActionRowBuilder, ButtonBuilder, ButtonStyle, type ButtonInteraction } from 'discord.js';
 
 import type { ButtonHandler } from '../../../discord/types.js';
@@ -8,13 +9,7 @@ import {
   buildOpEmbed,
   parseOwnerDiscordId,
 } from '../../../discord/utils/index.js';
-import {
-  CANCEL_SET_LANGUAGE_BUTTON_NAME,
-  CONFIRM_SET_LANGUAGE_BUTTON_NAME,
-  EN_BUTTON_NAME,
-  FR_BUTTON_NAME,
-  type SupportedLanguage,
-} from '../constants.js';
+import { CANCEL_SET_LANGUAGE_BUTTON_NAME, CONFIRM_SET_LANGUAGE_BUTTON_NAME, LANGUAGE_NAMES } from '../constants.js';
 
 function createHandle(language: SupportedLanguage) {
   return async function handle(interaction: ButtonInteraction, args: Array<string>): Promise<void> {
@@ -25,24 +20,21 @@ function createHandle(language: SupportedLanguage) {
 
     const row = new ActionRowBuilder<ButtonBuilder>().addComponents(
       new ButtonBuilder()
-        .setCustomId(buildCustomId(CONFIRM_SET_LANGUAGE_BUTTON_NAME, interaction.user.id, language))
-        .setLabel('Confirmer')
-        .setStyle(ButtonStyle.Success),
-      new ButtonBuilder()
         .setCustomId(buildCustomId(CANCEL_SET_LANGUAGE_BUTTON_NAME, interaction.user.id))
         .setLabel('Annuler')
         .setStyle(ButtonStyle.Secondary),
+      new ButtonBuilder()
+        .setCustomId(buildCustomId(CONFIRM_SET_LANGUAGE_BUTTON_NAME, interaction.user.id, language))
+        .setLabel('Confirmer')
+        .setStyle(ButtonStyle.Success),
     );
-    const embed = buildOpEmbed('warn').setTitle('Es-tu sûr ?');
+    const embed = buildOpEmbed('info')
+      .setTitle(`Mettre le serveur en ${LANGUAGE_NAMES[language]} ?`)
+      .setFooter({ text: `⚠️ Ce changement s'appliquera à tout le serveur ${interaction.guild!.name}.` });
     await interaction.editReply({ embeds: [embed], components: [row] });
   };
 }
-export const frButtonHandler: ButtonHandler = {
-  name: FR_BUTTON_NAME,
-  handle: createHandle('fr'),
-};
-
-export const enButtonHandler: ButtonHandler = {
-  name: EN_BUTTON_NAME,
-  handle: createHandle('en'),
-};
+export const languageButtonHandlers: Array<ButtonHandler> = SUPPORTED_LANGUAGES.map((language) => ({
+  name: language,
+  handle: createHandle(language),
+}));
