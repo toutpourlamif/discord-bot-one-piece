@@ -1,3 +1,4 @@
+// VIBE CODÉ, PEUT ÊTRE OPTIMISÉ MAIS PAS BESOIN POUR L'INSTANT
 import { execFileSync } from 'node:child_process';
 import { existsSync, readFileSync, statSync, unlinkSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
