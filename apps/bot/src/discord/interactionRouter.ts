@@ -14,9 +14,10 @@ import { buildRegistry } from '../shared/build-registry.js';
 import { CUSTOM_ID_SEPARATOR } from './constants.js';
 import { AppError, ValidationError } from './errors.js';
 import type { ButtonHandler } from './types.js';
-import { buildOpEmbed } from './utils/index.js';
+import { buildOpEmbed, cancelButtonHandler } from './utils/index.js';
 
 const allButtonHandlers: Array<ButtonHandler> = [
+  cancelButtonHandler,
   ...infoButtonHandlers,
   ...playerButtonHandlers,
   ...shipButtonHandlers,
