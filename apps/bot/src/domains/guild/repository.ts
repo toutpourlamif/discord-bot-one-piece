@@ -20,6 +20,6 @@ export async function updatePrefix(guildId: string, prefix: string): Promise<Gui
 }
 
 export async function updateLanguage(guildId: string, language: SupportedLanguage): Promise<Guild> {
-  const [updated] = await db.update(guild).set({ language: language }).where(eq(guild.id, guildId)).returning();
+  const [updated] = await db.update(guild).set({ language }).where(eq(guild.id, guildId)).returning();
   return updated!;
 }
