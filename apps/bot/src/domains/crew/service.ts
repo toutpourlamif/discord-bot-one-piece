@@ -11,8 +11,6 @@ import { MAX_CREW_NAME_LENGTH, MIN_CREW_NAME_LENGTH } from './constants.js';
 import * as crewRepository from './repository.js';
 import { isInCrewFilter } from './utils/is-in-crew-filter.js';
 
-export { disembarkCharacter, embarkCharacter } from './services/crew-membership.js';
-
 export async function getCrewByPlayerId(playerId: number): Promise<Array<CharacterRow>> {
   const characters = await characterRepository.getCharactersByPlayerId(playerId);
   const crew = characters.filter(isInCrewFilter);
