@@ -52,6 +52,11 @@ export async function loadAllForPlayer(playerId: number, client: DbOrTransaction
     .orderBy(asc(history.occurredAt));
 }
 
+export async function wipeHistoryForPlayer(playerId: number, client: DbOrTransaction = db): Promise<number> {
+  const rows = await client.delete(history).where(eq(history.actorPlayerId, playerId)).returning({ id: history.id });
+  return rows.length;
+}
+
 type WriteEventResolutionArgs = {
   actorPlayerId: number;
   kind: string;
