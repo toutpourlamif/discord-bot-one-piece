@@ -22,12 +22,12 @@ export const seagullFlyby: PassiveGenerator = {
   cooldownBuckets: inBuckets('1d'),
   probability: () => 0.3,
   compute: (_ctx, rng) => {
-    const titleIdx = pickRandom(rng, TITLES);
-    const imageIdx = pickRandom(rng, IMAGES);
-    return { effects: [], state: { titleIdx, imageIdx } };
+    const title = pickRandom(rng, TITLES);
+    const imageUrl = pickRandom(rng, IMAGES);
+    return { effects: [], state: { title, imageUrl } };
   },
   render: (state) =>
     buildOpEmbed('info')
-      .setTitle(TITLES[state.titleIdx as number]!)
-      .setImage(buildAssetUrl(IMAGES[state.imageIdx as number]!)),
+      .setTitle(state.title as string)
+      .setImage(buildAssetUrl(state.imageUrl as string)),
 };
