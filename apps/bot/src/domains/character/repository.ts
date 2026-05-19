@@ -12,7 +12,7 @@ import { and, asc, desc, eq, getTableColumns, ilike, ne, or, sql } from 'drizzle
 
 import { InternalError, NotFoundError } from '../../discord/errors.js';
 
-import type { CharacterRow, CharacterTemplateInfo } from './types.js';
+import type { CharacterRow, CharacterTemplateWithDevilFruit } from './types.js';
 
 export async function getCharactersByPlayerId(playerId: number, client: DbOrTransaction = db): Promise<Array<CharacterRow>> {
   return client
@@ -23,10 +23,7 @@ export async function getCharactersByPlayerId(playerId: number, client: DbOrTran
       imageUrl: characterTemplate.imageUrl,
       hp: characterTemplate.hp,
       combat: characterTemplate.combat,
-      devilFruit: {
-        hpBonus: devilFruitTemplate.hpBonus,
-        combatBonus: devilFruitTemplate.combatBonus,
-      },
+      devilFruit: getTableColumns(devilFruitTemplate),
       joinedCrewAt: characterInstance.joinedCrewAt,
       isCaptain: characterInstance.isCaptain,
     })
@@ -62,10 +59,7 @@ export async function createCharacterInstance(playerId: number, templateId: numb
       imageUrl: characterTemplate.imageUrl,
       hp: characterTemplate.hp,
       combat: characterTemplate.combat,
-      devilFruit: {
-        hpBonus: devilFruitTemplate.hpBonus,
-        combatBonus: devilFruitTemplate.combatBonus,
-      },
+      devilFruit: getTableColumns(devilFruitTemplate),
       joinedCrewAt: characterInstance.joinedCrewAt,
       isCaptain: characterInstance.isCaptain,
     })
@@ -103,16 +97,11 @@ export async function searchManyByName(query: string): Promise<Array<{ entity: C
   return rows.map(({ score, ...entity }) => ({ entity, score }));
 }
 
-export async function findById(id: number): Promise<CharacterTemplateInfo | undefined> {
+export async function findById(id: number): Promise<CharacterTemplateWithDevilFruit | undefined> {
   const [row] = await db
     .select({
       ...getTableColumns(characterTemplate),
-      devilFruitName: devilFruitTemplate.name,
-      devilFruitTypes: devilFruitTemplate.types,
-      devilFruit: {
-        hpBonus: devilFruitTemplate.hpBonus,
-        combatBonus: devilFruitTemplate.combatBonus,
-      },
+      devilFruit: getTableColumns(devilFruitTemplate),
     })
     .from(characterTemplate)
     .leftJoin(devilFruitTemplate, eq(devilFruitTemplate.id, characterTemplate.devilFruitTemplateId))

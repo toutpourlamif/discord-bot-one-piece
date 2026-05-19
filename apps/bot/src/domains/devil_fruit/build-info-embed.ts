@@ -17,6 +17,9 @@ export function buildDevilFruitInfoEmbed(fruit: DevilFruitTemplate): EmbedBuilde
         value: fruit.types.length > 0 ? fruit.types.join(', ') : '—',
         inline: true,
       },
+      // TODO: Il faut styliser ça et ajouter des emojis
+      { name: 'HP', value: formatDfBonus(fruit.hpBonus), inline: true },
+      { name: 'Combat', value: formatDfBonus(fruit.combatBonus), inline: true },
     );
 
   if (fruit.imageUrl) {
@@ -24,4 +27,8 @@ export function buildDevilFruitInfoEmbed(fruit: DevilFruitTemplate): EmbedBuilde
   }
 
   return embed;
+}
+
+function formatDfBonus(value: number): string {
+  return value >= 0 ? `+${value}` : String(value);
 }

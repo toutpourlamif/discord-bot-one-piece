@@ -1,7 +1,5 @@
 import type { CharacterTemplate, DevilFruitTemplate } from '@one-piece/db';
 
-type DevilFruitStats = Pick<DevilFruitTemplate, 'combatBonus' | 'hpBonus'>;
-
 // TODO: RENOMMER EN Character tout court et ajouter le type devil fruit et PICK depuis les schémas db
 /** Row (character_instance + character_template) utilisée par les vues métier. */
 export type CharacterRow = {
@@ -11,13 +9,11 @@ export type CharacterRow = {
   imageUrl: string | null;
   hp: number;
   combat: number;
-  devilFruit: DevilFruitStats | null;
+  devilFruit: DevilFruitTemplate | null;
   joinedCrewAt: Date | null;
   isCaptain: boolean;
 };
 
-export type CharacterTemplateInfo = CharacterTemplate & {
-  devilFruitName: string | null;
-  devilFruitTypes: DevilFruitTemplate['types'] | null;
-  devilFruit: DevilFruitStats | null;
+export type CharacterTemplateWithDevilFruit = CharacterTemplate & {
+  devilFruit: DevilFruitTemplate | null;
 };
