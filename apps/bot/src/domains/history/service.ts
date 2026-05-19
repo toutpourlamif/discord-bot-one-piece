@@ -2,14 +2,19 @@ import { db } from '@one-piece/db';
 
 import * as historyRepository from './repository.js';
 
-export async function wipeHistoryForPlayer(playerId: number): Promise<number> {
+type WipeHistoryForPlayerArgs = {
+  targetPlayerId: number;
+  actorPlayerId: number;
+};
+
+export async function wipeHistoryForPlayer({ targetPlayerId, actorPlayerId }: WipeHistoryForPlayerArgs): Promise<number> {
   return db.transaction(async (tx) => {
-    const count = await historyRepository.wipeHistoryForPlayer(playerId, tx);
+    const count = await historyRepository.wipeHistoryForPlayer(targetPlayerId, tx);
 
     await historyRepository.appendHistory({
-      type: 'dev.history_reset',
-      actorPlayerId: undefined,
-      target: { type: 'player', id: playerId },
+      type: 'dev.historyReset',
+      actorPlayerId,
+      target: { type: 'player', id: targetPlayerId },
       payload: { wipedCount: count },
       client: tx,
     });

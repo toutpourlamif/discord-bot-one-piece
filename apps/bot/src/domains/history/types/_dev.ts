@@ -1,5 +1,5 @@
 export type DevHistoryResetLog = {
-  type: 'dev.history_reset';
+  type: 'dev.historyReset';
   payload: { wipedCount: number };
 };
 

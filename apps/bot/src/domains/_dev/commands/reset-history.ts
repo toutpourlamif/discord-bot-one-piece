@@ -7,7 +7,10 @@ export const resetHistoryCommand: Command = {
   name: ['resetHistory', 'reset-history', 'rh'],
   async handler(ctx) {
     const { targetPlayer } = await resolveTargetPlayer(ctx);
-    const wipedCount = await wipeHistoryForPlayer(targetPlayer.id);
+    const wipedCount = await wipeHistoryForPlayer({
+      targetPlayerId: targetPlayer.id,
+      actorPlayerId: ctx.player.id,
+    });
 
     await ctx.message.reply({
       embeds: [buildOpEmbed('success').setDescription(`History de ${targetPlayer.name} wipée (${wipedCount} entrées).`)],
