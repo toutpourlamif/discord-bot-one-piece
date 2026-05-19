@@ -12,7 +12,7 @@ const TITLES = [
   'Vous aviez aperçu une mouette sur le mât.',
 ] as const;
 
-const IMAGES = ['events/passive/seagull-flyby-logo.webp', 'events/passive/seagull-flyby.webp'];
+const IMAGES = ['events/passive/seagull-far.webp', 'events/passive/seagull-flyby.webp'];
 
 export const seagullFlyby: PassiveGenerator = {
   key: 'seagullFlyby',
