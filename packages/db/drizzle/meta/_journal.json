@@ -267,6 +267,13 @@
       "when": 1779132626537,
       "tag": "0037_reflective_anita_blake",
       "breakpoints": true
+    },
+    {
+      "idx": 38,
+      "version": "7",
+      "when": 1779208355868,
+      "tag": "0038_furry_professor_monster",
+      "breakpoints": true
     }
   ]
 }
