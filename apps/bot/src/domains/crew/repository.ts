@@ -12,12 +12,8 @@ export async function findCharacterInstanceById(
   client: DbOrTransaction = db,
   options: FindCharacterInstanceByIdOptions = {},
 ): Promise<CharacterInstance | undefined> {
-  if (options.forUpdate) {
-    const [row] = await client.select().from(characterInstance).where(eq(characterInstance.id, instanceId)).limit(1).for('update');
-    return row;
-  }
-
-  const [row] = await client.select().from(characterInstance).where(eq(characterInstance.id, instanceId)).limit(1);
+  const query = client.select().from(characterInstance).where(eq(characterInstance.id, instanceId)).limit(1);
+  const [row] = await (options.forUpdate ? query.for('update') : query);
   return row;
 }
 
