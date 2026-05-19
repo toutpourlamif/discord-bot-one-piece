@@ -55,7 +55,7 @@ export async function routeMessage(message: Message): Promise<void> {
     }
 
     if (command.requiresSynchronization !== false) {
-      await autoSyncBeforeAction(message, player);
+      await autoSyncBeforeAction(message, player, guild);
     }
 
     await command.handler({ message, args, player, guild });
