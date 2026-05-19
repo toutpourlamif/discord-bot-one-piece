@@ -4,13 +4,14 @@ import { ActionRowBuilder, ButtonBuilder, ButtonStyle } from 'discord.js';
 import { CUSTOM_ID_SEPARATOR } from '../../../discord/constants.js';
 import { ValidationError } from '../../../discord/errors.js';
 import type { Command } from '../../../discord/types.js';
-import { assertGuildMemberIsAdmin, buildCustomId, buildOpEmbed } from '../../../discord/utils/index.js';
-import { CANCEL_SET_PREFIX_BUTTON_NAME, CONFIRM_SET_PREFIX_BUTTON_NAME } from '../constants.js';
+import { assertGuildMemberIsAdmin, buildCancelButton, buildCustomId, buildOpEmbed } from '../../../discord/utils/index.js';
+import { CONFIRM_SET_PREFIX_BUTTON_NAME } from '../constants.js';
 
 const WHITESPACE_REGEX = /\s/;
 
 export const setPrefixCommand: Command = {
   name: 'setprefix',
+  requiresSynchronization: false,
   async handler({ message, args, guild }) {
     assertGuildMemberIsAdmin(message.member);
 
@@ -21,14 +22,11 @@ export const setPrefixCommand: Command = {
       .setDescription(`Es-tu sûr de vouloir changer le préfixe de \`${guild.prefix}\` en \`${prefix}\` ?`);
 
     const row = new ActionRowBuilder<ButtonBuilder>().addComponents(
+      buildCancelButton(message.author.id),
       new ButtonBuilder()
         .setCustomId(buildCustomId(CONFIRM_SET_PREFIX_BUTTON_NAME, message.author.id, prefix))
         .setLabel('Confirmer')
         .setStyle(ButtonStyle.Success),
-      new ButtonBuilder()
-        .setCustomId(buildCustomId(CANCEL_SET_PREFIX_BUTTON_NAME, message.author.id))
-        .setLabel('Annuler')
-        .setStyle(ButtonStyle.Secondary),
     );
 
     await message.reply({ embeds: [embed], components: [row] });

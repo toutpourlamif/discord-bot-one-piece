@@ -1,5 +1,5 @@
 {
-  "id": "2a6e26b0-40cc-48cb-990e-4a31c8fd62e8",
+  "id": "14f30e68-bee5-40d4-847e-27592249db53",
   "prevId": "cb7035cd-765a-45f4-9f71-640999b8ad54",
   "version": "7",
   "dialect": "postgresql",
@@ -233,13 +233,6 @@
           "primaryKey": false,
           "notNull": true,
           "default": "now()"
-        },
-        "skills": {
-          "name": "skills",
-          "type": "character_skill[]",
-          "typeSchema": "public",
-          "primaryKey": false,
-          "notNull": false
         }
       },
       "indexes": {
@@ -605,7 +598,8 @@
         },
         "language": {
           "name": "language",
-          "type": "varchar(8)",
+          "type": "language",
+          "typeSchema": "public",
           "primaryKey": false,
           "notNull": true,
           "default": "'fr'"
@@ -1287,17 +1281,6 @@
         "DWARF"
       ]
     },
-    "public.character_skill": {
-      "name": "character_skill",
-      "schema": "public",
-      "values": [
-        "MASON",
-        "SUPER_MASON",
-        "NAVIGATOR",
-        "CONQUERORS_HAKI",
-        "ARCHAEOLOGIST"
-      ]
-    },
     "public.devil_fruit_type": {
       "name": "devil_fruit_type",
       "schema": "public",
@@ -1312,6 +1295,14 @@
         "GAZ",
         "CAOUTCHOUC",
         "POISON"
+      ]
+    },
+    "public.language": {
+      "name": "language",
+      "schema": "public",
+      "values": [
+        "fr",
+        "en"
       ]
     },
     "public.rarity": {
