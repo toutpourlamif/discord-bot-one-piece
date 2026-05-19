@@ -2,7 +2,13 @@ export { closeDb, db, type Db, type DbOrTransaction, type Transaction } from './
 export { MAX_CHARACTER_NAME_LENGTH, MAX_CREW_NAME_LENGTH } from './shared/constants.js';
 export { type JSONFromSQL } from './shared/types.js';
 export * from './schema.js';
-export { MAX_GUILD_PREFIX_LENGTH, MIN_GUILD_PREFIX_LENGTH, type Guild } from './domains/guild/index.js';
+export {
+  MAX_GUILD_PREFIX_LENGTH,
+  MIN_GUILD_PREFIX_LENGTH,
+  SUPPORTED_LANGUAGES,
+  type Guild,
+  type SupportedLanguage,
+} from './domains/guild/index.js';
 export {
   ISLANDS,
   SEAS,
