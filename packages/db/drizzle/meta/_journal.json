@@ -274,6 +274,13 @@
       "when": 1779285452239,
       "tag": "0038_add_wano",
       "breakpoints": true
+    },
+    {
+      "idx": 39,
+      "version": "7",
+      "when": 1779289527680,
+      "tag": "0039_character_skills",
+      "breakpoints": true
     }
   ]
 }
