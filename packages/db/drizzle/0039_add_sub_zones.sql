@@ -1,0 +1,2 @@
+CREATE TYPE "public"."sub_zone" AS ENUM('foosha_village', 'loguetown_square', 'reverse_mountain_twin_cape', 'whisky_peak_town', 'little_garden_jungle', 'drum_village', 'alabasta_nanohana', 'wano_flower_capital');--> statement-breakpoint
+ALTER TABLE "player" ADD COLUMN "current_sub_zone" "sub_zone" DEFAULT 'foosha_village';

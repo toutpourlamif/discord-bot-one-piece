@@ -13,6 +13,7 @@ type IslandDefinitions = (typeof ISLAND_REGISTRY)[number];
 
 export type Island = IslandDefinitions['key'];
 
+// TODO: voir si c'est optimisable
 // `keyof` sur l'union d'îles donnerait l'intersection des clés : un type
 // générique est nécessaire pour distribuer le `keyof` sur chaque île.
 type SubZonesOf<T> = T extends { subZones: infer S } ? keyof S : never;
