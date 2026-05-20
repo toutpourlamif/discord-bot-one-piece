@@ -1,0 +1,1 @@
+ALTER TYPE "public"."zone" ADD VALUE 'wano' BEFORE 'sea_east_blue';

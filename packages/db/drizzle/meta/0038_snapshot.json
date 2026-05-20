@@ -1,5 +1,5 @@
 {
-  "id": "c1754e2a-7ed9-464e-884b-7e23471be923",
+  "id": "38cd7a01-ff66-4b8d-8a43-bf0f7f2e5790",
   "prevId": "14f30e68-bee5-40d4-847e-27592249db53",
   "version": "7",
   "dialect": "postgresql",
@@ -233,14 +233,6 @@
           "primaryKey": false,
           "notNull": true,
           "default": "now()"
-        },
-        "skills": {
-          "name": "skills",
-          "type": "character_skill[]",
-          "typeSchema": "public",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "'{}'::character_skill[]"
         }
       },
       "indexes": {
@@ -1289,17 +1281,6 @@
         "DWARF"
       ]
     },
-    "public.character_skill": {
-      "name": "character_skill",
-      "schema": "public",
-      "values": [
-        "MASON",
-        "SUPER_MASON",
-        "NAVIGATOR",
-        "CONQUERORS_HAKI",
-        "ARCHAEOLOGIST"
-      ]
-    },
     "public.devil_fruit_type": {
       "name": "devil_fruit_type",
       "schema": "public",
@@ -1345,6 +1326,7 @@
         "little_garden",
         "drum",
         "alabasta",
+        "wano",
         "sea_east_blue",
         "sea_paradise",
         "sea_new_world"

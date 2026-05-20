@@ -1,4 +1,4 @@
-// TODO: Décider la bonne couleur et le bon nom pour le bot discord
+// TODO: Décider le bon nom pour le bot discord
 export const BOT_NAME = 'One Piece Bot';
 
 export const EMBED_COLORS = {
@@ -7,6 +7,7 @@ export const EMBED_COLORS = {
   info: 0x5284de,
   success: 0x57f287,
   warn: 0xfee75c,
+  forest: 0x389d79,
 } as const;
 
 export type EmbedVariant = keyof typeof EMBED_COLORS;
