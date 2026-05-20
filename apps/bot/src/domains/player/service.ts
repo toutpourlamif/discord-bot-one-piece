@@ -2,13 +2,11 @@ import { db, type Player } from '@one-piece/db';
 
 import { sanitizeName } from '../../shared/sanitize-name.js';
 import * as characterRepository from '../character/repository.js';
-import { getLatestProcessableBucket } from '../event/engine/bucket.js';
-import * as eventRepository from '../event/repository.js';
+import * as historyRepository from '../history/repository.js';
 import { findOrCreateShip } from '../ship/service.js';
 
 import { assertNameNotEmpty, assertNameWithinMaxLength } from './guards/index.js';
 import * as playerRepository from './repository.js';
-
 type FindOrCreateResult = {
   player: Player;
   created: boolean;
@@ -36,21 +34,15 @@ export async function renamePlayer(playerId: number, rawName: string): Promise<P
   assertNameNotEmpty(sanitizedName);
 
   return db.transaction(async (transaction) => {
+    const current = await playerRepository.findByIdOrThrow(playerId, transaction);
     const updated = await playerRepository.updateName(playerId, sanitizedName, transaction);
     await characterRepository.updatePlayerAsCharacterNickname(playerId, sanitizedName, transaction);
+    await historyRepository.appendHistory({
+      type: 'player.renamed',
+      actorPlayerId: playerId,
+      payload: { from: current.name, to: sanitizedName },
+      client: transaction,
+    });
     return updated;
   });
-}
-
-export async function isPlayerUpToDate(playerId: number): Promise<boolean> {
-  const player = await playerRepository.findByIdOrThrow(playerId);
-  const latestProcessableBucketId = getLatestProcessableBucket();
-
-  if (player.lastProcessedBucketId < latestProcessableBucketId) {
-    return false;
-  }
-
-  const interactivePending = await eventRepository.findFirstInteractivePending(playerId);
-
-  return interactivePending === null;
 }
