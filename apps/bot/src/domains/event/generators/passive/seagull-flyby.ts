@@ -6,10 +6,10 @@ import { pickRandom } from '../../engine/rng.js';
 import type { PassiveGenerator } from '../../types.js';
 
 const TITLES = [
-  "Le cri d'une mouette s'était fait entendre pas loin du navire...",
-  'Une mouette avait survolée le navire.',
-  'Plusieurs mouettes chassaient des poissons près du bâteau.',
-  'Vous aviez aperçu une mouette sur le mât.',
+  "Le cri d'une mouette s'est fait entendre pas loin du navire...",
+  'Une mouette a survolé le navire.',
+  'Plusieurs mouettes ont chassé des poissons près du bateau.',
+  'Vous avez aperçu une mouette sur le mât.',
 ] as const;
 
 const IMAGES = ['events/passive/seagull-far.webp', 'events/passive/seagull-flyby.webp'];
