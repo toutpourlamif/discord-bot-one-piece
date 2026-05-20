@@ -1,10 +1,11 @@
-import { ISLAND_ENTRY_SUB_ZONE, type Transaction } from '@one-piece/db';
+import { type Transaction } from '@one-piece/db';
 
 import * as economyRepository from '../../economy/repository.js';
 import { changeSubZone } from '../../navigation/services/change-sub-zone.js';
 import { completeTravel } from '../../navigation/services/complete-travel.js';
 import { startTravel } from '../../navigation/services/start-travel.js';
 import { updateTravelTarget } from '../../navigation/services/update-travel-target.js';
+import { getEntrySubZone } from '../../navigation/utils/index.js';
 import type { GeneratorContext } from '../types.js';
 
 import type { EventEffect } from './types.js';
@@ -49,9 +50,9 @@ export async function applyEffects(effects: Array<EventEffect>, ctx: GeneratorCo
         ctx.player.travelStartedBucket = null;
         ctx.player.travelEtaBucket = null;
         ctx.player.currentZone = effect.arrivedZone;
-        ctx.player.currentSubZone = ISLAND_ENTRY_SUB_ZONE[effect.arrivedZone];
+        ctx.player.currentSubZone = getEntrySubZone(effect.arrivedZone);
         ctx.zone = effect.arrivedZone;
-        ctx.subZone = ISLAND_ENTRY_SUB_ZONE[effect.arrivedZone];
+        ctx.subZone = getEntrySubZone(effect.arrivedZone);
         break;
       case 'updateTravelTarget':
         await updateTravelTarget({
