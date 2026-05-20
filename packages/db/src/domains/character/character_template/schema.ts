@@ -27,3 +27,4 @@ export const characterTemplate = pgTable(
 
 export type CharacterTemplateInsert = typeof characterTemplate.$inferInsert;
 export type CharacterTemplate = typeof characterTemplate.$inferSelect;
+export type CharacterCombatStats = Pick<CharacterTemplate, 'combat' | 'hp'>;

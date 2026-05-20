@@ -11,4 +11,5 @@ export const ZONE_LABELS: Record<Zone, string> = {
   sea_east_blue: "Mer d'East Blue",
   sea_paradise: 'Mer de Paradise',
   sea_new_world: 'Mer du Nouveau Monde',
+  wano: 'Wano',
 };

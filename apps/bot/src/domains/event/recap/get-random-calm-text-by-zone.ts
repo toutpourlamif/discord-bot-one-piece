@@ -53,6 +53,13 @@ const CALM_TEXT_BY_ZONE: Record<Zone, Array<string>> = {
     "Un courant inconnu glisse sous la coque. Vous gardez l'œil ouvert, sans plus.",
     'Au loin, un orage gronde. Pas pour vous, pas encore.',
   ],
+  wano: [
+    'Les pétales tombent à votre rythme.',
+    'Vous entendez un shamisen quelque part derrière les bambous.',
+    'Vous vous asseyez sous un cerisier. Le vent fait tout le travail.',
+    "L'odeur du thé persiste dans l'air.",
+    'Un samouraï affûte sa lame au bord de la rivière. Vous échangez un regard.',
+  ],
 };
 
 export function getRandomCalmTextByZone(zone: Zone): string {

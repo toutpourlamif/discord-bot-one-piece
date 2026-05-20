@@ -8,6 +8,8 @@ import { noCompute, noProbability } from '../../utils.js';
 type ArrivalContent = {
   text: string;
   imageUrl: string;
+  description?: string;
+  color?: number;
 };
 
 export function buildArrivalGenerator(island: Island, content: ArrivalContent): PassiveGenerator {
@@ -17,6 +19,11 @@ export function buildArrivalGenerator(island: Island, content: ArrivalContent): 
     seedScope: 'player',
     probability: noProbability,
     compute: noCompute,
-    render: () => buildOpEmbed('info').setTitle(content.text).setImage(content.imageUrl),
+    render: () =>
+      buildOpEmbed('info')
+        .setTitle(content.text)
+        .setImage(content.imageUrl)
+        .setDescription(content.description ?? null)
+        .setColor(content.color ?? null),
   };
 }
