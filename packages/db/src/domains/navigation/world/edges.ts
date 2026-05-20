@@ -1,4 +1,4 @@
-import type { ResourceName } from '../resource/index.js';
+import type { ResourceName } from '../../resource/index.js';
 
 import { inBuckets } from './in-buckets.js';
 import type { Island, Sea } from './zones.js';

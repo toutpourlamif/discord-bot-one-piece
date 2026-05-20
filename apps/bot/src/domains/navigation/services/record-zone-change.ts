@@ -3,6 +3,7 @@ import { type Transaction, type Zone } from '@one-piece/db';
 import { ValidationError } from '../../../discord/errors.js';
 import * as historyRepository from '../../history/index.js';
 import * as playerRepository from '../../player/repository.js';
+import { getEntrySubZone } from '../utils/index.js';
 
 type RecordZoneChangeParams = {
   playerId: number;
@@ -17,7 +18,7 @@ export async function recordZoneChange({ playerId, newZone, bucketId, tx }: Reco
 
   if (from === newZone) throw new ValidationError('Vous êtes déjà à cet endroit');
 
-  await playerRepository.updateZone(playerId, newZone, tx);
+  await playerRepository.updateZone(playerId, newZone, getEntrySubZone(newZone), tx);
   await historyRepository.appendHistory({
     type: 'player.zone_changed',
     actorPlayerId: playerId,

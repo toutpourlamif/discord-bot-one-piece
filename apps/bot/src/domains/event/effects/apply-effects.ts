@@ -1,6 +1,7 @@
-import { type Transaction } from '@one-piece/db';
+import { ISLAND_ENTRY_SUB_ZONE, type Transaction } from '@one-piece/db';
 
 import * as economyRepository from '../../economy/repository.js';
+import { changeSubZone } from '../../navigation/services/change-sub-zone.js';
 import { completeTravel } from '../../navigation/services/complete-travel.js';
 import { startTravel } from '../../navigation/services/start-travel.js';
 import { updateTravelTarget } from '../../navigation/services/update-travel-target.js';
@@ -29,7 +30,9 @@ export async function applyEffects(effects: Array<EventEffect>, ctx: GeneratorCo
         ctx.player.travelStartedBucket = ctx.bucketId;
         ctx.player.travelEtaBucket = effect.etaBucket;
         ctx.player.currentZone = effect.edge.via;
+        ctx.player.currentSubZone = null;
         ctx.zone = effect.edge.via;
+        ctx.subZone = null;
         break;
       case 'completeTravel':
         await completeTravel({
@@ -46,7 +49,9 @@ export async function applyEffects(effects: Array<EventEffect>, ctx: GeneratorCo
         ctx.player.travelStartedBucket = null;
         ctx.player.travelEtaBucket = null;
         ctx.player.currentZone = effect.arrivedZone;
+        ctx.player.currentSubZone = ISLAND_ENTRY_SUB_ZONE[effect.arrivedZone];
         ctx.zone = effect.arrivedZone;
+        ctx.subZone = ISLAND_ENTRY_SUB_ZONE[effect.arrivedZone];
         break;
       case 'updateTravelTarget':
         await updateTravelTarget({
@@ -62,6 +67,11 @@ export async function applyEffects(effects: Array<EventEffect>, ctx: GeneratorCo
           ctx.player.currentZone = effect.newEdge.via;
           ctx.zone = effect.newEdge.via;
         }
+        break;
+      case 'changeSubZone':
+        await changeSubZone({ playerId: ctx.player.id, targetSubZone: effect.targetSubZone, bucketId: ctx.bucketId, tx });
+        ctx.player.currentSubZone = effect.targetSubZone;
+        ctx.subZone = effect.targetSubZone;
         break;
     }
   }

@@ -1,4 +1,4 @@
-import type { JSONFromSQL, Player, Ship, Zone } from '@one-piece/db';
+import type { JSONFromSQL, Player, Ship, SubZone, Zone } from '@one-piece/db';
 import type { EmbedBuilder } from 'discord.js';
 
 import type { CharacterRow } from '../character/types.js';
@@ -26,6 +26,7 @@ export type GeneratorContext = {
   };
   bucketId: number;
   zone: Zone;
+  subZone: SubZone | null;
   othersInZone: Array<Player>;
 };
 
