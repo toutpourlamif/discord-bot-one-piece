@@ -19,14 +19,14 @@ import { parseIntegerArg, parseStringArg, replyDebugData } from '../../../../dis
 type TableWithIdColumn = PgTable & { id: PgColumn };
 
 const DEBUG_TABLES: Record<string, TableWithIdColumn> = {
-  player: player,
-  ship: ship,
-  resource_instance: resourceInstance,
-  resource_template: resourceTemplate,
-  devil_fruit_instance: devilFruitInstance,
-  devil_fruit_template: devilFruitTemplate,
-  character_instance: characterInstance,
-  character_template: characterTemplate,
+  p: player,
+  s: ship,
+  ri: resourceInstance,
+  rt: resourceTemplate,
+  dfi: devilFruitInstance,
+  dft: devilFruitTemplate,
+  ci: characterInstance,
+  ct: characterTemplate,
 };
 
 const helpMessage = `Usage : \`debug <table> <id>\`\nTables : ${Object.keys(DEBUG_TABLES).join(', ')}`;
