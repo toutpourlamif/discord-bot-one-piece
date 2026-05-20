@@ -7,7 +7,7 @@
     ".": "./src/index.ts"
   },
   "scripts": {
-    "generate": "drizzle-kit generate",
+    "generate": "sh -c 'drizzle-kit generate ${1:+--name=\"$1\"}' --",
     "migrate": "tsx --env-file=.env.local src/migrate.ts",
     "seed": "tsx --env-file=.env.local src/seed.ts",
     "studio": "tsx scripts/studio.ts",

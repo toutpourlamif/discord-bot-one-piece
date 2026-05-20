@@ -1,5 +1,7 @@
 import type { Island } from '@one-piece/db';
 
+import { EMBED_COLORS } from '../../../../../discord/branding.js';
+import { buildAssetUrl } from '../../../../../shared/build-asset-url.js';
 import type { PassiveGenerator } from '../../../types.js';
 
 import { buildArrivalGenerator } from './build-arrival-generator.js';
@@ -18,6 +20,12 @@ export const arrivalByIsland: Record<Island, PassiveGenerator> = {
   little_garden: buildArrivalGenerator('little_garden', TEMPLATE_ARRIVAL),
   drum: buildArrivalGenerator('drum', TEMPLATE_ARRIVAL),
   alabasta: buildArrivalGenerator('alabasta', TEMPLATE_ARRIVAL),
+  wano: buildArrivalGenerator('wano', {
+    text: 'Vous êtes arrivés à destination : Le Pays des Wa',
+    imageUrl: buildAssetUrl('events/arrival/wano.webp'),
+    description: "Les pétales de cerisiers flottent dans l'air, quelle vue magnifique..",
+    color: EMBED_COLORS.forest,
+  }),
 };
 
 export const arrivalGenerators: Array<PassiveGenerator> = Object.values(arrivalByIsland);

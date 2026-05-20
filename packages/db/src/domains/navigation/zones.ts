@@ -1,4 +1,7 @@
-export const ISLANDS = ['foosha', 'loguetown', 'reverse_mountain', 'whisky_peak', 'little_garden', 'drum', 'alabasta'] as const;
+const EAST_BLUE_ISLANDS = ['foosha', 'loguetown'] as const;
+const PARADISE_ISLANDS = ['whisky_peak', 'little_garden', 'drum', 'alabasta'] as const;
+const NEW_WORLD_ISLANDS = ['wano'] as const;
+export const ISLANDS = [...EAST_BLUE_ISLANDS, 'reverse_mountain', ...PARADISE_ISLANDS, ...NEW_WORLD_ISLANDS] as const;
 
 export const SEAS = ['sea_east_blue', 'sea_paradise', 'sea_new_world'] as const;
 
