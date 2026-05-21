@@ -10,13 +10,16 @@ export {
   type SupportedLanguage,
 } from './domains/guild/index.js';
 export {
+  ISLAND_ENTRY_SUB_ZONE,
   ISLANDS,
   SEAS,
+  SUB_ZONES_BY_ISLAND,
   ZONE_LABELS,
   ZONES,
   type Edge,
   type Island,
   type Sea,
+  type SubZone,
   type TravelModifier,
   type Zone,
   WORLD_EDGES,

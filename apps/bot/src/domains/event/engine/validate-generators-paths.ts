@@ -20,6 +20,7 @@ const fakeCtx: GeneratorContext = {
   },
   bucketId: 0,
   zone: 'sea_east_blue' as Zone,
+  subZone: null,
   othersInZone: [],
 };
 

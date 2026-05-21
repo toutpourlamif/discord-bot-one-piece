@@ -1,10 +1,18 @@
-import type { Zone } from '@one-piece/db';
+import type { SubZone, Zone } from '@one-piece/db';
 
 type PlayerZoneChangedLog = {
   type: 'player.zone_changed';
   payload: {
     from: Zone;
     to: Zone;
+  };
+};
+
+type PlayerSubZoneChangedLog = {
+  type: 'player.subZoneChanged';
+  payload: {
+    from: SubZone | null;
+    to: SubZone;
   };
 };
 
@@ -16,4 +24,4 @@ type PlayerRenamedLog = {
   };
 };
 
-export type PlayerLog = PlayerZoneChangedLog | PlayerRenamedLog;
+export type PlayerLog = PlayerZoneChangedLog | PlayerSubZoneChangedLog | PlayerRenamedLog;
