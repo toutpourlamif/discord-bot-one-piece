@@ -1,2 +1,0 @@
-CREATE TYPE "public"."character_skill" AS ENUM('MASON', 'SUPER_MASON', 'NAVIGATOR', 'CONQUERORS_HAKI', 'ARCHAEOLOGIST');--> statement-breakpoint
-ALTER TABLE "character_template" ADD COLUMN "skills" character_skill[] DEFAULT '{}'::character_skill[] NOT NULL;
