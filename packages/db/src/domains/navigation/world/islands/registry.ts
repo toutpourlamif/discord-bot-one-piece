@@ -1,13 +1,32 @@
 import { ALABASTA } from './alabasta.js';
 import { DRUM } from './drum.js';
-import { DAWN, GOAT, SATSURUZO, YOTSUBA } from './east-blue/index.js';
+import { DAWN, GECKO, GOAT, KUMATE, MIRRORBALL, NAGAGUTSU, ORGAN, RARE_ANIMAL, SATSURUZO, SIXIS, YOTSUBA } from './east-blue/index.js';
 import { LITTLE_GARDEN } from './little-garden.js';
 import { LOGUETOWN } from './loguetown.js';
 import { REVERSE_MOUNTAIN } from './reverse-mountain.js';
 import { WANO } from './wano.js';
 import { WHISKY_PEAK } from './whisky-peak.js';
 
-const ISLAND_REGISTRY = [SATSURUZO, DAWN, GOAT, YOTSUBA, LOGUETOWN, REVERSE_MOUNTAIN, WHISKY_PEAK, LITTLE_GARDEN, DRUM, ALABASTA, WANO];
+const ISLAND_REGISTRY = [
+  SATSURUZO,
+  DAWN,
+  GOAT,
+  YOTSUBA,
+  MIRRORBALL,
+  NAGAGUTSU,
+  ORGAN,
+  RARE_ANIMAL,
+  KUMATE,
+  SIXIS,
+  GECKO,
+  LOGUETOWN,
+  REVERSE_MOUNTAIN,
+  WHISKY_PEAK,
+  LITTLE_GARDEN,
+  DRUM,
+  ALABASTA,
+  WANO,
+];
 
 type IslandDefinitions = (typeof ISLAND_REGISTRY)[number];
 

@@ -30,12 +30,20 @@ South Blue ─┘                              │
 | `dawn`             | Île du royaume de Goa et du village de Foosha. Point de départ des joueurs. |
 | `goat`             | Petite île proche de Dawn Island et Yotsuba Island.                         |
 | `yotsuba`          | Île de Shells Town et du village Shimotsuki.                                |
+| `mirrorball`       | Île proche du royaume de Nagagutsu et de l'archipel Organ.                  |
+| `nagagutsu`        | Royaume d'East Blue relié à Yotsuba Island, Goat Island et Satsuruzo.       |
+| `organ`            | Archipel d'Orange Town, carrefour local vers Gecko et Kumate.               |
+| `rare_animal`      | Île sauvage proche de Kumate Island et de l'archipel Gecko.                 |
+| `kumate`           | Petite île entre Organ Archipelago, Rare Animal Island et Sixis.            |
+| `sixis`            | Île isolée proche de Goat Island et Kumate Island.                          |
+| `gecko`            | Archipel de Syrup Village, au sud-ouest du cluster East Blue.               |
 | `loguetown`        | La dernière île d'East Blue avant le Grand Line. Lieu d'exécution de Roger. |
 | `reverse_mountain` | La porte d'entrée du Grand Line. Une montagne avec un courant qui monte.    |
 | `whisky_peak`      | Première île du Grand Line. Un piège à pirates, pleine d'agents secrets.    |
 | `little_garden`    | Une île préhistorique, dinosaures, géants. Détour de la mainstory.          |
 | `drum`             | Île hivernale, un médecin légendaire. C'est là qu'on recrute Chopper.       |
 | `alabasta`         | Royaume désertique. Combat contre Crocodile, c'est le climax de l'arc 1.    |
+| `wano`             | Pays des Wa. Zone de test/futur contenu.                                    |
 
 ### Seas (les zones de mer entre les îles)
 
@@ -51,13 +59,28 @@ South Blue ─┘                              │
 
 ## Le graphe d'arêtes (qui mène à qui)
 
-```
-satsuruzo ──→ yotsuba ──→ loguetown ──→ reverse_mountain ──→ whisky_peak ──→ little_garden ──→ drum ──→ alabasta
-                ↑
-dawn ──┴──→ goat
-```
+### East Blue
 
-C'est volontairement linéaire pour la V1. Un seul chemin possible, on suit le rail. À mesure qu'on rajoute des îles (Jaya, Skypiea, Water 7…), le graphe va se ramifier.
+La première portion d'East Blue est représentée comme un cluster d'îles proches. Les arêtes sont orientées côté code pour éviter les cycles directs, mais elles représentent les routes locales visibles dans `pnpm world`.
+
+| Depuis        | Vers proches                                       |
+| ------------- | -------------------------------------------------- |
+| `satsuruzo`   | `yotsuba`, `nagagutsu`                             |
+| `dawn`        | `goat`, `yotsuba`                                  |
+| `goat`        | `sixis`, `nagagutsu`, `organ`, `kumate`, `yotsuba` |
+| `yotsuba`     | `organ`, `nagagutsu`, `kumate`, `loguetown`        |
+| `mirrorball`  | `nagagutsu`, `organ`, `gecko`                      |
+| `nagagutsu`   | `organ`, `gecko`                                   |
+| `organ`       | `gecko`, `kumate`, `rare_animal`                   |
+| `rare_animal` | `gecko`, `kumate`                                  |
+| `kumate`      | `sixis`                                            |
+| `loguetown`   | `reverse_mountain`                                 |
+
+### Paradise
+
+```
+reverse_mountain ──→ whisky_peak ──→ little_garden ──→ drum ──→ alabasta
+```
 
 ## Le Log Pose
 

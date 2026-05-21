@@ -24,6 +24,41 @@ const CALM_TEXT_BY_ZONE: Record<Zone, Array<string>> = {
     'Yotsuba Island semble paisible, mais personne ne baisse vraiment la garde.',
     'Vous regardez les collines autour de Shells Town. Le vent tourne lentement.',
   ],
+  mirrorball: [
+    "Mirrorball Island miroite sous le soleil. L'équipage profite du calme.",
+    "Les façades de Mirrorball Island renvoient la lumière jusqu'au port.",
+    'Vous laissez le navire au mouillage. Rien ne bouge autour de Mirrorball Island.',
+  ],
+  nagagutsu: [
+    'Le royaume de Nagagutsu s’étire le long de la côte. Vous observez les quais.',
+    'Une cloche sonne quelque part dans Nagagutsu. Personne ne semble pressé.',
+    "Vous inspectez l'horizon depuis Nagagutsu. La mer reste tranquille.",
+  ],
+  organ: [
+    "Les îlots de l'archipel Organ restent silencieux sous la brume.",
+    'Orange Town bruisse au loin. Pour l’instant, rien ne vient troubler le port.',
+    "Vous suivez les petites vagues entre les îlots d'Organ Archipelago.",
+  ],
+  rare_animal: [
+    'Des cris étranges montent de la jungle. Ils restent loin du campement.',
+    "Rare Animal Island respire doucement autour de vous. L'équipage parle bas.",
+    'Vous comptez les silhouettes entre les arbres, puis vous abandonnez.',
+  ],
+  kumate: [
+    'Kumate Island dort sous un ciel clair. La mer clapote contre la coque.',
+    "Vous longez les petites falaises de Kumate Island. Rien d'urgent.",
+    'Le vent tourne autour de Kumate Island sans apporter de mauvaise nouvelle.',
+  ],
+  sixis: [
+    "Sixis paraît abandonnée. C'est presque reposant.",
+    "Vous ramassez du bois sec près de la plage de Sixis. L'île ne répond pas.",
+    'Le silence de Sixis laisse tout le monde reprendre son souffle.',
+  ],
+  gecko: [
+    'Syrup Village somnole derrière les collines. Le port reste calme.',
+    "Les îles de l'archipel Gecko découpent l'horizon en petites ombres.",
+    'Vous entendez une rumeur de village, puis seulement le bruit des vagues.',
+  ],
   loguetown: [
     "Vous traînez sur la place de l'exécution. Un soldat de la Marine vous toise, sans bouger.",
     'Vous testez une lame chez un forgeron. Rien ne presse.',

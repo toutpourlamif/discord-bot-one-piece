@@ -288,6 +288,13 @@
       "when": 1779362273657,
       "tag": "0040_add_east_blue_first_islands",
       "breakpoints": true
+    },
+    {
+      "idx": 41,
+      "version": "7",
+      "when": 1779363898546,
+      "tag": "0041_add_east_blue_second_islands",
+      "breakpoints": true
     }
   ]
 }

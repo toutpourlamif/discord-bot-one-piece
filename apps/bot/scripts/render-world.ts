@@ -14,17 +14,24 @@ const cytoscapeJs = readFileSync(require.resolve('cytoscape/dist/cytoscape.min.j
 type Position = { x: number; y: number };
 
 const WORLD_NODE_POSITIONS: Partial<Record<Island, Position>> = {
-  satsuruzo: { x: 140, y: 240 },
-  yotsuba: { x: 450, y: 140 },
-  dawn: { x: 665, y: 455 },
-  goat: { x: 450, y: 675 },
-  loguetown: { x: 900, y: 500 },
-  reverse_mountain: { x: 1110, y: 500 },
-  whisky_peak: { x: 1320, y: 500 },
-  little_garden: { x: 1530, y: 500 },
-  drum: { x: 1740, y: 500 },
-  alabasta: { x: 1950, y: 500 },
-  wano: { x: 2160, y: 500 },
+  satsuruzo: { x: 900, y: 80 },
+  yotsuba: { x: 1120, y: 330 },
+  dawn: { x: 1700, y: 235 },
+  goat: { x: 1470, y: 650 },
+  mirrorball: { x: 160, y: 800 },
+  nagagutsu: { x: 520, y: 515 },
+  organ: { x: 710, y: 900 },
+  gecko: { x: 365, y: 1190 },
+  rare_animal: { x: 645, y: 1260 },
+  kumate: { x: 965, y: 1180 },
+  sixis: { x: 1320, y: 1035 },
+  loguetown: { x: 1935, y: 235 },
+  reverse_mountain: { x: 2145, y: 235 },
+  whisky_peak: { x: 2355, y: 235 },
+  little_garden: { x: 2565, y: 235 },
+  drum: { x: 2775, y: 235 },
+  alabasta: { x: 2985, y: 235 },
+  wano: { x: 3195, y: 235 },
 };
 
 const islands = [...new Set(WORLD_EDGES.flatMap((edge) => [edge.from, edge.to]))] as Array<Island>;

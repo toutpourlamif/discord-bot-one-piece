@@ -1,4 +1,11 @@
 export { DAWN } from './dawn.js';
+export { GECKO } from './gecko.js';
 export { GOAT } from './goat.js';
+export { KUMATE } from './kumate.js';
+export { MIRRORBALL } from './mirrorball.js';
+export { NAGAGUTSU } from './nagagutsu.js';
+export { ORGAN } from './organ.js';
+export { RARE_ANIMAL } from './rare-animal.js';
 export { SATSURUZO } from './satsuruzo.js';
+export { SIXIS } from './sixis.js';
 export { YOTSUBA } from './yotsuba.js';
