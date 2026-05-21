@@ -13,7 +13,10 @@ const TEMPLATE_ARRIVAL = {
 };
 
 export const arrivalByIsland: Record<Island, PassiveGenerator> = {
-  foosha: buildArrivalGenerator('foosha', TEMPLATE_ARRIVAL),
+  satsuruzo_kingdom: buildArrivalGenerator('satsuruzo_kingdom', TEMPLATE_ARRIVAL),
+  dawn_island: buildArrivalGenerator('dawn_island', TEMPLATE_ARRIVAL),
+  goat_island: buildArrivalGenerator('goat_island', TEMPLATE_ARRIVAL),
+  yotsuba_island: buildArrivalGenerator('yotsuba_island', TEMPLATE_ARRIVAL),
   loguetown: buildArrivalGenerator('loguetown', TEMPLATE_ARRIVAL),
   reverse_mountain: buildArrivalGenerator('reverse_mountain', TEMPLATE_ARRIVAL),
   whisky_peak: buildArrivalGenerator('whisky_peak', TEMPLATE_ARRIVAL),

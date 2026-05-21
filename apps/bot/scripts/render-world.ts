@@ -5,16 +5,36 @@ import { readFileSync, writeFileSync } from 'node:fs';
 import { createRequire } from 'node:module';
 import path from 'node:path';
 
-import { WORLD_EDGES, ZONE_LABELS } from '@one-piece/db';
+import { SUB_ZONE_LABELS, SUB_ZONES_BY_ISLAND, WORLD_EDGES, ZONE_LABELS, type Island } from '@one-piece/db';
 import open from 'open';
 
 const require = createRequire(import.meta.url);
 const cytoscapeJs = readFileSync(require.resolve('cytoscape/dist/cytoscape.min.js'), 'utf-8');
-const dagreJs = readFileSync(require.resolve('dagre/dist/dagre.min.js'), 'utf-8');
-const cytoscapeDagreJs = readFileSync(require.resolve('cytoscape-dagre'), 'utf-8');
 
-const nodes = [...new Set(WORLD_EDGES.flatMap((edge) => [edge.from, edge.to]))].map((id) => ({
-  data: { id, label: ZONE_LABELS[id] },
+type Position = { x: number; y: number };
+
+const WORLD_NODE_POSITIONS: Partial<Record<Island, Position>> = {
+  satsuruzo_kingdom: { x: 140, y: 240 },
+  yotsuba_island: { x: 450, y: 140 },
+  dawn_island: { x: 665, y: 455 },
+  goat_island: { x: 450, y: 675 },
+  loguetown: { x: 900, y: 500 },
+  reverse_mountain: { x: 1110, y: 500 },
+  whisky_peak: { x: 1320, y: 500 },
+  little_garden: { x: 1530, y: 500 },
+  drum: { x: 1740, y: 500 },
+  alabasta: { x: 1950, y: 500 },
+  wano: { x: 2160, y: 500 },
+};
+
+const islands = [...new Set(WORLD_EDGES.flatMap((edge) => [edge.from, edge.to]))] as Array<Island>;
+const nodes = islands.map((id, index) => ({
+  data: {
+    id,
+    label: ZONE_LABELS[id],
+    subZones: SUB_ZONES_BY_ISLAND[id].map((subZone) => SUB_ZONE_LABELS[subZone]),
+  },
+  position: WORLD_NODE_POSITIONS[id] ?? fallbackPosition(index),
 }));
 
 const BUCKET_DURATION_MIN = 15;
@@ -52,59 +72,74 @@ const html = `<!doctype html>
     <style>
       html, body { margin: 0; height: 100%; background: ${BG}; color: #f8fafc; font: 14px system-ui, sans-serif; }
       #cy { width: 100vw; height: 100vh; }
-      .legend {
-        position: fixed; top: 16px; left: 16px;
+      .legend, .inspector {
+        position: fixed; z-index: 10;
         background: rgba(8, 30, 48, 0.92); padding: 12px 16px;
-        border-radius: 10px; line-height: 1.7;
+        border-radius: 8px; line-height: 1.7;
         box-shadow: 0 6px 18px rgba(0, 0, 0, 0.5);
         border: 1px solid rgba(255, 255, 255, 0.08);
       }
-      .legend strong { color: #fbbf24; }
+      .legend { top: 16px; left: 16px; }
+      .inspector { right: 16px; bottom: 16px; width: min(360px, calc(100vw - 32px)); }
+      .legend strong, .inspector strong { color: #fbbf24; }
       .legend .req { color: #fbbf24; }
+      .subzones { margin: 8px 0 0; padding-left: 18px; }
     </style>
   </head>
   <body>
     <div class="legend">
       <strong>World graph</strong><br/>
       ${nodes.length} îles, ${WORLD_EDGES.length} arêtes<br/>
-      <span class="req">— — —</span> arête avec requirement
+      <span class="req">— — —</span> arête avec requirement<br/>
+      Clique une île pour voir ses subzones.
+    </div>
+    <div class="inspector" id="inspector">
+      <strong>Subzones</strong><br/>
+      Clique sur une île.
     </div>
     <div id="cy"></div>
     <script>${cytoscapeJs}</script>
-    <script>${dagreJs}</script>
-    <script>${cytoscapeDagreJs}</script>
     <script>
-      cytoscape.use(cytoscapeDagre);
-      cytoscape({
+      const inspector = document.getElementById('inspector');
+      const cy = cytoscape({
         container: document.getElementById('cy'),
         elements: {
           nodes: ${JSON.stringify(nodes)},
           edges: ${JSON.stringify(edges)},
         },
         layout: {
-          name: 'dagre',
-          rankDir: 'LR',
-          nodeSep: 100,
-          rankSep: 200,
-          edgeSep: 50,
+          name: 'preset',
+          fit: true,
+          padding: 90,
         },
         style: [
           {
             selector: 'node',
             style: {
+              'shape': 'ellipse',
               'background-color': '#c9a37c',
-              'border-width': 4,
-              'border-color': '#7c5a3a',
+              'border-width': 3,
+              'border-color': '#fff7d6',
               'label': 'data(label)',
-              'color': '#3a2a18',
-              'text-valign': 'center',
+              'color': '#f8fafc',
+              'text-outline-width': 3,
+              'text-outline-color': '#172033',
+              'text-valign': 'bottom',
               'text-halign': 'center',
-              'font-weight': 'bold',
-              'font-size': 13,
-              'width': 110,
-              'height': 110,
+              'font-weight': '900',
+              'font-size': 18,
+              'width': 54,
+              'height': 54,
+              'text-margin-y': 8,
               'text-wrap': 'wrap',
-              'text-max-width': 95,
+              'text-max-width': 130,
+            },
+          },
+          {
+            selector: 'node:selected',
+            style: {
+              'background-color': '#fbbf24',
+              'border-color': '#ffffff',
             },
           },
           {
@@ -116,7 +151,7 @@ const html = `<!doctype html>
               'line-color': '#e2e8f0',
               'target-arrow-color': '#e2e8f0',
               'label': 'data(label)',
-              'font-size': 15,
+              'font-size': 13,
               'font-weight': 'bold',
               'color': '#f8fafc',
               'text-rotation': 'autorotate',
@@ -133,10 +168,16 @@ const html = `<!doctype html>
               'line-color': '#fbbf24',
               'target-arrow-color': '#fbbf24',
               'line-style': 'dashed',
-              'width': 3,
             },
           },
         ],
+      });
+
+      cy.on('tap', 'node', (event) => {
+        const node = event.target;
+        const subZones = node.data('subZones');
+        const list = subZones.map((subZone) => '<li>' + subZone + '</li>').join('');
+        inspector.innerHTML = '<strong>' + node.data('label') + '</strong><ul class="subzones">' + list + '</ul>';
       });
     </script>
   </body>
@@ -146,3 +187,10 @@ const outPath = path.resolve(import.meta.dirname, '../world.html');
 writeFileSync(outPath, html, 'utf-8');
 console.log(`Rendu : ${outPath}`);
 await open(outPath);
+
+function fallbackPosition(index: number): Position {
+  return {
+    x: 1180 + (index % 6) * 190,
+    y: 760 + Math.floor(index / 6) * 130,
+  };
+}

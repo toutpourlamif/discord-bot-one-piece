@@ -281,6 +281,13 @@
       "when": 1779285936625,
       "tag": "0039_add_sub_zones",
       "breakpoints": true
+    },
+    {
+      "idx": 40,
+      "version": "7",
+      "when": 1779353301565,
+      "tag": "0040_add_east_blue_first_islands",
+      "breakpoints": true
     }
   ]
 }

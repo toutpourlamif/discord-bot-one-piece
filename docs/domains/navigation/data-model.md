@@ -60,7 +60,7 @@ L'enum est **dérivé** des deux arrays TypeScript `ISLANDS` et `SEAS` (cf [worl
 
 V1 :
 
-- Islands : `foosha`, `loguetown`, `reverse_mountain`, `whisky_peak`, `little_garden`, `drum`, `alabasta`.
+- Islands : `satsuruzo_kingdom`, `dawn_island`, `goat_island`, `yotsuba_island`, `loguetown`, `reverse_mountain`, `whisky_peak`, `little_garden`, `drum`, `alabasta`, `wano`.
 - Seas : `sea_east_blue`, `sea_paradise`, `sea_new_world`.
 
 Ajouter une nouvelle zone = pousser dans le bon array TS + générer la migration. Pas de `ALTER TYPE` à écrire à la main.

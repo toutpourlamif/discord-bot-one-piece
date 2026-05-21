@@ -3,10 +3,25 @@ import sample from 'lodash/sample.js';
 
 // TODO: Mettre des vrais trucs là c'est généré par l'IA
 const CALM_TEXT_BY_ZONE: Record<Zone, Array<string>> = {
-  foosha: [
-    'Vous repassez par Foosha. Makino vous tend une bière sans poser de questions.',
-    "Vous flânez près du moulin. L'air sent la mer et le pain chaud.",
-    'Les gosses du village courent sur le ponton. Personne ne vous attend.',
+  satsuruzo_kingdom: [
+    "Le port de Satsuruzo bruisse au loin. Vous prenez le temps d'observer les voiles.",
+    "Une brise tranquille passe sur Satsuruzo. Rien ne presse l'équipage.",
+    'Vous laissez le navire au mouillage. Le royaume semble calme pour l’instant.',
+  ],
+  dawn_island: [
+    'Dawn Island s’étire sous le soleil. Le village vit sans se soucier de votre départ.',
+    "Vous observez la côte de Dawn Island. L'air sent l'herbe chaude et la mer.",
+    'Le royaume de Goa reste au loin. Vous profitez d’un rare moment tranquille.',
+  ],
+  goat_island: [
+    'Goat Island somnole sous les embruns. Le navire grince doucement.',
+    'Vous inspectez la côte basse de Goat Island. Rien à signaler.',
+    "Quelques nuages passent au-dessus de l'île. L'équipage souffle un peu.",
+  ],
+  yotsuba_island: [
+    'Les rues de Shells Town sont calmes. La Marine garde ses distances.',
+    'Yotsuba Island semble paisible, mais personne ne baisse vraiment la garde.',
+    'Vous regardez les collines autour de Shells Town. Le vent tourne lentement.',
   ],
   loguetown: [
     "Vous traînez sur la place de l'exécution. Un soldat de la Marine vous toise, sans bouger.",
