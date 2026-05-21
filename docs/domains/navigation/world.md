@@ -36,6 +36,7 @@ South Blue ─┘                              │
 | `rare_animal`      | Île sauvage proche de Kumate Island et de l'archipel Gecko.                 |
 | `kumate`           | Petite île entre Organ Archipelago, Rare Animal Island et Sixis.            |
 | `sixis`            | Île isolée proche de Goat Island et Kumate Island.                          |
+| `tequila_wolf`     | Île-pont proche de Rare Animal Island, Sixis et Kumate.                     |
 | `gecko`            | Archipel de Syrup Village, au sud-ouest du cluster East Blue.               |
 | `baratie`          | Restaurant flottant proche de l'archipel Gecko et de Conomi.                |
 | `conomi`           | Archipel d'Arlong Park, Cocoyasi, Gosa Town et la 16e branche.              |
@@ -77,8 +78,9 @@ La première portion d'East Blue est représentée comme un cluster d'îles proc
 | `mirrorball`  | `nagagutsu`, `organ`, `gecko`                      |
 | `nagagutsu`   | `organ`, `gecko`                                   |
 | `organ`       | `gecko`, `kumate`, `rare_animal`                   |
-| `rare_animal` | `gecko`, `kumate`                                  |
-| `kumate`      | `sixis`                                            |
+| `rare_animal` | `gecko`, `kumate`, `tequila_wolf`                  |
+| `kumate`      | `sixis`, `tequila_wolf`                            |
+| `sixis`       | `tequila_wolf`                                     |
 | `gecko`       | `baratie`                                          |
 | `baratie`     | `conomi`, `oykot`, `pole_star`                     |
 | `conomi`      | `cozia`, `frauce`, `oykot`, `pole_star`            |

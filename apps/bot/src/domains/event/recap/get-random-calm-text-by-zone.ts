@@ -59,6 +59,11 @@ const CALM_TEXT_BY_ZONE: Record<Zone, Array<string>> = {
     "Les îles de l'archipel Gecko découpent l'horizon en petites ombres.",
     'Vous entendez une rumeur de village, puis seulement le bruit des vagues.',
   ],
+  tequila_wolf: [
+    'Le pont colossal de Tequila Wolf disparaît dans la brume.',
+    'Vous entendez au loin le martèlement régulier des chantiers.',
+    "Tequila Wolf s'étire sous un ciel pâle. Pour l'instant, personne ne vous arrête.",
+  ],
   baratie: [
     'Les cuisines du Baratie s’agitent sans vous. Sur le pont, la mer reste calme.',
     "Vous sentez l'odeur d'un plat chaud passer au-dessus des vagues.",

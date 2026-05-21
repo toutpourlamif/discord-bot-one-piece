@@ -17,6 +17,7 @@ import {
   RARE_ANIMAL,
   SATSURUZO,
   SIXIS,
+  TEQUILA_WOLF,
   YOTSUBA,
 } from './east-blue/index.js';
 import { LITTLE_GARDEN } from './little-garden.js';
@@ -35,6 +36,7 @@ const ISLAND_REGISTRY = [
   RARE_ANIMAL,
   KUMATE,
   SIXIS,
+  TEQUILA_WOLF,
   GECKO,
   BARATIE,
   CONOMI,

@@ -14,4 +14,5 @@ export { POLE_STAR } from './pole-star.js';
 export { RARE_ANIMAL } from './rare-animal.js';
 export { SATSURUZO } from './satsuruzo.js';
 export { SIXIS } from './sixis.js';
+export { TEQUILA_WOLF } from './tequila-wolf.js';
 export { YOTSUBA } from './yotsuba.js';

@@ -23,6 +23,7 @@ export const arrivalByIsland: Record<Island, PassiveGenerator> = {
   rare_animal: buildArrivalGenerator('rare_animal', TEMPLATE_ARRIVAL),
   kumate: buildArrivalGenerator('kumate', TEMPLATE_ARRIVAL),
   sixis: buildArrivalGenerator('sixis', TEMPLATE_ARRIVAL),
+  tequila_wolf: buildArrivalGenerator('tequila_wolf', TEMPLATE_ARRIVAL),
   gecko: buildArrivalGenerator('gecko', TEMPLATE_ARRIVAL),
   baratie: buildArrivalGenerator('baratie', TEMPLATE_ARRIVAL),
   conomi: buildArrivalGenerator('conomi', TEMPLATE_ARRIVAL),
