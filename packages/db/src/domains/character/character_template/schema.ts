@@ -1,5 +1,5 @@
 import { sql } from 'drizzle-orm';
-import { index, integer, pgTable, serial, varchar, text } from 'drizzle-orm/pg-core';
+import { index, integer, pgTable, serial, varchar, text, real } from 'drizzle-orm/pg-core';
 
 import { imageUrl, timestamps } from '../../../shared/helpers.js';
 import { rarity } from '../../../shared/rarity.js';
@@ -18,6 +18,11 @@ export const characterTemplate = pgTable(
       onDelete: 'restrict',
     }),
     rarity: rarity('rarity').notNull().default('COMMON'),
+    captainCombatMultiplier: real('captain_combat_multiplier').notNull().default(1),
+    captainHpMultiplier: real('captain_hp_multiplier').notNull().default(1),
+    captainBerryGainMultiplier: real('captain_berry_gain_multiplier').notNull().default(1),
+    captainKarmaMultiplier: real('captain_karma_multiplier').notNull().default(1),
+    captainMoraleMultiplier: real('captain_morale_multiplier').notNull().default(1),
 
     race: characterRaceEnum('race').notNull(),
     ...imageUrl(),
