@@ -14,10 +14,10 @@ const cytoscapeJs = readFileSync(require.resolve('cytoscape/dist/cytoscape.min.j
 type Position = { x: number; y: number };
 
 const WORLD_NODE_POSITIONS: Partial<Record<Island, Position>> = {
-  satsuruzo_kingdom: { x: 140, y: 240 },
-  yotsuba_island: { x: 450, y: 140 },
-  dawn_island: { x: 665, y: 455 },
-  goat_island: { x: 450, y: 675 },
+  satsuruzo: { x: 140, y: 240 },
+  yotsuba: { x: 450, y: 140 },
+  dawn: { x: 665, y: 455 },
+  goat: { x: 450, y: 675 },
   loguetown: { x: 900, y: 500 },
   reverse_mountain: { x: 1110, y: 500 },
   whisky_peak: { x: 1320, y: 500 },

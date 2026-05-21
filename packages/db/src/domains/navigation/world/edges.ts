@@ -24,14 +24,14 @@ export type Edge = {
   modifiers?: Array<TravelModifier>;
 };
 
-const EAST_BLUE_BUCKETS = inBuckets('2h');
+const EAST_BLUE_TRAVEL_DURATION = inBuckets('2h');
 
 export const WORLD_EDGES: Array<Edge> = [
-  { from: 'satsuruzo_kingdom', to: 'yotsuba_island', via: 'sea_east_blue', baseDurationBuckets: EAST_BLUE_BUCKETS },
-  { from: 'dawn_island', to: 'goat_island', via: 'sea_east_blue', baseDurationBuckets: inBuckets('1h') },
-  { from: 'dawn_island', to: 'yotsuba_island', via: 'sea_east_blue', baseDurationBuckets: EAST_BLUE_BUCKETS },
-  { from: 'goat_island', to: 'yotsuba_island', via: 'sea_east_blue', baseDurationBuckets: EAST_BLUE_BUCKETS },
-  { from: 'yotsuba_island', to: 'loguetown', via: 'sea_east_blue', baseDurationBuckets: inBuckets('3h') },
+  { from: 'satsuruzo', to: 'yotsuba', via: 'sea_east_blue', baseDurationBuckets: EAST_BLUE_TRAVEL_DURATION },
+  { from: 'dawn', to: 'goat', via: 'sea_east_blue', baseDurationBuckets: inBuckets('1h') },
+  { from: 'dawn', to: 'yotsuba', via: 'sea_east_blue', baseDurationBuckets: EAST_BLUE_TRAVEL_DURATION },
+  { from: 'goat', to: 'yotsuba', via: 'sea_east_blue', baseDurationBuckets: EAST_BLUE_TRAVEL_DURATION },
+  { from: 'yotsuba', to: 'loguetown', via: 'sea_east_blue', baseDurationBuckets: inBuckets('3h') },
   { from: 'loguetown', to: 'reverse_mountain', via: 'sea_east_blue', baseDurationBuckets: 8 },
   {
     from: 'reverse_mountain',

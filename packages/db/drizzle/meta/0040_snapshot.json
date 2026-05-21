@@ -1,5 +1,5 @@
 {
-  "id": "3dd08b97-1796-4fab-96ed-585c8aa7c67c",
+  "id": "b143dbdc-3419-4034-8c3b-93045e3c89b6",
   "prevId": "18c21beb-d0e1-42ef-9850-48b41d54ab9d",
   "version": "7",
   "dialect": "postgresql",
@@ -915,7 +915,7 @@
           "typeSchema": "public",
           "primaryKey": false,
           "notNull": true,
-          "default": "'dawn_island'"
+          "default": "'dawn'"
         },
         "current_sub_zone": {
           "name": "current_sub_zone",
@@ -923,7 +923,7 @@
           "typeSchema": "public",
           "primaryKey": false,
           "notNull": false,
-          "default": "'dawn_goa_kingdom'"
+          "default": "'goa_kingdom'"
         },
         "travel_target_zone": {
           "name": "travel_target_zone",
@@ -1328,11 +1328,11 @@
       "schema": "public",
       "values": [
         "satsuruzo_port",
-        "dawn_goa_kingdom",
-        "dawn_foosha_village",
-        "goat_island_coast",
-        "yotsuba_shells_town",
-        "yotsuba_shimotsuki_village",
+        "goa_kingdom",
+        "foosha_village",
+        "coast",
+        "shells_town",
+        "shimotsuki_village",
         "loguetown_square",
         "reverse_mountain_twin_cape",
         "whisky_peak_town",
@@ -1346,10 +1346,10 @@
       "name": "zone",
       "schema": "public",
       "values": [
-        "satsuruzo_kingdom",
-        "dawn_island",
-        "goat_island",
-        "yotsuba_island",
+        "satsuruzo",
+        "dawn",
+        "goat",
+        "yotsuba",
         "loguetown",
         "reverse_mountain",
         "whisky_peak",

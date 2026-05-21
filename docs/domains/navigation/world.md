@@ -24,18 +24,18 @@ South Blue ─┘                              │
 
 ### Islands (les zones terrestres)
 
-| Island              | Description                                                                 |
-| ------------------- | --------------------------------------------------------------------------- |
-| `satsuruzo_kingdom` | Royaume voisin de Yotsuba Island, dans East Blue.                           |
-| `dawn_island`       | Île du royaume de Goa et du village de Foosha. Point de départ des joueurs. |
-| `goat_island`       | Petite île proche de Dawn Island et Yotsuba Island.                         |
-| `yotsuba_island`    | Île de Shells Town et du village Shimotsuki.                                |
-| `loguetown`         | La dernière île d'East Blue avant le Grand Line. Lieu d'exécution de Roger. |
-| `reverse_mountain`  | La porte d'entrée du Grand Line. Une montagne avec un courant qui monte.    |
-| `whisky_peak`       | Première île du Grand Line. Un piège à pirates, pleine d'agents secrets.    |
-| `little_garden`     | Une île préhistorique, dinosaures, géants. Détour de la mainstory.          |
-| `drum`              | Île hivernale, un médecin légendaire. C'est là qu'on recrute Chopper.       |
-| `alabasta`          | Royaume désertique. Combat contre Crocodile, c'est le climax de l'arc 1.    |
+| Island             | Description                                                                 |
+| ------------------ | --------------------------------------------------------------------------- |
+| `satsuruzo`        | Royaume voisin de Yotsuba Island, dans East Blue.                           |
+| `dawn`             | Île du royaume de Goa et du village de Foosha. Point de départ des joueurs. |
+| `goat`             | Petite île proche de Dawn Island et Yotsuba Island.                         |
+| `yotsuba`          | Île de Shells Town et du village Shimotsuki.                                |
+| `loguetown`        | La dernière île d'East Blue avant le Grand Line. Lieu d'exécution de Roger. |
+| `reverse_mountain` | La porte d'entrée du Grand Line. Une montagne avec un courant qui monte.    |
+| `whisky_peak`      | Première île du Grand Line. Un piège à pirates, pleine d'agents secrets.    |
+| `little_garden`    | Une île préhistorique, dinosaures, géants. Détour de la mainstory.          |
+| `drum`             | Île hivernale, un médecin légendaire. C'est là qu'on recrute Chopper.       |
+| `alabasta`         | Royaume désertique. Combat contre Crocodile, c'est le climax de l'arc 1.    |
 
 ### Seas (les zones de mer entre les îles)
 
@@ -52,9 +52,9 @@ South Blue ─┘                              │
 ## Le graphe d'arêtes (qui mène à qui)
 
 ```
-satsuruzo_kingdom ──→ yotsuba_island ──→ loguetown ──→ reverse_mountain ──→ whisky_peak ──→ little_garden ──→ drum ──→ alabasta
-                         ↑
-dawn_island ──┴──→ goat_island
+satsuruzo ──→ yotsuba ──→ loguetown ──→ reverse_mountain ──→ whisky_peak ──→ little_garden ──→ drum ──→ alabasta
+                ↑
+dawn ──┴──→ goat
 ```
 
 C'est volontairement linéaire pour la V1. Un seul chemin possible, on suit le rail. À mesure qu'on rajoute des îles (Jaya, Skypiea, Water 7…), le graphe va se ramifier.

@@ -2,23 +2,24 @@ import { type Zone } from '@one-piece/db';
 import sample from 'lodash/sample.js';
 
 // TODO: Mettre des vrais trucs là c'est généré par l'IA
+// TODO: Déclarer les calm text directement quand on définit une île.
 const CALM_TEXT_BY_ZONE: Record<Zone, Array<string>> = {
-  satsuruzo_kingdom: [
+  satsuruzo: [
     "Le port de Satsuruzo bruisse au loin. Vous prenez le temps d'observer les voiles.",
     "Une brise tranquille passe sur Satsuruzo. Rien ne presse l'équipage.",
     'Vous laissez le navire au mouillage. Le royaume semble calme pour l’instant.',
   ],
-  dawn_island: [
+  dawn: [
     'Dawn Island s’étire sous le soleil. Le village vit sans se soucier de votre départ.',
     "Vous observez la côte de Dawn Island. L'air sent l'herbe chaude et la mer.",
     'Le royaume de Goa reste au loin. Vous profitez d’un rare moment tranquille.',
   ],
-  goat_island: [
+  goat: [
     'Goat Island somnole sous les embruns. Le navire grince doucement.',
     'Vous inspectez la côte basse de Goat Island. Rien à signaler.',
     "Quelques nuages passent au-dessus de l'île. L'équipage souffle un peu.",
   ],
-  yotsuba_island: [
+  yotsuba: [
     'Les rues de Shells Town sont calmes. La Marine garde ses distances.',
     'Yotsuba Island semble paisible, mais personne ne baisse vraiment la garde.',
     'Vous regardez les collines autour de Shells Town. Le vent tourne lentement.',

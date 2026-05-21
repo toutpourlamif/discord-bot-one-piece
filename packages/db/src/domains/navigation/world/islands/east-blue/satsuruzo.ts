@@ -1,7 +1,7 @@
-import { defineIsland } from './define-island.js';
+import { defineIsland } from '../define-island.js';
 
-export const SATSURUZO_KINGDOM = defineIsland({
-  key: 'satsuruzo_kingdom',
+export const SATSURUZO = defineIsland({
+  key: 'satsuruzo',
   name: 'Royaume de Satsuruzo',
   entrySubZone: 'satsuruzo_port',
   subZones: {
