@@ -24,6 +24,7 @@
     "db:wipe": "docker exec one-piece-db psql -U one_piece -d postgres -c \"DROP DATABASE IF EXISTS one_piece WITH (FORCE)\" -c \"CREATE DATABASE one_piece\"",
     "db:r": "pnpm db:reset",
     "db:reset": "pnpm db:wipe && pnpm db:m:a && pnpm db:seed",
+    "images:optimize": "tsx scripts/optimize-staged-images.ts",
     "prepare": "husky"
   },
   "lint-staged": {
@@ -46,6 +47,7 @@
     "jiti": "^2.6.1",
     "lint-staged": "^16.4.0",
     "prettier": "^3.8.3",
+    "sharp": "^0.34.5",
     "tsx": "^4.21.0",
     "typescript": "^6.0.3",
     "typescript-eslint": "^8.58.2"

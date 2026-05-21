@@ -3,5 +3,6 @@ if [ ! -f node_modules/.modules.yaml ] || [ pnpm-lock.yaml -nt node_modules/.mod
   pnpm install
 fi
 
+pnpm tsx scripts/optimize-staged-images.ts
 pnpm lint-staged
 pnpm typecheck
