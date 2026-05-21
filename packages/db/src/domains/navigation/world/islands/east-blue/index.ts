@@ -9,6 +9,8 @@ export { KUMATE } from './kumate.js';
 export { MIRRORBALL } from './mirrorball.js';
 export { NAGAGUTSU } from './nagagutsu.js';
 export { ORGAN } from './organ.js';
+export { OYKOT } from './oykot.js';
+export { POLE_STAR } from './pole-star.js';
 export { RARE_ANIMAL } from './rare-animal.js';
 export { SATSURUZO } from './satsuruzo.js';
 export { SIXIS } from './sixis.js';

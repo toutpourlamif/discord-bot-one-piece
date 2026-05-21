@@ -12,13 +12,14 @@ import {
   MIRRORBALL,
   NAGAGUTSU,
   ORGAN,
+  OYKOT,
+  POLE_STAR,
   RARE_ANIMAL,
   SATSURUZO,
   SIXIS,
   YOTSUBA,
 } from './east-blue/index.js';
 import { LITTLE_GARDEN } from './little-garden.js';
-import { LOGUETOWN } from './loguetown.js';
 import { REVERSE_MOUNTAIN } from './reverse-mountain.js';
 import { WANO } from './wano.js';
 import { WHISKY_PEAK } from './whisky-peak.js';
@@ -39,7 +40,8 @@ const ISLAND_REGISTRY = [
   CONOMI,
   COZIA,
   FRAUCE,
-  LOGUETOWN,
+  OYKOT,
+  POLE_STAR,
   REVERSE_MOUNTAIN,
   WHISKY_PEAK,
   LITTLE_GARDEN,

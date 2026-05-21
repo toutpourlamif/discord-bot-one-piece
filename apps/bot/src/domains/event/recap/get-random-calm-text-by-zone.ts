@@ -79,7 +79,12 @@ const CALM_TEXT_BY_ZONE: Record<Zone, Array<string>> = {
     'Vous regardez les pavillons de Frauce claquer au vent.',
     'Frauce semble loin de toute agitation. Bon moment pour souffler.',
   ],
-  loguetown: [
+  oykot: [
+    "Le royaume d'Oykot reste calme derrière ses quais.",
+    "Vous observez la côte d'Oykot. Aucun navire suspect en approche.",
+    "Une rumeur de marché arrive depuis Oykot, puis s'éteint dans le vent.",
+  ],
+  pole_star: [
     "Vous traînez sur la place de l'exécution. Un soldat de la Marine vous toise, sans bouger.",
     'Vous testez une lame chez un forgeron. Rien ne presse.',
     "Vous traversez les ruelles, l'odeur de poudre et d'épices colle à vos vêtements.",

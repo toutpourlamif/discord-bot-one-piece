@@ -41,7 +41,8 @@ South Blue ─┘                              │
 | `conomi`           | Archipel d'Arlong Park, Cocoyasi, Gosa Town et la 16e branche.              |
 | `cozia`            | Île proche de Conomi et du royaume de Frauce.                               |
 | `frauce`           | Royaume voisin de Cozia et de l'archipel de Conomi.                         |
-| `loguetown`        | La dernière île d'East Blue avant le Grand Line. Lieu d'exécution de Roger. |
+| `oykot`            | Royaume voisin de Conomi et de l'archipel Pole Star.                        |
+| `pole_star`        | Archipel de Loguetown, dernière étape d'East Blue avant le Grand Line.      |
 | `reverse_mountain` | La porte d'entrée du Grand Line. Une montagne avec un courant qui monte.    |
 | `whisky_peak`      | Première île du Grand Line. Un piège à pirates, pleine d'agents secrets.    |
 | `little_garden`    | Une île préhistorique, dinosaures, géants. Détour de la mainstory.          |
@@ -72,17 +73,18 @@ La première portion d'East Blue est représentée comme un cluster d'îles proc
 | `satsuruzo`   | `yotsuba`, `nagagutsu`                             |
 | `dawn`        | `goat`, `yotsuba`                                  |
 | `goat`        | `sixis`, `nagagutsu`, `organ`, `kumate`, `yotsuba` |
-| `yotsuba`     | `organ`, `nagagutsu`, `kumate`, `loguetown`        |
+| `yotsuba`     | `organ`, `nagagutsu`, `kumate`                     |
 | `mirrorball`  | `nagagutsu`, `organ`, `gecko`                      |
 | `nagagutsu`   | `organ`, `gecko`                                   |
 | `organ`       | `gecko`, `kumate`, `rare_animal`                   |
 | `rare_animal` | `gecko`, `kumate`                                  |
 | `kumate`      | `sixis`                                            |
 | `gecko`       | `baratie`                                          |
-| `baratie`     | `conomi`                                           |
-| `conomi`      | `cozia`, `frauce`                                  |
+| `baratie`     | `conomi`, `oykot`, `pole_star`                     |
+| `conomi`      | `cozia`, `frauce`, `oykot`, `pole_star`            |
 | `cozia`       | `frauce`                                           |
-| `loguetown`   | `reverse_mountain`                                 |
+| `oykot`       | `pole_star`                                        |
+| `pole_star`   | `reverse_mountain`                                 |
 
 ### Paradise
 
