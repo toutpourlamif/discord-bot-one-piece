@@ -281,6 +281,13 @@
       "when": 1779285936625,
       "tag": "0039_add_sub_zones",
       "breakpoints": true
+    },
+    {
+      "idx": 40,
+      "version": "7",
+      "when": 1779362049595,
+      "tag": "0040_ajout_captain_multiplier",
+      "breakpoints": true
     }
   ]
 }
