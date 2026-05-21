@@ -59,6 +59,26 @@ const CALM_TEXT_BY_ZONE: Record<Zone, Array<string>> = {
     "Les îles de l'archipel Gecko découpent l'horizon en petites ombres.",
     'Vous entendez une rumeur de village, puis seulement le bruit des vagues.',
   ],
+  baratie: [
+    'Les cuisines du Baratie s’agitent sans vous. Sur le pont, la mer reste calme.',
+    "Vous sentez l'odeur d'un plat chaud passer au-dessus des vagues.",
+    'Le restaurant flotte paisiblement. Personne ne cherche la bagarre pour l’instant.',
+  ],
+  conomi: [
+    "L'archipel de Conomi se découpe en îlots tranquilles autour de vous.",
+    'Cocoyasi paraît calme au loin. Le vent glisse entre les mandariniers.',
+    'Vous observez les quais de Conomi. Rien ne bouge, sauf les vagues.',
+  ],
+  cozia: [
+    'Cozia reste silencieuse sous le soleil. Le port tourne au ralenti.',
+    'Vous faites le tour des quais de Cozia. Rien à signaler.',
+    "Une brise légère traverse Cozia. L'équipage garde le cap au calme.",
+  ],
+  frauce: [
+    'Le royaume de Frauce veille derrière ses murs. La mer est docile.',
+    'Vous regardez les pavillons de Frauce claquer au vent.',
+    'Frauce semble loin de toute agitation. Bon moment pour souffler.',
+  ],
   loguetown: [
     "Vous traînez sur la place de l'exécution. Un soldat de la Marine vous toise, sans bouger.",
     'Vous testez une lame chez un forgeron. Rien ne presse.',

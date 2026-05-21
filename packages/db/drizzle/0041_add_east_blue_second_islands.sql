@@ -5,10 +5,21 @@ ALTER TYPE "public"."sub_zone" ADD VALUE 'rare_animal_coast' BEFORE 'loguetown_s
 ALTER TYPE "public"."sub_zone" ADD VALUE 'kumate_coast' BEFORE 'loguetown_square';--> statement-breakpoint
 ALTER TYPE "public"."sub_zone" ADD VALUE 'sixis_coast' BEFORE 'loguetown_square';--> statement-breakpoint
 ALTER TYPE "public"."sub_zone" ADD VALUE 'syrup_village' BEFORE 'loguetown_square';--> statement-breakpoint
+ALTER TYPE "public"."sub_zone" ADD VALUE 'baratie_deck' BEFORE 'loguetown_square';--> statement-breakpoint
+ALTER TYPE "public"."sub_zone" ADD VALUE 'arlong_park' BEFORE 'loguetown_square';--> statement-breakpoint
+ALTER TYPE "public"."sub_zone" ADD VALUE 'cocoyasi_village' BEFORE 'loguetown_square';--> statement-breakpoint
+ALTER TYPE "public"."sub_zone" ADD VALUE 'gosa_town' BEFORE 'loguetown_square';--> statement-breakpoint
+ALTER TYPE "public"."sub_zone" ADD VALUE 'branch_16' BEFORE 'loguetown_square';--> statement-breakpoint
+ALTER TYPE "public"."sub_zone" ADD VALUE 'cozia_port' BEFORE 'loguetown_square';--> statement-breakpoint
+ALTER TYPE "public"."sub_zone" ADD VALUE 'frauce_port' BEFORE 'loguetown_square';--> statement-breakpoint
 ALTER TYPE "public"."zone" ADD VALUE 'mirrorball' BEFORE 'loguetown';--> statement-breakpoint
 ALTER TYPE "public"."zone" ADD VALUE 'nagagutsu' BEFORE 'loguetown';--> statement-breakpoint
 ALTER TYPE "public"."zone" ADD VALUE 'organ' BEFORE 'loguetown';--> statement-breakpoint
 ALTER TYPE "public"."zone" ADD VALUE 'rare_animal' BEFORE 'loguetown';--> statement-breakpoint
 ALTER TYPE "public"."zone" ADD VALUE 'kumate' BEFORE 'loguetown';--> statement-breakpoint
 ALTER TYPE "public"."zone" ADD VALUE 'sixis' BEFORE 'loguetown';--> statement-breakpoint
-ALTER TYPE "public"."zone" ADD VALUE 'gecko' BEFORE 'loguetown';
+ALTER TYPE "public"."zone" ADD VALUE 'gecko' BEFORE 'loguetown';--> statement-breakpoint
+ALTER TYPE "public"."zone" ADD VALUE 'baratie' BEFORE 'loguetown';--> statement-breakpoint
+ALTER TYPE "public"."zone" ADD VALUE 'conomi' BEFORE 'loguetown';--> statement-breakpoint
+ALTER TYPE "public"."zone" ADD VALUE 'cozia' BEFORE 'loguetown';--> statement-breakpoint
+ALTER TYPE "public"."zone" ADD VALUE 'frauce' BEFORE 'loguetown';

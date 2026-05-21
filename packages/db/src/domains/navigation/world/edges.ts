@@ -50,6 +50,11 @@ export const WORLD_EDGES: Array<Edge> = [
   { from: 'rare_animal', to: 'gecko', via: 'sea_east_blue', baseDurationBuckets: EAST_BLUE_TRAVEL_DURATION },
   { from: 'rare_animal', to: 'kumate', via: 'sea_east_blue', baseDurationBuckets: inBuckets('1h') },
   { from: 'kumate', to: 'sixis', via: 'sea_east_blue', baseDurationBuckets: EAST_BLUE_TRAVEL_DURATION },
+  { from: 'gecko', to: 'baratie', via: 'sea_east_blue', baseDurationBuckets: EAST_BLUE_TRAVEL_DURATION },
+  { from: 'baratie', to: 'conomi', via: 'sea_east_blue', baseDurationBuckets: EAST_BLUE_TRAVEL_DURATION },
+  { from: 'conomi', to: 'cozia', via: 'sea_east_blue', baseDurationBuckets: inBuckets('1h') },
+  { from: 'conomi', to: 'frauce', via: 'sea_east_blue', baseDurationBuckets: EAST_BLUE_TRAVEL_DURATION },
+  { from: 'cozia', to: 'frauce', via: 'sea_east_blue', baseDurationBuckets: inBuckets('1h') },
   { from: 'yotsuba', to: 'loguetown', via: 'sea_east_blue', baseDurationBuckets: inBuckets('3h') },
   { from: 'loguetown', to: 'reverse_mountain', via: 'sea_east_blue', baseDurationBuckets: 8 },
   {

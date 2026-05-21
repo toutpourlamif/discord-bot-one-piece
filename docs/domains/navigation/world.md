@@ -37,6 +37,10 @@ South Blue ─┘                              │
 | `kumate`           | Petite île entre Organ Archipelago, Rare Animal Island et Sixis.            |
 | `sixis`            | Île isolée proche de Goat Island et Kumate Island.                          |
 | `gecko`            | Archipel de Syrup Village, au sud-ouest du cluster East Blue.               |
+| `baratie`          | Restaurant flottant proche de l'archipel Gecko et de Conomi.                |
+| `conomi`           | Archipel d'Arlong Park, Cocoyasi, Gosa Town et la 16e branche.              |
+| `cozia`            | Île proche de Conomi et du royaume de Frauce.                               |
+| `frauce`           | Royaume voisin de Cozia et de l'archipel de Conomi.                         |
 | `loguetown`        | La dernière île d'East Blue avant le Grand Line. Lieu d'exécution de Roger. |
 | `reverse_mountain` | La porte d'entrée du Grand Line. Une montagne avec un courant qui monte.    |
 | `whisky_peak`      | Première île du Grand Line. Un piège à pirates, pleine d'agents secrets.    |
@@ -74,6 +78,10 @@ La première portion d'East Blue est représentée comme un cluster d'îles proc
 | `organ`       | `gecko`, `kumate`, `rare_animal`                   |
 | `rare_animal` | `gecko`, `kumate`                                  |
 | `kumate`      | `sixis`                                            |
+| `gecko`       | `baratie`                                          |
+| `baratie`     | `conomi`                                           |
+| `conomi`      | `cozia`, `frauce`                                  |
+| `cozia`       | `frauce`                                           |
 | `loguetown`   | `reverse_mountain`                                 |
 
 ### Paradise

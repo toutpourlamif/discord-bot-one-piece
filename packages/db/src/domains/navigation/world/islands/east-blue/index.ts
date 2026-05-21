@@ -1,4 +1,8 @@
+export { BARATIE } from './baratie.js';
+export { CONOMI } from './conomi.js';
+export { COZIA } from './cozia.js';
 export { DAWN } from './dawn.js';
+export { FRAUCE } from './frauce.js';
 export { GECKO } from './gecko.js';
 export { GOAT } from './goat.js';
 export { KUMATE } from './kumate.js';

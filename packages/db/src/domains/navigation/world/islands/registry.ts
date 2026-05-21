@@ -1,6 +1,22 @@
 import { ALABASTA } from './alabasta.js';
 import { DRUM } from './drum.js';
-import { DAWN, GECKO, GOAT, KUMATE, MIRRORBALL, NAGAGUTSU, ORGAN, RARE_ANIMAL, SATSURUZO, SIXIS, YOTSUBA } from './east-blue/index.js';
+import {
+  BARATIE,
+  CONOMI,
+  COZIA,
+  DAWN,
+  FRAUCE,
+  GECKO,
+  GOAT,
+  KUMATE,
+  MIRRORBALL,
+  NAGAGUTSU,
+  ORGAN,
+  RARE_ANIMAL,
+  SATSURUZO,
+  SIXIS,
+  YOTSUBA,
+} from './east-blue/index.js';
 import { LITTLE_GARDEN } from './little-garden.js';
 import { LOGUETOWN } from './loguetown.js';
 import { REVERSE_MOUNTAIN } from './reverse-mountain.js';
@@ -19,6 +35,10 @@ const ISLAND_REGISTRY = [
   KUMATE,
   SIXIS,
   GECKO,
+  BARATIE,
+  CONOMI,
+  COZIA,
+  FRAUCE,
   LOGUETOWN,
   REVERSE_MOUNTAIN,
   WHISKY_PEAK,
