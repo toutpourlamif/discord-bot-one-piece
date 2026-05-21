@@ -68,24 +68,24 @@ const ISLAND_NODE_COLORS: Partial<Record<Island, string>> = {
 };
 
 const WORLD_NODE_POSITIONS: Partial<Record<Island, Position>> = {
-  satsuruzo: { x: 900, y: 80 },
-  yotsuba: { x: 1120, y: 330 },
-  dawn: { x: 1700, y: 235 },
-  goat: { x: 1470, y: 650 },
-  mirrorball: { x: 160, y: 800 },
-  nagagutsu: { x: 520, y: 515 },
-  organ: { x: 710, y: 900 },
-  gecko: { x: 365, y: 1190 },
-  baratie: { x: 120, y: 1410 },
-  conomi: { x: 430, y: 1515 },
-  cozia: { x: 710, y: 1440 },
-  frauce: { x: 800, y: 1660 },
-  oykot: { x: 1030, y: 1470 },
-  pole_star: { x: 1935, y: 235 },
-  rare_animal: { x: 645, y: 1260 },
-  kumate: { x: 965, y: 1180 },
-  sixis: { x: 1320, y: 1035 },
-  tequila_wolf: { x: 1175, y: 1410 },
+  satsuruzo: { x: 1585, y: -20 },
+  yotsuba: { x: 1600, y: 220 },
+  dawn: { x: 2010, y: 310 },
+  goat: { x: 1680, y: 555 },
+  mirrorball: { x: 995, y: 465 },
+  nagagutsu: { x: 980, y: 180 },
+  organ: { x: 1205, y: 475 },
+  gecko: { x: 755, y: 755 },
+  baratie: { x: 645, y: 1145 },
+  conomi: { x: 165, y: 730 },
+  cozia: { x: -265, y: 770 },
+  frauce: { x: -90, y: 490 },
+  oykot: { x: 115, y: 1320 },
+  pole_star: { x: -215, y: 1785 },
+  rare_animal: { x: 1170, y: 765 },
+  kumate: { x: 1455, y: 770 },
+  sixis: { x: 1965, y: 1020 },
+  tequila_wolf: { x: 1425, y: 1795 },
   reverse_mountain: { x: 2145, y: 235 },
   whisky_peak: { x: 2355, y: 235 },
   little_garden: { x: 2565, y: 235 },
@@ -182,7 +182,7 @@ function formatDuration(buckets: number): string {
 
 const edges = WORLD_EDGES.map((edge) => {
   const requirementLabel = edge.requirements?.map((r) => r.name).join(', ') ?? '';
-  const lines = [ZONE_LABELS[edge.via], formatDuration(edge.baseDurationBuckets)];
+  const lines = [formatDuration(edge.baseDurationBuckets)];
   if (requirementLabel) lines.push(`needs: ${requirementLabel}`);
   return {
     data: {
