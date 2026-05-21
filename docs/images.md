@@ -55,3 +55,15 @@ L'URL est construite **au runtime**, pas au build. Avantage : on peut pointer ve
 - En code : `setImage(buildAssetUrl(template.imageUrl))`, jamais d'URL en dur
 - En DB : on stocke le chemin relatif (`devil-fruits/gomu-gomu-no-mi.webp`), pas l'URL complète
 - Toujours du WebP, 256² pour thumbnail, 1024² pour setImage, < 800 KB pour un animé
+
+## Conversion automatique au commit
+
+Pas besoin de convertir à la main : si tu stage un fichier `.png`, `.jpg` ou `.jpeg` sous `/assets/`, un hook pre-commit l'optimise pour toi :
+
+- resize à 1024² max (côté long, ratio gardé) si l'image est plus grande
+- encode WebP en cherchant la qualité la plus haute qui rentre sous 150 KB (essaie 90 → 85 → 80 → 75 → 70 ; s'arrête au premier palier qui passe)
+- supprime l'original et le remplace par `.webp` dans le commit
+
+Tu peux relancer la conversion manuellement : `pnpm images:optimize` (agit sur ce qui est staged).
+
+Cas hors scope du hook : animés (GIF/MP4) — convertis-les à la main pour l'instant.
