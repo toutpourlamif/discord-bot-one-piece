@@ -5,6 +5,6 @@ export const FRAUCE = defineIsland({
   name: 'Royaume de Frauce',
   entrySubZone: 'frauce_port',
   subZones: {
-    frauce_port: 'Port de Frauce',
+    frauce_port: 'Port',
   },
 });

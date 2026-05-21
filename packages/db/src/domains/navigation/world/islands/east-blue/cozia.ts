@@ -5,6 +5,6 @@ export const COZIA = defineIsland({
   name: 'Cozia',
   entrySubZone: 'cozia_port',
   subZones: {
-    cozia_port: 'Port de Cozia',
+    cozia_port: 'Port',
   },
 });

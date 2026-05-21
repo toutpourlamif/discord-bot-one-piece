@@ -1,6 +1,6 @@
 {
-  "id": "cc4a94a5-6434-434d-aaff-6b10415fecca",
-  "prevId": "1e7718db-3d18-41e9-9afc-82a03c4bdd05",
+  "id": "85dc7171-d4b6-49be-96a5-18f60aff7868",
+  "prevId": "cc4a94a5-6434-434d-aaff-6b10415fecca",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
@@ -207,41 +207,6 @@
           "notNull": true,
           "default": "'COMMON'"
         },
-        "race": {
-          "name": "race",
-          "type": "character_race",
-          "typeSchema": "public",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "image_url": {
-          "name": "image_url",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "created_at": {
-          "name": "created_at",
-          "type": "timestamp with time zone",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "now()"
-        },
-        "updated_at": {
-          "name": "updated_at",
-          "type": "timestamp with time zone",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "now()"
-        },
-        "skills": {
-          "name": "skills",
-          "type": "character_skill[]",
-          "typeSchema": "public",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "'{}'::character_skill[]"
-        },
         "captain_combat_multiplier": {
           "name": "captain_combat_multiplier",
           "type": "real",
@@ -276,6 +241,41 @@
           "primaryKey": false,
           "notNull": true,
           "default": 1
+        },
+        "race": {
+          "name": "race",
+          "type": "character_race",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "image_url": {
+          "name": "image_url",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "skills": {
+          "name": "skills",
+          "type": "character_skill[]",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'{}'::character_skill[]"
         }
       },
       "indexes": {
@@ -958,7 +958,15 @@
           "typeSchema": "public",
           "primaryKey": false,
           "notNull": true,
-          "default": "'foosha'"
+          "default": "'dawn'"
+        },
+        "current_sub_zone": {
+          "name": "current_sub_zone",
+          "type": "sub_zone",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "'goa_kingdom'"
         },
         "travel_target_zone": {
           "name": "travel_target_zone",
@@ -1369,12 +1377,63 @@
         "LEGENDARY"
       ]
     },
+    "public.sub_zone": {
+      "name": "sub_zone",
+      "schema": "public",
+      "values": [
+        "satsuruzo_port",
+        "goa_kingdom",
+        "foosha_village",
+        "coast",
+        "shells_town",
+        "shimotsuki_village",
+        "mirrorball_coast",
+        "nagagutsu_port",
+        "orange_town",
+        "rare_animal_coast",
+        "kumate_coast",
+        "sixis_coast",
+        "tequila_wolf_coast",
+        "syrup_village",
+        "baratie_deck",
+        "arlong_park",
+        "cocoyasi_village",
+        "gosa_town",
+        "branch_16",
+        "cozia_port",
+        "frauce_port",
+        "oykot_port",
+        "loguetown_square",
+        "reverse_mountain_twin_cape",
+        "whisky_peak_town",
+        "little_garden_jungle",
+        "drum_village",
+        "alabasta_nanohana",
+        "wano_flower_capital"
+      ]
+    },
     "public.zone": {
       "name": "zone",
       "schema": "public",
       "values": [
-        "foosha",
-        "loguetown",
+        "satsuruzo",
+        "dawn",
+        "goat",
+        "yotsuba",
+        "mirrorball",
+        "nagagutsu",
+        "organ",
+        "rare_animal",
+        "kumate",
+        "sixis",
+        "tequila_wolf",
+        "gecko",
+        "baratie",
+        "conomi",
+        "cozia",
+        "frauce",
+        "oykot",
+        "pole_star",
         "reverse_mountain",
         "whisky_peak",
         "little_garden",

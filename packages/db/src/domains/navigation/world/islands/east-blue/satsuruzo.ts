@@ -5,6 +5,6 @@ export const SATSURUZO = defineIsland({
   name: 'Royaume de Satsuruzo',
   entrySubZone: 'satsuruzo_port',
   subZones: {
-    satsuruzo_port: 'Port de Satsuruzo',
+    satsuruzo_port: 'Port',
   },
 });

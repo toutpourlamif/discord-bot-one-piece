@@ -12,6 +12,7 @@ export { ORGAN } from './organ.js';
 export { OYKOT } from './oykot.js';
 export { POLE_STAR } from './pole-star.js';
 export { RARE_ANIMAL } from './rare-animal.js';
+export { EAST_BLUE_ISLAND_REGISTRY } from './registry.js';
 export { SATSURUZO } from './satsuruzo.js';
 export { SIXIS } from './sixis.js';
 export { TEQUILA_WOLF } from './tequila-wolf.js';

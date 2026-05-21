@@ -5,6 +5,6 @@ export const OYKOT = defineIsland({
   name: "Royaume d'Oykot",
   entrySubZone: 'oykot_port',
   subZones: {
-    oykot_port: "Port d'Oykot",
+    oykot_port: 'Port',
   },
 });

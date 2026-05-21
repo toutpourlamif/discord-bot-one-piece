@@ -5,6 +5,6 @@ export const RARE_ANIMAL = defineIsland({
   name: 'Île des Animaux Rares',
   entrySubZone: 'rare_animal_coast',
   subZones: {
-    rare_animal_coast: 'Côte de l’Île des Animaux Rares',
+    rare_animal_coast: 'Côte',
   },
 });

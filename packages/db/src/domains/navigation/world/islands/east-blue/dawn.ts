@@ -2,7 +2,7 @@ import { defineIsland } from '../define-island.js';
 
 export const DAWN = defineIsland({
   key: 'dawn',
-  name: 'Dawn Island',
+  name: 'Île Dawn',
   entrySubZone: 'goa_kingdom',
   subZones: {
     goa_kingdom: 'Royaume de Goa',

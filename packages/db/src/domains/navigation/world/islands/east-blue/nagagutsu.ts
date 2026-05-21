@@ -5,6 +5,6 @@ export const NAGAGUTSU = defineIsland({
   name: 'Royaume de Nagagutsu',
   entrySubZone: 'nagagutsu_port',
   subZones: {
-    nagagutsu_port: 'Port de Nagagutsu',
+    nagagutsu_port: 'Port',
   },
 });

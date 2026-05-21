@@ -2,9 +2,9 @@ import { defineIsland } from '../define-island.js';
 
 export const GOAT = defineIsland({
   key: 'goat',
-  name: 'Goat Island',
+  name: 'Île Goat',
   entrySubZone: 'coast',
   subZones: {
-    coast: 'Côte de Goat Island',
+    coast: 'Côte',
   },
 });

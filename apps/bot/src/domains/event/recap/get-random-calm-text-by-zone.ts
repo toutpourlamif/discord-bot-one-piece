@@ -10,24 +10,24 @@ const CALM_TEXT_BY_ZONE: Record<Zone, Array<string>> = {
     'Vous laissez le navire au mouillage. Le royaume semble calme pour l’instant.',
   ],
   dawn: [
-    'Dawn Island s’étire sous le soleil. Le village vit sans se soucier de votre départ.',
-    "Vous observez la côte de Dawn Island. L'air sent l'herbe chaude et la mer.",
+    "L'île Dawn s’étire sous le soleil. Le village vit sans se soucier de votre départ.",
+    "Vous observez la côte de l'île Dawn. L'air sent l'herbe chaude et la mer.",
     'Le royaume de Goa reste au loin. Vous profitez d’un rare moment tranquille.',
   ],
   goat: [
-    'Goat Island somnole sous les embruns. Le navire grince doucement.',
-    'Vous inspectez la côte basse de Goat Island. Rien à signaler.',
+    "L'île Goat somnole sous les embruns. Le navire grince doucement.",
+    "Vous inspectez la côte basse de l'île Goat. Rien à signaler.",
     "Quelques nuages passent au-dessus de l'île. L'équipage souffle un peu.",
   ],
   yotsuba: [
     'Les rues de Shells Town sont calmes. La Marine garde ses distances.',
-    'Yotsuba Island semble paisible, mais personne ne baisse vraiment la garde.',
+    "L'île Yotsuba semble paisible, mais personne ne baisse vraiment la garde.",
     'Vous regardez les collines autour de Shells Town. Le vent tourne lentement.',
   ],
   mirrorball: [
-    "Mirrorball Island miroite sous le soleil. L'équipage profite du calme.",
-    "Les façades de Mirrorball Island renvoient la lumière jusqu'au port.",
-    'Vous laissez le navire au mouillage. Rien ne bouge autour de Mirrorball Island.',
+    "L'île Mirrorball miroite sous le soleil. L'équipage profite du calme.",
+    "Les façades de l'île Mirrorball renvoient la lumière jusqu'au port.",
+    "Vous laissez le navire au mouillage. Rien ne bouge autour de l'île Mirrorball.",
   ],
   nagagutsu: [
     'Le royaume de Nagagutsu s’étire le long de la côte. Vous observez les quais.',
@@ -35,19 +35,19 @@ const CALM_TEXT_BY_ZONE: Record<Zone, Array<string>> = {
     "Vous inspectez l'horizon depuis Nagagutsu. La mer reste tranquille.",
   ],
   organ: [
-    "Les îlots de l'archipel Organ restent silencieux sous la brume.",
+    "Les îlots de l'archipel Des Orgao restent silencieux sous la brume.",
     'Orange Town bruisse au loin. Pour l’instant, rien ne vient troubler le port.',
-    "Vous suivez les petites vagues entre les îlots d'Organ Archipelago.",
+    "Vous suivez les petites vagues entre les îlots de l'archipel Des Orgao.",
   ],
   rare_animal: [
     'Des cris étranges montent de la jungle. Ils restent loin du campement.',
-    "Rare Animal Island respire doucement autour de vous. L'équipage parle bas.",
+    "L'île des Animaux Rares respire doucement autour de vous. L'équipage parle bas.",
     'Vous comptez les silhouettes entre les arbres, puis vous abandonnez.',
   ],
   kumate: [
-    'Kumate Island dort sous un ciel clair. La mer clapote contre la coque.',
-    "Vous longez les petites falaises de Kumate Island. Rien d'urgent.",
-    'Le vent tourne autour de Kumate Island sans apporter de mauvaise nouvelle.',
+    "L'île Kumate dort sous un ciel clair. La mer clapote contre la coque.",
+    "Vous longez les petites falaises de l'île Kumate. Rien d'urgent.",
+    "Le vent tourne autour de l'île Kumate sans apporter de mauvaise nouvelle.",
   ],
   sixis: [
     "Sixis paraît abandonnée. C'est presque reposant.",
@@ -60,9 +60,9 @@ const CALM_TEXT_BY_ZONE: Record<Zone, Array<string>> = {
     'Vous entendez une rumeur de village, puis seulement le bruit des vagues.',
   ],
   tequila_wolf: [
-    'Le pont colossal de Tequila Wolf disparaît dans la brume.',
+    "Le pont colossal de l'île Tequila Wolf disparaît dans la brume.",
     'Vous entendez au loin le martèlement régulier des chantiers.',
-    "Tequila Wolf s'étire sous un ciel pâle. Pour l'instant, personne ne vous arrête.",
+    "L'île Tequila Wolf s'étire sous un ciel pâle. Pour l'instant, personne ne vous arrête.",
   ],
   baratie: [
     'Les cuisines du Baratie s’agitent sans vous. Sur le pont, la mer reste calme.',

@@ -2,9 +2,9 @@ import { defineIsland } from '../define-island.js';
 
 export const KUMATE = defineIsland({
   key: 'kumate',
-  name: 'Kumate Island',
+  name: 'Île Kumate',
   entrySubZone: 'kumate_coast',
   subZones: {
-    kumate_coast: 'Côte de Kumate Island',
+    kumate_coast: 'Côte',
   },
 });
