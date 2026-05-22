@@ -1,6 +1,6 @@
 {
-  "id": "85dc7171-d4b6-49be-96a5-18f60aff7868",
-  "prevId": "cc4a94a5-6434-434d-aaff-6b10415fecca",
+  "id": "10729fe9-64ba-461b-8219-5f1635fd97ab",
+  "prevId": "8ce4884e-4668-460c-828e-8c05c863e6f9",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
@@ -1384,7 +1384,7 @@
         "satsuruzo_port",
         "goa_kingdom",
         "foosha_village",
-        "coast",
+        "goat_coast",
         "shells_town",
         "shimotsuki_village",
         "mirrorball_coast",

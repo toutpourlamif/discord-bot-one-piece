@@ -3,8 +3,8 @@ import { defineIsland } from '../define-island.js';
 export const GOAT = defineIsland({
   key: 'goat',
   name: 'Île Goat',
-  entrySubZone: 'coast',
+  entrySubZone: 'goat_coast',
   subZones: {
-    coast: 'Côte',
+    goat_coast: 'Côte',
   },
 });

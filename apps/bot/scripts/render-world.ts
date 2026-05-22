@@ -24,14 +24,6 @@ const WORLD_COLORS = {
   neutral: '#c9a37c',
 } as const;
 
-const EAST_BLUE_REGION = {
-  id: 'region:east_blue',
-  label: 'East Blue',
-  position: { x: 880, y: 880 },
-  width: 2440,
-  height: 1950,
-};
-
 const LEGEND_POSITION: Position = { x: 230, y: 230 };
 const LEGEND_WIDTH = 760;
 const LEGEND_HEIGHT = 330;
@@ -39,9 +31,9 @@ const LEGEND_HEIGHT = 330;
 const WORLD_COLOR_LEGEND = [
   { color: WORLD_COLORS.blue, label: 'Bleu : Arc Luffy / Zoro' },
   { color: WORLD_COLORS.orange, label: 'Orange : Nami / Buggy le clown' },
-  { color: WORLD_COLORS.red, label: 'Rouge : Ussop / Kuro' },
+  { color: WORLD_COLORS.red, label: 'Rouge : Usopp / Kuro' },
   { color: WORLD_COLORS.green, label: 'Vert : Sanji' },
-  { color: WORLD_COLORS.black, label: 'Noir : Aarlong Park' },
+  { color: WORLD_COLORS.black, label: 'Noir : Arlong Park' },
   { color: WORLD_COLORS.gold, label: 'Or : en route vers Grand Line' },
   { color: WORLD_COLORS.purple, label: 'Violet : ville annexe' },
 ];
@@ -67,6 +59,7 @@ const ISLAND_NODE_COLORS: Partial<Record<Island, string>> = {
   pole_star: WORLD_COLORS.gold,
 };
 
+// Positions manuelles : graine du layout MDS pour East Blue (la Grand Line est placée plus bas).
 const WORLD_NODE_POSITIONS: Partial<Record<Island, Position>> = {
   satsuruzo: { x: 1585, y: -20 },
   yotsuba: { x: 1600, y: 220 },
@@ -86,16 +79,56 @@ const WORLD_NODE_POSITIONS: Partial<Record<Island, Position>> = {
   kumate: { x: 1455, y: 770 },
   sixis: { x: 1965, y: 1020 },
   tequila_wolf: { x: 1425, y: 1795 },
-  reverse_mountain: { x: 2145, y: 235 },
-  whisky_peak: { x: 2355, y: 235 },
-  little_garden: { x: 2565, y: 235 },
-  drum: { x: 2775, y: 235 },
-  alabasta: { x: 2985, y: 235 },
-  wano: { x: 3195, y: 235 },
 };
 
-const islands = [...new Set(WORLD_EDGES.flatMap((edge) => [edge.from, edge.to]))] as Array<Island>;
-const islandNodes = islands.map((id, index) => ({
+const islands = [...new Set(WORLD_EDGES.flatMap((edge) => [edge.from, edge.to]))];
+
+// La Grand Line (Paradise) est une chaîne linéaire, ordonnée d'ouest en est, posée en
+// rangée sous East Blue. East Blue = tout le reste, placé par l'algo de layout MDS.
+const GRAND_LINE_ISLANDS: Array<Island> = ['reverse_mountain', 'whisky_peak', 'little_garden', 'drum', 'alabasta', 'wano'];
+
+const eastBlueIslands = islands.filter((id) => !GRAND_LINE_ISLANDS.includes(id));
+
+// East Blue : positions calculées par MDS (stress majorization) — la distance à l'écran
+// reflète la durée de trajet en buckets. Cf. computeWorldPositions plus bas.
+const worldPositions = computeWorldPositions();
+
+const REGION_PADDING = 300;
+const REGION_GAP = 220;
+const GRAND_LINE_SPACING = 500;
+const GRAND_LINE_START_OFFSET_X = 600;
+
+const eastBlueBox = boundingBox(eastBlueIslands.map((id) => worldPositions.get(id) ?? { x: 0, y: 0 }));
+const EAST_BLUE_REGION = {
+  id: 'region:east_blue',
+  label: 'East Blue',
+  position: {
+    x: (eastBlueBox.minX + eastBlueBox.maxX) / 2,
+    y: (eastBlueBox.minY + eastBlueBox.maxY) / 2,
+  },
+  width: eastBlueBox.maxX - eastBlueBox.minX + REGION_PADDING * 2,
+  height: eastBlueBox.maxY - eastBlueBox.minY + REGION_PADDING * 2,
+};
+
+// Grand Line : rangée horizontale (ouest → est) sous East Blue. reverse_mountain (l'entrée)
+// part en bas-à-gauche de Loguetown (pole_star), point de sortie d'East Blue.
+const poleStarX = worldPositions.get('pole_star')?.x ?? EAST_BLUE_REGION.position.x;
+const loguetownX = poleStarX - GRAND_LINE_START_OFFSET_X;
+const grandLineY = EAST_BLUE_REGION.position.y + EAST_BLUE_REGION.height / 2 + REGION_GAP + REGION_PADDING;
+GRAND_LINE_ISLANDS.forEach((id, i) => {
+  worldPositions.set(id, { x: loguetownX + i * GRAND_LINE_SPACING, y: grandLineY });
+});
+
+const grandLineBox = boundingBox(GRAND_LINE_ISLANDS.map((id) => worldPositions.get(id) ?? { x: 0, y: 0 }));
+const GRAND_LINE_REGION = {
+  id: 'region:grand_line_paradise',
+  label: 'Grand Line Paradise',
+  position: { x: (grandLineBox.minX + grandLineBox.maxX) / 2, y: grandLineY },
+  width: grandLineBox.maxX - grandLineBox.minX + REGION_PADDING * 2,
+  height: REGION_PADDING * 2,
+};
+
+const islandNodes = islands.map((id) => ({
   data: {
     id,
     type: 'island',
@@ -103,23 +136,21 @@ const islandNodes = islands.map((id, index) => ({
     color: ISLAND_NODE_COLORS[id] ?? WORLD_COLORS.neutral,
     subZones: SUB_ZONES_BY_ISLAND[id].map((subZone) => SUB_ZONE_LABELS[subZone]),
   },
-  position: WORLD_NODE_POSITIONS[id] ?? fallbackPosition(index),
+  position: worldPositions.get(id) ?? { x: 0, y: 0 },
 }));
 
-const regionNodes = [
-  {
-    data: {
-      id: EAST_BLUE_REGION.id,
-      type: 'region',
-      label: EAST_BLUE_REGION.label,
-      width: EAST_BLUE_REGION.width,
-      height: EAST_BLUE_REGION.height,
-    },
-    position: EAST_BLUE_REGION.position,
-    selectable: false,
-    grabbable: false,
+const regionNodes = [EAST_BLUE_REGION, GRAND_LINE_REGION].map((region) => ({
+  data: {
+    id: region.id,
+    type: 'region',
+    label: region.label,
+    width: region.width,
+    height: region.height,
   },
-];
+  position: region.position,
+  selectable: false,
+  grabbable: false,
+}));
 
 const legendNodes = [
   {
@@ -225,26 +256,9 @@ const html = `<!doctype html>
     <div id="cy"></div>
     <script>${cytoscapeJs}</script>
     <script>
-      const POSITION_STORAGE_KEY = 'one-piece-world:positions';
       const inspector = document.getElementById('inspector');
       const nodes = ${JSON.stringify([...regionNodes, ...legendNodes, ...islandNodes])};
       const edges = ${JSON.stringify(edges)};
-
-      function loadSavedPositions() {
-        try {
-          return JSON.parse(localStorage.getItem(POSITION_STORAGE_KEY) ?? '{}');
-        } catch {
-          return {};
-        }
-      }
-
-      const savedPositions = loadSavedPositions();
-      for (const node of nodes) {
-        const savedPosition = savedPositions[node.data.id];
-        if (node.data.type === 'island' && savedPosition) {
-          node.position = savedPosition;
-        }
-      }
 
       const cy = cytoscape({
         container: document.getElementById('cy'),
@@ -410,25 +424,6 @@ const html = `<!doctype html>
         ],
       });
 
-      function saveIslandPositions() {
-        const positions = {};
-        cy.nodes('node[type = "island"]').forEach((node) => {
-          const position = node.position();
-          positions[node.id()] = {
-            x: Math.round(position.x),
-            y: Math.round(position.y),
-          };
-        });
-
-        try {
-          localStorage.setItem(POSITION_STORAGE_KEY, JSON.stringify(positions));
-        } catch {
-          // Le graph reste utilisable même si le navigateur bloque le stockage local.
-        }
-      }
-
-      cy.on('dragfree', 'node[type = "island"]', saveIslandPositions);
-
       cy.on('tap', 'node[type = "island"]', (event) => {
         const node = event.target;
         const subZones = node.data('subZones');
@@ -449,4 +444,180 @@ function fallbackPosition(index: number): Position {
     x: 1180 + (index % 6) * 190,
     y: 760 + Math.floor(index / 6) * 130,
   };
+}
+
+function computeWorldPositions(): Map<Island, Position> {
+  const positions = new Map<Island, Position>();
+  islands.forEach((id, index) => {
+    positions.set(id, WORLD_NODE_POSITIONS[id] ?? fallbackPosition(index));
+  });
+
+  const seed = eastBlueIslands.map((id) => positions.get(id) ?? { x: 0, y: 0 });
+  const bucketDist = computeBucketDistances(eastBlueIslands);
+  const connected = bucketDist.every((row) => row.every((d) => Number.isFinite(d)));
+  if (!connected) {
+    console.warn('Graphe East Blue non connexe : positions manuelles conservées.');
+    return positions;
+  }
+
+  const laidOut = separateOverlaps(smacofLayout(bucketDist, seed));
+  eastBlueIslands.forEach((id, i) => {
+    const p = laidOut[i];
+    if (p) positions.set(id, p);
+  });
+  return positions;
+}
+
+function boundingBox(points: Array<Position>): { minX: number; maxX: number; minY: number; maxY: number } {
+  const xs = points.map((p) => p.x);
+  const ys = points.map((p) => p.y);
+  return {
+    minX: Math.min(...xs),
+    maxX: Math.max(...xs),
+    minY: Math.min(...ys),
+    maxY: Math.max(...ys),
+  };
+}
+
+// Floyd-Warshall sur le sous-graphe East Blue, arêtes pondérées par baseDurationBuckets.
+function computeBucketDistances(subset: Array<Island>): Array<Array<number>> {
+  const n = subset.length;
+  const idx = new Map(subset.map((id, i) => [id, i] as const));
+  const dist: Array<Array<number>> = Array.from({ length: n }, (_, i) => Array.from({ length: n }, (_, j) => (i === j ? 0 : Infinity)));
+  for (const edge of WORLD_EDGES) {
+    const i = idx.get(edge.from);
+    const j = idx.get(edge.to);
+    if (i === undefined || j === undefined) continue;
+    const rowI = dist[i];
+    const rowJ = dist[j];
+    if (!rowI || !rowJ) continue;
+    rowI[j] = Math.min(rowI[j] ?? Infinity, edge.baseDurationBuckets);
+    rowJ[i] = Math.min(rowJ[i] ?? Infinity, edge.baseDurationBuckets);
+  }
+  for (let k = 0; k < n; k++) {
+    const rowK = dist[k];
+    if (!rowK) continue;
+    for (let i = 0; i < n; i++) {
+      const rowI = dist[i];
+      const ik = rowI?.[k];
+      if (!rowI || ik === undefined) continue;
+      for (let j = 0; j < n; j++) {
+        const kj = rowK[j];
+        const ij = rowI[j];
+        if (kj === undefined || ij === undefined) continue;
+        if (ik + kj < ij) rowI[j] = ik + kj;
+      }
+    }
+  }
+  return dist;
+}
+
+// MDS par stress majorization (SMACOF) : déplace les points pour que les distances
+// euclidiennes collent aux distances-cibles. La graine est la carte manuelle, ce qui
+// garde l'orientation/cadrage habituels — seul l'espacement est recalculé.
+function smacofLayout(bucketDist: Array<Array<number>>, seed: Array<Position>): Array<Position> {
+  const iterations = 400;
+  const n = seed.length;
+
+  // Échelle : on cale la somme des distances-cibles sur celle de la graine pour
+  // conserver la taille globale de la carte actuelle.
+  let seedSum = 0;
+  let bucketSum = 0;
+  for (let i = 0; i < n; i++) {
+    const pi = seed[i];
+    const row = bucketDist[i];
+    if (!pi || !row) continue;
+    for (let j = i + 1; j < n; j++) {
+      const pj = seed[j];
+      const target = row[j];
+      if (!pj || target === undefined) continue;
+      seedSum += Math.hypot(pi.x - pj.x, pi.y - pj.y);
+      bucketSum += target;
+    }
+  }
+  const scale = bucketSum > 0 ? seedSum / bucketSum : 1;
+
+  let pos = seed.map((p) => ({ x: p.x, y: p.y }));
+  for (let iter = 0; iter < iterations; iter++) {
+    const next: Array<Position> = Array.from({ length: n }, () => ({ x: 0, y: 0 }));
+    for (let i = 0; i < n; i++) {
+      const pi = pos[i];
+      const ni = next[i];
+      const row = bucketDist[i];
+      if (!pi || !ni || !row) continue;
+      // Transformation de Guttman : x_i ← (1/n) Σ_j B_ij x_j
+      let bii = 0;
+      for (let j = 0; j < n; j++) {
+        if (j === i) continue;
+        const pj = pos[j];
+        const target = row[j];
+        if (!pj || target === undefined) continue;
+        const d = Math.hypot(pi.x - pj.x, pi.y - pj.y);
+        const bij = d > 1e-9 ? -(target * scale) / d : 0;
+        bii -= bij;
+        ni.x += bij * pj.x;
+        ni.y += bij * pj.y;
+      }
+      ni.x = (ni.x + bii * pi.x) / n;
+      ni.y = (ni.y + bii * pi.y) / n;
+    }
+    pos = next;
+  }
+
+  // SMACOF recentre le nuage sur l'origine : on le retranslate sur le centroïde de la graine.
+  const seedCentroid = centroid(seed);
+  const posCentroid = centroid(pos);
+  for (const p of pos) {
+    p.x += seedCentroid.x - posCentroid.x;
+    p.y += seedCentroid.y - posCentroid.y;
+  }
+  return pos;
+}
+
+function centroid(points: Array<Position>): Position {
+  let x = 0;
+  let y = 0;
+  for (const p of points) {
+    x += p.x;
+    y += p.y;
+  }
+  return { x: x / points.length, y: y / points.length };
+}
+
+// Passe anti-chevauchement : le MDS colle les îles quasi-jumelles (mêmes voisins) au même
+// endroit. On écarte itérativement toute paire plus proche que minDistance — les poussées
+// sont symétriques, donc le centroïde (et donc le cadrage) ne bougent pas.
+function separateOverlaps(points: Array<Position>): Array<Position> {
+  const minDistance = 160;
+  const iterations = 200;
+  const pos = points.map((p) => ({ x: p.x, y: p.y }));
+  const n = pos.length;
+  for (let iter = 0; iter < iterations; iter++) {
+    let moved = false;
+    for (let i = 0; i < n; i++) {
+      for (let j = i + 1; j < n; j++) {
+        const pi = pos[i];
+        const pj = pos[j];
+        if (!pi || !pj) continue;
+        let dx = pj.x - pi.x;
+        let dy = pj.y - pi.y;
+        let d = Math.hypot(dx, dy);
+        if (d >= minDistance) continue;
+        // Deux îles pile au même point : on les sépare sur un axe déterministe.
+        if (d < 1e-9) {
+          dx = 1;
+          dy = 0;
+          d = 1;
+        }
+        const push = (minDistance - d) / 2;
+        pi.x -= (dx / d) * push;
+        pi.y -= (dy / d) * push;
+        pj.x += (dx / d) * push;
+        pj.y += (dy / d) * push;
+        moved = true;
+      }
+    }
+    if (!moved) break;
+  }
+  return pos;
 }
