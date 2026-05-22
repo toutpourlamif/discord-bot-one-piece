@@ -1,24 +1,3 @@
-ALTER TYPE "public"."sub_zone" ADD VALUE 'satsuruzo_port' BEFORE 'foosha_village';--> statement-breakpoint
-ALTER TYPE "public"."sub_zone" ADD VALUE 'goa_kingdom' BEFORE 'foosha_village';--> statement-breakpoint
-ALTER TYPE "public"."sub_zone" ADD VALUE 'goat_coast' BEFORE 'loguetown_square';--> statement-breakpoint
-ALTER TYPE "public"."sub_zone" ADD VALUE 'shells_town' BEFORE 'loguetown_square';--> statement-breakpoint
-ALTER TYPE "public"."sub_zone" ADD VALUE 'shimotsuki_village' BEFORE 'loguetown_square';--> statement-breakpoint
-ALTER TYPE "public"."sub_zone" ADD VALUE 'mirrorball_coast' BEFORE 'loguetown_square';--> statement-breakpoint
-ALTER TYPE "public"."sub_zone" ADD VALUE 'nagagutsu_port' BEFORE 'loguetown_square';--> statement-breakpoint
-ALTER TYPE "public"."sub_zone" ADD VALUE 'orange_town' BEFORE 'loguetown_square';--> statement-breakpoint
-ALTER TYPE "public"."sub_zone" ADD VALUE 'rare_animal_coast' BEFORE 'loguetown_square';--> statement-breakpoint
-ALTER TYPE "public"."sub_zone" ADD VALUE 'kumate_coast' BEFORE 'loguetown_square';--> statement-breakpoint
-ALTER TYPE "public"."sub_zone" ADD VALUE 'sixis_coast' BEFORE 'loguetown_square';--> statement-breakpoint
-ALTER TYPE "public"."sub_zone" ADD VALUE 'tequila_wolf_coast' BEFORE 'loguetown_square';--> statement-breakpoint
-ALTER TYPE "public"."sub_zone" ADD VALUE 'syrup_village' BEFORE 'loguetown_square';--> statement-breakpoint
-ALTER TYPE "public"."sub_zone" ADD VALUE 'baratie_deck' BEFORE 'loguetown_square';--> statement-breakpoint
-ALTER TYPE "public"."sub_zone" ADD VALUE 'arlong_park' BEFORE 'loguetown_square';--> statement-breakpoint
-ALTER TYPE "public"."sub_zone" ADD VALUE 'cocoyasi_village' BEFORE 'loguetown_square';--> statement-breakpoint
-ALTER TYPE "public"."sub_zone" ADD VALUE 'gosa_town' BEFORE 'loguetown_square';--> statement-breakpoint
-ALTER TYPE "public"."sub_zone" ADD VALUE 'branch_16' BEFORE 'loguetown_square';--> statement-breakpoint
-ALTER TYPE "public"."sub_zone" ADD VALUE 'cozia_port' BEFORE 'loguetown_square';--> statement-breakpoint
-ALTER TYPE "public"."sub_zone" ADD VALUE 'frauce_port' BEFORE 'loguetown_square';--> statement-breakpoint
-ALTER TYPE "public"."sub_zone" ADD VALUE 'oykot_port' BEFORE 'loguetown_square';--> statement-breakpoint
 ALTER TABLE "player" ALTER COLUMN "current_zone" SET DATA TYPE text;--> statement-breakpoint
 ALTER TABLE "player" ALTER COLUMN "current_zone" SET DEFAULT 'dawn'::text;--> statement-breakpoint
 ALTER TABLE "player" ALTER COLUMN "travel_target_zone" SET DATA TYPE text;--> statement-breakpoint
@@ -27,4 +6,9 @@ CREATE TYPE "public"."zone" AS ENUM('satsuruzo', 'dawn', 'goat', 'yotsuba', 'mir
 ALTER TABLE "player" ALTER COLUMN "current_zone" SET DEFAULT 'dawn'::"public"."zone";--> statement-breakpoint
 ALTER TABLE "player" ALTER COLUMN "current_zone" SET DATA TYPE "public"."zone" USING "current_zone"::"public"."zone";--> statement-breakpoint
 ALTER TABLE "player" ALTER COLUMN "travel_target_zone" SET DATA TYPE "public"."zone" USING "travel_target_zone"::"public"."zone";--> statement-breakpoint
-ALTER TABLE "player" ALTER COLUMN "current_sub_zone" SET DEFAULT 'goa_kingdom';
+ALTER TABLE "player" ALTER COLUMN "current_sub_zone" SET DATA TYPE text;--> statement-breakpoint
+ALTER TABLE "player" ALTER COLUMN "current_sub_zone" SET DEFAULT 'goa_kingdom'::text;--> statement-breakpoint
+DROP TYPE "public"."sub_zone";--> statement-breakpoint
+CREATE TYPE "public"."sub_zone" AS ENUM('satsuruzo_port', 'goa_kingdom', 'foosha_village', 'goat_coast', 'shells_town', 'shimotsuki_village', 'mirrorball_coast', 'nagagutsu_port', 'orange_town', 'rare_animal_coast', 'kumate_coast', 'sixis_coast', 'tequila_wolf_coast', 'syrup_village', 'baratie_deck', 'arlong_park', 'cocoyasi_village', 'gosa_town', 'branch_16', 'cozia_port', 'frauce_port', 'oykot_port', 'loguetown_square', 'reverse_mountain_twin_cape', 'whisky_peak_town', 'little_garden_jungle', 'drum_village', 'alabasta_nanohana', 'wano_flower_capital');--> statement-breakpoint
+ALTER TABLE "player" ALTER COLUMN "current_sub_zone" SET DEFAULT 'goa_kingdom'::"public"."sub_zone";--> statement-breakpoint
+ALTER TABLE "player" ALTER COLUMN "current_sub_zone" SET DATA TYPE "public"."sub_zone" USING "current_sub_zone"::"public"."sub_zone";
