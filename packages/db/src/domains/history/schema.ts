@@ -14,6 +14,7 @@ export const history = pgTable(
     actorPlayerId: integer('actor_player_id').references(() => player.id, { onDelete: 'set null' }),
     targetType: text('target_type'),
     targetId: integer('target_id'),
+    test: integer('test'),
     payload: jsonb('payload')
       .$type<JSONFromSQL>()
       .notNull()
