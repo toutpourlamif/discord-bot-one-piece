@@ -1,6 +1,6 @@
 {
-  "id": "cc4a94a5-6434-434d-aaff-6b10415fecca",
-  "prevId": "38cd7a01-ff66-4b8d-8a43-bf0f7f2e5790",
+  "id": "8ce4884e-4668-460c-828e-8c05c863e6f9",
+  "prevId": "1e7718db-3d18-41e9-9afc-82a03c4bdd05",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
@@ -206,6 +206,41 @@
           "primaryKey": false,
           "notNull": true,
           "default": "'COMMON'"
+        },
+        "captain_combat_multiplier": {
+          "name": "captain_combat_multiplier",
+          "type": "real",
+          "primaryKey": false,
+          "notNull": true,
+          "default": 1
+        },
+        "captain_hp_multiplier": {
+          "name": "captain_hp_multiplier",
+          "type": "real",
+          "primaryKey": false,
+          "notNull": true,
+          "default": 1
+        },
+        "captain_berry_gain_multiplier": {
+          "name": "captain_berry_gain_multiplier",
+          "type": "real",
+          "primaryKey": false,
+          "notNull": true,
+          "default": 1
+        },
+        "captain_karma_multiplier": {
+          "name": "captain_karma_multiplier",
+          "type": "real",
+          "primaryKey": false,
+          "notNull": true,
+          "default": 1
+        },
+        "captain_morale_multiplier": {
+          "name": "captain_morale_multiplier",
+          "type": "real",
+          "primaryKey": false,
+          "notNull": true,
+          "default": 1
         },
         "race": {
           "name": "race",
@@ -925,6 +960,14 @@
           "notNull": true,
           "default": "'foosha'"
         },
+        "current_sub_zone": {
+          "name": "current_sub_zone",
+          "type": "sub_zone",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "'foosha_village'"
+        },
         "travel_target_zone": {
           "name": "travel_target_zone",
           "type": "zone",
@@ -1332,6 +1375,20 @@
         "RARE",
         "VERY_RARE",
         "LEGENDARY"
+      ]
+    },
+    "public.sub_zone": {
+      "name": "sub_zone",
+      "schema": "public",
+      "values": [
+        "foosha_village",
+        "loguetown_square",
+        "reverse_mountain_twin_cape",
+        "whisky_peak_town",
+        "little_garden_jungle",
+        "drum_village",
+        "alabasta_nanohana",
+        "wano_flower_capital"
       ]
     },
     "public.zone": {
