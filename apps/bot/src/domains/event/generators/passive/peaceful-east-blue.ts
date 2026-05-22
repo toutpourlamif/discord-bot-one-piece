@@ -1,7 +1,7 @@
 import { buildOpEmbed } from '../../../../discord/utils/build-op-embed.js';
 import { buildAssetUrl } from '../../../../shared/build-asset-url.js';
 import type { PassiveGenerator } from '../../types.js';
-import { computeNothing } from '../utils.js';
+import { noCompute } from '../utils.js';
 
 export const peacefulEastBlue: PassiveGenerator = {
   key: 'peacefulEastBlue',
@@ -11,12 +11,12 @@ export const peacefulEastBlue: PassiveGenerator = {
   oneTime: true,
   probability: () => 0.05,
 
-  compute: computeNothing,
+  compute: noCompute,
 
   render: () => {
     return (
       buildOpEmbed('info')
-        .setTitle("East Blue s'étire sous un ciel paisible. L'équipage profite du paysage.")
+        .setTitle("East Blue s'est étendue sous un ciel paisible — votre équipage en a profité.")
         //TODO Changer le gif de golmon
         .setImage(buildAssetUrl('events/passive/peaceful-east-blue.webp'))
     );

@@ -1,10 +1,11 @@
 import { type Transaction } from '@one-piece/db';
 
-import { InternalError } from '../../../discord/errors.js';
 import * as economyRepository from '../../economy/repository.js';
+import { changeSubZone } from '../../navigation/services/change-sub-zone.js';
 import { completeTravel } from '../../navigation/services/complete-travel.js';
 import { startTravel } from '../../navigation/services/start-travel.js';
 import { updateTravelTarget } from '../../navigation/services/update-travel-target.js';
+import { getEntrySubZone } from '../../navigation/utils/index.js';
 import type { GeneratorContext } from '../types.js';
 
 import type { EventEffect } from './types.js';
@@ -30,19 +31,18 @@ export async function applyEffects(effects: Array<EventEffect>, ctx: GeneratorCo
         ctx.player.travelStartedBucket = ctx.bucketId;
         ctx.player.travelEtaBucket = effect.etaBucket;
         ctx.player.currentZone = effect.edge.via;
+        ctx.player.currentSubZone = null;
         ctx.zone = effect.edge.via;
+        ctx.subZone = null;
         break;
-      case 'completeTravel': {
-        if (ctx.player.travelTargetZone === null) {
-          throw new InternalError('completeTravel effect emitted but player.travelTargetZone is null.');
-        }
-        const drifted = effect.drifted ?? false;
-        const intendedTo = effect.intendedTo ?? ctx.player.travelTargetZone;
+      case 'completeTravel':
         await completeTravel({
           playerId: ctx.player.id,
+          fromSea: effect.fromSea,
+          startedBucket: effect.startedBucket,
           arrivedZone: effect.arrivedZone,
-          drifted,
-          intendedTo,
+          drifted: effect.drifted,
+          intendedTo: effect.intendedTo,
           bucketId: ctx.bucketId,
           tx,
         });
@@ -50,9 +50,10 @@ export async function applyEffects(effects: Array<EventEffect>, ctx: GeneratorCo
         ctx.player.travelStartedBucket = null;
         ctx.player.travelEtaBucket = null;
         ctx.player.currentZone = effect.arrivedZone;
+        ctx.player.currentSubZone = getEntrySubZone(effect.arrivedZone);
         ctx.zone = effect.arrivedZone;
+        ctx.subZone = getEntrySubZone(effect.arrivedZone);
         break;
-      }
       case 'updateTravelTarget':
         await updateTravelTarget({
           playerId: ctx.player.id,
@@ -67,6 +68,11 @@ export async function applyEffects(effects: Array<EventEffect>, ctx: GeneratorCo
           ctx.player.currentZone = effect.newEdge.via;
           ctx.zone = effect.newEdge.via;
         }
+        break;
+      case 'changeSubZone':
+        await changeSubZone({ playerId: ctx.player.id, targetSubZone: effect.targetSubZone, bucketId: ctx.bucketId, tx });
+        ctx.player.currentSubZone = effect.targetSubZone;
+        ctx.subZone = effect.targetSubZone;
         break;
     }
   }

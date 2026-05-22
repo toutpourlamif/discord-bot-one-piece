@@ -14,7 +14,7 @@ export type Command = {
   name: CommandName;
   handler: (ctx: CommandContext) => Promise<void>;
   requiresSynchronization?: boolean;
-  requiresAdmin?: boolean;
+  requiresOpAdmin?: boolean;
 };
 
 export type ButtonHandler = {

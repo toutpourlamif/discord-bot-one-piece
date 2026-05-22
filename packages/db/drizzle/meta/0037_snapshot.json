@@ -1,5 +1,5 @@
 {
-  "id": "4f9d0871-645a-4e1f-8145-ef1245661c59",
+  "id": "14f30e68-bee5-40d4-847e-27592249db53",
   "prevId": "cb7035cd-765a-45f4-9f71-640999b8ad54",
   "version": "7",
   "dialect": "postgresql",
@@ -598,7 +598,8 @@
         },
         "language": {
           "name": "language",
-          "type": "varchar(8)",
+          "type": "language",
+          "typeSchema": "public",
           "primaryKey": false,
           "notNull": true,
           "default": "'fr'"
@@ -676,12 +677,6 @@
         },
         "target_id": {
           "name": "target_id",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "test": {
-          "name": "test",
           "type": "integer",
           "primaryKey": false,
           "notNull": false
@@ -1300,6 +1295,14 @@
         "GAZ",
         "CAOUTCHOUC",
         "POISON"
+      ]
+    },
+    "public.language": {
+      "name": "language",
+      "schema": "public",
+      "values": [
+        "fr",
+        "en"
       ]
     },
     "public.rarity": {
