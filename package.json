@@ -18,6 +18,7 @@
     "db:m:a": "pnpm db:migrations:apply",
     "db:migrations:generate": "pnpm -F @one-piece/db generate",
     "db:migrations:apply": "pnpm -F @one-piece/db migrate",
+    "db:regen": "pnpm -F @one-piece/db regen",
     "db:seed": "pnpm -F @one-piece/db seed",
     "db:s": "pnpm db:studio",
     "db:studio": "pnpm -F @one-piece/db studio",
