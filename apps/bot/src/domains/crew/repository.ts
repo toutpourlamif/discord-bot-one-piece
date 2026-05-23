@@ -1,7 +1,9 @@
-import { characterTemplate, characterInstance, db, type CharacterInstance, type DbOrTransaction, type CaptainBoosts } from '@one-piece/db';
+import { characterInstance, db, type CharacterInstance, type DbOrTransaction } from '@one-piece/db';
 import { and, eq, isNotNull } from 'drizzle-orm';
 
 import { InternalError } from '../../discord/errors.js';
+import { getCharactersByPlayerId } from '../character/repository.js';
+import type { CharacterRow } from '../character/types.js';
 export async function findCharacterInstanceById(instanceId: number): Promise<CharacterInstance | undefined> {
   const [row] = await db.select().from(characterInstance).where(eq(characterInstance.id, instanceId)).limit(1);
   return row;
@@ -27,19 +29,7 @@ export async function setCaptain(playerId: number, instanceId: number, client: D
   return result.count > 0;
 }
 
-export async function findCaptainByPlayerId(playerId: number): Promise<CaptainBoosts | undefined> {
-  const [row] = await db
-    .select({
-      captainCombatMultiplier: characterTemplate.captainCombatMultiplier,
-      captainHpMultiplier: characterTemplate.captainHpMultiplier,
-      captainBerryGainMultiplier: characterTemplate.captainBerryGainMultiplier,
-      captainKarmaMultiplier: characterTemplate.captainKarmaMultiplier,
-      captainMoraleMultiplier: characterTemplate.captainMoraleMultiplier,
-    })
-    .from(characterInstance)
-    .innerJoin(characterTemplate, eq(characterInstance.templateId, characterTemplate.id))
-    .where(and(eq(characterInstance.playerId, playerId), eq(characterInstance.isCaptain, true)))
-    .limit(1);
-
-  return row;
+export async function findCaptainByPlayerId(playerId: number): Promise<CharacterRow | undefined> {
+  const characters = await getCharactersByPlayerId(playerId);
+  return characters.find((character) => character.isCaptain);
 }

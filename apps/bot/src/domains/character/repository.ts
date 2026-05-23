@@ -26,6 +26,11 @@ export async function getCharactersByPlayerId(playerId: number, client: DbOrTran
       devilFruit: getTableColumns(devilFruitTemplate),
       joinedCrewAt: characterInstance.joinedCrewAt,
       isCaptain: characterInstance.isCaptain,
+      captainCombatMultiplier: characterTemplate.captainCombatMultiplier,
+      captainHpMultiplier: characterTemplate.captainHpMultiplier,
+      captainBerryGainMultiplier: characterTemplate.captainBerryGainMultiplier,
+      captainKarmaMultiplier: characterTemplate.captainKarmaMultiplier,
+      captainMoraleMultiplier: characterTemplate.captainMoraleMultiplier,
     })
     .from(characterInstance)
     .innerJoin(characterTemplate, eq(characterInstance.templateId, characterTemplate.id))
@@ -62,6 +67,11 @@ export async function createCharacterInstance(playerId: number, templateId: numb
       devilFruit: getTableColumns(devilFruitTemplate),
       joinedCrewAt: characterInstance.joinedCrewAt,
       isCaptain: characterInstance.isCaptain,
+      captainCombatMultiplier: characterTemplate.captainCombatMultiplier,
+      captainHpMultiplier: characterTemplate.captainHpMultiplier,
+      captainBerryGainMultiplier: characterTemplate.captainBerryGainMultiplier,
+      captainKarmaMultiplier: characterTemplate.captainKarmaMultiplier,
+      captainMoraleMultiplier: characterTemplate.captainMoraleMultiplier,
     })
     .from(characterInstance)
     .innerJoin(characterTemplate, eq(characterInstance.templateId, characterTemplate.id))
