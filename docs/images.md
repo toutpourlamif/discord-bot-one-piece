@@ -62,7 +62,7 @@ L'URL est construite **au runtime**, pas au build. Avantage : on peut pointer ve
 | `info.webp` animé   | `setImage` animé                                    | **600-800px**, 12-15 fps, 2-3s         | **WebP animé** (PAS GIF) | < 800 KB    |
 | `icon.webp`         | Composition par le moteur graphique (inventaire, …) | **128×128**, fond transparent          | WebP                     | 3-10 KB     |
 
-| `avatar.webp` a décidé..
+| `avatar.webp` - à décider
 
 **Toujours du WebP**, jamais de GIF. Un GIF animé pèse typiquement 5 à 15× plus qu'un WebP animé équivalent, et Discord rend les deux pareil.
 
