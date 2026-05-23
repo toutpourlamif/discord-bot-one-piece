@@ -1,4 +1,4 @@
-import { db, type Player } from '@one-piece/db';
+import { db, type DbOrTransaction, type Player } from '@one-piece/db';
 
 import { NotFoundError, ValidationError } from '../../discord/errors.js';
 import { sanitizeName } from '../../shared/sanitize-name.js';
@@ -11,8 +11,8 @@ import { MAX_CREW_NAME_LENGTH, MIN_CREW_NAME_LENGTH } from './constants.js';
 import * as crewRepository from './repository.js';
 import { isInCrewFilter } from './utils/is-in-crew-filter.js';
 
-export async function getCrewByPlayerId(playerId: number): Promise<Array<CharacterRow>> {
-  const characters = await characterRepository.getCharactersByPlayerId(playerId);
+export async function getCrewByPlayerId(playerId: number, client: DbOrTransaction = db): Promise<Array<CharacterRow>> {
+  const characters = await characterRepository.getCharactersByPlayerId(playerId, client);
   const crew = characters.filter(isInCrewFilter);
 
   if (crew.length === 0) {
