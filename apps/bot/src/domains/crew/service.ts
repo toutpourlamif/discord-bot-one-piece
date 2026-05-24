@@ -3,6 +3,7 @@ import { db, type Player } from '@one-piece/db';
 import { NotFoundError, ValidationError } from '../../discord/errors.js';
 import { sanitizeName } from '../../shared/sanitize-name.js';
 import * as characterRepository from '../character/repository.js';
+import { getCharactersByPlayerId } from '../character/repository.js';
 import type { CharacterRow } from '../character/types.js';
 import * as historyRepository from '../history/index.js';
 import * as playerRepository from '../player/repository.js';
@@ -57,4 +58,9 @@ export async function renameCrew(playerId: number, rawName: string): Promise<Pla
   }
 
   return playerRepository.updateCrewName(playerId, sanitizedName);
+}
+
+export async function findCaptainByPlayerId(playerId: number): Promise<CharacterRow | undefined> {
+  const characters = await getCharactersByPlayerId(playerId);
+  return characters.find((character) => character.isCaptain);
 }

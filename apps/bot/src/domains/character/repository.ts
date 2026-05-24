@@ -14,6 +14,7 @@ import { InternalError, NotFoundError } from '../../discord/errors.js';
 
 import type { CharacterRow, CharacterTemplateWithDevilFruit } from './types.js';
 
+//TODO: regarder si on peut select all ou pas
 export async function getCharactersByPlayerId(playerId: number, client: DbOrTransaction = db): Promise<Array<CharacterRow>> {
   return client
     .select({
