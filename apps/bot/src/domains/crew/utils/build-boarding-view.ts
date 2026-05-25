@@ -35,7 +35,9 @@ export function buildBoardingView(player: Player, ship: Ship, characters: Array<
 
   if (isCrewPage) {
     const crewCapacity = getCrewCapacity(ship);
-    embed.setTitle(`${getCrewDisplayName(player)} (${crew.length}/${crewCapacity})`).setDescription(crew.map(formatLine).join('\n'));
+    embed
+      .setTitle(`Composition de ${getCrewDisplayName(player)} (${crew.length}/${crewCapacity})`)
+      .setDescription(crew.map(formatLine).join('\n'));
     const captain = crew.find((character) => character.isCaptain);
     if (captain?.imageUrl) {
       embed.setThumbnail(buildAssetUrl(captain.imageUrl));
