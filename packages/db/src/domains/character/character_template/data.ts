@@ -21,6 +21,7 @@ export const CHARACTER_TEMPLATES_DATA: Array<CharacterTemplateSeed> = [
     imageUrl: null,
     devilFruitName: 'Gomu Gomu no Mi',
     description: 'Homme ÉLastique qui adore le bezelouf',
+    captainCombatMultiplier: 1.3,
   },
   {
     name: 'Roronoa Zoro',
