@@ -6,6 +6,7 @@ const EAST_BLUE_TRAVEL_DURATION = inBuckets('2h');
 export const EAST_BLUE_EDGES: Array<Edge> = [
   { from: 'satsuruzo', to: 'yotsuba', via: 'sea_east_blue', baseDurationBuckets: EAST_BLUE_TRAVEL_DURATION },
   { from: 'satsuruzo', to: 'nagagutsu', via: 'sea_east_blue', baseDurationBuckets: EAST_BLUE_TRAVEL_DURATION },
+  { from: 'dawn', to: 'satsuruzo', via: 'sea_east_blue', baseDurationBuckets: EAST_BLUE_TRAVEL_DURATION },
   { from: 'dawn', to: 'goat', via: 'sea_east_blue', baseDurationBuckets: inBuckets('1h') },
   { from: 'dawn', to: 'yotsuba', via: 'sea_east_blue', baseDurationBuckets: EAST_BLUE_TRAVEL_DURATION },
   { from: 'goat', to: 'sixis', via: 'sea_east_blue', baseDurationBuckets: inBuckets('1h') },
@@ -16,6 +17,7 @@ export const EAST_BLUE_EDGES: Array<Edge> = [
   { from: 'yotsuba', to: 'organ', via: 'sea_east_blue', baseDurationBuckets: EAST_BLUE_TRAVEL_DURATION },
   { from: 'yotsuba', to: 'nagagutsu', via: 'sea_east_blue', baseDurationBuckets: EAST_BLUE_TRAVEL_DURATION },
   { from: 'yotsuba', to: 'kumate', via: 'sea_east_blue', baseDurationBuckets: EAST_BLUE_TRAVEL_DURATION },
+  { from: 'yotsuba', to: 'mirrorball', via: 'sea_east_blue', baseDurationBuckets: EAST_BLUE_TRAVEL_DURATION },
   { from: 'mirrorball', to: 'nagagutsu', via: 'sea_east_blue', baseDurationBuckets: inBuckets('1h') },
   { from: 'mirrorball', to: 'organ', via: 'sea_east_blue', baseDurationBuckets: EAST_BLUE_TRAVEL_DURATION },
   { from: 'mirrorball', to: 'gecko', via: 'sea_east_blue', baseDurationBuckets: EAST_BLUE_TRAVEL_DURATION },
