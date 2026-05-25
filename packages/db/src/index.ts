@@ -31,6 +31,7 @@ export {
   type CharacterCombatStats,
   type CharacterInstance,
   type CharacterTemplate,
+  type CaptainBoosts,
 } from './domains/character/index.js';
 export { SHIP_MODULE_KEYS, SHIP_MODULE_LEVEL_COLUMNS, type Ship, type ShipModuleKey } from './domains/ship/index.js';
 export { type ResourceName, type ResourceTemplate } from './domains/resource/index.js';

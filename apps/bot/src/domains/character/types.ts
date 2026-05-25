@@ -12,6 +12,11 @@ export type CharacterRow = {
   devilFruit: DevilFruitTemplate | null;
   joinedCrewAt: Date | null;
   isCaptain: boolean;
+  captainCombatMultiplier: number;
+  captainHpMultiplier: number;
+  captainBerryGainMultiplier: number;
+  captainKarmaMultiplier: number;
+  captainMoraleMultiplier: number;
 };
 
 export type CharacterTemplateWithDevilFruit = CharacterTemplate & {
