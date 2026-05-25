@@ -12,7 +12,6 @@ import {
   clampPage,
   splitIntoPages,
 } from '../../../discord/utils/index.js';
-import { buildAssetUrl } from '../../../shared/build-asset-url.js';
 import type { CharacterRow } from '../../character/types.js';
 import { getCharacterInstanceName } from '../../character/utils/index.js';
 import { BOARDING_BUTTON_NAME, DISEMBARK_BUTTON_NAME, EMBARK_BUTTON_NAME } from '../constants.js';
@@ -27,26 +26,15 @@ export function buildBoardingView(player: Player, ship: Ship, characters: Array<
   const reserve = characters.filter((c) => c.joinedCrewAt === null);
 
   const reservePages = splitIntoPages(reserve.map(formatLine));
-  const pageCount = 1 + reservePages.length;
+  const pageCount = reservePages.length;
   const currentPage = clampPage(page, pageCount);
 
   const embed = buildOpEmbed();
-  const isCrewPage = currentPage === 0;
+  const crewCapacity = getCrewCapacity(ship);
+  embed.setTitle(`Composition de ${getCrewDisplayName(player)} (${crew.length}/${crewCapacity})`);
 
-  if (isCrewPage) {
-    const crewCapacity = getCrewCapacity(ship);
-    embed
-      .setTitle(`Composition de ${getCrewDisplayName(player)} (${crew.length}/${crewCapacity})`)
-      .setDescription(crew.map(formatLine).join('\n'));
-    const captain = crew.find((character) => character.isCaptain);
-    if (captain?.imageUrl) {
-      embed.setThumbnail(buildAssetUrl(captain.imageUrl));
-    }
-  } else {
-    const reservePage = reservePages[currentPage - 1];
-    if (!reservePage) throw new Error(`Page de réserve introuvable: ${currentPage}/${reservePages.length}`);
-    embed.setTitle(`Réserve de ${player.name}`).setDescription(reservePage);
-  }
+  const reservePage = reservePages[currentPage] ?? '';
+  embed.setDescription(`**À bord**\n${crew.map(formatLine).join('\n')}\n\n**Réserve**\n${reservePage}`);
 
   if (pageCount > 1) {
     embed.setFooter({ text: `Page ${currentPage + 1}/${pageCount}` });
