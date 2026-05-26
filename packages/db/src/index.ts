@@ -24,7 +24,7 @@ export {
   type Zone,
   WORLD_EDGES,
 } from './domains/navigation/index.js';
-export { type Player } from './domains/player/index.js';
+export { ONBOARDING_STEP_IDS, type OnboardingStepId, type Player } from './domains/player/index.js';
 export { type DevilFruitTemplate } from './domains/devil_fruit/index.js';
 export {
   PLAYER_AS_CHARACTER_TEMPLATE_NAME,
