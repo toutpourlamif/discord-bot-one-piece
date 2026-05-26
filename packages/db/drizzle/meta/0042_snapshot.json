@@ -1,5 +1,5 @@
 {
-  "id": "719eaa16-a994-4008-8529-96641cbc7d2d",
+  "id": "ba807b47-0dd7-48ba-8159-89e4f50c97cb",
   "prevId": "8ce4884e-4668-460c-828e-8c05c863e6f9",
   "version": "7",
   "dialect": "postgresql",
@@ -986,14 +986,6 @@
           "type": "integer",
           "primaryKey": false,
           "notNull": false
-        },
-        "onboarding_step": {
-          "name": "onboarding_step",
-          "type": "onboarding_step",
-          "typeSchema": "public",
-          "primaryKey": false,
-          "notNull": false,
-          "default": "'intro'"
         }
       },
       "indexes": {},
@@ -1364,7 +1356,10 @@
         "SABLE",
         "GAZ",
         "CAOUTCHOUC",
-        "POISON"
+        "POISON",
+        "ACIER",
+        "ELECTRIQUE",
+        "PSY"
       ]
     },
     "public.language": {
@@ -1373,15 +1368,6 @@
       "values": [
         "fr",
         "en"
-      ]
-    },
-    "public.onboarding_step": {
-      "name": "onboarding_step",
-      "schema": "public",
-      "values": [
-        "intro",
-        "fish-mission",
-        "after-fish"
       ]
     },
     "public.rarity": {

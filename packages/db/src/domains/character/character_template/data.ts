@@ -3,7 +3,12 @@ import { FAKE_STRAW_HATS_DATA } from './data/fake-straw-hats.js';
 import { STRAW_HATS_DATA } from './data/straw-hats.js';
 import type { CharacterTemplateSeed } from './data/types.js';
 
+function buildCharacterImageUrl(crew: string, slug: string): string {
+  return `characters/${crew}/${slug}/info.webp`;
+}
+
 // TODO: supprimer/modifier en prod
+// TODO: donner aux personnages leurs types de base quand la colonne types existera sur character_template
 export const CHARACTER_TEMPLATES_DATA: Array<CharacterTemplateSeed> = [
   {
     name: PLAYER_AS_CHARACTER_TEMPLATE_NAME,
@@ -21,6 +26,7 @@ export const CHARACTER_TEMPLATES_DATA: Array<CharacterTemplateSeed> = [
     imageUrl: null,
     devilFruitName: 'Gomu Gomu no Mi',
     description: 'Homme ÉLastique qui adore le bezelouf',
+    captainCombatMultiplier: 1.3,
   },
   {
     name: 'Roronoa Zoro',
@@ -84,6 +90,47 @@ export const CHARACTER_TEMPLATES_DATA: Array<CharacterTemplateSeed> = [
     rarity: 'COMMON',
     imageUrl: null,
     description: "Chef pirate de l'East Blue, dangereux surtout par son arsenal.",
+  },
+  {
+    name: 'Portgas D. Ace',
+    hp: 22,
+    combat: 26,
+    race: 'HUMAN',
+    rarity: 'LEGENDARY',
+    skills: ['CONQUERORS_HAKI'],
+    imageUrl: buildCharacterImageUrl('whitebeard-pirates', 'portgas-d-ace'),
+    devilFruitName: 'Mera Mera no Mi',
+    description: 'Commandant de la 2e flotte de Barbe Blanche, frère de Luffy et fils du légendaire Gol D. Roger.',
+  },
+  {
+    name: 'Marshall D. Teach',
+    hp: 30,
+    combat: 28,
+    race: 'HUMAN',
+    rarity: 'LEGENDARY',
+    imageUrl: buildCharacterImageUrl('blackbeard-pirates', 'marshall-d-teach'),
+    devilFruitName: 'Yami Yami no Mi',
+    description: 'Capitaine des Pirates de Barbe Noire, seul homme connu à porter deux fruits du démon.',
+  },
+  {
+    name: 'Eustass Kid',
+    hp: 24,
+    combat: 26,
+    race: 'HUMAN',
+    rarity: 'LEGENDARY',
+    skills: ['CONQUERORS_HAKI'],
+    imageUrl: buildCharacterImageUrl('kid-pirates', 'eustass-kid'),
+    devilFruitName: 'Jiki Jiki no Mi',
+    description: 'Capitaine des Pirates de Kid, Supernova brutal qui plie le métal à sa volonté.',
+  },
+  {
+    name: 'Basil Hawkins',
+    hp: 18,
+    combat: 23,
+    race: 'HUMAN',
+    rarity: 'VERY_RARE',
+    imageUrl: buildCharacterImageUrl('beasts-pirates', 'basil-hawkins'),
+    description: "Le Mage, Supernova énigmatique qui lit l'avenir dans ses cartes de tarot.",
   },
   ...FAKE_STRAW_HATS_DATA,
   ...STRAW_HATS_DATA,
