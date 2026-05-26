@@ -7,6 +7,6 @@ export { player } from './domains/player/index.js';
 export { ship } from './domains/ship/index.js';
 export { resourceInstance, resourceTemplate } from './domains/resource/index.js';
 export { characterInstance, characterTemplate } from './domains/character/index.js';
-export { rarity } from './shared/rarity.js';
+export { rarityEnum } from './shared/rarity-enum.js';
 export { characterRaceEnum } from './domains/character/enum.js';
 export { characterSkillEnum } from './domains/character/skill-enum.js';

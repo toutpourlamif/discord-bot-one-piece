@@ -2,7 +2,7 @@ import { sql } from 'drizzle-orm';
 import { index, integer, pgTable, serial, text, varchar } from 'drizzle-orm/pg-core';
 
 import { imageUrl, timestamps } from '../../../shared/helpers.js';
-import { rarity } from '../../../shared/rarity.js';
+import { rarityColumn } from '../../../shared/rarity-enum.js';
 import { devilFruitType } from '../enum.js';
 
 export const devilFruitTemplate = pgTable(
@@ -16,8 +16,7 @@ export const devilFruitTemplate = pgTable(
       .default(sql`'{}'::devil_fruit_type[]`),
     hpBonus: integer('hp_bonus').notNull().default(0),
     combatBonus: integer('combat_bonus').notNull().default(0),
-    // TODO: Refaire les raretés en D/C/B/A/S/SS/X
-    rarity: rarity('rarity').notNull().default('COMMON'),
+    ...rarityColumn(),
     ...imageUrl(),
     description: text('description'),
     ...timestamps(),
