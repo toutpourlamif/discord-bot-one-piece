@@ -8,6 +8,6 @@ export { ship } from './domains/ship/index.js';
 export { resourceInstance, resourceTemplate } from './domains/resource/index.js';
 export { characterInstance, characterTemplate } from './domains/character/index.js';
 export { rarity } from './shared/rarity.js';
-export { pokemonType } from './shared/type-enum.js';
+export { pokemonType } from './shared/pokemon-type-enum.js';
 export { characterRaceEnum } from './domains/character/enum.js';
 export { characterSkillEnum } from './domains/character/skill-enum.js';

@@ -2,8 +2,8 @@ import { sql } from 'drizzle-orm';
 import { index, integer, pgTable, serial, text, varchar } from 'drizzle-orm/pg-core';
 
 import { imageUrl, timestamps } from '../../../shared/helpers.js';
+import { pokemonType } from '../../../shared/pokemon-type-enum.js';
 import { rarity } from '../../../shared/rarity.js';
-import { pokemonType } from '../../../shared/type-enum.js';
 
 export const devilFruitTemplate = pgTable(
   'devil_fruit_template',

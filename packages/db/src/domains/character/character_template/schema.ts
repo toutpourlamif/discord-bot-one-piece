@@ -2,8 +2,8 @@ import { sql } from 'drizzle-orm';
 import { index, integer, pgTable, serial, varchar, text, real } from 'drizzle-orm/pg-core';
 
 import { imageUrl, timestamps } from '../../../shared/helpers.js';
+import { pokemonType } from '../../../shared/pokemon-type-enum.js';
 import { rarity } from '../../../shared/rarity.js';
-import { pokemonType } from '../../../shared/type-enum.js';
 import { devilFruitTemplate } from '../../devil_fruit/devil_fruit_template/schema.js';
 import { characterRaceEnum } from '../enum.js';
 import { characterSkillEnum } from '../skill-enum.js';
