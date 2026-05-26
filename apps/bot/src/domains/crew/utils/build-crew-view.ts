@@ -4,9 +4,9 @@ import type { View } from '../../../discord/types.js';
 import { buildMenuButtons, buildOpEmbed, buildPaginationButtons, clampPage, splitIntoPages } from '../../../discord/utils/index.js';
 import { buildAssetUrl } from '../../../shared/build-asset-url.js';
 import type { CharacterRow } from '../../character/types.js';
-import { getCharacterInstanceName } from '../../character/utils/index.js';
 import { CREW_BUTTON_NAME } from '../constants.js';
 
+import { formatLine } from './captain-prefix.js';
 import { getCrewCapacity } from './get-crew-capacity.js';
 import { getCrewDisplayName } from './get-crew-display-name.js';
 
@@ -44,9 +44,4 @@ export function buildCrewView(player: Player, ship: Ship, characters: Array<Char
     embeds: [embed],
     components: [...buildPaginationButtons(CREW_BUTTON_NAME, ownerDiscordId, player.id, currentPage, pageCount), menuRow],
   };
-}
-
-function formatLine(row: CharacterRow): string {
-  const prefix = row.isCaptain ? '⭐ ' : '';
-  return `${prefix}${getCharacterInstanceName(row)}`;
 }

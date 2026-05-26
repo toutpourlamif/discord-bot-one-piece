@@ -16,13 +16,15 @@ import type { CharacterRow } from '../../character/types.js';
 import { getCharacterInstanceName } from '../../character/utils/index.js';
 import { BOARDING_BUTTON_NAME, DISEMBARK_BUTTON_NAME, EMBARK_BUTTON_NAME } from '../constants.js';
 
+import { formatLine } from './captain-prefix.js';
 import { getCrewCapacity } from './get-crew-capacity.js';
 import { getCrewDisplayName } from './get-crew-display-name.js';
+import { isInCrewFilter } from './is-in-crew-filter.js';
 
 export function buildBoardingView(player: Player, ship: Ship, characters: Array<CharacterRow>, page: number, ownerDiscordId: string): View {
   const menuRow = buildMenuButtons(BOARDING_BUTTON_NAME, ownerDiscordId, player.id);
 
-  const crew = characters.filter((c) => c.joinedCrewAt !== null);
+  const crew = characters.filter(isInCrewFilter);
   const reserve = characters.filter((c) => c.joinedCrewAt === null);
 
   const reservePages = splitIntoPages(reserve.map(formatLine));
@@ -34,7 +36,8 @@ export function buildBoardingView(player: Player, ship: Ship, characters: Array<
   embed.setTitle(`Composition de ${getCrewDisplayName(player)} (${crew.length}/${crewCapacity})`);
 
   const reservePage = reservePages[currentPage] ?? '';
-  embed.setDescription(`**À bord**\n${crew.map(formatLine).join('\n')}\n\n**Réserve**\n${reservePage}`);
+  const crewLines = crew.map(formatLine).join('\n');
+  embed.setDescription(`**À bord**\n${crewLines}\n\n**Réserve**\n${reservePage}`);
 
   if (pageCount > 1) {
     embed.setFooter({ text: `Page ${currentPage + 1}/${pageCount}` });
@@ -49,11 +52,6 @@ export function buildBoardingView(player: Player, ship: Ship, characters: Array<
       menuRow,
     ],
   };
-}
-
-function formatLine(row: CharacterRow): string {
-  const prefix = row.isCaptain ? '⭐ ' : '';
-  return `${prefix}${getCharacterInstanceName(row)}`;
 }
 
 function buildEmbarkButtonRows(crew: Array<CharacterRow>, page: number): Array<ActionRowBuilder<ButtonBuilder>> {
