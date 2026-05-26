@@ -9,11 +9,12 @@ import { CREW_BUTTON_NAME } from '../constants.js';
 import { formatLine } from './captain-prefix.js';
 import { getCrewCapacity } from './get-crew-capacity.js';
 import { getCrewDisplayName } from './get-crew-display-name.js';
+import { isInCrewFilter } from './is-in-crew-filter.js';
 
 export function buildCrewView(player: Player, ship: Ship, characters: Array<CharacterRow>, page: number, ownerDiscordId: string): View {
   const menuRow = buildMenuButtons(CREW_BUTTON_NAME, ownerDiscordId, player.id);
 
-  const crew = characters.filter((c) => c.joinedCrewAt !== null);
+  const crew = characters.filter(isInCrewFilter);
   const reserve = characters.filter((c) => c.joinedCrewAt === null);
 
   const reservePages = splitIntoPages(reserve.map(formatLine));
