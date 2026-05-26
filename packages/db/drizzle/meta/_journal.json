@@ -302,6 +302,13 @@
       "when": 1779482822985,
       "tag": "0042_add_new_characters_and_type",
       "breakpoints": true
+    },
+    {
+      "idx": 43,
+      "version": "7",
+      "when": 1779789663720,
+      "tag": "0043_pokemon_type",
+      "breakpoints": true
     }
   ]
 }

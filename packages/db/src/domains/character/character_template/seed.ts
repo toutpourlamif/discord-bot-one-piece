@@ -38,6 +38,7 @@ export async function seedCharacter(db: Db) {
         combat: sql`excluded.combat`,
         imageUrl: sql`excluded.image_url`,
         devilFruitTemplateId: sql`excluded.devil_fruit_template_id`,
+        types: sql`excluded.types`,
       },
     });
   logSeed(characterTemplate, rows);

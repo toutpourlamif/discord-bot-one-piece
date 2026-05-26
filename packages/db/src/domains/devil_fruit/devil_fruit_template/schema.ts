@@ -3,17 +3,17 @@ import { index, integer, pgTable, serial, text, varchar } from 'drizzle-orm/pg-c
 
 import { imageUrl, timestamps } from '../../../shared/helpers.js';
 import { rarity } from '../../../shared/rarity.js';
-import { devilFruitType } from '../enum.js';
+import { pokemonType } from '../../../shared/type-enum.js';
 
 export const devilFruitTemplate = pgTable(
   'devil_fruit_template',
   {
     id: serial('id').primaryKey(),
     name: varchar('name', { length: 128 }).notNull().unique(),
-    types: devilFruitType('types')
+    types: pokemonType('types')
       .array()
       .notNull()
-      .default(sql`'{}'::devil_fruit_type[]`),
+      .default(sql`'{}'::pokemon_type[]`),
     hpBonus: integer('hp_bonus').notNull().default(0),
     combatBonus: integer('combat_bonus').notNull().default(0),
     // TODO: Refaire les raretés en D/C/B/A/S/SS/X
