@@ -16,6 +16,7 @@ export const devilFruitTemplate = pgTable(
       .default(sql`'{}'::devil_fruit_type[]`),
     hpBonus: integer('hp_bonus').notNull().default(0),
     combatBonus: integer('combat_bonus').notNull().default(0),
+    // TODO: Refaire les raretés en D/C/B/A/S/SS/X
     rarity: rarity('rarity').notNull().default('COMMON'),
     ...imageUrl(),
     description: text('description'),

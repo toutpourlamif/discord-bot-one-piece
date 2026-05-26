@@ -58,3 +58,8 @@ export async function renameCrew(playerId: number, rawName: string): Promise<Pla
 
   return playerRepository.updateCrewName(playerId, sanitizedName);
 }
+
+export async function findCaptainByPlayerId(playerId: number): Promise<CharacterRow | undefined> {
+  const characters = await characterRepository.getCharactersByPlayerId(playerId);
+  return characters.find((character) => character.isCaptain);
+}

@@ -39,3 +39,7 @@ export const characterTemplate = pgTable(
 export type CharacterTemplateInsert = typeof characterTemplate.$inferInsert;
 export type CharacterTemplate = typeof characterTemplate.$inferSelect;
 export type CharacterCombatStats = Pick<CharacterTemplate, 'combat' | 'hp'>;
+export type CaptainBoosts = Pick<
+  CharacterTemplate,
+  'captainHpMultiplier' | 'captainCombatMultiplier' | 'captainBerryGainMultiplier' | 'captainKarmaMultiplier' | 'captainMoraleMultiplier'
+>;

@@ -295,6 +295,13 @@
       "when": 1779379014221,
       "tag": "0041_add_skills",
       "breakpoints": true
+    },
+    {
+      "idx": 42,
+      "version": "7",
+      "when": 1779482822985,
+      "tag": "0042_add_new_characters_and_type",
+      "breakpoints": true
     }
   ]
 }
