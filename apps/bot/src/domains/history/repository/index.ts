@@ -6,4 +6,3 @@ export { findLastForPlayer } from './find-last-for-player.js';
 export { findLastForPlayerByKindPrefix } from './find-last-for-player-by-kind-prefix.js';
 export { loadAllForPlayer } from './load-all-for-player.js';
 export { writeEventResolution } from './write-event-resolution.js';
-export type { AppendHistoryArgs, HistoryEntryId, HistoryLog, WriteEventResolutionArgs } from './types.js';

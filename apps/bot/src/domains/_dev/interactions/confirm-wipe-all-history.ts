@@ -12,7 +12,8 @@ async function handle(interaction: ButtonInteraction, args: Array<string>): Prom
   assertInteractorIsTheOwner(interaction, ownerDiscordId);
 
   const targetPlayerId = parseIntegerArg(args[1]);
-  const kind = args[2];
+  const rawKind = args[2];
+  const kind = rawKind === '' ? undefined : rawKind;
 
   await interaction.deferUpdate();
 

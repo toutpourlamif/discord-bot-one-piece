@@ -1,3 +1,4 @@
+import type { Player } from '@one-piece/db';
 import { ActionRowBuilder, ButtonBuilder, ButtonStyle } from 'discord.js';
 
 import { ValidationError } from '../../../discord/errors.js';
@@ -25,9 +26,7 @@ export const wipeHistoryCommand: Command = {
   },
 };
 
-type WipeHistoryTargetPlayer = Awaited<ReturnType<typeof resolveTargetPlayer>>['targetPlayer'];
-
-async function handleAllMode(ctx: CommandContext, targetPlayer: WipeHistoryTargetPlayer, kind: string | undefined): Promise<void> {
+async function handleAllMode(ctx: CommandContext, targetPlayer: Player, kind: string | undefined): Promise<void> {
   await ctx.message.reply({
     embeds: [
       buildOpEmbed('warn')
@@ -38,7 +37,7 @@ async function handleAllMode(ctx: CommandContext, targetPlayer: WipeHistoryTarge
       new ActionRowBuilder<ButtonBuilder>().addComponents(
         buildCancelButton(ctx.message.author.id),
         new ButtonBuilder()
-          .setCustomId(buildCustomId(CONFIRM_WIPE_ALL_HISTORY_BUTTON_NAME, ctx.message.author.id, targetPlayer.id, ...(kind ? [kind] : [])))
+          .setCustomId(buildCustomId(CONFIRM_WIPE_ALL_HISTORY_BUTTON_NAME, ctx.message.author.id, targetPlayer.id, kind ?? ''))
           .setLabel('Confirmer')
           .setStyle(ButtonStyle.Danger),
       ),
@@ -46,7 +45,7 @@ async function handleAllMode(ctx: CommandContext, targetPlayer: WipeHistoryTarge
   });
 }
 
-async function handleLastMode(ctx: CommandContext, targetPlayer: WipeHistoryTargetPlayer, kind: string | undefined): Promise<void> {
+async function handleLastMode(ctx: CommandContext, targetPlayer: Player, kind: string | undefined): Promise<void> {
   const result = await historyService.wipeHistoryForPlayer({
     targetPlayerId: targetPlayer.id,
     actorPlayerId: ctx.player.id,
