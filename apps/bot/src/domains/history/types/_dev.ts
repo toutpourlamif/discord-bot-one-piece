@@ -1,4 +1,4 @@
-export type DevHistoryResetLog = {
+export type DevWipeHistoryLog = {
   type: 'dev.historyReset';
   payload: {
     wipedCount: number;
@@ -8,4 +8,4 @@ export type DevHistoryResetLog = {
   };
 };
 
-export type DevLog = DevHistoryResetLog;
+export type DevLog = DevWipeHistoryLog;

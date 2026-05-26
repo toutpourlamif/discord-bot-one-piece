@@ -1,4 +1,4 @@
-import type { WipeHistoryMode } from '../../history/index.js';
+import type { WipeHistoryMode } from '../../history/services/index.js';
 
 type WipeHistoryResult = {
   wipedHistoryCount: number;

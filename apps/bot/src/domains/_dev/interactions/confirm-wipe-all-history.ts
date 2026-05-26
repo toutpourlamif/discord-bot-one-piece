@@ -1,11 +1,10 @@
 import type { ButtonInteraction } from 'discord.js';
 
-import { NotFoundError } from '../../../discord/errors.js';
 import type { ButtonHandler } from '../../../discord/types.js';
 import { assertInteractorIsTheOwner, buildOpEmbed, parseIntegerArg, parseOwnerDiscordId } from '../../../discord/utils/index.js';
-import { wipeHistoryForPlayer } from '../../history/index.js';
+import * as historyService from '../../history/services/index.js';
 import * as playerRepository from '../../player/repository.js';
-import { CONFIRM_WIPE_HISTORY_BUTTON_NAME } from '../constants.js';
+import { CONFIRM_WIPE_ALL_HISTORY_BUTTON_NAME } from '../constants.js';
 import { buildWipeHistoryMessage } from '../utils/build-wipe-history-message.js';
 
 async function handle(interaction: ButtonInteraction, args: Array<string>): Promise<void> {
@@ -17,11 +16,9 @@ async function handle(interaction: ButtonInteraction, args: Array<string>): Prom
 
   await interaction.deferUpdate();
 
-  const actorPlayer = await playerRepository.findByDiscordId(ownerDiscordId);
-  if (!actorPlayer) throw new NotFoundError('Joueur introuvable.');
-
+  const actorPlayer = await playerRepository.findByDiscordIdOrThrow(ownerDiscordId);
   const targetPlayer = await playerRepository.findByIdOrThrow(targetPlayerId);
-  const result = await wipeHistoryForPlayer({
+  const result = await historyService.wipeHistoryForPlayer({
     targetPlayerId: targetPlayer.id,
     actorPlayerId: actorPlayer.id,
     kind,
@@ -34,7 +31,7 @@ async function handle(interaction: ButtonInteraction, args: Array<string>): Prom
   });
 }
 
-export const confirmWipeHistoryButtonHandler: ButtonHandler = {
-  name: CONFIRM_WIPE_HISTORY_BUTTON_NAME,
+export const confirmWipeAllHistoryButtonHandler: ButtonHandler = {
+  name: CONFIRM_WIPE_ALL_HISTORY_BUTTON_NAME,
   handle,
 };

@@ -1,8 +1,7 @@
 import { db, type DbOrTransaction } from '@one-piece/db';
 
-import * as eventRepository from '../event/repository.js';
-
-import * as historyRepository from './repository.js';
+import * as eventRepository from '../../event/repository.js';
+import * as historyRepository from '../repository/index.js';
 
 export type WipeHistoryMode = 'last' | 'all';
 
@@ -13,7 +12,7 @@ type WipeHistoryForPlayerArgs = {
   mode: WipeHistoryMode;
 };
 
-type WipeHistoryForPlayerResult = {
+export type WipeHistoryForPlayerResult = {
   wipedHistoryCount: number;
   remainingPendingEventCount: number;
 };
@@ -26,9 +25,11 @@ export async function wipeHistoryForPlayer({
 }: WipeHistoryForPlayerArgs): Promise<WipeHistoryForPlayerResult> {
   return db.transaction(async (tx) => {
     const wipedHistoryCount = await wipeHistoryRows({ targetPlayerId, kind, mode }, tx);
-    const remainingPendingEventCount = kind
-      ? await eventRepository.countPendingEventsForPlayerByEventKey(targetPlayerId, kind, tx)
-      : await eventRepository.countPendingEventsForPlayer(targetPlayerId, tx);
+    const remainingPendingEventCount = await eventRepository.countPendingEventsForPlayer({
+      playerId: targetPlayerId,
+      eventKey: kind,
+      client: tx,
+    });
 
     await historyRepository.appendHistory({
       type: 'dev.historyReset',
@@ -48,12 +49,17 @@ type WipeHistoryRowsArgs = {
   mode: WipeHistoryMode;
 };
 
-async function wipeHistoryRows({ targetPlayerId, kind, mode }: WipeHistoryRowsArgs, tx: DbOrTransaction): Promise<number> {
-  if (mode === 'all') {
-    if (!kind) return historyRepository.deleteAllForPlayer(targetPlayerId, tx);
-    return historyRepository.deleteAllForPlayerByKindPrefix(targetPlayerId, kind, buildKindPrefixPattern(kind), tx);
-  }
+async function wipeHistoryRows(args: WipeHistoryRowsArgs, tx: DbOrTransaction): Promise<number> {
+  if (args.mode === 'all') return wipeAllHistoryRows(args, tx);
+  return wipeLastHistoryRow(args, tx);
+}
 
+async function wipeAllHistoryRows({ targetPlayerId, kind }: WipeHistoryRowsArgs, tx: DbOrTransaction): Promise<number> {
+  if (!kind) return historyRepository.deleteAllForPlayer(targetPlayerId, tx);
+  return historyRepository.deleteAllForPlayerByKindPrefix(targetPlayerId, kind, buildKindPrefixPattern(kind), tx);
+}
+
+async function wipeLastHistoryRow({ targetPlayerId, kind }: WipeHistoryRowsArgs, tx: DbOrTransaction): Promise<number> {
   const lastEntry = kind
     ? await historyRepository.findLastForPlayerByKindPrefix(targetPlayerId, kind, buildKindPrefixPattern(kind), tx)
     : await historyRepository.findLastForPlayer(targetPlayerId, tx);

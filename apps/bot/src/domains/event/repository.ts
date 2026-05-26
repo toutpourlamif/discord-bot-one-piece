@@ -49,20 +49,18 @@ export async function deleteById(id: bigint, client: DbOrTransaction = db): Prom
   return { deleted: rows.length > 0 };
 }
 
-export async function countPendingEventsForPlayer(playerId: number, client: DbOrTransaction = db): Promise<number> {
-  const [row] = await client.select({ count: count() }).from(eventInstance).where(eq(eventInstance.playerId, playerId));
-  return row?.count ?? 0;
-}
+type CountPendingEventsForPlayerArgs = {
+  playerId: number;
+  eventKey?: string;
+  client?: DbOrTransaction;
+};
 
-export async function countPendingEventsForPlayerByEventKey(
-  playerId: number,
-  eventKey: string,
-  client: DbOrTransaction = db,
-): Promise<number> {
-  const [row] = await client
-    .select({ count: count() })
-    .from(eventInstance)
-    .where(and(eq(eventInstance.playerId, playerId), eq(eventInstance.eventKey, eventKey)));
+export async function countPendingEventsForPlayer({ playerId, eventKey, client = db }: CountPendingEventsForPlayerArgs): Promise<number> {
+  const whereClause = eventKey
+    ? and(eq(eventInstance.playerId, playerId), eq(eventInstance.eventKey, eventKey))
+    : eq(eventInstance.playerId, playerId);
+  const [row] = await client.select({ count: count() }).from(eventInstance).where(whereClause);
+
   return row?.count ?? 0;
 }
 
