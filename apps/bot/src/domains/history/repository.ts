@@ -1,5 +1,5 @@
 import { db, history, type DbOrTransaction, type JSONFromSQL } from '@one-piece/db';
-import { asc, eq, sql } from 'drizzle-orm';
+import { and, asc, desc, eq, sql } from 'drizzle-orm';
 
 import type { HistoryTarget } from './types/common.js';
 import type { Log } from './types/index.js';
@@ -52,8 +52,61 @@ export async function loadAllForPlayer(playerId: number, client: DbOrTransaction
     .orderBy(asc(history.occurredAt));
 }
 
-export async function wipeHistoryForPlayer(playerId: number, client: DbOrTransaction = db): Promise<number> {
+type HistoryEntryId = {
+  id: bigint;
+};
+
+export async function deleteAllForPlayer(playerId: number, client: DbOrTransaction = db): Promise<number> {
   const rows = await client.delete(history).where(eq(history.actorPlayerId, playerId)).returning({ id: history.id });
+  return rows.length;
+}
+
+export async function deleteAllForPlayerByKindPrefix(
+  playerId: number,
+  kind: string,
+  kindPrefixPattern: string,
+  client: DbOrTransaction = db,
+): Promise<number> {
+  const rows = await client
+    .delete(history)
+    .where(
+      and(eq(history.actorPlayerId, playerId), sql`(${history.kind} = ${kind} OR ${history.kind} LIKE ${kindPrefixPattern} ESCAPE '\\')`),
+    )
+    .returning({ id: history.id });
+  return rows.length;
+}
+
+export async function findLastForPlayer(playerId: number, client: DbOrTransaction = db): Promise<HistoryEntryId | null> {
+  const [row] = await client
+    .select({ id: history.id })
+    .from(history)
+    .where(eq(history.actorPlayerId, playerId))
+    .orderBy(desc(history.occurredAt), desc(history.id))
+    .limit(1);
+
+  return row ?? null;
+}
+
+export async function findLastForPlayerByKindPrefix(
+  playerId: number,
+  kind: string,
+  kindPrefixPattern: string,
+  client: DbOrTransaction = db,
+): Promise<HistoryEntryId | null> {
+  const [row] = await client
+    .select({ id: history.id })
+    .from(history)
+    .where(
+      and(eq(history.actorPlayerId, playerId), sql`(${history.kind} = ${kind} OR ${history.kind} LIKE ${kindPrefixPattern} ESCAPE '\\')`),
+    )
+    .orderBy(desc(history.occurredAt), desc(history.id))
+    .limit(1);
+
+  return row ?? null;
+}
+
+export async function deleteById(id: bigint, client: DbOrTransaction = db): Promise<number> {
+  const rows = await client.delete(history).where(eq(history.id, id)).returning({ id: history.id });
   return rows.length;
 }
 

@@ -13,10 +13,10 @@ import { onePieceCommand } from './onepiece.js';
 import { randomCommand } from './random.js';
 import { randomCatCommand } from './randomcat.js';
 import { repeatCommand } from './repeat.js';
-import { resetHistoryCommand } from './reset-history.js';
 import { sellCommand } from './sell.js';
 import { showHistoryCommand } from './show-history.js';
 import { upgradeShipCommand } from './upgrade-ship.js';
+import { wipeHistoryCommand } from './wipe-history.js';
 
 export const devCommands = [
   onePieceCommand,
@@ -37,5 +37,5 @@ export const devCommands = [
   upgradeShipCommand,
   dmCommand,
   showHistoryCommand,
-  resetHistoryCommand,
+  wipeHistoryCommand,
 ].map((cmd) => ({ ...cmd, requiresOpAdmin: true, requiresSynchronization: false }));

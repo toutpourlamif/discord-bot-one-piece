@@ -27,3 +27,9 @@ export function findGeneratorByFuzzyKeyOrThrow(query: string): EventGenerator {
   }
   throw new NotFoundError(`Générateur introuvable pour l'évènement: ${query}`);
 }
+
+export function findGeneratorByHistoryKindOrThrow(kind: string): EventGenerator {
+  const generator = allGenerators.find((gen) => kind === gen.key || kind.startsWith(`${gen.key}.`));
+  if (!generator) throw new NotFoundError(`Générateur introuvable pour le type d'history: ${kind}`);
+  return generator;
+}
