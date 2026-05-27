@@ -3,6 +3,7 @@ import type { Message } from 'discord.js';
 import sample from 'lodash/sample.js';
 
 import { buildOpEmbed } from '../../discord/utils/build-op-embed.js';
+import { pluralize } from '../../shared/pluralize.js';
 
 import { getEndDateOfBucket } from './engine/bucket.js';
 import { synchronizePlayer } from './engine/synchronize-player.js';
@@ -39,10 +40,6 @@ export async function autoSyncBeforeAction(message: Message, player: Player, gui
       ],
     });
   }
-}
-
-function pluralize(value: number, singular: string, plural: string): string {
-  return `${value} ${value === 1 ? singular : plural}`;
 }
 
 function formatElapsedTime(since: Date): string {
