@@ -21,6 +21,7 @@ export type Edge = {
   to: Island;
   via: Sea;
   baseDurationBuckets: number;
+  oneWay?: boolean;
   requirements?: Array<TravelRequirement>;
   modifiers?: Array<TravelModifier>;
 };

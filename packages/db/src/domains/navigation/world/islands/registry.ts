@@ -1,6 +1,6 @@
 import { ALABASTA } from './alabasta.js';
 import { DRUM } from './drum.js';
-import { EAST_BLUE_ISLAND_REGISTRY } from './east-blue/index.js';
+import { EAST_BLUE_ISLAND_REGISTRY } from './east-blue/registry.js';
 import { LITTLE_GARDEN } from './little-garden.js';
 import { REVERSE_MOUNTAIN } from './reverse-mountain.js';
 import { WANO } from './wano.js';
