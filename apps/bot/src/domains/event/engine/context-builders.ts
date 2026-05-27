@@ -4,12 +4,13 @@ import * as characterRepository from '../../character/repository.js';
 import type { CharacterRow } from '../../character/types.js';
 import { isInCrewFilter } from '../../crew/utils/is-in-crew-filter.js';
 import * as historyRepository from '../../history/index.js';
+import type { HistoryLog } from '../../history/index.js';
 import * as resourceRepository from '../../resource/repository.js';
 import type { Inventory } from '../../resource/types.js';
 import * as shipRepository from '../../ship/repository.js';
 import type { GeneratorContext } from '../types.js';
 
-type HistoryRow = Pick<Awaited<ReturnType<typeof historyRepository.loadAllForPlayer>>[number], 'kind' | 'bucketId'>;
+type HistoryRow = Pick<HistoryLog, 'kind' | 'bucketId'>;
 
 export type GeneratorContextData = {
   player: Player;

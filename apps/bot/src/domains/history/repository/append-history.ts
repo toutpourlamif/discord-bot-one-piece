@@ -1,6 +1,15 @@
-import { db, history } from '@one-piece/db';
+import { db, history, type DbOrTransaction } from '@one-piece/db';
 
-import type { AppendHistoryArgs } from './types.js';
+import type { HistoryTarget } from '../types/common.js';
+import type { Log } from '../types/registry.js';
+
+type AppendHistoryArgs = Log & {
+  actorPlayerId?: number;
+  bucketId?: number;
+  target?: HistoryTarget;
+  client?: DbOrTransaction;
+  occurredAt?: Date;
+};
 
 export async function appendHistory({
   type,

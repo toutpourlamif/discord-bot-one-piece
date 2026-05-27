@@ -1,7 +1,11 @@
 import { db, history, type DbOrTransaction } from '@one-piece/db';
 import { sql } from 'drizzle-orm';
 
-import type { WriteEventResolutionArgs } from './types.js';
+type WriteEventResolutionArgs = {
+  actorPlayerId: number;
+  kind: string;
+  bucketId: number;
+};
 
 export async function writeEventResolution(args: WriteEventResolutionArgs, client: DbOrTransaction = db): Promise<void> {
   await client
