@@ -24,9 +24,9 @@ const WORLD_COLORS = {
   neutral: '#c9a37c',
 } as const;
 
-const LEGEND_POSITION: Position = { x: 230, y: 230 };
 const LEGEND_WIDTH = 760;
 const LEGEND_HEIGHT = 330;
+const LEGEND_MARGIN = 100;
 
 const WORLD_COLOR_LEGEND = [
   { color: WORLD_COLORS.blue, label: 'Bleu : Arc Luffy / Zoro' },
@@ -108,6 +108,11 @@ const EAST_BLUE_REGION = {
   },
   width: eastBlueBox.maxX - eastBlueBox.minX + REGION_PADDING * 2,
   height: eastBlueBox.maxY - eastBlueBox.minY + REGION_PADDING * 2,
+};
+
+const LEGEND_POSITION: Position = {
+  x: EAST_BLUE_REGION.position.x - EAST_BLUE_REGION.width / 2 + LEGEND_MARGIN + LEGEND_WIDTH / 2,
+  y: EAST_BLUE_REGION.position.y - EAST_BLUE_REGION.height / 2 + LEGEND_MARGIN + LEGEND_HEIGHT / 2,
 };
 
 // Grand Line : rangée horizontale (ouest → est) sous East Blue. reverse_mountain (l'entrée)
@@ -222,6 +227,7 @@ const edges = WORLD_EDGES.map((edge) => {
       target: edge.to,
       label: lines.join('\n'),
       hasRequirement: requirementLabel.length > 0,
+      oneWay: edge.oneWay === true,
     },
   };
 });
@@ -396,9 +402,11 @@ const html = `<!doctype html>
             selector: 'edge',
             style: {
               'curve-style': 'bezier',
+              'source-arrow-shape': 'triangle',
               'target-arrow-shape': 'triangle',
               'width': 3,
               'line-color': '#e2e8f0',
+              'source-arrow-color': '#e2e8f0',
               'target-arrow-color': '#e2e8f0',
               'label': 'data(label)',
               'font-size': 13,
@@ -414,9 +422,16 @@ const html = `<!doctype html>
             },
           },
           {
+            selector: 'edge[?oneWay]',
+            style: {
+              'source-arrow-shape': 'none',
+            },
+          },
+          {
             selector: 'edge[?hasRequirement]',
             style: {
               'line-color': '#fbbf24',
+              'source-arrow-color': '#fbbf24',
               'target-arrow-color': '#fbbf24',
               'line-style': 'dashed',
             },
