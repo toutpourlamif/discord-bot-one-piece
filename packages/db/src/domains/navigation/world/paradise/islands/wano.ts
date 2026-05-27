@@ -1,5 +1,6 @@
-import { defineIsland } from '../define-island.js';
+import { defineIsland } from '../../utils/define-island.js';
 
+// TODO: Move dans NEW WORLD qunand on implémentera
 export const WANO = defineIsland({
   key: 'wano',
   name: 'Wano',

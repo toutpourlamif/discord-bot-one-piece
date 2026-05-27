@@ -1,4 +1,4 @@
-import { defineIsland } from '../define-island.js';
+import { defineIsland } from '../../utils/define-island.js';
 
 export const POLE_STAR = defineIsland({
   key: 'pole_star',

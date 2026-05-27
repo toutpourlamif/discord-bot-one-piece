@@ -1,4 +1,4 @@
-import { defineIsland } from '../define-island.js';
+import { defineIsland } from '../../utils/define-island.js';
 
 export const TEQUILA_WOLF = defineIsland({
   key: 'tequila_wolf',

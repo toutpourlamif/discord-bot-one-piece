@@ -1,5 +1,5 @@
-import { EAST_BLUE_ISLAND_REGISTRY } from './east-blue/registry.js';
-import { PARADISE_ISLAND_REGISTRY } from './paradise/registry.js';
+import { EAST_BLUE_ISLAND_REGISTRY } from './east-blue/island-registry.js';
+import { PARADISE_ISLAND_REGISTRY } from './paradise/island-registry.js';
 
 const ISLAND_REGISTRY = [...EAST_BLUE_ISLAND_REGISTRY, ...PARADISE_ISLAND_REGISTRY];
 

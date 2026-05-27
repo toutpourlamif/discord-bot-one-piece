@@ -1,5 +1,5 @@
-import type { Edge } from '../edges.js';
-import { inBuckets } from '../in-buckets.js';
+import type { Edge } from '../types.js';
+import { inBuckets } from '../utils/in-buckets.js';
 
 export const PARADISE_EDGES: Array<Edge> = [
   {
