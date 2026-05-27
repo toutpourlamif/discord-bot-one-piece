@@ -1,6 +1,7 @@
 import type { ResourceName } from '../../resource/index.js';
 
 import { inBuckets } from './in-buckets.js';
+import { EAST_BLUE_EDGES } from './islands/east-blue/edges.js';
 import type { Island, Sea } from './zones.js';
 
 type TravelRequirement = { kind: 'item'; name: ResourceName };
@@ -20,13 +21,13 @@ export type Edge = {
   to: Island;
   via: Sea;
   baseDurationBuckets: number;
+  oneWay?: boolean;
   requirements?: Array<TravelRequirement>;
   modifiers?: Array<TravelModifier>;
 };
 
 export const WORLD_EDGES: Array<Edge> = [
-  { from: 'foosha', to: 'loguetown', via: 'sea_east_blue', baseDurationBuckets: 6 },
-  { from: 'loguetown', to: 'reverse_mountain', via: 'sea_east_blue', baseDurationBuckets: 8 },
+  ...EAST_BLUE_EDGES,
   {
     from: 'reverse_mountain',
     to: 'whisky_peak',
