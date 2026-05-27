@@ -9,7 +9,7 @@ export const setBucketCommand: Command = {
     const target = getTargetUser(message);
     const queryArgs = message.mentions.users.first() ? args.slice(1) : args;
     const bucketId = Number(queryArgs[0]);
-    if (!Number.isInteger(bucketId)) {
+    if (!Number.isSafeInteger(bucketId) || bucketId < 0) {
       throw new NotFoundError('Tu dois fournir un entier BucketId.');
     }
     const player = await playerRepository.findByDiscordId(target.id);
