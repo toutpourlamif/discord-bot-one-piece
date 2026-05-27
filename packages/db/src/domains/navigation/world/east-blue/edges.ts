@@ -1,5 +1,5 @@
-import type { Edge } from '../../edges.js';
-import { inBuckets } from '../../in-buckets.js';
+import type { Edge } from '../edges.js';
+import { inBuckets } from '../in-buckets.js';
 
 const EAST_BLUE_TRAVEL_DURATION = inBuckets('2h');
 

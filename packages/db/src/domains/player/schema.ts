@@ -5,7 +5,7 @@ import { MAX_CHARACTER_NAME_LENGTH, MAX_CREW_NAME_LENGTH } from '../../shared/co
 import { timestamps } from '../../shared/helpers.js';
 import { guild } from '../guild/schema.js';
 import { subZoneEnum } from '../navigation/sub-zone-enum.js';
-import { ISLAND_ENTRY_SUB_ZONE } from '../navigation/world/islands/registry.js';
+import { ISLAND_ENTRY_SUB_ZONE } from '../navigation/world/registry.js';
 import type { Island } from '../navigation/world/zones.js';
 import { zoneEnum } from '../navigation/zone-enum.js';
 

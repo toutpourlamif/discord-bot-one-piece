@@ -1,5 +1,5 @@
-import { ISLANDS, type Island } from './islands/registry.js';
-import { SEAS, type Sea } from './seas/registry.js';
+import { ISLANDS, type Island } from './registry.js';
+import { SEAS, type Sea } from './seas.js';
 
 export const ZONES = [...ISLANDS, ...SEAS] as const;
 

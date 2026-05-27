@@ -10,5 +10,5 @@ export {
   SUB_ZONES_BY_ISLAND,
   type Island,
   type SubZone,
-} from './world/islands/registry.js';
+} from './world/registry.js';
 export { type Edge, type TravelModifier, WORLD_EDGES } from './world/edges.js';
