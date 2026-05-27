@@ -15,7 +15,7 @@ export const setPrefixCommand: Command = {
   async handler({ message, args, guild }) {
     assertGuildMemberIsAdmin(message.member);
 
-    const prefix = parseGuildPrefixArg(args);
+    const prefix = parseGuildPrefixArg(args, guild.prefix);
 
     const embed = buildOpEmbed('warn')
       .setTitle('Changer le préfixe ?')
@@ -33,9 +33,9 @@ export const setPrefixCommand: Command = {
   },
 };
 
-function parseGuildPrefixArg(args: Array<string>): string {
+function parseGuildPrefixArg(args: Array<string>, currentPrefix: string): string {
   if (args.length !== 1) {
-    throw new ValidationError('Donne exactement un mot. Ex: !setprefix $');
+    throw new ValidationError(`Donne exactement un mot. Ex: ${currentPrefix}setprefix $`);
   }
 
   const prefix = args[0]!;

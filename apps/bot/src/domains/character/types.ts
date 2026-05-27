@@ -9,11 +9,16 @@ export type CharacterRow = {
   imageUrl: string | null;
   hp: number;
   combat: number;
+  devilFruit: DevilFruitTemplate | null;
   joinedCrewAt: Date | null;
   isCaptain: boolean;
+  captainCombatMultiplier: number;
+  captainHpMultiplier: number;
+  captainBerryGainMultiplier: number;
+  captainKarmaMultiplier: number;
+  captainMoraleMultiplier: number;
 };
 
-export type CharacterTemplateInfo = CharacterTemplate & {
-  devilFruitName: string | null;
-  devilFruitTypes: DevilFruitTemplate['types'] | null;
+export type CharacterTemplateWithDevilFruit = CharacterTemplate & {
+  devilFruit: DevilFruitTemplate | null;
 };

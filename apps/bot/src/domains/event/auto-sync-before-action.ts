@@ -1,4 +1,4 @@
-import type { Player } from '@one-piece/db';
+import type { Player, Guild } from '@one-piece/db';
 import type { Message } from 'discord.js';
 import sample from 'lodash/sample.js';
 
@@ -20,7 +20,7 @@ const LONG_AWAY_PHRASES = [
   "depuis un vieux récit rapporté par l'équipage",
 ];
 
-export async function autoSyncBeforeAction(message: Message, player: Player): Promise<void> {
+export async function autoSyncBeforeAction(message: Message, player: Player, guild: Guild): Promise<void> {
   const result = await synchronizePlayer(player.id);
 
   if (result.status === 'blocked_on_interactive') {
@@ -35,8 +35,7 @@ export async function autoSyncBeforeAction(message: Message, player: Player): Pr
     await message.reply({
       embeds: [
         buildOpEmbed('info').setDescription(
-          // TODO: remplacer par le préfixe de la guild
-          `📜 Votre équipage a vécu ${eventCountText} ${elapsed}. Tapez \`!recap\` pour les revivre.`,
+          `📜 Votre équipage a vécu ${eventCountText} ${elapsed}. Tapez \`${guild.prefix}recap\` pour les revivre.`,
         ),
       ],
     });

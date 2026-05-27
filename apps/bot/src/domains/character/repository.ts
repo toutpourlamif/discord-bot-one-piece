@@ -12,8 +12,9 @@ import { and, asc, desc, eq, getTableColumns, ilike, ne, or, sql } from 'drizzle
 
 import { InternalError, NotFoundError } from '../../discord/errors.js';
 
-import type { CharacterRow, CharacterTemplateInfo } from './types.js';
+import type { CharacterRow, CharacterTemplateWithDevilFruit } from './types.js';
 
+//TODO: regarder si on peut select all ou pas
 export async function getCharactersByPlayerId(playerId: number, client: DbOrTransaction = db): Promise<Array<CharacterRow>> {
   return client
     .select({
@@ -23,11 +24,24 @@ export async function getCharactersByPlayerId(playerId: number, client: DbOrTran
       imageUrl: characterTemplate.imageUrl,
       hp: characterTemplate.hp,
       combat: characterTemplate.combat,
+      devilFruit: getTableColumns(devilFruitTemplate),
       joinedCrewAt: characterInstance.joinedCrewAt,
       isCaptain: characterInstance.isCaptain,
+      captainCombatMultiplier: characterTemplate.captainCombatMultiplier,
+      captainHpMultiplier: characterTemplate.captainHpMultiplier,
+      captainBerryGainMultiplier: characterTemplate.captainBerryGainMultiplier,
+      captainKarmaMultiplier: characterTemplate.captainKarmaMultiplier,
+      captainMoraleMultiplier: characterTemplate.captainMoraleMultiplier,
     })
     .from(characterInstance)
     .innerJoin(characterTemplate, eq(characterInstance.templateId, characterTemplate.id))
+    .leftJoin(
+      devilFruitTemplate,
+      eq(
+        devilFruitTemplate.id,
+        sql<number>`coalesce(${characterTemplate.devilFruitTemplateId}, ${characterInstance.devilFruitTemplateId})`,
+      ),
+    )
     .where(eq(characterInstance.playerId, playerId))
     .orderBy(desc(characterInstance.isCaptain), sql`${characterInstance.joinedCrewAt} asc nulls last`, asc(characterTemplate.name));
 }
@@ -51,11 +65,24 @@ export async function createCharacterInstance(playerId: number, templateId: numb
       imageUrl: characterTemplate.imageUrl,
       hp: characterTemplate.hp,
       combat: characterTemplate.combat,
+      devilFruit: getTableColumns(devilFruitTemplate),
       joinedCrewAt: characterInstance.joinedCrewAt,
       isCaptain: characterInstance.isCaptain,
+      captainCombatMultiplier: characterTemplate.captainCombatMultiplier,
+      captainHpMultiplier: characterTemplate.captainHpMultiplier,
+      captainBerryGainMultiplier: characterTemplate.captainBerryGainMultiplier,
+      captainKarmaMultiplier: characterTemplate.captainKarmaMultiplier,
+      captainMoraleMultiplier: characterTemplate.captainMoraleMultiplier,
     })
     .from(characterInstance)
     .innerJoin(characterTemplate, eq(characterInstance.templateId, characterTemplate.id))
+    .leftJoin(
+      devilFruitTemplate,
+      eq(
+        devilFruitTemplate.id,
+        sql<number>`coalesce(${characterTemplate.devilFruitTemplateId}, ${characterInstance.devilFruitTemplateId})`,
+      ),
+    )
     .where(eq(characterInstance.id, created.id))
     .limit(1);
   if (!createdRow) throw new InternalError('Impossible de récupérer le personnage créé.');
@@ -81,12 +108,11 @@ export async function searchManyByName(query: string): Promise<Array<{ entity: C
   return rows.map(({ score, ...entity }) => ({ entity, score }));
 }
 
-export async function findById(id: number): Promise<CharacterTemplateInfo | undefined> {
+export async function findById(id: number): Promise<CharacterTemplateWithDevilFruit | undefined> {
   const [row] = await db
     .select({
       ...getTableColumns(characterTemplate),
-      devilFruitName: devilFruitTemplate.name,
-      devilFruitTypes: devilFruitTemplate.types,
+      devilFruit: getTableColumns(devilFruitTemplate),
     })
     .from(characterTemplate)
     .leftJoin(devilFruitTemplate, eq(devilFruitTemplate.id, characterTemplate.devilFruitTemplateId))

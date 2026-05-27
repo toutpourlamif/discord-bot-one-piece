@@ -1,5 +1,9 @@
 import type { DevilFruitTemplateInsert } from './schema.js';
 
+function buildDevilFruitImageUrl(slug: string): string {
+  return `devil-fruits/${slug}/info.webp`;
+}
+
 export const DEVIL_FRUIT_TEMPLATES_DATA = [
   {
     name: 'Gomu Gomu no Mi',
@@ -15,7 +19,7 @@ export const DEVIL_FRUIT_TEMPLATES_DATA = [
     types: ['FEU'],
     hpBonus: 0,
     combatBonus: 25,
-    imageUrl: 'devil-fruits/mera-mera-no-mi.webp',
+    imageUrl: buildDevilFruitImageUrl('mera'),
     description:
       "Le Mera Mera no Mi est un fruit du démon de type Logia qui confère à son utilisateur la capacité de créer et de contrôler le feu. Cela lui permet d'attacker avec une grande puissance et de se défendre contre les ennemis.",
   },
@@ -37,7 +41,27 @@ export const DEVIL_FRUIT_TEMPLATES_DATA = [
     types: ['TENEBRES'],
     hpBonus: -5,
     combatBonus: 35,
-    imageUrl: 'devil-fruits/yami-yami-no-mi.webp',
+    imageUrl: buildDevilFruitImageUrl('yami'),
+    description:
+      "Le Yami Yami no Mi est un fruit du démon de type Logia qui permet à son utilisateur de manipuler les ténèbres. Il peut absorber tout ce qui l'entoure, attaques comme matière, et annuler les pouvoirs des autres fruits du démon par simple contact — au prix d'une vulnérabilité accrue aux dégâts qu'il subit.",
+  },
+  {
+    name: 'Jiki Jiki no Mi',
+    types: ['ACIER', 'ELECTRIQUE'],
+    hpBonus: 0,
+    combatBonus: 28,
+    imageUrl: buildDevilFruitImageUrl('jiki'),
+    description:
+      'Le Jiki Jiki no Mi est un fruit du démon de type Paramecia qui confère à son utilisateur le contrôle du magnétisme. Il peut attirer ou repousser tout métal sur de longues distances, assemblant des amas de ferraille en armes massives ou détournant les projectiles ennemis.',
+  },
+  {
+    name: 'Ope Ope no Mi',
+    types: ['PSY'],
+    hpBonus: 10,
+    combatBonus: 30,
+    imageUrl: buildDevilFruitImageUrl('ope'),
+    description:
+      "Le Ope Ope no Mi est un fruit du démon de type Paramecia, surnommé le fruit ultime. Il permet de créer une « Room », un espace sphérique dans lequel l'utilisateur manipule à sa guise tout ce qui s'y trouve : trancher, déplacer, échanger ou opérer sans causer de blessure mortelle.",
   },
 ] as const satisfies ReadonlyArray<DevilFruitTemplateInsert>;
 

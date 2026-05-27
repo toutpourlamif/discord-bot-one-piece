@@ -1,4 +1,4 @@
-import type { ResourceName } from '../resource/index.js';
+import type { ResourceName } from '../../resource/index.js';
 
 import { inBuckets } from './in-buckets.js';
 import type { Island, Sea } from './zones.js';
@@ -54,5 +54,12 @@ export const WORLD_EDGES: Array<Edge> = [
     via: 'sea_paradise',
     baseDurationBuckets: inBuckets('5h'),
     requirements: [{ kind: 'item', name: 'Log Pose' }],
+  },
+  // TODO: remove, fake data
+  {
+    from: 'alabasta',
+    to: 'wano',
+    via: 'sea_paradise',
+    baseDurationBuckets: 1,
   },
 ];

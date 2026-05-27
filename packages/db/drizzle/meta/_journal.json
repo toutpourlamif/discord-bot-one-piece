@@ -267,6 +267,48 @@
       "when": 1779132626537,
       "tag": "0037_reflective_anita_blake",
       "breakpoints": true
+    },
+    {
+      "idx": 38,
+      "version": "7",
+      "when": 1779285452239,
+      "tag": "0038_add_wano",
+      "breakpoints": true
+    },
+    {
+      "idx": 39,
+      "version": "7",
+      "when": 1779285936625,
+      "tag": "0039_add_sub_zones",
+      "breakpoints": true
+    },
+    {
+      "idx": 40,
+      "version": "7",
+      "when": 1779362049595,
+      "tag": "0040_ajout_captain_multiplier",
+      "breakpoints": true
+    },
+    {
+      "idx": 41,
+      "version": "7",
+      "when": 1779379014221,
+      "tag": "0041_add_skills",
+      "breakpoints": true
+    },
+    {
+      "idx": 42,
+      "version": "7",
+      "when": 1779482822985,
+      "tag": "0042_add_new_characters_and_type",
+      "breakpoints": true
+    },
+    {
+      "idx": 43,
+      "version": "7",
+      "when": 1779818257456,
+      "tag": "0043_add_ob_step_column",
+      "breakpoints": true
     }
   ]
 }

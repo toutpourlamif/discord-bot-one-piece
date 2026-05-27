@@ -1,4 +1,4 @@
-import { db, player, type DbOrTransaction, type Player, type Zone } from '@one-piece/db';
+import { db, player, type DbOrTransaction, type Player, type SubZone, type Zone } from '@one-piece/db';
 import { eq } from 'drizzle-orm';
 
 import { NotFoundError } from '../../discord/errors.js';
@@ -47,8 +47,13 @@ export async function updateName(playerId: number, name: string, client: DbOrTra
   return row!;
 }
 
-export async function updateZone(playerId: number, zone: Zone, client: DbOrTransaction = db): Promise<void> {
-  await client.update(player).set({ currentZone: zone }).where(eq(player.id, playerId));
+// TODO: 3 args ->  migrer les args en object
+export async function updateZone(playerId: number, zone: Zone, subZone: SubZone | null, client: DbOrTransaction = db): Promise<void> {
+  await client.update(player).set({ currentZone: zone, currentSubZone: subZone }).where(eq(player.id, playerId));
+}
+
+export async function updateSubZone(playerId: number, subZone: SubZone, client: DbOrTransaction = db): Promise<void> {
+  await client.update(player).set({ currentSubZone: subZone }).where(eq(player.id, playerId));
 }
 
 export async function clearTravel(playerId: number, options: ClientOptions = {}): Promise<void> {

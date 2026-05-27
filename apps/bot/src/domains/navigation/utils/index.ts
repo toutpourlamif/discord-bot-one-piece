@@ -1,4 +1,5 @@
 export { isSea } from './is-sea.js';
+export { getEntrySubZone } from './get-entry-sub-zone.js';
 export { computeDriftProbability } from './compute-drift-probability.js';
 export { decideTravelOutcome } from './decide-travel-outcome.js';
 export { computeTravelETA } from './compute-travel-eta.js';

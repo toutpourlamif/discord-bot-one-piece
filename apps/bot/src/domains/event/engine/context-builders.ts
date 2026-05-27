@@ -40,6 +40,7 @@ export function buildGeneratorContext(ctxData: GeneratorContextData, bucketId: n
     // qui émet un effect `changeZone`, ou interactif "Partir" qui passe par applyEffects), la mutation
     // in-place de ctx.player.currentZone par applyEffects suffira. En attendant, la zone est constante.
     zone: ctxData.player.currentZone,
+    subZone: ctxData.player.currentSubZone,
     // TODO: cross-player v2 — remplir avec les autres joueurs présents dans la zone à ce bucket
     othersInZone: [],
   };
