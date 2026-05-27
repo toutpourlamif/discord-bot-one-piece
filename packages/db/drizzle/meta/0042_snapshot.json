@@ -1,5 +1,9 @@
 {
+<<<<<<< HEAD
   "id": "10729fe9-64ba-461b-8219-5f1635fd97ab",
+=======
+  "id": "ba807b47-0dd7-48ba-8159-89e4f50c97cb",
+>>>>>>> origin/main
   "prevId": "8ce4884e-4668-460c-828e-8c05c863e6f9",
   "version": "7",
   "dialect": "postgresql",
@@ -958,7 +962,11 @@
           "typeSchema": "public",
           "primaryKey": false,
           "notNull": true,
+<<<<<<< HEAD
           "default": "'dawn'"
+=======
+          "default": "'foosha'"
+>>>>>>> origin/main
         },
         "current_sub_zone": {
           "name": "current_sub_zone",
@@ -966,7 +974,11 @@
           "typeSchema": "public",
           "primaryKey": false,
           "notNull": false,
+<<<<<<< HEAD
           "default": "'goa_kingdom'"
+=======
+          "default": "'foosha_village'"
+>>>>>>> origin/main
         },
         "travel_target_zone": {
           "name": "travel_target_zone",
@@ -1356,7 +1368,14 @@
         "SABLE",
         "GAZ",
         "CAOUTCHOUC",
+<<<<<<< HEAD
         "POISON"
+=======
+        "POISON",
+        "ACIER",
+        "ELECTRIQUE",
+        "PSY"
+>>>>>>> origin/main
       ]
     },
     "public.language": {
@@ -1381,6 +1400,7 @@
       "name": "sub_zone",
       "schema": "public",
       "values": [
+<<<<<<< HEAD
         "satsuruzo_port",
         "goa_kingdom",
         "foosha_village",
@@ -1403,6 +1423,9 @@
         "cozia_port",
         "frauce_port",
         "oykot_port",
+=======
+        "foosha_village",
+>>>>>>> origin/main
         "loguetown_square",
         "reverse_mountain_twin_cape",
         "whisky_peak_town",
@@ -1416,6 +1439,7 @@
       "name": "zone",
       "schema": "public",
       "values": [
+<<<<<<< HEAD
         "satsuruzo",
         "dawn",
         "goat",
@@ -1434,6 +1458,10 @@
         "frauce",
         "oykot",
         "pole_star",
+=======
+        "foosha",
+        "loguetown",
+>>>>>>> origin/main
         "reverse_mountain",
         "whisky_peak",
         "little_garden",

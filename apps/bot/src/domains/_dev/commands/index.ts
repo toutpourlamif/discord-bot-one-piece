@@ -16,6 +16,7 @@ import { repeatCommand } from './repeat.js';
 import { sellCommand } from './sell.js';
 import { showHistoryCommand } from './show-history.js';
 import { upgradeShipCommand } from './upgrade-ship.js';
+import { wipeHistoryCommand } from './wipe-history.js';
 
 export const devCommands = [
   onePieceCommand,
@@ -36,4 +37,5 @@ export const devCommands = [
   upgradeShipCommand,
   dmCommand,
   showHistoryCommand,
+  wipeHistoryCommand,
 ].map((cmd) => ({ ...cmd, requiresOpAdmin: true, requiresSynchronization: false }));

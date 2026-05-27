@@ -30,6 +30,12 @@ export async function findByDiscordId(discordId: string): Promise<Player | undef
   return row;
 }
 
+export async function findByDiscordIdOrThrow(discordId: string): Promise<Player> {
+  const row = await findByDiscordId(discordId);
+  if (!row) throw new NotFoundError('Joueur introuvable.');
+  return row;
+}
+
 export async function create(discordId: string, name: string, originGuildId: string, transaction: DbOrTransaction = db): Promise<Player> {
   const lastProcessedBucketId = getNowBucketId();
   const [row] = await transaction.insert(player).values({ discordId, name, originGuildId, lastProcessedBucketId }).returning();

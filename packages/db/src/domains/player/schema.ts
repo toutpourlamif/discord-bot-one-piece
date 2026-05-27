@@ -9,6 +9,8 @@ import { ISLAND_ENTRY_SUB_ZONE } from '../navigation/world/islands/registry.js';
 import type { Island } from '../navigation/world/zones.js';
 import { zoneEnum } from '../navigation/zone-enum.js';
 
+import { ONBOARDING_STEP_IDS, onboardingStepEnum } from './onboarding-step-enum.js';
+
 export const player = pgTable('player', {
   id: serial('id').primaryKey(),
 
@@ -40,6 +42,7 @@ export const player = pgTable('player', {
   travelTargetZone: zoneEnum('travel_target_zone').$type<Island>(),
   travelStartedBucket: integer('travel_started_bucket'),
   travelEtaBucket: integer('travel_eta_bucket'),
+  onboardingStep: onboardingStepEnum('onboarding_step').default(ONBOARDING_STEP_IDS[0]),
 });
 
 export type Player = typeof player.$inferSelect;

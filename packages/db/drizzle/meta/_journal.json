@@ -299,8 +299,20 @@
     {
       "idx": 42,
       "version": "7",
+<<<<<<< HEAD
       "when": 1779450373789,
       "tag": "0042_add_east_blue",
+=======
+      "when": 1779482822985,
+      "tag": "0042_add_new_characters_and_type",
+      "breakpoints": true
+    },
+    {
+      "idx": 43,
+      "version": "7",
+      "when": 1779818257456,
+      "tag": "0043_add_ob_step_column",
+>>>>>>> origin/main
       "breakpoints": true
     }
   ]
