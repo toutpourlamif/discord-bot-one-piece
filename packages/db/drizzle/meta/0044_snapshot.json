@@ -1,6 +1,6 @@
 {
-  "id": "ba807b47-0dd7-48ba-8159-89e4f50c97cb",
-  "prevId": "8ce4884e-4668-460c-828e-8c05c863e6f9",
+  "id": "d01f2e61-132d-4466-ae19-1db2b654ec1c",
+  "prevId": "a99ce07a-d2af-41bc-9feb-4067a7d7ad06",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
@@ -958,7 +958,7 @@
           "typeSchema": "public",
           "primaryKey": false,
           "notNull": true,
-          "default": "'foosha'"
+          "default": "'dawn'"
         },
         "current_sub_zone": {
           "name": "current_sub_zone",
@@ -966,7 +966,7 @@
           "typeSchema": "public",
           "primaryKey": false,
           "notNull": false,
-          "default": "'foosha_village'"
+          "default": "'goa_kingdom'"
         },
         "travel_target_zone": {
           "name": "travel_target_zone",
@@ -986,6 +986,14 @@
           "type": "integer",
           "primaryKey": false,
           "notNull": false
+        },
+        "onboarding_step": {
+          "name": "onboarding_step",
+          "type": "onboarding_step",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "'intro'"
         }
       },
       "indexes": {},
@@ -1370,6 +1378,15 @@
         "en"
       ]
     },
+    "public.onboarding_step": {
+      "name": "onboarding_step",
+      "schema": "public",
+      "values": [
+        "intro",
+        "fish-mission",
+        "after-fish"
+      ]
+    },
     "public.rarity": {
       "name": "rarity",
       "schema": "public",
@@ -1384,7 +1401,28 @@
       "name": "sub_zone",
       "schema": "public",
       "values": [
+        "satsuruzo_port",
+        "goa_kingdom",
         "foosha_village",
+        "goat_coast",
+        "shells_town",
+        "shimotsuki_village",
+        "mirrorball_coast",
+        "nagagutsu_port",
+        "orange_town",
+        "rare_animal_coast",
+        "kumate_coast",
+        "sixis_coast",
+        "tequila_wolf_coast",
+        "syrup_village",
+        "baratie_deck",
+        "arlong_park",
+        "cocoyasi_village",
+        "gosa_town",
+        "branch_16",
+        "cozia_port",
+        "frauce_port",
+        "oykot_port",
         "loguetown_square",
         "reverse_mountain_twin_cape",
         "whisky_peak_town",
@@ -1398,8 +1436,24 @@
       "name": "zone",
       "schema": "public",
       "values": [
-        "foosha",
-        "loguetown",
+        "satsuruzo",
+        "dawn",
+        "goat",
+        "yotsuba",
+        "mirrorball",
+        "nagagutsu",
+        "organ",
+        "rare_animal",
+        "kumate",
+        "sixis",
+        "tequila_wolf",
+        "gecko",
+        "baratie",
+        "conomi",
+        "cozia",
+        "frauce",
+        "oykot",
+        "pole_star",
         "reverse_mountain",
         "whisky_peak",
         "little_garden",
