@@ -1,6 +1,7 @@
 import { type Transaction } from '@one-piece/db';
 
 import * as economyRepository from '../../economy/repository.js';
+import { computeBerryReward } from '../../economy/utils/compute-berry-reward.js';
 import { changeSubZone } from '../../navigation/services/change-sub-zone.js';
 import { completeTravel } from '../../navigation/services/complete-travel.js';
 import { startTravel } from '../../navigation/services/start-travel.js';
@@ -17,10 +18,12 @@ import type { EventEffect } from './types.js';
 export async function applyEffects(effects: Array<EventEffect>, ctx: GeneratorContext, tx: Transaction): Promise<void> {
   for (const effect of effects) {
     switch (effect.type) {
-      case 'addBerries':
-        await economyRepository.creditBerry(ctx.player.id, effect.amount, tx);
-        ctx.player.berries += effect.amount;
+      case 'addBerries': {
+        const boostedAmount = await computeBerryReward(ctx.player.id, effect.amount);
+        await economyRepository.creditBerry(ctx.player.id, boostedAmount, tx);
+        ctx.player.berries += boostedAmount;
         break;
+      }
       case 'spendBerries':
         await economyRepository.debitBerry(ctx.player.id, effect.amount, tx);
         ctx.player.berries -= effect.amount;
