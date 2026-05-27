@@ -15,6 +15,8 @@ export const setBucketCommand: Command = {
     }
     const oldBucket = player.lastProcessedBucketId;
     await playerRepository.setLastProcessedBucketId(player.id, bucketId);
-    await message.reply({ embeds: [buildOpEmbed('success').setDescription(`${player.name} : bucket ${oldBucket} → ${bucketId}`)] });
+    await message.reply({
+      embeds: [buildOpEmbed('success').setDescription(`🪣  Bucket mis à jour pour ${player.name}  \n${oldBucket} → ${bucketId}`)],
+    });
   },
 };
