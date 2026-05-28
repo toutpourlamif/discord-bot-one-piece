@@ -7,7 +7,7 @@ function buildDevilFruitImageUrl(slug: string): string {
 export const DEVIL_FRUIT_TEMPLATES_DATA = [
   {
     name: 'Gomu Gomu no Mi',
-    types: ['CAOUTCHOUC'],
+    types: [],
     hpBonus: 0,
     combatBonus: 20,
     imageUrl: 'devil-fruits/gomu-gomu-no-mi.webp',
@@ -16,7 +16,7 @@ export const DEVIL_FRUIT_TEMPLATES_DATA = [
   },
   {
     name: 'Mera Mera no Mi',
-    types: ['FEU'],
+    types: ['FIRE'],
     hpBonus: 0,
     combatBonus: 25,
     imageUrl: buildDevilFruitImageUrl('mera'),
@@ -25,20 +25,20 @@ export const DEVIL_FRUIT_TEMPLATES_DATA = [
   },
   {
     name: 'Hie Hie no Mi',
-    types: ['GLACE'],
+    types: ['ICE'],
     hpBonus: 0,
     combatBonus: 25,
     imageUrl: 'devil-fruits/hie-hie-no-mi.webp',
   },
   {
     name: 'Magu Magu no Mi',
-    types: ['MAGMA'],
+    types: [],
     hpBonus: 0,
     combatBonus: 30,
   },
   {
     name: 'Yami Yami no Mi',
-    types: ['TENEBRES'],
+    types: ['DARK'],
     hpBonus: -5,
     combatBonus: 35,
     imageUrl: buildDevilFruitImageUrl('yami'),
@@ -47,7 +47,7 @@ export const DEVIL_FRUIT_TEMPLATES_DATA = [
   },
   {
     name: 'Jiki Jiki no Mi',
-    types: ['ACIER', 'ELECTRIQUE'],
+    types: ['STEEL', 'ELECTRIC'],
     hpBonus: 0,
     combatBonus: 28,
     imageUrl: buildDevilFruitImageUrl('jiki'),
@@ -56,7 +56,7 @@ export const DEVIL_FRUIT_TEMPLATES_DATA = [
   },
   {
     name: 'Ope Ope no Mi',
-    types: ['PSY'],
+    types: ['PSYCHIC'],
     hpBonus: 10,
     combatBonus: 30,
     imageUrl: buildDevilFruitImageUrl('ope'),
