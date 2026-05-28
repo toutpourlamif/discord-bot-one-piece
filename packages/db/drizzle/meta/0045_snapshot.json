@@ -1,5 +1,5 @@
 {
-  "id": "f124d476-9670-4076-9700-412f02ace877",
+  "id": "f34a7aff-0a5f-433b-8dae-ccf432eaccf6",
   "prevId": "d01f2e61-132d-4466-ae19-1db2b654ec1c",
   "version": "7",
   "dialect": "postgresql",
@@ -205,7 +205,7 @@
           "typeSchema": "public",
           "primaryKey": false,
           "notNull": true,
-          "default": "'D'"
+          "default": "'COMMON'"
         },
         "captain_combat_multiplier": {
           "name": "captain_combat_multiplier",
@@ -248,6 +248,14 @@
           "typeSchema": "public",
           "primaryKey": false,
           "notNull": true
+        },
+        "types": {
+          "name": "types",
+          "type": "pokemon_type[]",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'{}'::pokemon_type[]"
         },
         "image_url": {
           "name": "image_url",
@@ -436,11 +444,11 @@
         },
         "types": {
           "name": "types",
-          "type": "devil_fruit_type[]",
+          "type": "pokemon_type[]",
           "typeSchema": "public",
           "primaryKey": false,
           "notNull": true,
-          "default": "'{}'::devil_fruit_type[]"
+          "default": "'{}'::pokemon_type[]"
         },
         "hp_bonus": {
           "name": "hp_bonus",
@@ -462,7 +470,7 @@
           "typeSchema": "public",
           "primaryKey": false,
           "notNull": true,
-          "default": "'D'"
+          "default": "'COMMON'"
         },
         "image_url": {
           "name": "image_url",
@@ -1153,7 +1161,7 @@
           "typeSchema": "public",
           "primaryKey": false,
           "notNull": true,
-          "default": "'D'"
+          "default": "'COMMON'"
         },
         "image_url": {
           "name": "image_url",
@@ -1351,25 +1359,6 @@
         "ARCHAEOLOGIST"
       ]
     },
-    "public.devil_fruit_type": {
-      "name": "devil_fruit_type",
-      "schema": "public",
-      "values": [
-        "FEU",
-        "GLACE",
-        "MAGMA",
-        "FOUDRE",
-        "TENEBRES",
-        "LUMIERE",
-        "SABLE",
-        "GAZ",
-        "CAOUTCHOUC",
-        "POISON",
-        "ACIER",
-        "ELECTRIQUE",
-        "PSY"
-      ]
-    },
     "public.language": {
       "name": "language",
       "schema": "public",
@@ -1387,17 +1376,38 @@
         "after-fish"
       ]
     },
+    "public.pokemon_type": {
+      "name": "pokemon_type",
+      "schema": "public",
+      "values": [
+        "NORMAL",
+        "FIRE",
+        "WATER",
+        "ELECTRIC",
+        "GRASS",
+        "ICE",
+        "FIGHTING",
+        "POISON",
+        "GROUND",
+        "FLYING",
+        "PSYCHIC",
+        "BUG",
+        "ROCK",
+        "GHOST",
+        "DRAGON",
+        "DARK",
+        "STEEL",
+        "FAIRY"
+      ]
+    },
     "public.rarity": {
       "name": "rarity",
       "schema": "public",
       "values": [
-        "D",
-        "C",
-        "B",
-        "A",
-        "S",
-        "SS",
-        "X"
+        "COMMON",
+        "RARE",
+        "VERY_RARE",
+        "LEGENDARY"
       ]
     },
     "public.sub_zone": {
