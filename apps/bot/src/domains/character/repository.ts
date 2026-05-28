@@ -46,9 +46,18 @@ export async function getCharactersByPlayerId(playerId: number, client: DbOrTran
     .orderBy(desc(characterInstance.isCaptain), sql`${characterInstance.joinedCrewAt} asc nulls last`, asc(characterTemplate.name));
 }
 
+export async function findTemplateByName(name: string, client: DbOrTransaction = db): Promise<CharacterTemplate | undefined> {
+  const [row] = await client.select().from(characterTemplate).where(eq(characterTemplate.name, name)).limit(1);
+  return row;
+}
+
 // TODO: multi-statement → service avec tx
-export async function createCharacterInstance(playerId: number, templateId: number): Promise<CharacterRow> {
-  const [created] = await db
+export async function createCharacterInstance(
+  playerId: number,
+  templateId: number,
+  client: DbOrTransaction = db,
+): Promise<CharacterRow> {
+  const [created] = await client
     .insert(characterInstance)
     .values({
       playerId,
@@ -57,7 +66,7 @@ export async function createCharacterInstance(playerId: number, templateId: numb
     .returning();
   if (!created) throw new InternalError('Impossible de créer ce personnage.');
 
-  const [createdRow] = await db
+  const [createdRow] = await client
     .select({
       instanceId: characterInstance.id,
       name: characterTemplate.name,
