@@ -52,11 +52,7 @@ export async function findTemplateByName(name: string, client: DbOrTransaction =
 }
 
 // TODO: multi-statement → service avec tx
-export async function createCharacterInstance(
-  playerId: number,
-  templateId: number,
-  client: DbOrTransaction = db,
-): Promise<CharacterRow> {
+export async function createCharacterInstance(playerId: number, templateId: number, client: DbOrTransaction = db): Promise<CharacterRow> {
   const [created] = await client
     .insert(characterInstance)
     .values({
