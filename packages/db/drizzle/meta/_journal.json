@@ -316,6 +316,13 @@
       "when": 1779903941266,
       "tag": "0044_add_east_blue",
       "breakpoints": true
+    },
+    {
+      "idx": 45,
+      "version": "7",
+      "when": 1779980121951,
+      "tag": "0045_luxuriant_joshua_kane",
+      "breakpoints": true
     }
   ]
 }
