@@ -1,4 +1,4 @@
-import { db, player, type DbOrTransaction, type Player, type SubZone, type Zone } from '@one-piece/db';
+import { db, player, type DbOrTransaction, type OnboardingStepId, type Player, type SubZone, type Zone } from '@one-piece/db';
 import { eq } from 'drizzle-orm';
 
 import { NotFoundError } from '../../discord/errors.js';
@@ -70,4 +70,12 @@ export async function updateCrewName(playerId: number, crewName: string, client:
 
 export async function setLastProcessedBucketId(playerId: number, bucketId: number, client: DbOrTransaction = db): Promise<void> {
   await client.update(player).set({ lastProcessedBucketId: bucketId }).where(eq(player.id, playerId));
+}
+
+export async function setOnboardingStep(
+  playerId: number,
+  step: OnboardingStepId | null,
+  client: DbOrTransaction = db,
+): Promise<void> {
+  await client.update(player).set({ onboardingStep: step }).where(eq(player.id, playerId));
 }
