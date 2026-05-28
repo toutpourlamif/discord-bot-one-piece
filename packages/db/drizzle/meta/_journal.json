@@ -306,8 +306,15 @@
     {
       "idx": 43,
       "version": "7",
-      "when": 1779789663720,
-      "tag": "0043_pokemon_type",
+      "when": 1779818257456,
+      "tag": "0043_add_ob_step_column",
+      "breakpoints": true
+    },
+    {
+      "idx": 44,
+      "version": "7",
+      "when": 1779903941266,
+      "tag": "0044_add_east_blue",
       "breakpoints": true
     }
   ]

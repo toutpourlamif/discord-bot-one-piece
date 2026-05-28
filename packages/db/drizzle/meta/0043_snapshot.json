@@ -1,5 +1,5 @@
 {
-  "id": "94f30c92-2a23-40bf-8995-dfa467279cdf",
+  "id": "a99ce07a-d2af-41bc-9feb-4067a7d7ad06",
   "prevId": "ba807b47-0dd7-48ba-8159-89e4f50c97cb",
   "version": "7",
   "dialect": "postgresql",
@@ -249,14 +249,6 @@
           "primaryKey": false,
           "notNull": true
         },
-        "types": {
-          "name": "types",
-          "type": "pokemon_type[]",
-          "typeSchema": "public",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "'{}'::pokemon_type[]"
-        },
         "image_url": {
           "name": "image_url",
           "type": "text",
@@ -444,11 +436,11 @@
         },
         "types": {
           "name": "types",
-          "type": "pokemon_type[]",
+          "type": "devil_fruit_type[]",
           "typeSchema": "public",
           "primaryKey": false,
           "notNull": true,
-          "default": "'{}'::pokemon_type[]"
+          "default": "'{}'::devil_fruit_type[]"
         },
         "hp_bonus": {
           "name": "hp_bonus",
@@ -994,6 +986,14 @@
           "type": "integer",
           "primaryKey": false,
           "notNull": false
+        },
+        "onboarding_step": {
+          "name": "onboarding_step",
+          "type": "onboarding_step",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "'intro'"
         }
       },
       "indexes": {},
@@ -1351,6 +1351,25 @@
         "ARCHAEOLOGIST"
       ]
     },
+    "public.devil_fruit_type": {
+      "name": "devil_fruit_type",
+      "schema": "public",
+      "values": [
+        "FEU",
+        "GLACE",
+        "MAGMA",
+        "FOUDRE",
+        "TENEBRES",
+        "LUMIERE",
+        "SABLE",
+        "GAZ",
+        "CAOUTCHOUC",
+        "POISON",
+        "ACIER",
+        "ELECTRIQUE",
+        "PSY"
+      ]
+    },
     "public.language": {
       "name": "language",
       "schema": "public",
@@ -1359,28 +1378,13 @@
         "en"
       ]
     },
-    "public.pokemon_type": {
-      "name": "pokemon_type",
+    "public.onboarding_step": {
+      "name": "onboarding_step",
       "schema": "public",
       "values": [
-        "NORMAL",
-        "FIRE",
-        "WATER",
-        "ELECTRIC",
-        "GRASS",
-        "ICE",
-        "FIGHTING",
-        "POISON",
-        "GROUND",
-        "FLYING",
-        "PSYCHIC",
-        "BUG",
-        "ROCK",
-        "GHOST",
-        "DRAGON",
-        "DARK",
-        "STEEL",
-        "FAIRY"
+        "intro",
+        "fish-mission",
+        "after-fish"
       ]
     },
     "public.rarity": {
