@@ -72,10 +72,6 @@ export async function setLastProcessedBucketId(playerId: number, bucketId: numbe
   await client.update(player).set({ lastProcessedBucketId: bucketId }).where(eq(player.id, playerId));
 }
 
-export async function setOnboardingStep(
-  playerId: number,
-  step: OnboardingStepId | null,
-  client: DbOrTransaction = db,
-): Promise<void> {
+export async function setOnboardingStep(playerId: number, step: OnboardingStepId | null, client: DbOrTransaction = db): Promise<void> {
   await client.update(player).set({ onboardingStep: step }).where(eq(player.id, playerId));
 }

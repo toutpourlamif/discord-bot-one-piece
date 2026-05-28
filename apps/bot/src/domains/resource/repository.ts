@@ -32,7 +32,11 @@ type AddResourceParams = {
 /** Ajoute n quantité d'une ressource à un joueur. Si il en avait déjà x, la quantité devient x + y. */
 export async function addResource({ playerId, name, quantity, options = {} }: AddResourceParams): Promise<void> {
   const { client = db } = options;
-  const [template] = await client.select({ id: resourceTemplate.id }).from(resourceTemplate).where(eq(resourceTemplate.name, name)).limit(1);
+  const [template] = await client
+    .select({ id: resourceTemplate.id })
+    .from(resourceTemplate)
+    .where(eq(resourceTemplate.name, name))
+    .limit(1);
   if (!template) throw new NotFoundError(`Ressource introuvable : ${name}.`);
   await client
     .insert(resourceInstance)

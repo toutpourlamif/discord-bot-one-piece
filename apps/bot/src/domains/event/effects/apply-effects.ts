@@ -78,7 +78,12 @@ export async function applyEffects(effects: Array<EventEffect>, ctx: GeneratorCo
         ctx.subZone = effect.targetSubZone;
         break;
       case 'addResource': {
-        await resourceRepository.addResource({ playerId: ctx.player.id, name: effect.name, quantity: effect.quantity, options: { client: tx } });
+        await resourceRepository.addResource({
+          playerId: ctx.player.id,
+          name: effect.name,
+          quantity: effect.quantity,
+          options: { client: tx },
+        });
         const existing = ctx.inventory.find((r) => r.name === effect.name);
         if (existing) existing.quantity += effect.quantity;
         else ctx.inventory.push({ name: effect.name, quantity: effect.quantity });
