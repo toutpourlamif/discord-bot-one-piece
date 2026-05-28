@@ -1,5 +1,5 @@
 {
-  "id": "31aedfa5-5496-4b41-b21d-0bc3bdce38a8",
+  "id": "a99ce07a-d2af-41bc-9feb-4067a7d7ad06",
   "prevId": "ba807b47-0dd7-48ba-8159-89e4f50c97cb",
   "version": "7",
   "dialect": "postgresql",
@@ -205,7 +205,7 @@
           "typeSchema": "public",
           "primaryKey": false,
           "notNull": true,
-          "default": "'D'"
+          "default": "'COMMON'"
         },
         "captain_combat_multiplier": {
           "name": "captain_combat_multiplier",
@@ -462,7 +462,7 @@
           "typeSchema": "public",
           "primaryKey": false,
           "notNull": true,
-          "default": "'D'"
+          "default": "'COMMON'"
         },
         "image_url": {
           "name": "image_url",
@@ -986,6 +986,14 @@
           "type": "integer",
           "primaryKey": false,
           "notNull": false
+        },
+        "onboarding_step": {
+          "name": "onboarding_step",
+          "type": "onboarding_step",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "'intro'"
         }
       },
       "indexes": {},
@@ -1145,7 +1153,7 @@
           "typeSchema": "public",
           "primaryKey": false,
           "notNull": true,
-          "default": "'D'"
+          "default": "'COMMON'"
         },
         "image_url": {
           "name": "image_url",
@@ -1370,17 +1378,23 @@
         "en"
       ]
     },
+    "public.onboarding_step": {
+      "name": "onboarding_step",
+      "schema": "public",
+      "values": [
+        "intro",
+        "fish-mission",
+        "after-fish"
+      ]
+    },
     "public.rarity": {
       "name": "rarity",
       "schema": "public",
       "values": [
-        "D",
-        "C",
-        "B",
-        "A",
-        "S",
-        "SS",
-        "X"
+        "COMMON",
+        "RARE",
+        "VERY_RARE",
+        "LEGENDARY"
       ]
     },
     "public.sub_zone": {

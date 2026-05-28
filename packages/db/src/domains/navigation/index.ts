@@ -1,7 +1,7 @@
 export { zoneEnum } from './zone-enum.js';
 export { subZoneEnum } from './sub-zone-enum.js';
-export { ZONE_LABELS } from './world/zone-labels.js';
-export { SEAS, ZONES, type Sea, type Zone } from './world/zones.js';
+export { ZONE_LABELS, ZONES, type Zone } from './world/zones.js';
+export { SEAS, type Sea } from './world/seas.js';
 export {
   ISLAND_ENTRY_SUB_ZONE,
   ISLANDS,
@@ -10,5 +10,6 @@ export {
   SUB_ZONES_BY_ISLAND,
   type Island,
   type SubZone,
-} from './world/islands/registry.js';
-export { type Edge, type TravelModifier, WORLD_EDGES } from './world/edges.js';
+} from './world/registry.js';
+export { WORLD_EDGES } from './world/world-edges.js';
+export { type Edge, type TravelModifier } from './world/types.js';

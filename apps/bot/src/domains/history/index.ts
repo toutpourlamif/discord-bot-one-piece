@@ -1,1 +1,2 @@
-export { appendHistory, loadAllForPlayer, writeEventResolution } from './repository.js';
+export { appendHistory, loadAllForPlayer, writeEventResolution } from './repository/index.js';
+export type { HistoryLog } from './repository/index.js';

@@ -1,5 +1,5 @@
 import { db, eventInstance, type DbOrTransaction, type EventInstance, type JSONFromSQL } from '@one-piece/db';
-import { asc, eq, and } from 'drizzle-orm';
+import { and, asc, count, eq, type SQL } from 'drizzle-orm';
 
 export type PendingEventInstance = Omit<EventInstance, 'playerId' | 'state'> & {
   state: Record<string, unknown>;
@@ -47,6 +47,26 @@ export async function findFirstInteractivePending(playerId: number, client: DbOr
 export async function deleteById(id: bigint, client: DbOrTransaction = db): Promise<{ deleted: boolean }> {
   const rows = await client.delete(eventInstance).where(eq(eventInstance.id, id)).returning({ id: eventInstance.id });
   return { deleted: rows.length > 0 };
+}
+
+type CountPendingEventsOptions = {
+  eventKey?: string;
+  client?: DbOrTransaction;
+};
+
+export async function countPendingEventsForPlayer(
+  playerId: number,
+  { eventKey, client = db }: CountPendingEventsOptions = {},
+): Promise<number> {
+  const conditions: Array<SQL> = [eq(eventInstance.playerId, playerId)];
+  if (eventKey) conditions.push(eq(eventInstance.eventKey, eventKey));
+
+  const [row] = await client
+    .select({ count: count() })
+    .from(eventInstance)
+    .where(and(...conditions));
+
+  return row?.count ?? 0;
 }
 
 type InsertWithIdempotenceArgs = {
