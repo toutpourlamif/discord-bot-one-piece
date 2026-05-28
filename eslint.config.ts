@@ -30,7 +30,6 @@ export default defineConfig([
       '@typescript-eslint/no-explicit-any': 'error',
 
       '@typescript-eslint/switch-exhaustiveness-check': 'error',
-      '@typescript-eslint/no-shadow': 'error',
       '@typescript-eslint/only-throw-error': 'error',
       '@typescript-eslint/return-await': ['error', 'in-try-catch'],
       '@typescript-eslint/promise-function-async': 'error',

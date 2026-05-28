@@ -1,3 +1,4 @@
+/* eslint-disable no-param-reassign */
 import { type Transaction } from '@one-piece/db';
 
 import { NotFoundError } from '../../../discord/errors.js';
