@@ -26,12 +26,6 @@ export async function advanceOnboarding(playerId: number, tx: Transaction): Prom
   if (nextStep === null) {
     // On évite que le moteur de monde rejoue tous les buckets accumulés pendant l'onboarding.
     await playerRepository.setLastProcessedBucketId(playerId, getLatestProcessableBucket(), tx);
-    await historyRepository.appendHistory({
-      type: 'onboarding.completed',
-      actorPlayerId: playerId,
-      payload: {},
-      client: tx,
-    });
   }
 
   return { previousStep: currentStep, nextStep };

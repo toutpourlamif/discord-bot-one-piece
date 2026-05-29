@@ -100,10 +100,7 @@ Côté UX, si le joueur a plusieurs messages anciens avec un bouton Continuer ob
 
 ## Traçabilité
 
-Chaque transition écrit dans `history` :
-
-- `onboarding.stepCompleted` → payload `{ step }` ;
-- `onboarding.completed` → fin de parcours.
+Chaque transition écrit `onboarding.stepCompleted` dans `history` (payload `{ step }`). La fin de parcours est implicite : c'est la complétion du dernier step.
 
 ---
 
