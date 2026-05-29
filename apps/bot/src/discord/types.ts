@@ -15,7 +15,7 @@ export type Command = {
   handler: (ctx: CommandContext) => Promise<void>;
   requiresSynchronization?: boolean;
   requiresOpAdmin?: boolean;
-  isAllowedDuringOnboarding?: boolean;
+  requiresOnboardingFinished?: boolean;
 };
 
 export type ButtonHandler = {

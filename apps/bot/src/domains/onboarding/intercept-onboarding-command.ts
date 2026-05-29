@@ -13,7 +13,7 @@ type GateArgs = { ctx: CommandContext; command: Command };
 export async function interceptOnboardingCommand({ ctx, command }: GateArgs): Promise<boolean> {
   const stepId = ctx.player.onboardingStep;
   if (stepId === null) return false;
-  if (command.isAllowedDuringOnboarding) return false;
+  if (command.requiresOnboardingFinished === false) return false;
 
   const step = getStep(stepId);
 

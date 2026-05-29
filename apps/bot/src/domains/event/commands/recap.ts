@@ -5,7 +5,7 @@ import { buildRecapView } from '../recap/build-recap-view.js';
 export const recapCommand: Command = {
   name: ['recap', 'r'],
   requiresSynchronization: false,
-  isAllowedDuringOnboarding: true,
+  requiresOnboardingFinished: false,
   async handler(ctx) {
     if (ctx.player.onboardingStep !== null) {
       await ctx.message.reply(buildOnboardingView(ctx.player));

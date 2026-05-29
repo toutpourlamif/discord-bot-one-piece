@@ -71,7 +71,7 @@ Comportement :
 
 `interceptOnboardingCommand` est appelé par le router avant l'auto-sync.
 
-- la commande a `isAllowedDuringOnboarding: true` → pass-through (`!info`, `!recap`, `!intro`, `_dev`) ;
+- la commande a `requiresOnboardingFinished: false` → pass-through (`!info`, `!recap`, `_dev`). Le défaut est `true` (gated) ; `!intro` n'opt-out pas car c'est la commande attendue par la 1ʳᵉ mission ;
 - step `scene` → tout est bloqué, on renvoie `buildOnboardingView` ;
 - step `mission` → seul `expects` passe → `run` + `advanceOnboarding` en tx, puis on poste la suite ; tout le reste → `step.reminder`.
 
