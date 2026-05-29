@@ -4,7 +4,7 @@ import { InternalError } from '../../../discord/errors.js';
 import { getLatestProcessableBucket } from '../../event/engine/bucket.js';
 import * as historyRepository from '../../history/index.js';
 import * as playerRepository from '../../player/repository.js';
-import { getNextStepId } from '../script.js';
+import { getNextStepId } from '../step-registry.js';
 
 type AdvanceResult = { previousStep: OnboardingStepId; nextStep: OnboardingStepId | null };
 

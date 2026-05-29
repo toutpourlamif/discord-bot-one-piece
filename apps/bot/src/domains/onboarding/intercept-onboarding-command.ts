@@ -4,8 +4,8 @@ import type { Command, CommandContext } from '../../discord/types.js';
 import * as playerRepository from '../player/repository.js';
 
 import { OnboardingPendingError } from './errors.js';
-import { getStep } from './script.js';
 import * as onboardingService from './services/index.js';
+import { getStep } from './step-registry.js';
 import { buildOnboardingCompletedView, buildOnboardingView } from './view.js';
 
 type GateArgs = { ctx: CommandContext; command: Command };

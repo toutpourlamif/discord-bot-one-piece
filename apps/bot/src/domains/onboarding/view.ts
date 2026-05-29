@@ -7,7 +7,7 @@ import { buildCustomId } from '../../discord/utils/build-custom-id.js';
 import { buildOpEmbed } from '../../discord/utils/index.js';
 
 import { ONBOARDING_NEXT_BUTTON_NAME } from './constants.js';
-import { getStep } from './script.js';
+import { getStep } from './step-registry.js';
 
 const DEFAULT_SCENE_BUTTON_LABEL = 'Continuer';
 
