@@ -6,7 +6,7 @@ import { parseStringArg } from '../../../discord/utils/index.js';
 import * as playerRepository from '../../player/repository.js';
 import { findOrCreatePlayer } from '../../player/service.js';
 import { ONBOARDING_NEXT_BUTTON_NAME } from '../constants.js';
-import { advanceOnboarding } from '../services/advance-onboarding.js';
+import * as onboardingService from '../services/index.js';
 import { buildOnboardingCompletedView, buildOnboardingView } from '../view.js';
 
 export const onboardingNextButtonHandler: ButtonHandler = {
@@ -20,7 +20,7 @@ export const onboardingNextButtonHandler: ButtonHandler = {
     const resultingStep = await db.transaction(async (tx) => {
       const locked = await playerRepository.findByIdOrThrow(player.id, tx, { forUpdate: true });
       if (locked.onboardingStep !== stepId) return locked.onboardingStep;
-      const { nextStep } = await advanceOnboarding(player.id, tx);
+      const { nextStep } = await onboardingService.advanceOnboarding(player.id, tx);
       return nextStep;
     });
 

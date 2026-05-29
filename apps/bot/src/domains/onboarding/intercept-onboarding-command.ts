@@ -5,7 +5,7 @@ import * as playerRepository from '../player/repository.js';
 
 import { OnboardingPendingError } from './errors.js';
 import { getStep } from './script.js';
-import { advanceOnboarding } from './services/advance-onboarding.js';
+import * as onboardingService from './services/index.js';
 import { buildOnboardingCompletedView, buildOnboardingView } from './view.js';
 
 type GateArgs = { ctx: CommandContext; command: Command };
@@ -31,7 +31,7 @@ export async function interceptOnboardingCommand({ ctx, command }: GateArgs): Pr
     const locked = await playerRepository.findByIdOrThrow(ctx.player.id, tx, { forUpdate: true });
     if (locked.onboardingStep !== stepId) throw new OnboardingPendingError(buildOnboardingView(ctx.player));
     const reply = await step.run(ctx.player.id, tx);
-    const { nextStep } = await advanceOnboarding(ctx.player.id, tx);
+    const { nextStep } = await onboardingService.advanceOnboarding(ctx.player.id, tx);
     return { reply, nextStep };
   });
 
