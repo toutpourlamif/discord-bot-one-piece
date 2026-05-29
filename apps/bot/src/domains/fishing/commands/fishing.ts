@@ -1,3 +1,5 @@
+import { db } from '@one-piece/db';
+
 import type { Command } from '../../../discord/types.js';
 import { buildOpEmbed } from '../../../discord/utils/index.js';
 import { resolveTargetPlayer } from '../../player/index.js';
@@ -7,7 +9,7 @@ export const fishingCommand: Command = {
   name: ['fishing', 'fish'],
   async handler(ctx) {
     const { targetPlayer } = await resolveTargetPlayer(ctx);
-    const result = await runFishingAttempt(targetPlayer.id);
+    const result = await db.transaction(async (tx) => runFishingAttempt(targetPlayer.id, tx));
 
     const embed = buildOpEmbed()
       .setTitle('🎣 Pêche')
