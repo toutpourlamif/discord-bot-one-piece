@@ -1,22 +1,17 @@
-import { NotFoundError } from '../../../discord/errors.js';
 import type { Command } from '../../../discord/types.js';
-import { buildOpEmbed, getTargetUser, parseIntegerArg } from '../../../discord/utils/index.js';
+import { buildOpEmbed, parseIntegerArg } from '../../../discord/utils/index.js';
+import { resolveTargetPlayer } from '../../player/index.js';
 import * as playerRepository from '../../player/repository.js';
 
 export const setBucketCommand: Command = {
-  name: 'setbucket',
-  async handler({ message, args }) {
-    const target = getTargetUser(message);
-    const queryArgs = message.mentions.users.first() ? args.slice(1) : args;
-    const bucketId = parseIntegerArg(queryArgs[0]);
-    const player = await playerRepository.findByDiscordId(target.id);
-    if (player === undefined) {
-      throw new NotFoundError('Le joueur est introuvable.');
-    }
-    const oldBucket = player.lastProcessedBucketId;
-    await playerRepository.setLastProcessedBucketId(player.id, bucketId);
-    await message.reply({
-      embeds: [buildOpEmbed('success').setDescription(`🪣  Bucket mis à jour pour ${player.name}  \n${oldBucket} → ${bucketId}`)],
+  name: ['setbucket', 'sb'],
+  async handler(ctx) {
+    const { targetPlayer, rest } = await resolveTargetPlayer(ctx);
+    const bucketId = parseIntegerArg(rest[0]);
+    const oldBucket = targetPlayer.lastProcessedBucketId;
+    await playerRepository.setLastProcessedBucketId(targetPlayer.id, bucketId);
+    await ctx.message.reply({
+      embeds: [buildOpEmbed('success').setDescription(`🪣  Bucket mis à jour pour ${targetPlayer.name}  \n${oldBucket} → ${bucketId}`)],
     });
   },
 };
