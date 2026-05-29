@@ -19,7 +19,7 @@ type MissionStep = {
   id: OnboardingStepId;
   type: 'mission';
   expects: string;
-  run: (playerId: number, tx: Transaction) => Promise<View>;
+  run: (playerId: number, tx: Transaction) => Promise<View> | View;
   reminder: (player: Player) => View;
 };
 

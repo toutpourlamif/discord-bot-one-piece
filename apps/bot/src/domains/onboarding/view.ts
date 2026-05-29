@@ -3,8 +3,8 @@ import { ActionRowBuilder, ButtonBuilder, ButtonStyle } from 'discord.js';
 
 import { InternalError } from '../../discord/errors.js';
 import type { View } from '../../discord/types.js';
-import { buildOpEmbed } from '../../discord/utils/index.js';
 import { buildCustomId } from '../../discord/utils/build-custom-id.js';
+import { buildOpEmbed } from '../../discord/utils/index.js';
 
 import { ONBOARDING_NEXT_BUTTON_NAME } from './constants.js';
 import { getStep } from './script.js';
@@ -26,20 +26,13 @@ export function buildOnboardingView(player: Player): View {
 
 export function buildOnboardingCompletedView(): View {
   return {
-    embeds: [
-      buildOpEmbed('success')
-        .setTitle('Bon vent, pirate.')
-        .setDescription('Ton aventure commence vraiment maintenant.'),
-    ],
+    embeds: [buildOpEmbed('success').setTitle('Bon vent, pirate.').setDescription('Ton aventure commence vraiment maintenant.')],
     components: [],
   };
 }
 
 function buildNextButtonRow(stepId: OnboardingStepId, label: string): ActionRowBuilder<ButtonBuilder> {
   return new ActionRowBuilder<ButtonBuilder>().addComponents(
-    new ButtonBuilder()
-      .setCustomId(buildCustomId(ONBOARDING_NEXT_BUTTON_NAME, stepId))
-      .setLabel(label)
-      .setStyle(ButtonStyle.Primary),
+    new ButtonBuilder().setCustomId(buildCustomId(ONBOARDING_NEXT_BUTTON_NAME, stepId)).setLabel(label).setStyle(ButtonStyle.Primary),
   );
 }
