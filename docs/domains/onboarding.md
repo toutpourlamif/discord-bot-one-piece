@@ -69,7 +69,7 @@ Comportement :
 
 ## Gate
 
-`handleOnboardingGate` est appelé par le router avant l'auto-sync.
+`interceptOnboardingCommand` est appelé par le router avant l'auto-sync.
 
 - la commande a `isAllowedDuringOnboarding: true` → pass-through (`!info`, `!recap`, `!intro`, `_dev`) ;
 - step `scene` → tout est bloqué, on renvoie `buildOnboardingView` ;

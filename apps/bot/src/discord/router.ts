@@ -7,7 +7,7 @@ import { autoSyncBeforeAction, eventCommands } from '../domains/event/index.js';
 import { fishingCommands } from '../domains/fishing/index.js';
 import { guildCommands, requireGuildId } from '../domains/guild/index.js';
 import * as guildRepository from '../domains/guild/repository.js';
-import { handleOnboardingGate, onboardingCommands } from '../domains/onboarding/index.js';
+import { interceptOnboardingCommand, onboardingCommands } from '../domains/onboarding/index.js';
 import { playerCommands } from '../domains/player/index.js';
 import { findOrCreatePlayer } from '../domains/player/service.js';
 import { resourceCommands } from '../domains/resource/index.js';
@@ -17,6 +17,7 @@ import { buildRegistry } from '../shared/build-registry.js';
 import { AppError } from './errors.js';
 import { buildOpEmbed } from './utils/index.js';
 
+// TODO: Séparer dans un fichier command-registry.ts
 const allCommands = [
   ...playerCommands,
   ...infoCommands,
@@ -56,7 +57,7 @@ export async function routeMessage(message: Message): Promise<void> {
       // assertPlayerIsAdmin(player); TODO: réactiver en prod
     }
 
-    const handled = await handleOnboardingGate({ ctx: { message, args, player, guild }, command });
+    const handled = await interceptOnboardingCommand({ ctx: { message, args, player, guild }, command });
     if (handled) return;
 
     if (command.requiresSynchronization !== false) {

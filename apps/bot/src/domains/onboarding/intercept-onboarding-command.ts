@@ -10,7 +10,7 @@ import { buildOnboardingCompletedView, buildOnboardingView } from './view.js';
 
 type GateArgs = { ctx: CommandContext; command: Command };
 
-export async function handleOnboardingGate({ ctx, command }: GateArgs): Promise<boolean> {
+export async function interceptOnboardingCommand({ ctx, command }: GateArgs): Promise<boolean> {
   const stepId = ctx.player.onboardingStep;
   if (stepId === null) return false;
   if (command.isAllowedDuringOnboarding) return false;
@@ -37,9 +37,7 @@ export async function handleOnboardingGate({ ctx, command }: GateArgs): Promise<
 
   await ctx.message.reply(result.reply);
   const followUp =
-    result.nextStep === null
-      ? buildOnboardingCompletedView()
-      : buildOnboardingView({ ...ctx.player, onboardingStep: result.nextStep });
+    result.nextStep === null ? buildOnboardingCompletedView() : buildOnboardingView({ ...ctx.player, onboardingStep: result.nextStep });
   await ctx.message.reply(followUp);
   return true;
 }
