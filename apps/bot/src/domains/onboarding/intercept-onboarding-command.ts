@@ -6,7 +6,8 @@ import * as playerRepository from '../player/repository.js';
 import { OnboardingPendingError } from './errors.js';
 import * as onboardingService from './services/index.js';
 import { getStep } from './step-registry.js';
-import { buildOnboardingCompletedView, buildOnboardingView } from './view.js';
+import { buildOnboardingCompletedView } from './views/build-onboarding-completed-view.js';
+import { buildOnboardingView } from './views/build-onboarding-view.js';
 
 type GateArgs = { ctx: CommandContext; command: Command };
 

@@ -8,7 +8,8 @@ import * as playerRepository from '../../player/repository.js';
 import { findOrCreatePlayer } from '../../player/service.js';
 import { ONBOARDING_NEXT_BUTTON_NAME } from '../constants.js';
 import * as onboardingService from '../services/index.js';
-import { buildOnboardingCompletedView, buildOnboardingView } from '../view.js';
+import { buildOnboardingCompletedView } from '../views/build-onboarding-completed-view.js';
+import { buildOnboardingView } from '../views/build-onboarding-view.js';
 
 export const onboardingNextButtonHandler: ButtonHandler = {
   name: ONBOARDING_NEXT_BUTTON_NAME,
