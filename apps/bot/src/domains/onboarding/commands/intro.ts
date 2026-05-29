@@ -6,6 +6,7 @@ export const introCommand: Command = {
   requiresSynchronization: false,
   async handler(ctx) {
     await ctx.message.reply({
+      // TODO: trouver un meilleur texte
       embeds: [buildOpEmbed('info').setTitle('Ton aventure a déjà commencé !').setDescription('Tu es déjà en mer, pirate.')],
       components: [],
     });
