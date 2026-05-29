@@ -19,7 +19,7 @@ player.onboarding_step;
 
 ## Script
 
-Le parcours est déclaré dans `onboarding/script.ts` — un tableau ordonné. La transition vers le step suivant est implicite (élément suivant du tableau).
+Le parcours est déclaré dans `onboarding/scenario.ts` — un tableau ordonné. La transition vers le step suivant est implicite (élément suivant du tableau).
 
 Deux types de steps :
 
@@ -108,6 +108,6 @@ Chaque transition écrit `onboarding.stepCompleted` dans `history` (payload `{ s
 
 1. Ajouter l'id dans `ONBOARDING_STEP_IDS` (package `db`) + migration enum PostgreSQL.
 2. Selon le type :
-   - `scene` → fonction `(player) => EmbedBuilder` dans `script.ts`, déclarer le step.
+   - `scene` → module `steps/step-<nom>.ts` qui exporte `(player) => EmbedBuilder`.
    - `mission` → module `steps/step-<nom>.ts` qui exporte `run` + `reminder`.
-3. Insérer le step dans `ONBOARDING_SCRIPT`. Le script `throw` au boot si un id de l'enum n'a pas de step ou si des ids sont dupliqués.
+3. Insérer le step dans `ONBOARDING_SCENARIO`. `step-registry.ts` `throw` au boot si un id de l'enum n'a pas de step ou si des ids sont dupliqués.

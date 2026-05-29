@@ -24,7 +24,7 @@ type MissionStep = {
 
 export type OnboardingStep = SceneStep | MissionStep;
 
-export const ONBOARDING_SCRIPT: ReadonlyArray<OnboardingStep> = [
+export const ONBOARDING_SCENARIO: ReadonlyArray<OnboardingStep> = [
   { id: 'intro', type: 'mission', expects: 'intro', run: runKickoff, reminder: buildKickoffReminder },
   { id: 'fish-mission', type: 'mission', expects: 'fish', run: runFishStep, reminder: buildFishReminder },
   { id: 'after-fish', type: 'scene', embed: buildAfterFishEmbed },
