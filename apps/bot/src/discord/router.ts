@@ -57,8 +57,8 @@ export async function routeMessage(message: Message): Promise<void> {
       // assertPlayerIsAdmin(player); TODO: réactiver en prod
     }
 
-    const handled = await interceptOnboardingCommand({ ctx: { message, args, player, guild }, command });
-    if (handled) return;
+    const intercepted = await interceptOnboardingCommand({ ctx: { message, args, player, guild }, command });
+    if (intercepted) return;
 
     if (command.requiresSynchronization !== false) {
       await autoSyncBeforeAction(message, player, guild);
