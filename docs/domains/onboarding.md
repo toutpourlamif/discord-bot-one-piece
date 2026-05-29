@@ -53,9 +53,7 @@ Le gate exécute `run` **et** `advanceOnboarding` dans la même transaction, pui
 
 `buildOnboardingView(player)` est synchrone, consommée par :
 
-- `!intro` (entrer / retrouver sa place) ;
-- `!recap` (branche onboarding) ;
-- le gate (commande bloquée) ;
+- le gate (commande bloquée, y compris `!recap`) ;
 - le button handler `onb-next` (après advance).
 
 Comportement :
