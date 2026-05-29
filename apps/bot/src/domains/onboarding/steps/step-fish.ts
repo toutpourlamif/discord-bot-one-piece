@@ -16,12 +16,12 @@ export async function runFishStep(playerId: number, tx: Transaction): Promise<Vi
   };
 }
 
-export function buildFishReminder(): View {
+export function buildFishReminder(prefix: string, expects: string): View {
   return {
     embeds: [
       buildOpEmbed('info')
         .setTitle("Un vieux marin t'attend sur le ponton.")
-        .setDescription('« Avant de prendre la mer, mousse, tu vas apprendre à pêcher. Tape `!fish`. »'),
+        .setDescription(`« Avant de prendre la mer, mousse, tu vas apprendre à pêcher. Tape \`${prefix}${expects}\`. »`),
     ],
     components: [],
   };

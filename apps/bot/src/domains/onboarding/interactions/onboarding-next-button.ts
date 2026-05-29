@@ -3,6 +3,7 @@ import type { ButtonInteraction } from 'discord.js';
 
 import type { ButtonHandler } from '../../../discord/types.js';
 import { parseStringArg } from '../../../discord/utils/index.js';
+import * as guildRepository from '../../guild/repository.js';
 import * as playerRepository from '../../player/repository.js';
 import { findOrCreatePlayer } from '../../player/service.js';
 import { ONBOARDING_NEXT_BUTTON_NAME } from '../constants.js';
@@ -15,6 +16,7 @@ export const onboardingNextButtonHandler: ButtonHandler = {
     await interaction.deferUpdate();
 
     const stepId = parseStringArg(args[0], 'stepId manquant dans le customId');
+    const guild = await guildRepository.findOrCreate(interaction.guildId!, interaction.guild!.name);
     const { player } = await findOrCreatePlayer(interaction.user.id, interaction.user.username, interaction.guildId!);
 
     const resultingStep = await db.transaction(async (tx) => {
@@ -25,7 +27,9 @@ export const onboardingNextButtonHandler: ButtonHandler = {
     });
 
     const view =
-      resultingStep === null ? buildOnboardingCompletedView() : buildOnboardingView({ ...player, onboardingStep: resultingStep });
+      resultingStep === null
+        ? buildOnboardingCompletedView()
+        : buildOnboardingView({ ...player, onboardingStep: resultingStep }, guild.prefix);
     await interaction.editReply(view);
   },
 };

@@ -8,9 +8,11 @@ export function runKickoff(): View {
   };
 }
 
-export function buildKickoffReminder(): View {
+export function buildKickoffReminder(prefix: string, expects: string): View {
   return {
-    embeds: [buildOpEmbed('info').setTitle('Bienvenue sur Grand Line.').setDescription('Démarre ton aventure en tapant `!intro`.')],
+    embeds: [
+      buildOpEmbed('info').setTitle('Bienvenue sur Grand Line.').setDescription(`Démarre ton aventure en tapant \`${prefix}${expects}\`.`),
+    ],
     components: [],
   };
 }

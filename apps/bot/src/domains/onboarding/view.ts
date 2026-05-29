@@ -11,12 +11,12 @@ import { getStep } from './script.js';
 
 const DEFAULT_SCENE_BUTTON_LABEL = 'Continuer';
 
-export function buildOnboardingView(player: Player): View {
+export function buildOnboardingView(player: Player, prefix: string): View {
   const stepId = player.onboardingStep;
   if (stepId === null) throw new InternalError('buildOnboardingView appelé hors onboarding');
   const step = getStep(stepId);
 
-  if (step.type === 'mission') return step.reminder(player);
+  if (step.type === 'mission') return step.reminder(prefix, step.expects);
 
   return {
     embeds: [step.embed(player)],
