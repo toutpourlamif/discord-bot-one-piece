@@ -27,10 +27,7 @@ export const onboardingNextButtonHandler: ButtonHandler = {
       return nextStep;
     });
 
-    const view =
-      resultingStep === null
-        ? buildOnboardingCompletedView()
-        : buildOnboardingView({ ...player, onboardingStep: resultingStep }, guild.prefix);
+    const view = resultingStep === null ? buildOnboardingCompletedView() : buildOnboardingView(resultingStep, guild.prefix);
     await interaction.editReply(view);
   },
 };

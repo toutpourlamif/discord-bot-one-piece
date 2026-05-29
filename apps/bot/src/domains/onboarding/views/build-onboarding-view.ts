@@ -1,7 +1,6 @@
-import type { OnboardingStepId, Player } from '@one-piece/db';
+import type { OnboardingStepId } from '@one-piece/db';
 import { ActionRowBuilder, ButtonBuilder, ButtonStyle } from 'discord.js';
 
-import { InternalError } from '../../../discord/errors.js';
 import type { View } from '../../../discord/types.js';
 import { buildCustomId } from '../../../discord/utils/build-custom-id.js';
 import { ONBOARDING_NEXT_BUTTON_NAME } from '../constants.js';
@@ -9,15 +8,13 @@ import { getStep } from '../step-registry.js';
 
 const DEFAULT_SCENE_BUTTON_LABEL = 'Continuer';
 
-export function buildOnboardingView(player: Player, prefix: string): View {
-  const stepId = player.onboardingStep;
-  if (stepId === null) throw new InternalError('buildOnboardingView appelé hors onboarding');
+export function buildOnboardingView(stepId: OnboardingStepId, prefix: string): View {
   const step = getStep(stepId);
 
   if (step.type === 'mission') return step.reminder(prefix, step.expects);
 
   return {
-    embeds: [step.embed(player)],
+    embeds: [step.embed()],
     components: [buildNextButtonRow(step.id, step.buttonLabel ?? DEFAULT_SCENE_BUTTON_LABEL)],
   };
 }

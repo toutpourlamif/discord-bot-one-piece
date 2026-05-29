@@ -1,4 +1,4 @@
-import { type OnboardingStepId, type Player, type Transaction } from '@one-piece/db';
+import { type OnboardingStepId, type Transaction } from '@one-piece/db';
 import type { EmbedBuilder } from 'discord.js';
 
 import type { View } from '../../discord/types.js';
@@ -10,7 +10,7 @@ import { buildKickoffReminder, runKickoff } from './steps/step-kickoff.js';
 type SceneStep = {
   id: OnboardingStepId;
   type: 'scene';
-  embed: (player: Player) => EmbedBuilder;
+  embed: () => EmbedBuilder;
   buttonLabel?: string;
 };
 
