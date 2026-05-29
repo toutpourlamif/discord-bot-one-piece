@@ -23,10 +23,9 @@ export async function advanceOnboarding(playerId: number, tx: Transaction): Prom
     client: tx,
   });
 
-  if (nextStep === null) {
-    // On évite que le moteur de monde rejoue tous les buckets accumulés pendant l'onboarding.
-    await playerRepository.setLastProcessedBucketId(playerId, getLatestProcessableBucket(), tx);
-  }
+  const isOnboardingFinished = nextStep === null;
+
+  if (isOnboardingFinished) await playerRepository.setLastProcessedBucketId(playerId, getLatestProcessableBucket(), tx);
 
   return { previousStep: currentStep, nextStep };
 }
