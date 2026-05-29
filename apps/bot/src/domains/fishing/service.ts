@@ -12,7 +12,7 @@ export async function runFishingAttempt(playerId: number): Promise<FishingResult
   const picked = sample(templates);
   if (!picked) throw new Error('Aucun resource_template en base — exécute le seed avant de pêcher.');
 
-  await resourceRepository.addResourceToPlayer(playerId, picked.id, 1);
+  await resourceRepository.addResource({ playerId, name: picked.name, quantity: 1 });
   // TODO: SUPPRIMER EN PROD — log de test pour valider history
   await historyRepository.appendHistory({
     type: 'fishing.attempt',

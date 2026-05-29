@@ -4,7 +4,7 @@ import * as characterRepository from '../../character/repository.js';
 import type { CharacterRow } from '../../character/types.js';
 import { isInCrewFilter } from '../../crew/utils/is-in-crew-filter.js';
 import * as historyRepository from '../../history/index.js';
-import type { HistoryLog } from '../../history/repository.js';
+import type { HistoryLog } from '../../history/index.js';
 import * as resourceRepository from '../../resource/repository.js';
 import type { Inventory } from '../../resource/types.js';
 import * as shipRepository from '../../ship/repository.js';

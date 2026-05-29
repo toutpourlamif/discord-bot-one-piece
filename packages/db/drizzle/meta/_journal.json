@@ -302,6 +302,27 @@
       "when": 1779482822985,
       "tag": "0042_add_new_characters_and_type",
       "breakpoints": true
+    },
+    {
+      "idx": 43,
+      "version": "7",
+      "when": 1779818257456,
+      "tag": "0043_add_ob_step_column",
+      "breakpoints": true
+    },
+    {
+      "idx": 44,
+      "version": "7",
+      "when": 1779903941266,
+      "tag": "0044_add_east_blue",
+      "breakpoints": true
+    },
+    {
+      "idx": 45,
+      "version": "7",
+      "when": 1779980121951,
+      "tag": "0045_luxuriant_joshua_kane",
+      "breakpoints": true
     }
   ]
 }

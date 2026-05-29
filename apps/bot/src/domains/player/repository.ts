@@ -1,4 +1,4 @@
-import { db, player, type DbOrTransaction, type Player, type SubZone, type Zone } from '@one-piece/db';
+import { db, player, type DbOrTransaction, type OnboardingStepId, type Player, type SubZone, type Zone } from '@one-piece/db';
 import { eq } from 'drizzle-orm';
 
 import { NotFoundError } from '../../discord/errors.js';
@@ -27,6 +27,12 @@ export async function findByIdOrThrow(id: number, client: DbOrTransaction = db, 
 
 export async function findByDiscordId(discordId: string): Promise<Player | undefined> {
   const [row] = await db.select().from(player).where(eq(player.discordId, discordId)).limit(1);
+  return row;
+}
+
+export async function findByDiscordIdOrThrow(discordId: string): Promise<Player> {
+  const row = await findByDiscordId(discordId);
+  if (!row) throw new NotFoundError('Joueur introuvable.');
   return row;
 }
 
@@ -64,4 +70,8 @@ export async function updateCrewName(playerId: number, crewName: string, client:
 
 export async function setLastProcessedBucketId(playerId: number, bucketId: number, client: DbOrTransaction = db): Promise<void> {
   await client.update(player).set({ lastProcessedBucketId: bucketId }).where(eq(player.id, playerId));
+}
+
+export async function setOnboardingStep(playerId: number, step: OnboardingStepId | null, client: DbOrTransaction = db): Promise<void> {
+  await client.update(player).set({ onboardingStep: step }).where(eq(player.id, playerId));
 }

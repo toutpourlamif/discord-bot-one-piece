@@ -2,6 +2,7 @@ import { sql } from 'drizzle-orm';
 import { index, integer, pgTable, serial, varchar, text, real } from 'drizzle-orm/pg-core';
 
 import { imageUrl, timestamps } from '../../../shared/helpers.js';
+import { pokemonType } from '../../../shared/pokemon-type-enum.js';
 import { rarity } from '../../../shared/rarity.js';
 import { devilFruitTemplate } from '../../devil_fruit/devil_fruit_template/schema.js';
 import { characterRaceEnum } from '../enum.js';
@@ -25,6 +26,10 @@ export const characterTemplate = pgTable(
     captainMoraleMultiplier: real('captain_morale_multiplier').notNull().default(1),
 
     race: characterRaceEnum('race').notNull(),
+    types: pokemonType('types')
+      .array()
+      .notNull()
+      .default(sql`'{}'::pokemon_type[]`),
     ...imageUrl(),
     ...timestamps(),
 

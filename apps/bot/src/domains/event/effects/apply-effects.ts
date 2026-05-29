@@ -1,11 +1,15 @@
+/* eslint-disable no-param-reassign */
 import { type Transaction } from '@one-piece/db';
 
+import { NotFoundError } from '../../../discord/errors.js';
+import * as characterRepository from '../../character/repository.js';
 import * as economyRepository from '../../economy/repository.js';
 import { changeSubZone } from '../../navigation/services/change-sub-zone.js';
 import { completeTravel } from '../../navigation/services/complete-travel.js';
 import { startTravel } from '../../navigation/services/start-travel.js';
 import { updateTravelTarget } from '../../navigation/services/update-travel-target.js';
 import { getEntrySubZone } from '../../navigation/utils/index.js';
+import * as resourceRepository from '../../resource/repository.js';
 import type { GeneratorContext } from '../types.js';
 
 import type { EventEffect } from './types.js';
@@ -74,6 +78,24 @@ export async function applyEffects(effects: Array<EventEffect>, ctx: GeneratorCo
         ctx.player.currentSubZone = effect.targetSubZone;
         ctx.subZone = effect.targetSubZone;
         break;
+      case 'addResource': {
+        await resourceRepository.addResource({
+          playerId: ctx.player.id,
+          name: effect.name,
+          quantity: effect.quantity,
+          options: { client: tx },
+        });
+        const existing = ctx.inventory.find((r) => r.name === effect.name);
+        if (existing) existing.quantity += effect.quantity;
+        else ctx.inventory.push({ name: effect.name, quantity: effect.quantity });
+        break;
+      }
+      case 'addCharacter': {
+        const template = await characterRepository.findTemplateByName(effect.templateName, tx);
+        if (!template) throw new NotFoundError(`Personnage introuvable : ${effect.templateName}.`);
+        await characterRepository.createCharacterInstance(ctx.player.id, template.id, tx);
+        break;
+      }
     }
   }
 }
