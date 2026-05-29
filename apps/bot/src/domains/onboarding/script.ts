@@ -6,7 +6,7 @@ import type { View } from '../../discord/types.js';
 import { buildOpEmbed } from '../../discord/utils/index.js';
 
 import { buildFishReminder, runFishStep } from './steps/step-fish.js';
-import { buildIntroReminder, runIntroKickoff } from './steps/step-intro.js';
+import { buildKickoffReminder, runKickoff } from './steps/step-kickoff.js';
 
 type SceneStep = {
   id: OnboardingStepId;
@@ -26,7 +26,7 @@ type MissionStep = {
 type OnboardingStep = SceneStep | MissionStep;
 
 export const ONBOARDING_SCRIPT: ReadonlyArray<OnboardingStep> = [
-  { id: 'intro', type: 'mission', expects: 'intro', run: runIntroKickoff, reminder: buildIntroReminder },
+  { id: 'intro', type: 'mission', expects: 'intro', run: runKickoff, reminder: buildKickoffReminder },
   { id: 'fish-mission', type: 'mission', expects: 'fish', run: runFishStep, reminder: buildFishReminder },
   { id: 'after-fish', type: 'scene', embed: buildAfterFishEmbed },
 ];
