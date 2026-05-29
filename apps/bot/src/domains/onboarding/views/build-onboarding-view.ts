@@ -8,19 +8,26 @@ import { getStep } from '../step-registry.js';
 
 const DEFAULT_SCENE_BUTTON_LABEL = 'Continuer';
 
-export function buildOnboardingView(stepId: OnboardingStepId, prefix: string): View {
+type BuildOnboardingViewParams = { stepId: OnboardingStepId; prefix: string; ownerDiscordId: string };
+
+export function buildOnboardingView({ stepId, prefix, ownerDiscordId }: BuildOnboardingViewParams): View {
   const step = getStep(stepId);
 
   if (step.type === 'mission') return step.reminder(prefix, step.expects);
 
   return {
     embeds: [step.embed()],
-    components: [buildNextButtonRow(step.id, step.buttonLabel ?? DEFAULT_SCENE_BUTTON_LABEL)],
+    components: [buildNextButtonRow({ stepId: step.id, label: step.buttonLabel ?? DEFAULT_SCENE_BUTTON_LABEL, ownerDiscordId })],
   };
 }
 
-function buildNextButtonRow(stepId: OnboardingStepId, label: string): ActionRowBuilder<ButtonBuilder> {
+type NextButtonRowParams = { stepId: OnboardingStepId; label: string; ownerDiscordId: string };
+
+function buildNextButtonRow({ stepId, label, ownerDiscordId }: NextButtonRowParams): ActionRowBuilder<ButtonBuilder> {
   return new ActionRowBuilder<ButtonBuilder>().addComponents(
-    new ButtonBuilder().setCustomId(buildCustomId(ONBOARDING_NEXT_BUTTON_NAME, stepId)).setLabel(label).setStyle(ButtonStyle.Primary),
+    new ButtonBuilder()
+      .setCustomId(buildCustomId(ONBOARDING_NEXT_BUTTON_NAME, ownerDiscordId, stepId))
+      .setLabel(label)
+      .setStyle(ButtonStyle.Primary),
   );
 }
