@@ -26,6 +26,8 @@ export async function synchronizePlayer(playerId: number): Promise<SyncResult> {
   return db.transaction(async (tx) => {
     const player = await playerRepository.findByIdOrThrow(playerId, tx, { forUpdate: true });
 
+    if (player.onboardingStep !== null) return { status: 'already_caught_up' };
+
     const interactivePending = await eventRepository.findFirstInteractivePending(playerId, tx);
     if (interactivePending) {
       return { status: 'blocked_on_interactive', generatedPassiveCount: 0, interactiveKey: interactivePending.eventKey };

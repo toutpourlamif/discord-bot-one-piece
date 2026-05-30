@@ -38,4 +38,4 @@ export const devCommands = [
   dmCommand,
   showHistoryCommand,
   wipeHistoryCommand,
-].map((cmd) => ({ ...cmd, requiresOpAdmin: true, requiresSynchronization: false }));
+].map((cmd) => ({ ...cmd, requiresOpAdmin: true, requiresSynchronization: false, requiresOnboardingFinished: false }));

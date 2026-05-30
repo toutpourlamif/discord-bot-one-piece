@@ -7,6 +7,7 @@ import { autoSyncBeforeAction, eventCommands } from '../domains/event/index.js';
 import { fishingCommands } from '../domains/fishing/index.js';
 import { guildCommands, requireGuildId } from '../domains/guild/index.js';
 import * as guildRepository from '../domains/guild/repository.js';
+import { interceptOnboardingCommand, onboardingCommands } from '../domains/onboarding/index.js';
 import { playerCommands } from '../domains/player/index.js';
 import { findOrCreatePlayer } from '../domains/player/service.js';
 import { resourceCommands } from '../domains/resource/index.js';
@@ -16,6 +17,7 @@ import { buildRegistry } from '../shared/build-registry.js';
 import { AppError } from './errors.js';
 import { buildOpEmbed } from './utils/index.js';
 
+// TODO: Séparer dans un fichier command-registry.ts
 const allCommands = [
   ...playerCommands,
   ...infoCommands,
@@ -26,6 +28,7 @@ const allCommands = [
   ...crewCommands,
   ...guildCommands,
   ...eventCommands,
+  ...onboardingCommands,
 ];
 const registry = buildRegistry(allCommands, (command) =>
   Array.isArray(command.name) ? command.name.map((name) => name.toLowerCase()) : command.name.toLowerCase(),
@@ -53,6 +56,9 @@ export async function routeMessage(message: Message): Promise<void> {
     if (command.requiresOpAdmin) {
       // assertPlayerIsAdmin(player); TODO: réactiver en prod
     }
+
+    const intercepted = await interceptOnboardingCommand({ ctx: { message, args, player, guild }, command });
+    if (intercepted) return;
 
     if (command.requiresSynchronization !== false) {
       await autoSyncBeforeAction(message, player, guild);
