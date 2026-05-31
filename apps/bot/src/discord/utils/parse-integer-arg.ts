@@ -1,6 +1,6 @@
 import { ValidationError } from '../errors.js';
 
-import { isValidPostgresInteger } from './valid-postgres-integer.js';
+import { isValidPostgresInteger } from './is-valid-postgres-integer.js';
 export function parseIntegerArg(raw: string | undefined): number {
   const value = Number(raw);
 
