@@ -5,39 +5,61 @@ import importX from 'eslint-plugin-import-x';
 import unusedImports from 'eslint-plugin-unused-imports';
 import tseslint from 'typescript-eslint';
 
-export default defineConfig({
-  ignores: ['**/dist/**', '**/node_modules/**', '**/drizzle/**'],
-  extends: [eslint.configs.recommended, tseslint.configs.recommendedTypeChecked, tseslint.configs.stylisticTypeChecked, prettier],
-  languageOptions: {
-    parserOptions: {
-      projectService: true,
+export default defineConfig([
+  {
+    ignores: ['**/dist/**', '**/node_modules/**', '**/drizzle/**'],
+  },
+  {
+    extends: [eslint.configs.recommended, tseslint.configs.recommendedTypeChecked, tseslint.configs.stylisticTypeChecked, prettier],
+    languageOptions: {
+      parserOptions: {
+        projectService: true,
+      },
+    },
+    plugins: {
+      'import-x': importX,
+      'unused-imports': unusedImports,
+    },
+    rules: {
+      '@typescript-eslint/consistent-type-definitions': ['error', 'type'],
+      '@typescript-eslint/consistent-type-imports': 'error',
+      '@typescript-eslint/array-type': ['error', { default: 'generic' }],
+      '@typescript-eslint/no-floating-promises': 'error',
+      '@typescript-eslint/no-misused-promises': ['error', { checksVoidReturn: { arguments: false } }],
+      '@typescript-eslint/no-unnecessary-condition': 'error',
+      '@typescript-eslint/no-explicit-any': 'error',
+
+      '@typescript-eslint/switch-exhaustiveness-check': 'error',
+      '@typescript-eslint/only-throw-error': 'error',
+      '@typescript-eslint/return-await': ['error', 'in-try-catch'],
+      '@typescript-eslint/promise-function-async': 'error',
+      '@typescript-eslint/no-confusing-void-expression': ['error', { ignoreArrowShorthand: true }],
+      '@typescript-eslint/no-unnecessary-type-arguments': 'error',
+
+      eqeqeq: ['error', 'always'],
+      'no-param-reassign': ['error', { props: true }],
+
+      '@typescript-eslint/no-unused-vars': 'off',
+      'unused-imports/no-unused-imports': 'error',
+      'unused-imports/no-unused-vars': ['warn', { argsIgnorePattern: '^_', varsIgnorePattern: '^_' }],
+
+      'import-x/no-cycle': 'error',
+      'import-x/no-default-export': 'error',
+      'import-x/no-duplicates': 'error',
+      'import-x/order': [
+        'error',
+        {
+          groups: ['builtin', 'external', 'internal', 'parent', 'sibling', 'index'],
+          'newlines-between': 'always',
+          alphabetize: { order: 'asc' },
+        },
+      ],
     },
   },
-  plugins: {
-    'import-x': importX,
-    'unused-imports': unusedImports,
+  {
+    files: ['**/*.config.ts', '**/*.config.js', '**/*.config.mjs'],
+    rules: {
+      'import-x/no-default-export': 'off',
+    },
   },
-  rules: {
-    '@typescript-eslint/consistent-type-definitions': ['error', 'type'],
-    '@typescript-eslint/consistent-type-imports': 'error',
-    '@typescript-eslint/array-type': ['error', { default: 'generic' }],
-    '@typescript-eslint/no-floating-promises': 'error',
-    '@typescript-eslint/no-misused-promises': ['error', { checksVoidReturn: { arguments: false } }],
-    '@typescript-eslint/no-unnecessary-condition': 'error',
-    '@typescript-eslint/no-explicit-any': 'error',
-
-    '@typescript-eslint/no-unused-vars': 'off',
-    'unused-imports/no-unused-imports': 'error',
-    'unused-imports/no-unused-vars': ['warn', { argsIgnorePattern: '^_', varsIgnorePattern: '^_' }],
-
-    'import-x/no-cycle': 'error',
-    'import-x/order': [
-      'error',
-      {
-        groups: ['builtin', 'external', 'internal', 'parent', 'sibling', 'index'],
-        'newlines-between': 'always',
-        alphabetize: { order: 'asc' },
-      },
-    ],
-  },
-});
+]);

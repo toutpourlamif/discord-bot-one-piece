@@ -22,10 +22,11 @@ Bot Discord autour de l'univers One Piece. Le joueur recrute un équipage, amél
 - `Array<T>`, jamais `T[]` (ESLint actif)
 - Helpers et fonctions top-level : `function foo() {}`, pas `const foo = () => {}`
 - Pas de commentaires qui décrivent **ce que** fait le code — uniquement **pourquoi** quand le « pourquoi » est non évident
+- **Short guards inline** : `if (cond) return …;`, `if (cond) throw …;`, etc. tiennent sur **une ligne sans accolades**. Pas d'ESLint `curly`.
 - **YAGNI** (_You Aren't Gonna Need It_) : on n'ajoute pas une feature, une dep, un helper, un validator tant qu'un code actuel ne l'utilise pas. Pas d'abstractions spéculatives — 3 lignes similaires valent mieux qu'un helper prématuré.
 - Les erreurs : gérer aux frontières (entrée Discord, APIs externes, DB). Faire confiance au code interne.
 - **TODO** : tout code temporaire (test manuel, stub, placeholder, hack) doit être marqué `// TODO: <raison>`. Permet de le retrouver facilement (`rg TODO`) et de nettoyer avant merge.
-- **Repositories** : import en namespace, jamais nommé. Ex : `import * as playerRepository from '../player/repository.js'` puis `playerRepository.findById(...)`. Les fonctions du repo n'ont pas le suffixe d'entité (`findOrCreate`, pas `findOrCreatePlayer`) — le namespace porte déjà l'info.
+- **Repositories & services** : import en namespace, jamais nommé. Ex : `import * as playerRepository from '../player/repository.js'` puis `playerRepository.findById(...)` ; `import * as onboardingService from '../services/index.js'` puis `onboardingService.advanceOnboarding(...)`. Les fonctions n'ont pas le suffixe d'entité (`findOrCreate`, pas `findOrCreatePlayer`) — le namespace porte déjà l'info.
 - **Signatures de fonctions** :
   - **1–2 args métier** : positionnels, `options: OptionsType = {}` en dernier. Ex : `clearTravel(playerId, options)`.
   - **3+ args métier** : un seul param object `{...}` typé via un `type FooParams = {...; options?: OptionsType}`. Ex : `completeTravel({ playerId, bucketId, rng, options })`.

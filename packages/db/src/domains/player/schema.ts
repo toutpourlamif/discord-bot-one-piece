@@ -5,8 +5,7 @@ import { MAX_CHARACTER_NAME_LENGTH, MAX_CREW_NAME_LENGTH } from '../../shared/co
 import { timestamps } from '../../shared/helpers.js';
 import { guild } from '../guild/schema.js';
 import { subZoneEnum } from '../navigation/sub-zone-enum.js';
-import { ISLAND_ENTRY_SUB_ZONE } from '../navigation/world/islands/registry.js';
-import type { Island } from '../navigation/world/zones.js';
+import { ISLAND_ENTRY_SUB_ZONE, type Island } from '../navigation/world/registry.js';
 import { zoneEnum } from '../navigation/zone-enum.js';
 
 import { ONBOARDING_STEP_IDS, onboardingStepEnum } from './onboarding-step-enum.js';
@@ -37,8 +36,8 @@ export const player = pgTable('player', {
   ...timestamps(),
   lastProcessedBucketId: integer('last_processed_bucket_id').notNull(),
   isAdmin: boolean('is_admin').notNull().default(false),
-  currentZone: zoneEnum('current_zone').notNull().default('foosha'),
-  currentSubZone: subZoneEnum('current_sub_zone').default(ISLAND_ENTRY_SUB_ZONE.foosha),
+  currentZone: zoneEnum('current_zone').notNull().default('dawn'),
+  currentSubZone: subZoneEnum('current_sub_zone').default(ISLAND_ENTRY_SUB_ZONE.dawn),
   travelTargetZone: zoneEnum('travel_target_zone').$type<Island>(),
   travelStartedBucket: integer('travel_started_bucket'),
   travelEtaBucket: integer('travel_eta_bucket'),

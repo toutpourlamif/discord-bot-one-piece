@@ -4,16 +4,17 @@ import type { View } from '../../../discord/types.js';
 import { buildMenuButtons, buildOpEmbed, buildPaginationButtons, clampPage, splitIntoPages } from '../../../discord/utils/index.js';
 import { buildAssetUrl } from '../../../shared/build-asset-url.js';
 import type { CharacterRow } from '../../character/types.js';
-import { getCharacterInstanceName } from '../../character/utils/index.js';
 import { CREW_BUTTON_NAME } from '../constants.js';
 
+import { formatLine } from './captain-prefix.js';
 import { getCrewCapacity } from './get-crew-capacity.js';
 import { getCrewDisplayName } from './get-crew-display-name.js';
+import { isInCrewFilter } from './is-in-crew-filter.js';
 
 export function buildCrewView(player: Player, ship: Ship, characters: Array<CharacterRow>, page: number, ownerDiscordId: string): View {
   const menuRow = buildMenuButtons(CREW_BUTTON_NAME, ownerDiscordId, player.id);
 
-  const crew = characters.filter((c) => c.joinedCrewAt !== null);
+  const crew = characters.filter(isInCrewFilter);
   const reserve = characters.filter((c) => c.joinedCrewAt === null);
 
   const reservePages = splitIntoPages(reserve.map(formatLine));
@@ -44,9 +45,4 @@ export function buildCrewView(player: Player, ship: Ship, characters: Array<Char
     embeds: [embed],
     components: [...buildPaginationButtons(CREW_BUTTON_NAME, ownerDiscordId, player.id, currentPage, pageCount), menuRow],
   };
-}
-
-function formatLine(row: CharacterRow): string {
-  const prefix = row.isCaptain ? '⭐ ' : '';
-  return `${prefix}${getCharacterInstanceName(row)}`;
 }

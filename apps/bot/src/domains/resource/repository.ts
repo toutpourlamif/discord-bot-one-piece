@@ -2,6 +2,7 @@ import { db, resourceInstance, resourceTemplate, type ResourceName, type Resourc
 import { and, asc, eq, getTableColumns, gte, ilike, or, sql } from 'drizzle-orm';
 
 import { NotFoundError } from '../../discord/errors.js';
+import type { ClientOptions } from '../../shared/types.js';
 
 import type { Inventory } from './types.js';
 
@@ -21,11 +22,25 @@ export async function listAllTemplates(): Promise<Array<ResourceTemplate>> {
   return db.select().from(resourceTemplate);
 }
 
-/** Ajoute n quantité d'une ressource à un joueur, si il avait déjà x ressource, alors la quantité devient x + y */
-export async function addResourceToPlayer(playerId: number, templateId: number, quantity: number): Promise<void> {
-  await db
+type AddResourceParams = {
+  playerId: number;
+  name: ResourceName;
+  quantity: number;
+  options?: ClientOptions;
+};
+
+/** Ajoute n quantité d'une ressource à un joueur. Si il en avait déjà x, la quantité devient x + y. */
+export async function addResource({ playerId, name, quantity, options = {} }: AddResourceParams): Promise<void> {
+  const { client = db } = options;
+  const [template] = await client
+    .select({ id: resourceTemplate.id })
+    .from(resourceTemplate)
+    .where(eq(resourceTemplate.name, name))
+    .limit(1);
+  if (!template) throw new NotFoundError(`Ressource introuvable : ${name}.`);
+  await client
     .insert(resourceInstance)
-    .values({ playerId, templateId, quantity })
+    .values({ playerId, templateId: template.id, quantity })
     .onConflictDoUpdate({
       target: [resourceInstance.playerId, resourceInstance.templateId],
       set: { quantity: sql`${resourceInstance.quantity} + ${quantity}` },

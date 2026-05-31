@@ -8,7 +8,7 @@ function buildCharacterImageUrl(crew: string, slug: string): string {
 }
 
 // TODO: supprimer/modifier en prod
-// TODO: donner aux personnages leurs types de base quand la colonne types existera sur character_template
+// TODO: compléter les types de base quand ils sont moins évidents que la race.
 export const CHARACTER_TEMPLATES_DATA: Array<CharacterTemplateSeed> = [
   {
     name: PLAYER_AS_CHARACTER_TEMPLATE_NAME,
@@ -78,6 +78,7 @@ export const CHARACTER_TEMPLATES_DATA: Array<CharacterTemplateSeed> = [
     hp: 15,
     combat: 18,
     race: 'FISHMAN',
+    types: ['WATER'],
     rarity: 'RARE',
     imageUrl: 'characters/arlong.webp',
     description: "Capitaine homme-poisson brutal venu imposer sa loi à l'East Blue.",

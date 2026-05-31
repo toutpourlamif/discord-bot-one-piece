@@ -1,6 +1,6 @@
 import type { Command } from '../../../discord/types.js';
 import { replyDebugData } from '../../../discord/utils/index.js';
-import * as historyRepository from '../../history/repository.js';
+import * as historyRepository from '../../history/index.js';
 import { resolveTargetPlayer } from '../../player/index.js';
 
 export const showHistoryCommand: Command = {
