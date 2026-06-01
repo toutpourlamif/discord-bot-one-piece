@@ -14,6 +14,7 @@ import { buildGeneratorContext, fetchGeneratorContextData } from '../engine/cont
 import { createRngForGenerator } from '../engine/rng.js';
 import { synchronizePlayer } from '../engine/synchronize-player.js';
 import { findGeneratorByKeyOrThrow } from '../generators/registry.js';
+import { buildInteractiveStepView } from '../recap/build-interactive-step-view.js';
 import { buildRecapView } from '../recap/build-recap-view.js';
 import * as eventRepository from '../repository.js';
 import type { Resolution } from '../types.js';
@@ -60,18 +61,29 @@ export const eventChoiceButtonHandler: ButtonHandler = {
       const choice = step.choices(instance.state, ctx).find((c) => c.id === choiceId);
       if (!choice) throw new InternalError(`Choix ${choiceId} introuvable dans ${generator.key}#${stepKey}`);
 
-      if ('goTo' in choice) return null;
+      if ('goTo' in choice) {
+        if (!generator.steps[choice.goTo]) throw new InternalError(`goTo vers step inexistant: ${choice.goTo} pour ${generator.key}`);
+        const nextState = { ...instance.state, step: choice.goTo };
+        await eventRepository.updateState(instance.id, nextState, tx);
+        return { kind: 'goTo' as const, nextState, ctx };
+      }
 
       const resolution = choice.resolve(ctx, createRngForGenerator(generator, ctx));
       await applyEffects(resolution.effects, ctx, tx);
       await historyRepository.writeEventResolution({ actorPlayerId: player.id, kind: resolution.resolutionType, bucketId }, tx);
       await eventRepository.deleteById(instance.id, tx);
-      return { resolution, player };
+      return { kind: 'resolved' as const, resolution, player };
     });
 
-    if (!result) {
-      // TODO #198 : multi-étapes (updateState + re-render). Hors scope #192.
-      await interaction.followUp({ content: 'TODO: goTo à brancher (cf #198).', ephemeral: true });
+    if (result.kind === 'goTo') {
+      const view = buildInteractiveStepView({
+        generator,
+        instanceId: instance.id,
+        state: result.nextState,
+        bucketId: instance.bucketId,
+        ctx: result.ctx,
+      });
+      await interaction.editReply(view);
       return;
     }
 

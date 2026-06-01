@@ -22,8 +22,8 @@ export async function getPendingEventsForPlayer(playerId: number): Promise<Array
   }));
 }
 
-export async function updateState(id: bigint, state: JSONFromSQL): Promise<void> {
-  await db.update(eventInstance).set({ state }).where(eq(eventInstance.id, id));
+export async function updateState(id: bigint, state: JSONFromSQL, client: DbOrTransaction = db): Promise<void> {
+  await client.update(eventInstance).set({ state }).where(eq(eventInstance.id, id));
 }
 
 export async function findById(id: bigint): Promise<EventInstance | null> {
