@@ -21,7 +21,7 @@ export async function appendHistory({
   occurredAt,
 }: AppendHistoryArgs): Promise<void> {
   await client.insert(history).values({
-    kind: type,
+    type,
     actorPlayerId,
     bucketId,
     targetType: target?.type,

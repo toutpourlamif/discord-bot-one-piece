@@ -64,7 +64,7 @@ export const eventChoiceButtonHandler: ButtonHandler = {
 
       const resolution = choice.resolve(ctx, createRngForGenerator(generator, ctx));
       await applyEffects(resolution.effects, ctx, tx);
-      await historyRepository.writeEventResolution({ actorPlayerId: player.id, kind: resolution.resolutionType, bucketId }, tx);
+      await historyRepository.writeEventResolution({ actorPlayerId: player.id, type: resolution.resolutionType, bucketId }, tx);
       await eventRepository.deleteById(instance.id, tx);
       return { resolution, player };
     });

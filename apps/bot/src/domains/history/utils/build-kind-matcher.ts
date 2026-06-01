@@ -11,5 +11,5 @@ export function buildKindMatcher(kind: string): SQL {
   if (!SAFE_KIND.test(kind)) {
     throw new ValidationError(`History kind invalide \`${kind}\` — uniquement lettres, chiffres et points sont autorisés.`);
   }
-  return or(eq(history.kind, kind), like(history.kind, `${kind}.%`))!;
+  return or(eq(history.type, kind), like(history.type, `${kind}.%`))!;
 }
