@@ -10,8 +10,7 @@ export const history = pgTable(
     id: bigserial('id', { mode: 'bigint' }).primaryKey(),
     bucketId: integer('bucket_id'),
     occurredAt: timestamp('occurred_at', { withTimezone: true }).notNull().defaultNow(),
-    // TODO: rename en type
-    kind: text('kind').notNull(),
+    type: text('type').notNull(),
     actorPlayerId: integer('actor_player_id').references(() => player.id, { onDelete: 'set null' }),
     targetType: text('target_type'),
     targetId: integer('target_id'),
@@ -22,15 +21,15 @@ export const history = pgTable(
   },
   (table) => [
     index('history_occurred_at_idx').on(table.occurredAt.desc()),
-    index('history_kind_occurred_at_idx').on(table.kind, table.occurredAt.desc()),
+    index('history_type_occurred_at_idx').on(table.type, table.occurredAt.desc()),
     index('history_actor_player_id_occurred_at_idx')
       .on(table.actorPlayerId, table.occurredAt.desc())
       .where(sql`${table.actorPlayerId} IS NOT NULL`),
     index('history_target_idx')
       .on(table.targetType, table.targetId)
       .where(sql`${table.targetId} IS NOT NULL`),
-    uniqueIndex('history_actor_kind_bucket_uniq')
-      .on(table.actorPlayerId, table.kind, table.bucketId)
+    uniqueIndex('history_actor_type_bucket_uniq')
+      .on(table.actorPlayerId, table.type, table.bucketId)
       .where(sql`${table.actorPlayerId} IS NOT NULL AND ${table.bucketId} IS NOT NULL`),
   ],
 );
