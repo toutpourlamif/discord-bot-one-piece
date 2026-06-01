@@ -1,4 +1,5 @@
 import type { Command } from '../../../discord/types.js';
+import { buildOpEmbed } from '../../../discord/utils/build-op-embed.js';
 import { getBucketIdFromDate, getEndDateOfBucket, getLatestProcessableBucket, getStartDateOfBucket } from '../../event/engine/bucket.js';
 import { formatBucketTime } from '../../event/utils/format-bucket-time.js';
 
@@ -6,7 +7,7 @@ function formatBucketLine(bucketId: number): string {
   const startDate = getStartDateOfBucket(bucketId);
   const endDate = getEndDateOfBucket(bucketId);
 
-  return `Bucket ${bucketId}, ${formatBucketTime(startDate)} - ${formatBucketTime(endDate)}`;
+  return `**${bucketId}**, \n${formatBucketTime(startDate)} - ${formatBucketTime(endDate)}`;
 }
 
 export const bucketsCommand: Command = {
@@ -16,8 +17,10 @@ export const bucketsCommand: Command = {
     const nowBucketId = getBucketIdFromDate(new Date());
     const latestProcessableBucketId = getLatestProcessableBucket();
 
-    await message.reply(
-      ['Now:', formatBucketLine(nowBucketId), 'LatestProcessable:', formatBucketLine(latestProcessableBucketId)].join('\n'),
-    );
+    const embed = buildOpEmbed('info')
+      .setTitle('Buckets')
+      .setDescription(`Now: ${formatBucketLine(nowBucketId)}, \n\n Latest processable: ${formatBucketLine(latestProcessableBucketId)}`);
+
+    await message.reply({ embeds: [embed] });
   },
 };
