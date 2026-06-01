@@ -1,9 +1,7 @@
 import { db, type Player } from '@one-piece/db';
 import { ActionRowBuilder, ButtonBuilder, ButtonStyle } from 'discord.js';
-import chunk from 'lodash/chunk.js';
 
-import { DISCORD_ACTION_ROW_MAX_BUTTONS, PAGINATION } from '../../../discord/constants.js';
-import { InternalError } from '../../../discord/errors.js';
+import { PAGINATION } from '../../../discord/constants.js';
 import type { View } from '../../../discord/types.js';
 import { buildOpEmbed } from '../../../discord/utils/index.js';
 import { buildProfilButton } from '../../player/build-profil-button.js';
@@ -12,8 +10,9 @@ import { buildGeneratorContext, fetchGeneratorContextData } from '../engine/cont
 import { findGeneratorByKeyOrThrow } from '../generators/registry.js';
 import { getPendingEventsForPlayer, type PendingEventInstance } from '../repository.js';
 import type { GeneratorContext, InteractiveGenerator, PassiveGenerator } from '../types.js';
-import { buildEventInteractiveChoiceCustomId, buildEventPassiveNextCustomId } from '../utils/build-event-custom-id.js';
+import { buildEventPassiveNextCustomId } from '../utils/build-event-custom-id.js';
 
+import { buildInteractiveStepView } from './build-interactive-step-view.js';
 import { getRandomCalmTextByZone } from './get-random-calm-text-by-zone.js';
 
 export async function buildRecapView(player: Player, isContinuation = false): Promise<View> {
@@ -59,25 +58,8 @@ function buildPassiveView(generator: PassiveGenerator, instance: PendingEventIns
 }
 
 async function buildInteractiveView(generator: InteractiveGenerator, instance: PendingEventInstance, player: Player): Promise<View> {
-  const stepKey = instance.state.step;
-  if (typeof stepKey !== 'string') throw new InternalError(`state.step invalide pour ${generator.key}: ${String(stepKey)}`);
-  const step = generator.steps[stepKey];
-  if (!step) throw new InternalError(`Step introuvable: ${stepKey} pour ${generator.key}`);
-
   const ctx = await buildCtxForPlayer(player);
-  const embed = step.embed(instance.state, ctx).setTimestamp(getStartDateOfBucket(instance.bucketId));
-  const buttons = step
-    .choices(instance.state, ctx)
-    .map((choice) =>
-      new ButtonBuilder()
-        .setCustomId(buildEventInteractiveChoiceCustomId(instance.id, choice.id))
-        .setLabel(choice.label)
-        .setStyle(ButtonStyle.Primary),
-    );
-  const rows = chunk(buttons, DISCORD_ACTION_ROW_MAX_BUTTONS).map((rowButtons) =>
-    new ActionRowBuilder<ButtonBuilder>().addComponents(rowButtons),
-  );
-  return { embeds: [embed], components: rows };
+  return buildInteractiveStepView({ generator, instanceId: instance.id, state: instance.state, bucketId: instance.bucketId, ctx });
 }
 
 async function buildCtxForPlayer(player: Player): Promise<GeneratorContext> {
