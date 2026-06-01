@@ -3,7 +3,7 @@ import { sql } from 'drizzle-orm';
 
 type WriteEventResolutionArgs = {
   actorPlayerId: number;
-  kind: string;
+  type: string;
   bucketId: number;
 };
 
@@ -12,7 +12,7 @@ export async function writeEventResolution(args: WriteEventResolutionArgs, clien
     .insert(history)
     .values(args)
     .onConflictDoNothing({
-      target: [history.actorPlayerId, history.kind, history.bucketId],
+      target: [history.actorPlayerId, history.type, history.bucketId],
       where: sql`${history.actorPlayerId} IS NOT NULL AND ${history.bucketId} IS NOT NULL`,
     });
 }
