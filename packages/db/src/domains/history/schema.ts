@@ -10,6 +10,7 @@ export const history = pgTable(
     id: bigserial('id', { mode: 'bigint' }).primaryKey(),
     bucketId: integer('bucket_id'),
     occurredAt: timestamp('occurred_at', { withTimezone: true }).notNull().defaultNow(),
+    // TODO: rename en type
     kind: text('kind').notNull(),
     actorPlayerId: integer('actor_player_id').references(() => player.id, { onDelete: 'set null' }),
     targetType: text('target_type'),

@@ -65,17 +65,17 @@ export const eventChoiceButtonHandler: ButtonHandler = {
         if (!generator.steps[choice.goTo]) throw new InternalError(`goTo vers step inexistant: ${choice.goTo} pour ${generator.key}`);
         const nextState = { ...instance.state, step: choice.goTo };
         await eventRepository.updateState(instance.id, nextState, tx);
-        return { kind: 'goTo' as const, nextState, ctx };
+        return { type: 'goTo' as const, nextState, ctx };
       }
 
       const resolution = choice.resolve(ctx, createRngForGenerator(generator, ctx));
       await applyEffects(resolution.effects, ctx, tx);
       await historyRepository.writeEventResolution({ actorPlayerId: player.id, kind: resolution.resolutionType, bucketId }, tx);
       await eventRepository.deleteById(instance.id, tx);
-      return { kind: 'resolved' as const, resolution, player };
+      return { type: 'resolved' as const, resolution, player };
     });
 
-    if (result.kind === 'goTo') {
+    if (result.type === 'goTo') {
       const view = buildInteractiveStepView({
         generator,
         instanceId: instance.id,
