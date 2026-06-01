@@ -6,7 +6,7 @@ import { formatBucketTime } from '../../event/utils/format-bucket-time.js';
 function formatBucketLine(bucketId: number): string {
   const startDate = getStartDateOfBucket(bucketId);
   const endDate = getEndDateOfBucket(bucketId);
-
+  //TODO: ajouter l'util wrapInBackticks quand dispo autour du bucketId a la places des etoiles
   return `**${bucketId}**, \n${formatBucketTime(startDate)} - ${formatBucketTime(endDate)}`;
 }
 
