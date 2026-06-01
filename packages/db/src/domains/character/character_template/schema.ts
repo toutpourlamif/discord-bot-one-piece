@@ -2,7 +2,8 @@ import { sql } from 'drizzle-orm';
 import { index, integer, pgTable, serial, varchar, text, real } from 'drizzle-orm/pg-core';
 
 import { imageUrl, timestamps } from '../../../shared/helpers.js';
-import { rarity } from '../../../shared/rarity.js';
+import { pokemonType } from '../../../shared/pokemon-type-enum.js';
+import { rarityColumn } from '../../../shared/rarity-enum.js';
 import { devilFruitTemplate } from '../../devil_fruit/devil_fruit_template/schema.js';
 import { characterRaceEnum } from '../enum.js';
 import { characterSkillEnum } from '../skill-enum.js';
@@ -17,7 +18,7 @@ export const characterTemplate = pgTable(
     devilFruitTemplateId: integer('devil_fruit_template_id').references(() => devilFruitTemplate.id, {
       onDelete: 'restrict',
     }),
-    rarity: rarity('rarity').notNull().default('COMMON'),
+    ...rarityColumn(),
     captainCombatMultiplier: real('captain_combat_multiplier').notNull().default(1),
     captainHpMultiplier: real('captain_hp_multiplier').notNull().default(1),
     captainBerryGainMultiplier: real('captain_berry_gain_multiplier').notNull().default(1),
@@ -25,6 +26,10 @@ export const characterTemplate = pgTable(
     captainMoraleMultiplier: real('captain_morale_multiplier').notNull().default(1),
 
     race: characterRaceEnum('race').notNull(),
+    types: pokemonType('types')
+      .array()
+      .notNull()
+      .default(sql`'{}'::pokemon_type[]`),
     ...imageUrl(),
     ...timestamps(),
 

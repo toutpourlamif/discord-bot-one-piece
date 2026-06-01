@@ -24,7 +24,7 @@ client.once(Events.ClientReady, (c) => {
   console.log(`Bot connecté : ${c.user.tag}`);
 });
 
-client.on(Events.MessageCreate, (message) => routeMessage(message));
-client.on(Events.InteractionCreate, (interaction) => routeInteraction(interaction));
+client.on(Events.MessageCreate, async (message) => routeMessage(message));
+client.on(Events.InteractionCreate, async (interaction) => routeInteraction(interaction));
 
 await client.login(token);

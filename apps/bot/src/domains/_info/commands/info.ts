@@ -19,7 +19,7 @@ export const infoCommand: Command = {
       minLength: MIN_QUERY_LENGTH,
     });
 
-    const hitsPerProvider = await Promise.all(infoProviders.map((provider) => provider.searchManyByName(query)));
+    const hitsPerProvider = await Promise.all(infoProviders.map(async (provider) => provider.searchManyByName(query)));
     const topHits = hitsPerProvider
       .flat()
       .sort((a, b) => b.score - a.score)

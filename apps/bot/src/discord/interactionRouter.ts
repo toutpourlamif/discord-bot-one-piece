@@ -6,6 +6,7 @@ import { crewButtonHandlers } from '../domains/crew/index.js';
 import { eventButtonHandlers } from '../domains/event/index.js';
 import { guildButtonHandlers, requireGuildId } from '../domains/guild/index.js';
 import * as guildRepository from '../domains/guild/repository.js';
+import { onboardingButtonHandlers } from '../domains/onboarding/index.js';
 import { playerButtonHandlers } from '../domains/player/index.js';
 import { resourceButtonHandlers } from '../domains/resource/index.js';
 import { shipButtonHandlers } from '../domains/ship/index.js';
@@ -25,6 +26,7 @@ const allButtonHandlers: Array<ButtonHandler> = [
   ...crewButtonHandlers,
   ...guildButtonHandlers,
   ...eventButtonHandlers,
+  ...onboardingButtonHandlers,
   ...devButtonHandlers,
 ];
 const buttonRegistry = buildRegistry(allButtonHandlers, (h) => h.name);
