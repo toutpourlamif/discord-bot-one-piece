@@ -13,6 +13,8 @@ const ENTITIES_DISPLAYED_LIMIT = 10;
 
 export const infoCommand: Command = {
   name: 'info',
+  requiresOnboardingFinished: false,
+  requiresSynchronization: false,
   async handler({ message, args }) {
     const query = getQuery(args, {
       emptyMessage: `Ta recherche doit faire au moins ${MIN_QUERY_LENGTH} caractères.`,
