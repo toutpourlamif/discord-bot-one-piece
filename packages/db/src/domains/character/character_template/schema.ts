@@ -5,13 +5,17 @@ import { imageUrl, timestamps } from '../../../shared/helpers.js';
 import { pokemonType } from '../../../shared/pokemon-type-enum.js';
 import { rarityColumn } from '../../../shared/rarity-enum.js';
 import { devilFruitTemplate } from '../../devil_fruit/devil_fruit_template/schema.js';
+import { player } from '../../player/schema.js';
 import { characterRaceEnum } from '../enum.js';
 import { characterSkillEnum } from '../skill-enum.js';
 export const characterTemplate = pgTable(
   'character_template',
   {
     id: serial('id').primaryKey(),
-    name: varchar('name', { length: 128 }).notNull().unique(),
+    // Nullable : les templates perso d'un joueur n'ont pas de nom (le nickname de l'instance porte le nom affiché).
+    name: varchar('name', { length: 128 }).unique(),
+    // Renseigné uniquement pour le template perso d'un joueur ; null pour les templates recrutables.
+    playerId: integer('player_id').references(() => player.id, { onDelete: 'cascade' }),
     description: text('description'),
     hp: integer('hp').notNull().default(100),
     combat: integer('combat').notNull().default(10),
