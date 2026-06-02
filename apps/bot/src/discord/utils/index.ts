@@ -3,6 +3,7 @@ export { assertInteractorIsTheOwner } from './assert-interactor-is-the-owner.js'
 export { buildBackAction, buildBackButton } from './build-back-action.js';
 export { buildCancelButton, cancelButtonHandler } from './cancel-button.js';
 export { buildCustomId } from './build-custom-id.js';
+export { buildDialogueEmbed, type DialogueSpeaker } from './build-dialogue-embed.js';
 export { buildDiscordTimestamp } from './build-discord-timestamp.js';
 export { buildMenuButtons } from './build-menu-buttons.js';
 export { buildOpEmbed } from './build-op-embed.js';
