@@ -19,9 +19,10 @@ type BuildDialogueEmbedOptions = { emotion?: DialogueEmotion; variant?: EmbedVar
 
 export function buildDialogueEmbed(speaker: DialogueSpeaker, text: string, options: BuildDialogueEmbedOptions = {}): EmbedBuilder {
   const emotion = resolveEmotion(speaker, options.emotion);
-  const iconURL = buildAssetUrl(`${speaker.path}/dialogue-${emotion}.webp`);
+  const imageUrl = buildAssetUrl(`${speaker.path}/dialogue-${emotion}.webp`);
+  const iconURL = buildAssetUrl(`${speaker.path}/dialogue-default.webp`);
   const name = `${speaker.name} ${DIALOGUE_VERBS[options.verb ?? 'say']} :`;
-  return buildOpEmbed(options.variant).setAuthor({ name, iconURL }).setDescription(text);
+  return buildOpEmbed(options.variant).setAuthor({ name, iconURL }).setThumbnail(imageUrl).setDescription(text);
 }
 
 const DIALOGUE_VERBS = {
