@@ -19,7 +19,6 @@ export async function getCharactersByPlayerId(playerId: number, client: DbOrTran
     .select({
       instanceId: characterInstance.id,
       name: characterTemplate.name,
-      nickname: characterInstance.nickname,
       imageUrl: characterTemplate.imageUrl,
       hp: characterTemplate.hp,
       combat: characterTemplate.combat,
@@ -65,7 +64,6 @@ export async function createCharacterInstance(playerId: number, templateId: numb
     .select({
       instanceId: characterInstance.id,
       name: characterTemplate.name,
-      nickname: characterInstance.nickname,
       imageUrl: characterTemplate.imageUrl,
       hp: characterTemplate.hp,
       combat: characterTemplate.combat,
@@ -94,8 +92,8 @@ export async function createCharacterInstance(playerId: number, templateId: numb
   return createdRow;
 }
 
-// Le filtre `player_id IS NULL` ne garde que les templates recrutables, qui ont toujours un nom : on resserre donc `name` en `string`.
-export async function searchManyByName(query: string): Promise<Array<{ entity: CharacterTemplate & { name: string }; score: number }>> {
+// `player_id IS NULL` ne garde que les templates recrutables (les templates perso d'un joueur ne sortent pas du recrutement).
+export async function searchManyByName(query: string): Promise<Array<{ entity: CharacterTemplate; score: number }>> {
   const rows = await db
     .select({
       ...getTableColumns(characterTemplate),
@@ -107,7 +105,7 @@ export async function searchManyByName(query: string): Promise<Array<{ entity: C
     )
     .orderBy(sql`similarity(${characterTemplate.name}, ${query}) desc`)
     .limit(25);
-  return rows.map(({ score, ...entity }) => ({ entity: entity as CharacterTemplate & { name: string }, score }));
+  return rows.map(({ score, ...entity }) => ({ entity, score }));
 }
 
 export async function findById(id: number): Promise<CharacterTemplateWithDevilFruit | undefined> {
@@ -126,13 +124,13 @@ export async function findById(id: number): Promise<CharacterTemplateWithDevilFr
 // TODO: multi-statement → service avec tx
 export async function createPlayerAsCharacterInstance(
   playerId: number,
-  nickname: string,
+  name: string,
   client: DbOrTransaction = db,
 ): Promise<CharacterInstance> {
   const [template] = await client
     .insert(characterTemplate)
     .values({
-      name: null,
+      name,
       playerId,
       race: 'HUMAN',
       hp: 10,
@@ -147,7 +145,6 @@ export async function createPlayerAsCharacterInstance(
     .values({
       templateId: template.id,
       playerId,
-      nickname,
       isCaptain: true,
       joinedCrewAt: new Date(),
     })
@@ -155,18 +152,6 @@ export async function createPlayerAsCharacterInstance(
   return row!;
 }
 
-// TODO: multi-statement → service avec tx
-export async function updatePlayerAsCharacterNickname(playerId: number, nickname: string, client: DbOrTransaction = db): Promise<void> {
-  await client
-    .update(characterInstance)
-    .set({ nickname })
-    .where(
-      and(
-        eq(characterInstance.playerId, playerId),
-        eq(
-          characterInstance.templateId,
-          sql`(select ${characterTemplate.id} from ${characterTemplate} where ${characterTemplate.playerId} = ${playerId})`,
-        ),
-      ),
-    );
+export async function updatePlayerAsCharacterName(playerId: number, name: string, client: DbOrTransaction = db): Promise<void> {
+  await client.update(characterTemplate).set({ name }).where(eq(characterTemplate.playerId, playerId));
 }

@@ -1,5 +1,5 @@
 {
-  "id": "23a1a4b6-d3db-4ac0-ab6e-9bd2885834d0",
+  "id": "6d1e001d-d9d2-4e3d-bc72-fa5ccde8bce3",
   "prevId": "1d086c89-a5b6-408b-8fd7-ad4fed4f3d80",
   "version": "7",
   "dialect": "postgresql",
@@ -25,12 +25,6 @@
           "type": "integer",
           "primaryKey": false,
           "notNull": true
-        },
-        "nickname": {
-          "name": "nickname",
-          "type": "varchar(64)",
-          "primaryKey": false,
-          "notNull": false
         },
         "joined_crew_at": {
           "name": "joined_crew_at",
@@ -171,7 +165,7 @@
           "name": "name",
           "type": "varchar(128)",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
         "player_id": {
           "name": "player_id",
@@ -307,6 +301,22 @@
           "concurrently": false,
           "method": "gin",
           "with": {}
+        },
+        "character_template_name_recruitable_uniq": {
+          "name": "character_template_name_recruitable_uniq",
+          "columns": [
+            {
+              "expression": "name",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": true,
+          "where": "\"character_template\".\"player_id\" is null",
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
         }
       },
       "foreignKeys": {
@@ -338,15 +348,7 @@
         }
       },
       "compositePrimaryKeys": {},
-      "uniqueConstraints": {
-        "character_template_name_unique": {
-          "name": "character_template_name_unique",
-          "nullsNotDistinct": false,
-          "columns": [
-            "name"
-          ]
-        }
-      },
+      "uniqueConstraints": {},
       "policies": {},
       "checkConstraints": {},
       "isRLSEnabled": false

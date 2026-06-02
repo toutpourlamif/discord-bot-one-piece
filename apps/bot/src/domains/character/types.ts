@@ -4,8 +4,7 @@ import type { CharacterTemplate, DevilFruitTemplate } from '@one-piece/db';
 /** Row (character_instance + character_template) utilisée par les vues métier. */
 export type CharacterRow = {
   instanceId: number;
-  name: string | null;
-  nickname: string | null;
+  name: string;
   imageUrl: string | null;
   hp: number;
   combat: number;
