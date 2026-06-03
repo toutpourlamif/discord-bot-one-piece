@@ -1,22 +1,20 @@
 import { sql } from 'drizzle-orm';
 import { index, integer, pgTable, serial, text, varchar } from 'drizzle-orm/pg-core';
 
-import { imageUrl, timestamps } from '../../../shared/helpers.js';
-import { pokemonType } from '../../../shared/pokemon-type-enum.js';
-import { rarityColumn } from '../../../shared/rarity-enum.js';
+import { imageUrl } from '../../../shared/columns/imageUrlColumn.js';
+import { pokemonTypes } from '../../../shared/columns/pokemonTypesColumn.js';
+import { rarityColumn } from '../../../shared/columns/rarityColumn.js';
+import { timestamps } from '../../../shared/columns/timestampColumns.js';
 
 export const devilFruitTemplate = pgTable(
   'devil_fruit_template',
   {
     id: serial('id').primaryKey(),
     name: varchar('name', { length: 128 }).notNull().unique(),
-    types: pokemonType('types')
-      .array()
-      .notNull()
-      .default(sql`'{}'::pokemon_type[]`),
+    types: pokemonTypes(),
     hpBonus: integer('hp_bonus').notNull().default(0),
     combatBonus: integer('combat_bonus').notNull().default(0),
-    ...rarityColumn(),
+    rarity: rarityColumn(),
     ...imageUrl(),
     description: text('description'),
     ...timestamps(),

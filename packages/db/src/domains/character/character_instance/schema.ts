@@ -1,8 +1,8 @@
 import { sql } from 'drizzle-orm';
 import { boolean, check, integer, pgTable, serial, timestamp, uniqueIndex, varchar } from 'drizzle-orm/pg-core';
 
+import { timestamps } from '../../../shared/columns/timestampColumns.js';
 import { MAX_CHARACTER_NAME_LENGTH } from '../../../shared/constants.js';
-import { timestamps } from '../../../shared/helpers.js';
 import { devilFruitTemplate } from '../../devil_fruit/devil_fruit_template/schema.js';
 import { player } from '../../player/schema.js';
 import { characterTemplate } from '../character_template/schema.js';
