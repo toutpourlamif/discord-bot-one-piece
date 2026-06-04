@@ -2,7 +2,7 @@ import { sql } from 'drizzle-orm';
 
 import { pokemonType } from '../enums/pokemon-type.js';
 
-export function pokemonTypes() {
+export function buildPokemonTypesColumn() {
   return pokemonType('types')
     .array()
     .notNull()

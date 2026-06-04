@@ -1,6 +1,6 @@
 import { pgTable, varchar } from 'drizzle-orm/pg-core';
 
-import { timestamps } from '../../shared/columns/timestampColumns.js';
+import { buildTimestampColumns } from '../../shared/columns/timestamp-columns.js';
 
 import {
   DEFAULT_GUILD_LANGUAGE,
@@ -18,7 +18,7 @@ export const guild = pgTable('guild', {
   language: languageEnum('language').notNull().default(DEFAULT_GUILD_LANGUAGE),
   prefix: varchar('prefix', { length: MAX_GUILD_PREFIX_LENGTH }).notNull().default(DEFAULT_GUILD_PREFIX),
 
-  ...timestamps(),
+  ...buildTimestampColumns(),
 });
 
 export type Guild = typeof guild.$inferSelect;

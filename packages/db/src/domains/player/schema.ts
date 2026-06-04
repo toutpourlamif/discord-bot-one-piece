@@ -1,7 +1,7 @@
 import { sql } from 'drizzle-orm';
 import { pgTable, serial, varchar, bigint, integer, boolean } from 'drizzle-orm/pg-core';
 
-import { timestamps } from '../../shared/columns/timestampColumns.js';
+import { buildTimestampColumns } from '../../shared/columns/timestamp-columns.js';
 import { MAX_CHARACTER_NAME_LENGTH, MAX_CREW_NAME_LENGTH } from '../../shared/constants.js';
 import { guild } from '../guild/schema.js';
 import { subZoneEnum } from '../navigation/sub-zone-enum.js';
@@ -33,7 +33,7 @@ export const player = pgTable('player', {
   berries: bigint('berries', { mode: 'bigint' })
     .notNull()
     .default(sql`0`),
-  ...timestamps(),
+  ...buildTimestampColumns(),
   lastProcessedBucketId: integer('last_processed_bucket_id').notNull(),
   isAdmin: boolean('is_admin').notNull().default(false),
   currentZone: zoneEnum('current_zone').notNull().default('dawn'),

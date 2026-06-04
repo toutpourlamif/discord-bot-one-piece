@@ -1,23 +1,23 @@
 import { sql } from 'drizzle-orm';
 import { index, integer, pgTable, serial, text, varchar } from 'drizzle-orm/pg-core';
 
-import { imageUrl } from '../../../shared/columns/imageUrlColumn.js';
-import { pokemonTypes } from '../../../shared/columns/pokemonTypesColumn.js';
-import { rarityColumn } from '../../../shared/columns/rarityColumn.js';
-import { timestamps } from '../../../shared/columns/timestampColumns.js';
+import { buildImageUrlColumn } from '../../../shared/columns/image-url-column.js';
+import { buildPokemonTypesColumn } from '../../../shared/columns/pokemon-types-column.js';
+import { buildRarityColumn } from '../../../shared/columns/rarity-column.js';
+import { buildTimestampColumns } from '../../../shared/columns/timestamp-columns.js';
 
 export const devilFruitTemplate = pgTable(
   'devil_fruit_template',
   {
     id: serial('id').primaryKey(),
     name: varchar('name', { length: 128 }).notNull().unique(),
-    types: pokemonTypes(),
+    types: buildPokemonTypesColumn(),
     hpBonus: integer('hp_bonus').notNull().default(0),
     combatBonus: integer('combat_bonus').notNull().default(0),
-    rarity: rarityColumn(),
-    ...imageUrl(),
+    rarity: buildRarityColumn(),
+    ...buildImageUrlColumn(),
     description: text('description'),
-    ...timestamps(),
+    ...buildTimestampColumns(),
   },
   (table) => [index('devil_fruit_template_name_trgm_idx').using('gin', sql`${table.name} gin_trgm_ops`)],
 );

@@ -1,7 +1,7 @@
 import { sql } from 'drizzle-orm';
 import { check, integer, pgTable, serial, uniqueIndex } from 'drizzle-orm/pg-core';
 
-import { timestamps } from '../../../shared/columns/timestampColumns.js';
+import { buildTimestampColumns } from '../../../shared/columns/timestamp-columns.js';
 import { player } from '../../player/schema.js';
 import { resourceTemplate } from '../resource_template/schema.js';
 
@@ -16,7 +16,7 @@ export const resourceInstance = pgTable(
       .notNull()
       .references(() => player.id, { onDelete: 'cascade' }),
     quantity: integer('quantity').notNull(),
-    ...timestamps(),
+    ...buildTimestampColumns(),
   },
   (table) => [
     uniqueIndex('resource_instance_player_template_uniq').on(table.playerId, table.templateId),
