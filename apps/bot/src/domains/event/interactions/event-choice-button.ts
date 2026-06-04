@@ -4,7 +4,7 @@ import { ActionRowBuilder, ButtonBuilder, ButtonStyle, type ButtonInteraction } 
 import { PAGINATION } from '../../../discord/constants.js';
 import { InternalError } from '../../../discord/errors.js';
 import type { ButtonHandler, View } from '../../../discord/types.js';
-import { buildConsequenceEmbed, parseBigintArg, parseStringArg } from '../../../discord/utils/index.js';
+import { parseBigintArg, parseStringArg } from '../../../discord/utils/index.js';
 import * as historyRepository from '../../history/index.js';
 import * as playerRepository from '../../player/repository.js';
 import { EVENT_BUTTON_NAME } from '../constants.js';
@@ -18,7 +18,7 @@ import { buildInteractiveStepView } from '../recap/build-interactive-step-view.j
 import { buildRecapView } from '../recap/build-recap-view.js';
 import * as eventRepository from '../repository.js';
 import type { GeneratorContext, InteractiveGenerator, Resolution } from '../types.js';
-import { buildEventNextCustomId } from '../utils/build-event-custom-id.js';
+import { buildEventConsequenceCustomId, buildEventNextCustomId } from '../utils/build-event-custom-id.js';
 
 export const eventChoiceButtonHandler: ButtonHandler = {
   name: EVENT_BUTTON_NAME,
@@ -104,13 +104,14 @@ function getStep(generator: InteractiveGenerator, state: JSONFromSQL) {
 }
 
 function buildResolutionView(resolution: Resolution, ownerDiscordId: string): View {
+  // quand le choix est marquant, on passe par l'écran "conséquences" avant de reprendre le recap
+  const nextCustomId = resolution.hasConsequences ? buildEventConsequenceCustomId(ownerDiscordId) : buildEventNextCustomId(ownerDiscordId);
   const row = new ActionRowBuilder<ButtonBuilder>().addComponents(
     new ButtonBuilder()
-      .setCustomId(buildEventNextCustomId(ownerDiscordId))
+      .setCustomId(nextCustomId)
       .setEmoji(PAGINATION.next.emoji)
       .setLabel(PAGINATION.next.label)
       .setStyle(ButtonStyle.Primary),
   );
-  const embeds = resolution.hasConsequences ? [resolution.embed, buildConsequenceEmbed()] : [resolution.embed];
-  return { embeds, components: [row] };
+  return { embeds: [resolution.embed], components: [row] };
 }
