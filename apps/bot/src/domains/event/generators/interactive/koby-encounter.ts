@@ -57,5 +57,6 @@ function resolveEncounter(): Resolution {
     embed: buildOpEmbed().setDescription('Koby esquisse un salut, puis disparaît dans la brume. Votre équipage reprend sa route.'),
     effects: [],
     resolutionType: 'kobyEncounter.done',
+    hasConsequences: true,
   };
 }
