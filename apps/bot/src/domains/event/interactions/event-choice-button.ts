@@ -56,7 +56,6 @@ export const eventChoiceButtonHandler: ButtonHandler = {
 
     await synchronizePlayer(outcome.player.id);
     await interaction.editReply(buildResolutionView(outcome.resolution, outcome.player.discordId));
-    if (outcome.resolution.hasConsequences) await interaction.followUp({ embeds: [buildConsequenceEmbed()] });
   },
 };
 
@@ -112,5 +111,6 @@ function buildResolutionView(resolution: Resolution, ownerDiscordId: string): Vi
       .setLabel(PAGINATION.next.label)
       .setStyle(ButtonStyle.Primary),
   );
-  return { embeds: [resolution.embed], components: [row] };
+  const embeds = resolution.hasConsequences ? [resolution.embed, buildConsequenceEmbed()] : [resolution.embed];
+  return { embeds, components: [row] };
 }
