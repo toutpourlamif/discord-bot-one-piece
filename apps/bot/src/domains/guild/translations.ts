@@ -1,6 +1,6 @@
-import type { SupportedLanguage } from '@one-piece/db';
+import type { DomainTranslations } from '../../shared/i18n.js';
 
-export const texts = {
+export const translations = {
   setLanguageTitle: {
     fr: 'Langue du serveur',
     en: 'Server language',
@@ -9,4 +9,4 @@ export const texts = {
     fr: 'Dans quelle langue veux-tu que le bot te parle ?',
     en: 'Which language should the bot use?',
   },
-} satisfies Record<string, Record<SupportedLanguage, unknown>>;
+} satisfies DomainTranslations;

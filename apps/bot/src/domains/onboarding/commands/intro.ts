@@ -1,6 +1,6 @@
 import type { Command } from '../../../discord/types.js';
 import { buildOpEmbed } from '../../../discord/utils/index.js';
-import { texts } from '../texts.js';
+import { translations } from '../translations.js';
 
 export const introCommand: Command = {
   name: 'intro',
@@ -10,8 +10,8 @@ export const introCommand: Command = {
       // TODO: trouver un meilleur texte
       embeds: [
         buildOpEmbed('info')
-          .setTitle(texts.introAlreadyStartedTitle[guild.language])
-          .setDescription(texts.introAlreadyStartedDescription[guild.language]),
+          .setTitle(translations.introAlreadyStartedTitle[guild.language])
+          .setDescription(translations.introAlreadyStartedDescription[guild.language]),
       ],
       components: [],
     });

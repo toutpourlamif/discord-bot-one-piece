@@ -1,6 +1,6 @@
-import type { SupportedLanguage } from '@one-piece/db';
+import type { DomainTranslations } from '../../shared/i18n.js';
 
-export const texts = {
+export const translations = {
   renameMissingName: {
     fr: 'Tu dois donner un nom.',
     en: 'You must provide a name.',
@@ -21,4 +21,4 @@ export const texts = {
     fr: (grade: string, crewMorale: number) => `Morale d'équipage: ${grade} (${crewMorale})`,
     en: (grade: string, crewMorale: number) => `Crew morale: ${grade} (${crewMorale})`,
   },
-} satisfies Record<string, Record<SupportedLanguage, unknown>>;
+} satisfies DomainTranslations;

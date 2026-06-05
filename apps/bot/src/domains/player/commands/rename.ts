@@ -1,17 +1,17 @@
 import type { Command } from '../../../discord/types.js';
 import { buildOpEmbed, getQuery } from '../../../discord/utils/index.js';
 import { renamePlayer } from '../service.js';
-import { texts } from '../texts.js';
+import { translations } from '../translations.js';
 
 export const renameCommand: Command = {
   name: 'rename',
   async handler({ message, args, guild, player }) {
-    const name = getQuery(args, { emptyMessage: texts.renameMissingName[guild.language] });
+    const name = getQuery(args, { emptyMessage: translations.renameMissingName[guild.language] });
     const renamed = await renamePlayer(player.id, name);
 
     const embed = buildOpEmbed('success')
-      .setTitle(texts.renameSuccessTitle[guild.language])
-      .setDescription(texts.renameSuccessDescription[guild.language](renamed.name));
+      .setTitle(translations.renameSuccessTitle[guild.language])
+      .setDescription(translations.renameSuccessDescription[guild.language](renamed.name));
     await message.reply({ embeds: [embed] });
   },
 };

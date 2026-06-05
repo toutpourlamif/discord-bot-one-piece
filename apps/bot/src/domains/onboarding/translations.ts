@@ -1,6 +1,6 @@
-import type { SupportedLanguage } from '@one-piece/db';
+import type { DomainTranslations } from '../../shared/i18n.js';
 
-export const texts = {
+export const translations = {
   introAlreadyStartedTitle: {
     fr: 'Ton aventure a déjà commencé !',
     en: 'Your adventure has already begun!',
@@ -9,12 +9,12 @@ export const texts = {
     fr: 'Tu es déjà en mer, pirate.',
     en: 'You are already at sea, pirate.',
   },
-  completedTitle: {
+  onboardingCompletedTitle: {
     fr: 'Bon vent, pirate.',
     en: 'Fair winds, pirate.',
   },
-  completedDescription: {
+  onboardingCompletedDescription: {
     fr: 'Ton aventure commence vraiment maintenant.',
     en: 'Your adventure truly begins now.',
   },
-} satisfies Record<string, Record<SupportedLanguage, unknown>>;
+} satisfies DomainTranslations;
