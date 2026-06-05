@@ -21,6 +21,7 @@ Bot Discord autour de l'univers One Piece. Le joueur recrute un équipage, amél
 - N'exporter un `type` que s'il est importé ailleurs
 - `Array<T>`, jamais `T[]` (ESLint actif)
 - Helpers et fonctions top-level : `function foo() {}`, pas `const foo = () => {}`
+- **Public first, private after** : dans un fichier, les exports (API publique) en haut, les helpers/constantes/types privés en dessous. On lit d'abord ce que le fichier expose, les détails ensuite.
 - Pas de commentaires qui décrivent **ce que** fait le code — uniquement **pourquoi** quand le « pourquoi » est non évident
 - **Short guards inline** : `if (cond) return …;`, `if (cond) throw …;`, etc. tiennent sur **une ligne sans accolades**. Pas d'ESLint `curly`.
 - **YAGNI** (_You Aren't Gonna Need It_) : on n'ajoute pas une feature, une dep, un helper, un validator tant qu'un code actuel ne l'utilise pas. Pas d'abstractions spéculatives — 3 lignes similaires valent mieux qu'un helper prématuré.
@@ -58,6 +59,7 @@ Les **domaines** prévus sont listés dans `docs/architecture.md`. On en ouvre u
 ## Qualité
 
 - Hook pre-commit (`husky` + `lint-staged`) : eslint + prettier seulement sur les fichiers touchées, puis typecheck sur toute la codebase.
+- **Assets images** : ne pas se soucier du format source (`.jpg`, `.png`, …). Un script pre-commit convertit automatiquement les images en `.webp`. On dépose l'image telle quelle, le code référence toujours le `.webp` final.
 
 ## Où trouver quoi
 

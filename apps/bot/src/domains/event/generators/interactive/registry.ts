@@ -2,5 +2,6 @@ import type { InteractiveGenerator } from '../../types.js';
 
 import { barrelFound } from './barrel-found.js';
 import { cheatTeleport } from './cheat-teleport.js';
+import { kobyEncounter } from './koby-encounter.js';
 
-export const interactiveGenerators: Array<InteractiveGenerator> = [barrelFound, cheatTeleport];
+export const interactiveGenerators: Array<InteractiveGenerator> = [barrelFound, cheatTeleport, kobyEncounter];
