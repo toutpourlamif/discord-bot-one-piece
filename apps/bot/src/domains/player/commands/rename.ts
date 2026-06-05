@@ -1,16 +1,17 @@
 import type { Command } from '../../../discord/types.js';
 import { buildOpEmbed, getQuery } from '../../../discord/utils/index.js';
 import { renamePlayer } from '../service.js';
+import { texts } from '../texts.js';
 
 export const renameCommand: Command = {
   name: 'rename',
-  async handler({ message, args, player }) {
-    const name = getQuery(args, { emptyMessage: 'Tu dois donner un nom.' });
+  async handler({ message, args, guild, player }) {
+    const name = getQuery(args, { emptyMessage: texts.renameMissingName[guild.language] });
     const renamed = await renamePlayer(player.id, name);
 
     const embed = buildOpEmbed('success')
-      .setTitle('Changement de nom effectué !')
-      .setDescription(`On vous connait désormais sous le nom de **${renamed.name}**.`);
+      .setTitle(texts.renameSuccessTitle[guild.language])
+      .setDescription(texts.renameSuccessDescription[guild.language](renamed.name));
     await message.reply({ embeds: [embed] });
   },
 };
