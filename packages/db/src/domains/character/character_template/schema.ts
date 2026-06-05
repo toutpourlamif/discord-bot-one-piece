@@ -1,10 +1,7 @@
 import { sql } from 'drizzle-orm';
 import { index, integer, pgTable, serial, varchar, text, real } from 'drizzle-orm/pg-core';
 
-import { buildImageUrlColumn } from '../../../shared/columns/image-url-column.js';
-import { buildPokemonTypesColumn } from '../../../shared/columns/pokemon-types-column.js';
-import { buildRarityColumn } from '../../../shared/columns/rarity-column.js';
-import { buildTimestampColumns } from '../../../shared/columns/timestamp-columns.js';
+import { buildImageUrlColumn, buildPokemonTypesColumn, buildRarityColumn, buildTimestampColumns } from '../../../shared/columns/index.js';
 import { devilFruitTemplate } from '../../devil_fruit/devil_fruit_template/schema.js';
 import { characterRaceEnum } from '../enum.js';
 import { characterSkillEnum } from '../skill-enum.js';
@@ -19,7 +16,7 @@ export const characterTemplate = pgTable(
     devilFruitTemplateId: integer('devil_fruit_template_id').references(() => devilFruitTemplate.id, {
       onDelete: 'restrict',
     }),
-    rarity: buildRarityColumn(),
+    ...buildRarityColumn(),
     captainCombatMultiplier: real('captain_combat_multiplier').notNull().default(1),
     captainHpMultiplier: real('captain_hp_multiplier').notNull().default(1),
     captainBerryGainMultiplier: real('captain_berry_gain_multiplier').notNull().default(1),
@@ -27,7 +24,7 @@ export const characterTemplate = pgTable(
     captainMoraleMultiplier: real('captain_morale_multiplier').notNull().default(1),
 
     race: characterRaceEnum('race').notNull(),
-    types: buildPokemonTypesColumn(),
+    ...buildPokemonTypesColumn(),
     ...buildImageUrlColumn(),
     ...buildTimestampColumns(),
 

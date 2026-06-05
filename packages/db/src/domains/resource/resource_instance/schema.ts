@@ -1,7 +1,7 @@
 import { sql } from 'drizzle-orm';
 import { check, integer, pgTable, serial, uniqueIndex } from 'drizzle-orm/pg-core';
 
-import { buildTimestampColumns } from '../../../shared/columns/timestamp-columns.js';
+import { buildTimestampColumns } from '../../../shared/columns/index.js';
 import { player } from '../../player/schema.js';
 import { resourceTemplate } from '../resource_template/schema.js';
 

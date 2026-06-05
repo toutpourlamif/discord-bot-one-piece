@@ -1,5 +1,7 @@
-import { rarity } from '../enums/rarity.js';
+import { rarity } from '../enums/rarity-enum.js';
 
 export function buildRarityColumn() {
-  return rarity('rarity').notNull().default('D');
+  return {
+    rarity: rarity('rarity').notNull().default('D'),
+  };
 }

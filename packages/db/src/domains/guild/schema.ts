@@ -1,6 +1,6 @@
 import { pgTable, varchar } from 'drizzle-orm/pg-core';
 
-import { buildTimestampColumns } from '../../shared/columns/timestamp-columns.js';
+import { buildTimestampColumns } from '../../shared/columns/index.js';
 
 import {
   DEFAULT_GUILD_LANGUAGE,

@@ -1,6 +1,6 @@
 import { integer, pgTable, serial, uniqueIndex } from 'drizzle-orm/pg-core';
 
-import { buildTimestampColumns } from '../../../shared/columns/timestamp-columns.js';
+import { buildTimestampColumns } from '../../../shared/columns/index.js';
 import { player } from '../../player/schema.js';
 import { devilFruitTemplate } from '../devil_fruit_template/schema.js';
 

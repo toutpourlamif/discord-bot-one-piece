@@ -1,7 +1,7 @@
 import { sql } from 'drizzle-orm';
 import { pgTable, serial, varchar, bigint, integer, boolean } from 'drizzle-orm/pg-core';
 
-import { buildTimestampColumns } from '../../shared/columns/timestamp-columns.js';
+import { buildTimestampColumns } from '../../shared/columns/index.js';
 import { MAX_CHARACTER_NAME_LENGTH, MAX_CREW_NAME_LENGTH } from '../../shared/constants.js';
 import { guild } from '../guild/schema.js';
 import { subZoneEnum } from '../navigation/sub-zone-enum.js';
