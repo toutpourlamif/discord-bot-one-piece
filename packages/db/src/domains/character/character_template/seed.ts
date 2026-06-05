@@ -1,4 +1,4 @@
-import { sql } from 'drizzle-orm';
+import { isNull, sql } from 'drizzle-orm';
 
 import type { Db } from '../../../client.js';
 import { logSeed } from '../../../shared/seed.js';
@@ -32,7 +32,10 @@ export async function seedCharacter(db: Db) {
     .insert(characterTemplate)
     .values(rows)
     .onConflictDoUpdate({
+      // L'unicité de `name` est portée par un index partiel `WHERE player_id IS NULL` (templates recrutables) :
+      // il faut répéter le prédicat pour que Postgres infère le bon index.
       target: characterTemplate.name,
+      targetWhere: isNull(characterTemplate.playerId),
       set: {
         hp: sql`excluded.hp`,
         combat: sql`excluded.combat`,
