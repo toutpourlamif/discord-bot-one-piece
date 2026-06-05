@@ -1,6 +1,6 @@
 import type { Edge, Ship } from '@one-piece/db';
 
-import type { CharacterRow } from '../../character/types.js';
+import type { Character } from '../../character/types.js';
 
 const SAIL_SPEEDUP_PER_LEVEL = 0.05;
 
@@ -14,7 +14,7 @@ const NAVIGATOR_MULTIPLIER: Record<NavigatorSkill, number> = {
 type ComputeTravelETAInput = {
   edge: Edge;
   ship: Ship;
-  crew: Array<CharacterRow>;
+  crew: Array<Character>;
   startedBucket: number;
 };
 
@@ -33,6 +33,6 @@ function sailLevelToMultiplier(sailLevel: number): number {
   return 1 - (sailLevel - 1) * SAIL_SPEEDUP_PER_LEVEL;
 }
 
-function findBestNavigatorSkill(_crew: Array<CharacterRow>): NavigatorSkill | null {
+function findBestNavigatorSkill(_crew: Array<Character>): NavigatorSkill | null {
   return null;
 }

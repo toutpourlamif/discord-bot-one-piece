@@ -1,7 +1,7 @@
 import type { JSONFromSQL, Player, Ship, SubZone, Zone } from '@one-piece/db';
 import type { EmbedBuilder } from 'discord.js';
 
-import type { CharacterRow } from '../character/types.js';
+import type { Character } from '../character/types.js';
 import type { Inventory } from '../resource/types.js';
 
 import type { EventEffect } from './effects/types.js';
@@ -13,9 +13,9 @@ export type Rng = { next: () => number };
 export type GeneratorContext = {
   player: Player;
   crew: {
-    members: Array<CharacterRow>;
+    members: Array<Character>;
     has: (name: string) => boolean;
-    getByName: (name: string) => CharacterRow | undefined;
+    getByName: (name: string) => Character | undefined;
   };
   ship: Ship;
   inventory: Inventory;
