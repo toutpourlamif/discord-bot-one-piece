@@ -3,14 +3,13 @@ import {
   characterTemplate,
   db,
   devilFruitTemplate,
-  PLAYER_AS_CHARACTER_TEMPLATE_NAME,
   type CharacterInstance,
   type CharacterTemplate,
   type DbOrTransaction,
 } from '@one-piece/db';
-import { and, asc, desc, eq, getTableColumns, ilike, ne, or, sql } from 'drizzle-orm';
+import { and, asc, desc, eq, getTableColumns, ilike, isNull, or, sql } from 'drizzle-orm';
 
-import { InternalError, NotFoundError } from '../../discord/errors.js';
+import { InternalError } from '../../discord/errors.js';
 
 import type { CharacterRow, CharacterTemplateWithDevilFruit } from './types.js';
 
@@ -20,7 +19,6 @@ export async function getCharactersByPlayerId(playerId: number, client: DbOrTran
     .select({
       instanceId: characterInstance.id,
       name: characterTemplate.name,
-      nickname: characterInstance.nickname,
       imageUrl: characterTemplate.imageUrl,
       hp: characterTemplate.hp,
       combat: characterTemplate.combat,
@@ -66,7 +64,6 @@ export async function createCharacterInstance(playerId: number, templateId: numb
     .select({
       instanceId: characterInstance.id,
       name: characterTemplate.name,
-      nickname: characterInstance.nickname,
       imageUrl: characterTemplate.imageUrl,
       hp: characterTemplate.hp,
       combat: characterTemplate.combat,
@@ -95,6 +92,7 @@ export async function createCharacterInstance(playerId: number, templateId: numb
   return createdRow;
 }
 
+// `player_id IS NULL` ne garde que les templates recrutables (les templates perso d'un joueur ne sortent pas du recrutement).
 export async function searchManyByName(query: string): Promise<Array<{ entity: CharacterTemplate; score: number }>> {
   const rows = await db
     .select({
@@ -103,10 +101,7 @@ export async function searchManyByName(query: string): Promise<Array<{ entity: C
     })
     .from(characterTemplate)
     .where(
-      and(
-        or(sql`${characterTemplate.name} % ${query}`, ilike(characterTemplate.name, `%${query}%`)),
-        ne(characterTemplate.name, PLAYER_AS_CHARACTER_TEMPLATE_NAME),
-      ),
+      and(or(sql`${characterTemplate.name} % ${query}`, ilike(characterTemplate.name, `%${query}%`)), isNull(characterTemplate.playerId)),
     )
     .orderBy(sql`similarity(${characterTemplate.name}, ${query}) desc`)
     .limit(25);
@@ -126,25 +121,30 @@ export async function findById(id: number): Promise<CharacterTemplateWithDevilFr
   return row;
 }
 
-export async function getPlayerAsCharacterTemplate(): Promise<CharacterTemplate> {
-  const [row] = await db.select().from(characterTemplate).where(eq(characterTemplate.name, PLAYER_AS_CHARACTER_TEMPLATE_NAME)).limit(1);
-  if (!row) throw new NotFoundError(`Template ${PLAYER_AS_CHARACTER_TEMPLATE_NAME} introuvable — exécute le seed.`);
-  return row;
-}
-
 // TODO: multi-statement → service avec tx
 export async function createPlayerAsCharacterInstance(
   playerId: number,
-  nickname: string,
+  name: string,
   client: DbOrTransaction = db,
 ): Promise<CharacterInstance> {
-  const playerAsCharacterTemplate = await getPlayerAsCharacterTemplate();
+  const [template] = await client
+    .insert(characterTemplate)
+    .values({
+      name,
+      playerId,
+      race: 'HUMAN',
+      hp: 10,
+      combat: 10,
+      imageUrl: null,
+    })
+    .returning();
+  if (!template) throw new InternalError('Impossible de créer le template du joueur.');
+
   const [row] = await client
     .insert(characterInstance)
     .values({
-      templateId: playerAsCharacterTemplate.id,
+      templateId: template.id,
       playerId,
-      nickname,
       isCaptain: true,
       joinedCrewAt: new Date(),
     })
@@ -152,11 +152,6 @@ export async function createPlayerAsCharacterInstance(
   return row!;
 }
 
-// TODO: multi-statement → service avec tx
-export async function updatePlayerAsCharacterNickname(playerId: number, nickname: string, client: DbOrTransaction = db): Promise<void> {
-  const playerAsCharacterTemplate = await getPlayerAsCharacterTemplate();
-  await client
-    .update(characterInstance)
-    .set({ nickname })
-    .where(and(eq(characterInstance.playerId, playerId), eq(characterInstance.templateId, playerAsCharacterTemplate.id)));
+export async function updatePlayerAsCharacterName(playerId: number, name: string, client: DbOrTransaction = db): Promise<void> {
+  await client.update(characterTemplate).set({ name }).where(eq(characterTemplate.playerId, playerId));
 }

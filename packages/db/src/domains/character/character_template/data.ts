@@ -1,4 +1,3 @@
-import { PLAYER_AS_CHARACTER_TEMPLATE_NAME } from './constants.js';
 import { FAKE_STRAW_HATS_DATA } from './data/fake-straw-hats.js';
 import { STRAW_HATS_DATA } from './data/straw-hats.js';
 import type { CharacterTemplateSeed } from './data/types.js';
@@ -10,13 +9,6 @@ function buildCharacterImageUrl(crew: string, slug: string): string {
 // TODO: supprimer/modifier en prod
 // TODO: compléter les types de base quand ils sont moins évidents que la race.
 export const CHARACTER_TEMPLATES_DATA: Array<CharacterTemplateSeed> = [
-  {
-    name: PLAYER_AS_CHARACTER_TEMPLATE_NAME,
-    race: 'HUMAN',
-    hp: 10,
-    combat: 10,
-    imageUrl: null,
-  },
   {
     name: 'Monkey D. Luffy',
     hp: 10,

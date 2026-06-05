@@ -48,7 +48,7 @@ export function buildGeneratorContext(ctxData: GeneratorContextData, bucketId: n
 
 function buildCrewAccessor(members: Array<CharacterRow>): GeneratorContext['crew'] {
   function find(name: string): CharacterRow | undefined {
-    return members.find((m) => m.name === name || m.nickname === name);
+    return members.find((m) => m.name === name);
   }
   return {
     members,
