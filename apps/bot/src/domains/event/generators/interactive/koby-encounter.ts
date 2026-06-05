@@ -1,5 +1,4 @@
 import { buildDialogueEmbed, buildOpEmbed, type DialogueSpeaker } from '../../../../discord/utils/index.js';
-import { getCharacterInstanceName } from '../../../character/utils/get-character-instance-name.js';
 import type { GeneratorContext, InteractiveGenerator, Resolution } from '../../types.js';
 
 export const kobyEncounter: InteractiveGenerator = {
@@ -49,7 +48,7 @@ const KOBY_YOUNG: DialogueSpeaker = { name: 'Koby', path: 'characters/marines/ko
 
 function getCaptainSpeaker(ctx: GeneratorContext): DialogueSpeaker {
   const captain = ctx.crew.members.find((member) => member.isCaptain)!;
-  return { name: getCharacterInstanceName(captain), path: captain.imageUrl ?? '' };
+  return { name: captain.name, path: captain.imageUrl ?? '' };
 }
 
 function resolveEncounter(): Resolution {
