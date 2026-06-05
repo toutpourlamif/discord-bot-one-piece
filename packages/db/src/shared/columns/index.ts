@@ -1,4 +1,4 @@
-export { buildImageUrlColumn } from './image-url-column.js';
-export { buildPokemonTypesColumn } from './pokemon-types-column.js';
-export { buildRarityColumn } from './rarity-column.js';
-export { buildTimestampColumns } from './timestamp-columns.js';
+export { buildImageUrlColumn } from './build-image-url-column.js';
+export { buildPokemonTypesColumn } from './build-pokemon-types-column.js';
+export { buildRarityColumn } from './build-rarity-column.js';
+export { buildTimestampColumns } from './build-timestamp-columns.js';
