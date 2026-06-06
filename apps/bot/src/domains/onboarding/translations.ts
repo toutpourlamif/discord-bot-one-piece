@@ -1,4 +1,4 @@
-import type { DomainTranslations } from '../../shared/i18n.js';
+import type { Translations } from '../../shared/i18n.js';
 
 export const translations = {
   introAlreadyStartedTitle: {
@@ -17,4 +17,4 @@ export const translations = {
     fr: 'Ton aventure commence vraiment maintenant.',
     en: 'Your adventure truly begins now.',
   },
-} satisfies DomainTranslations;
+} satisfies Translations;

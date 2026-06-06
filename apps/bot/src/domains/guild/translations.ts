@@ -1,4 +1,4 @@
-import type { DomainTranslations } from '../../shared/i18n.js';
+import type { Translations } from '../../shared/i18n.js';
 
 export const translations = {
   setLanguageTitle: {
@@ -9,4 +9,4 @@ export const translations = {
     fr: 'Dans quelle langue veux-tu que le bot te parle ?',
     en: 'Which language should the bot use?',
   },
-} satisfies DomainTranslations;
+} satisfies Translations;

@@ -1,4 +1,4 @@
-import type { DomainTranslations } from '../../shared/i18n.js';
+import type { Translations } from '../../shared/i18n.js';
 
 export const translations = {
   renameMissingName: {
@@ -21,4 +21,4 @@ export const translations = {
     fr: (grade: string, crewMorale: number) => `Morale d'équipage: ${grade} (${crewMorale})`,
     en: (grade: string, crewMorale: number) => `Crew morale: ${grade} (${crewMorale})`,
   },
-} satisfies DomainTranslations;
+} satisfies Translations;
