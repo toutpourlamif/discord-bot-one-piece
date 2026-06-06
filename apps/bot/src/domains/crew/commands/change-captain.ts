@@ -5,10 +5,6 @@ import { getCharacterInstanceName } from '../../character/utils/index.js';
 import { getCrewByPlayerId } from '../service.js';
 import { buildSetCaptainView } from '../utils/build-change-captain-view.js';
 
-import { crewCommand } from './crew.js';
-
-const [crewCommandName] = Array.isArray(crewCommand.name) ? crewCommand.name : [crewCommand.name];
-
 export const changeCaptainCommand: Command = {
   name: 'changecaptain',
   async handler({ message, player, guild }) {
