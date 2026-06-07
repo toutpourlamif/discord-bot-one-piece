@@ -3,7 +3,7 @@ import type { ButtonInteraction } from 'discord.js';
 
 import type { ButtonHandler } from '../../../discord/types.js';
 import { assertInteractorIsTheOwner, buildOpEmbed, parseIntegerArg, parseOwnerDiscordId } from '../../../discord/utils/index.js';
-import { isSea } from '../../navigation/utils/index.js';
+import { assertPlayerIsNotAtSea } from '../../navigation/guards/index.js';
 import * as playerRepository from '../../player/repository.js';
 import { TAVERN_BUTTON_NAME } from '../constants.js';
 import { buildTavernView } from '../views/build-tavern-view.js';
@@ -16,18 +16,17 @@ async function handle(interaction: ButtonInteraction, args: Array<string>): Prom
   await interaction.deferUpdate();
   const player = await playerRepository.findByIdOrThrow(playerId);
 
-  if (player.travelTargetZone !== null || isSea(player.currentZone)) {
-    await interaction.editReply({ embeds: [buildOpEmbed().setDescription('🌊 Tu es en mer : reviens à quai pour entrer dans une taverne.')] });
+  assertPlayerIsNotAtSea(player);
+
+  const tavernConfig = TAVERN_BY_ZONE[player.currentZone];
+  if (tavernConfig === undefined) {
+    await interaction.editReply({
+      embeds: [buildOpEmbed().setDescription(`Il n'y a malheureusement pas de taverne à ${ZONE_LABELS[player.currentZone]}.`)],
+    });
     return;
   }
 
-  const tavern = TAVERN_BY_ZONE[player.currentZone];
-  if (tavern === undefined) {
-    await interaction.editReply({ embeds: [buildOpEmbed().setDescription(`Pas de taverne à ${ZONE_LABELS[player.currentZone]}.`)] });
-    return;
-  }
-
-  await interaction.editReply(buildTavernView({ player, ownerDiscordId, tavern }));
+  await interaction.editReply(buildTavernView({ player, ownerDiscordId, tavernConfig }));
 }
 
 export const tavernButtonHandler: ButtonHandler = {
