@@ -15,7 +15,7 @@ export const setEtaCommand: Command = {
     const parsedBucket = parseIntegerArg(bucketNumber);
 
     if (!travelTargetZone) {
-      throw new ValidationError(`Usage: !seteta <@user> <bucket(integer)>`);
+      throw new ValidationError(`Usage: !seteta <@user> <bucket(integer)> \n\n Il faut un voyage en cours!`);
     }
 
     await playerRepository.setTravelEtaBucket(targetPlayer.id, parsedBucket);
