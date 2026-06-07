@@ -2,6 +2,7 @@ import { ValidationError } from '../../../discord/errors.js';
 import type { Command } from '../../../discord/types.js';
 import { buildOpEmbed } from '../../../discord/utils/build-op-embed.js';
 import { parseIntegerArg } from '../../../discord/utils/parse-integer-arg.js';
+import { getNowBucketId } from '../../event/engine/bucket.js';
 import { resolveTargetPlayer } from '../../player/index.js';
 import * as playerRepository from '../../player/repository.js';
 
@@ -11,11 +12,16 @@ export const setEtaCommand: Command = {
     const { targetPlayer, rest } = await resolveTargetPlayer(ctx);
     const [bucketNumber] = rest;
     const { travelTargetZone } = targetPlayer;
+    const bucketNow = getNowBucketId();
 
     const parsedBucket = parseIntegerArg(bucketNumber);
 
     if (!travelTargetZone) {
       throw new ValidationError(`Usage: !seteta <@user> <bucket(integer)> \n\n Il faut un voyage en cours!`);
+    }
+
+    if (parsedBucket < bucketNow) {
+      throw new ValidationError(` Le bucket voulu ne doit pas être inférieur au bucket actuel`);
     }
 
     await playerRepository.setTravelEtaBucket(targetPlayer.id, parsedBucket);
