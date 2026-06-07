@@ -1,4 +1,4 @@
-import type { TavernConfig } from '../types/tavern.js';
+import type { TavernConfig } from '../../../tavern/types.js';
 
 export function defineIsland<
   const Key extends string,

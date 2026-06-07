@@ -14,4 +14,3 @@ export {
 export { WORLD_EDGES } from './world/world-edges.js';
 export { type Edge, type TravelModifier } from './world/types.js';
 export { TAVERN_BY_ZONE } from './world/registry.js';
-export { type TavernConfig, type TavernActivityType } from './world/types/tavern.js';

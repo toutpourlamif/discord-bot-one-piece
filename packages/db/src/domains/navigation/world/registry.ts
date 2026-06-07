@@ -1,6 +1,7 @@
+import type { TavernConfig } from '../../tavern/types.js';
+
 import { EAST_BLUE_ISLAND_REGISTRY } from './east-blue/island-registry.js';
 import { PARADISE_ISLAND_REGISTRY } from './paradise/island-registry.js';
-import type { TavernConfig } from './types/tavern.js';
 import type { Zone } from './zones.js';
 
 const ISLAND_REGISTRY = [...EAST_BLUE_ISLAND_REGISTRY, ...PARADISE_ISLAND_REGISTRY];
