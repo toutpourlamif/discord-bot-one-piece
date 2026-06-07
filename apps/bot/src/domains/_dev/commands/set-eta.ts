@@ -21,7 +21,7 @@ export const setEtaCommand: Command = {
     }
 
     if (parsedBucket < bucketNow) {
-      throw new ValidationError(` Le bucket voulu ne doit pas être inférieur au bucket actuel`);
+      throw new ValidationError(`Tu ne peux pas arriver dans le passé \n(la machine à remonter le temps n'existe pas encore.)`);
     }
 
     await playerRepository.setTravelEtaBucket(targetPlayer.id, parsedBucket);
