@@ -2,26 +2,27 @@
 
 ## Concept
 
-La **taverne** est le hub social d'une île. Le joueur l'ouvre via `!tavern` (ou `!taverne`) quand il est **à quai** sur une île qui en possède une. C'est le point d'entrée vers les activités proposées sur place : boire un coup, jouer, recruter, faire des emplettes.
+La **taverne** est un endroit important d'une île. Le joueur l'ouvre via `!tavern` (ou `!taverne`) quand il est **à quai** sur une île qui en possède une. C'est le point d'entrée vers les activités proposées sur place : jouer à des mini jeux, acheter des items, déclencher des quêtes, recruter des persos.
 
 ## Localisation
 
-Une taverne est **liée à l'île courante** du joueur, pas au joueur lui-même.
+Une taverne est **liée à l'île courante** du joueur (`player.currentZone`)
 
-- En mer (`travelTargetZone` non nul, ou zone courante de type `Sea`) : pas de taverne, le joueur doit revenir à quai.
+- En mer : pas de taverne, le joueur doit revenir à quai.
 - Sur une île sans taverne déclarée : message « Pas de taverne ici ».
 
-Les tavernes sont déclarées au niveau de chaque île dans le registry de `packages/db` (`TAVERN_BY_ZONE`). Une île sans entrée n'a pas de taverne.
+Les tavernes sont déclarées au niveau de chaque île dans le registry de `packages/db` (`TAVERN_BY_ZONE`).
+Quand on déclare une île (voir fonction `defineIsland`) on peut lui passer une clé `tavern` ; si `island.tavern` est `undefined`, l'île n'a tout simplement pas de taverne.
 
 ## Sections
 
 Le menu liste des **sections**, dérivées des `activities` de la `TavernConfig` de l'île :
 
-| Section       | Présence                                              |
-| ------------- | ----------------------------------------------------- |
-| 🍺 Tavernier  | Toujours présente                                     |
-| 🛒 Boutique   | Si l'activité `shop` est déclarée                     |
-| ⚓ Recruter   | Si l'activité `recruit` est déclarée                  |
+| Section        | Présence                                                                                          |
+| -------------- | ------------------------------------------------------------------------------------------------- |
+| 🍺 Tavernier   | Toujours présente                                                                                 |
+| 🛒 Boutique    | Si l'activité `shop` est déclarée                                                                 |
+| ⚓ Recruter    | Si l'activité `recruit` est déclarée                                                              |
 | 🎲 Espace jeux | Si l'activité `blackjack` **ou** `juste-prix` est déclarée (un seul bouton qui regroupe les jeux) |
 
 ## État actuel
