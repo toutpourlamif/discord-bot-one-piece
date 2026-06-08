@@ -5,7 +5,6 @@ import type { CharacterTemplate, DevilFruitTemplate } from '@one-piece/db';
 export type CharacterRow = {
   instanceId: number;
   name: string;
-  nickname: string | null;
   imageUrl: string | null;
   hp: number;
   combat: number;

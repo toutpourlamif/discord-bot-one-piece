@@ -36,7 +36,7 @@ export async function renamePlayer(playerId: number, rawName: string): Promise<P
   return db.transaction(async (transaction) => {
     const current = await playerRepository.findByIdOrThrow(playerId, transaction);
     const updated = await playerRepository.updateName(playerId, sanitizedName, transaction);
-    await characterRepository.updatePlayerAsCharacterNickname(playerId, sanitizedName, transaction);
+    await characterRepository.updatePlayerAsCharacterName(playerId, sanitizedName, transaction);
     await historyRepository.appendHistory({
       type: 'player.renamed',
       actorPlayerId: playerId,

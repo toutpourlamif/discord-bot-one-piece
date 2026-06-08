@@ -1,8 +1,7 @@
 import { sql } from 'drizzle-orm';
 import { index, pgTable, serial, text, varchar } from 'drizzle-orm/pg-core';
 
-import { imageUrl, timestamps } from '../../../shared/helpers.js';
-import { rarityColumn } from '../../../shared/rarity-enum.js';
+import { buildImageUrlColumn, buildRarityColumn, buildTimestampColumns } from '../../../shared/columns/index.js';
 
 import type { ResourceName } from './data.js';
 
@@ -11,11 +10,11 @@ export const resourceTemplate = pgTable(
   {
     id: serial('id').primaryKey(),
     name: varchar('name', { length: 128 }).$type<ResourceName>().notNull().unique(),
-    ...rarityColumn(),
+    ...buildRarityColumn(),
 
-    ...imageUrl(),
+    ...buildImageUrlColumn(),
     description: text('description'),
-    ...timestamps(),
+    ...buildTimestampColumns(),
   },
   (table) => [index('resource_template_name_trgm_idx').using('gin', sql`${table.name} gin_trgm_ops`)],
 );

@@ -13,7 +13,6 @@ import {
   splitIntoPages,
 } from '../../../discord/utils/index.js';
 import type { CharacterRow } from '../../character/types.js';
-import { getCharacterInstanceName } from '../../character/utils/index.js';
 import { BOARDING_BUTTON_NAME, DISEMBARK_BUTTON_NAME, EMBARK_BUTTON_NAME } from '../constants.js';
 
 import { formatLine } from './captain-prefix.js';
@@ -69,14 +68,14 @@ function buildDisembarkButtonRows(crew: Array<CharacterRow>, page: number): Arra
 function buildEmbarkButton(character: CharacterRow, page: number): ButtonBuilder {
   return new ButtonBuilder()
     .setCustomId(buildCustomId(EMBARK_BUTTON_NAME, character.instanceId, page))
-    .setLabel(getCharacterInstanceName(character))
+    .setLabel(character.name)
     .setStyle(ButtonStyle.Success);
 }
 
 function buildDisembarkButton(character: CharacterRow, page: number): ButtonBuilder {
   return new ButtonBuilder()
     .setCustomId(buildCustomId(DISEMBARK_BUTTON_NAME, character.instanceId, page))
-    .setLabel(getCharacterInstanceName(character))
+    .setLabel(character.name)
     .setStyle(ButtonStyle.Danger)
     .setDisabled(character.isCaptain);
 }

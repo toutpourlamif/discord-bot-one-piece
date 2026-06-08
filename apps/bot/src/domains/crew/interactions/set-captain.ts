@@ -5,7 +5,6 @@ import type { ButtonHandler } from '../../../discord/types.js';
 import { buildOpEmbed } from '../../../discord/utils/build-op-embed.js';
 import { parseIntegerArg } from '../../../discord/utils/parse-integer-arg.js';
 import type { CharacterRow } from '../../character/types.js';
-import { getCharacterInstanceName } from '../../character/utils/index.js';
 import { findOrCreatePlayer } from '../../player/service.js';
 import { SET_CAPTAIN_BUTTON_NAME } from '../constants.js';
 import * as crewRepository from '../repository.js';
@@ -30,7 +29,7 @@ async function handle(interaction: ButtonInteraction, args: Array<string>): Prom
 
   const embed = buildOpEmbed('success')
     .setTitle('Capitaine changé !')
-    .setDescription(`**${getCharacterInstanceName(selectedMember)}** est maintenant le capitaine de ton équipage.`);
+    .setDescription(`**${selectedMember.name}** est maintenant le capitaine de ton équipage.`);
   await interaction.editReply({ embeds: [embed], components: [] });
 }
 

@@ -6,7 +6,6 @@ import { DISCORD_ACTION_ROW_MAX_BUTTONS, DISCORD_MESSAGE_MAX_BUTTONS } from '../
 import type { View } from '../../../discord/types.js';
 import { buildCustomId, buildOpEmbed } from '../../../discord/utils/index.js';
 import type { CharacterRow } from '../../character/types.js';
-import { getCharacterInstanceName } from '../../character/utils/index.js';
 import { SET_CAPTAIN_BUTTON_NAME } from '../constants.js';
 
 export function buildSetCaptainView(player: Player, crew: Array<CharacterRow>): View {
@@ -27,7 +26,7 @@ function buildCaptainButtonRows(crew: Array<CharacterRow>): Array<ActionRowBuild
 function buildCaptainButton(character: CharacterRow): ButtonBuilder {
   return new ButtonBuilder()
     .setCustomId(buildCustomId(SET_CAPTAIN_BUTTON_NAME, character.instanceId))
-    .setLabel(getCharacterInstanceName(character))
+    .setLabel(character.name)
     .setStyle(character.isCaptain ? ButtonStyle.Primary : ButtonStyle.Secondary)
     .setDisabled(character.isCaptain);
 }
