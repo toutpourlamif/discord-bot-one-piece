@@ -12,6 +12,7 @@ const WHITESPACE_REGEX = /\s/;
 export const setPrefixCommand: Command = {
   name: 'setprefix',
   requiresSynchronization: false,
+  requiresOnboardingFinished: false,
   async handler({ message, args, guild }) {
     assertGuildMemberIsAdmin(message.member);
 

@@ -7,4 +7,7 @@ export const ALABASTA = defineIsland({
   subZones: {
     alabasta_nanohana: 'Nanohana',
   },
+  tavern: {
+    activities: ['shop', 'recruit'],
+  },
 });

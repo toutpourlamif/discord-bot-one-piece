@@ -10,7 +10,7 @@ import type { Inventory } from '../../resource/types.js';
 import * as shipRepository from '../../ship/repository.js';
 import type { GeneratorContext } from '../types.js';
 
-type HistoryRow = Pick<HistoryLog, 'kind' | 'bucketId'>;
+type HistoryRow = Pick<HistoryLog, 'type' | 'bucketId'>;
 
 export type GeneratorContextData = {
   player: Player;
@@ -48,7 +48,7 @@ export function buildGeneratorContext(ctxData: GeneratorContextData, bucketId: n
 
 function buildCrewAccessor(members: Array<CharacterRow>): GeneratorContext['crew'] {
   function find(name: string): CharacterRow | undefined {
-    return members.find((m) => m.name === name || m.nickname === name);
+    return members.find((m) => m.name === name);
   }
   return {
     members,
@@ -59,11 +59,11 @@ function buildCrewAccessor(members: Array<CharacterRow>): GeneratorContext['crew
 
 function buildHistoryAccessor(historyLogs: Array<HistoryRow>, currentBucketId: number): GeneratorContext['history'] {
   return {
-    has: (type) => historyLogs.some((log) => log.kind === type),
-    lastResolutionOf: (prefix) => historyLogs.findLast((log) => log.kind.startsWith(prefix))?.kind,
+    has: (type) => historyLogs.some((log) => log.type === type),
+    lastResolutionOf: (prefix) => historyLogs.findLast((log) => log.type.startsWith(prefix))?.type,
     countSinceNBuckets: (type, nBuckets) => {
       const minBucket = currentBucketId - nBuckets;
-      return historyLogs.filter((log) => log.kind === type && log.bucketId !== null && log.bucketId > minBucket).length;
+      return historyLogs.filter((log) => log.type === type && log.bucketId !== null && log.bucketId > minBucket).length;
     },
   };
 }

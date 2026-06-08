@@ -50,6 +50,8 @@ export type Resolution = {
   embed: EmbedBuilder;
   effects: Array<EventEffect>;
   resolutionType: string;
+  // déclenche l'embed "Cette décision aura des conséquences..." façon Life is Strange
+  hasConsequences?: boolean;
 };
 
 type Choice =
