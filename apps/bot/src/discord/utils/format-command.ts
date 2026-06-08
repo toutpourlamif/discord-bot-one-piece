@@ -1,10 +1,10 @@
-export function formatCommand(prefix: string, command: string, options?: FormatCommandOptions): string {
-  if (options?.backticks === false) {
-    return `${prefix}${command}`;
-  }
-  return `\`${prefix}${command}\``;
+import { inlineCode } from './index.js';
+
+export function formatCommand(prefix: string, commandName: string, options?: FormatCommandOptions): string {
+  const command = `${prefix}${commandName}`;
+  return options?.hasBackticks === false ? command : inlineCode(command);
 }
 
 type FormatCommandOptions = {
-  backticks: boolean;
+  hasBackticks: boolean;
 };

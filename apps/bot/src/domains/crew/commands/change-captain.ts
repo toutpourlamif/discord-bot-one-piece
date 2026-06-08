@@ -16,7 +16,7 @@ export const changeCaptainCommand: Command = {
         embeds: [
           buildOpEmbed('warn')
             .setDescription(`Votre équipage n'est composé que de **${captain.name}**.`)
-            .setFooter({ text: `${formatCommand(guild.prefix, 'crew', { backticks: false })} pour voir votre équipage!` }),
+            .setFooter({ text: `${formatCommand(guild.prefix, 'crew')} pour voir votre équipage!` }),
         ],
       });
       return;
