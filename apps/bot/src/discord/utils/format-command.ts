@@ -1,8 +1,8 @@
-import { inlineCode } from './index.js';
+import { wrapInBackticks } from './index.js';
 
 export function formatCommand(prefix: string, commandName: string, options?: FormatCommandOptions): string {
   const command = `${prefix}${commandName}`;
-  return options?.hasBackticks === false ? command : inlineCode(command);
+  return options?.hasBackticks === false ? command : wrapInBackticks(command);
 }
 
 type FormatCommandOptions = {

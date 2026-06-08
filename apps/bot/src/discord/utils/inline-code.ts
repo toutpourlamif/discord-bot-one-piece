@@ -1,3 +1,3 @@
-export function inlineCode(text: string): string {
+export function wrapInBackticks(text: string): string {
   return `\`${text}\``;
 }

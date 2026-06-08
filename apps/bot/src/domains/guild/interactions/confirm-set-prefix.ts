@@ -5,7 +5,7 @@ import {
   assertGuildMemberIsAdmin,
   assertInteractorIsTheOwner,
   buildOpEmbed,
-  inlineCode,
+  wrapInBackticks,
   parseOwnerDiscordId,
   parseStringArg,
 } from '../../../discord/utils/index.js';
@@ -26,7 +26,7 @@ async function handle(interaction: ButtonInteraction, args: Array<string>): Prom
 
   const embed = buildOpEmbed('success')
     .setTitle('Préfixe changé !')
-    .setDescription(`Le préfixe du serveur est maintenant ${inlineCode(updated.prefix)}.`);
+    .setDescription(`Le préfixe du serveur est maintenant ${wrapInBackticks(updated.prefix)}.`);
   await interaction.editReply({ embeds: [embed], components: [] });
 }
 

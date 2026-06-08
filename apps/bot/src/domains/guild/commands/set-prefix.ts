@@ -4,7 +4,7 @@ import { ActionRowBuilder, ButtonBuilder, ButtonStyle } from 'discord.js';
 import { CUSTOM_ID_SEPARATOR } from '../../../discord/constants.js';
 import { ValidationError } from '../../../discord/errors.js';
 import type { Command } from '../../../discord/types.js';
-import { assertGuildMemberIsAdmin, buildCancelButton, buildCustomId, buildOpEmbed, inlineCode } from '../../../discord/utils/index.js';
+import { assertGuildMemberIsAdmin, buildCancelButton, buildCustomId, buildOpEmbed, wrapInBackticks } from '../../../discord/utils/index.js';
 import { CONFIRM_SET_PREFIX_BUTTON_NAME } from '../constants.js';
 
 const WHITESPACE_REGEX = /\s/;
@@ -20,7 +20,7 @@ export const setPrefixCommand: Command = {
 
     const embed = buildOpEmbed('warn')
       .setTitle('Changer le préfixe ?')
-      .setDescription(`Es-tu sûr de vouloir changer le préfixe de ${inlineCode(guild.prefix)} en ${inlineCode(prefix)} ?`);
+      .setDescription(`Es-tu sûr de vouloir changer le préfixe de ${wrapInBackticks(guild.prefix)} en ${wrapInBackticks(prefix)} ?`);
 
     const row = new ActionRowBuilder<ButtonBuilder>().addComponents(
       buildCancelButton(message.author.id),
