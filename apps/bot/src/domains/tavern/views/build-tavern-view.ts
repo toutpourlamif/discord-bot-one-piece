@@ -5,14 +5,20 @@ import type { View } from '../../../discord/types.js';
 import { buildBackAction, buildCustomId, buildOpEmbed } from '../../../discord/utils/index.js';
 import { PROFIL_BUTTON_NAME } from '../../player/constants.js';
 import { TAVERN_SECTION_BUTTON_NAME, TAVERN_SECTIONS, type TavernSection } from '../constants.js';
+import { getReachableTavern } from '../utils/get-reachable-tavern.js';
 
 type BuildTavernViewParams = {
   player: Player;
   ownerDiscordId: string;
-  tavernConfig: TavernConfig;
 };
 
-export function buildTavernView({ player, ownerDiscordId, tavernConfig }: BuildTavernViewParams): View {
+export function buildTavernView({ player, ownerDiscordId }: BuildTavernViewParams): View {
+  const tavernConfig = getReachableTavern(player);
+  if (tavernConfig === undefined) {
+    const embed = buildOpEmbed().setDescription(`Il n'y a malheureusement pas de taverne à ${ZONE_LABELS[player.currentZone]}.`);
+    return { embeds: [embed], components: [] };
+  }
+
   const embed = buildOpEmbed()
     .setTitle(`🍺 Taverne — ${ZONE_LABELS[player.currentZone]}`)
     .setDescription("Pousse la porte : un verre, une partie, du recrutement et de quoi t'équiper.");
