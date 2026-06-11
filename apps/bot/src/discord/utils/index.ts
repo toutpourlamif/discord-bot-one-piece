@@ -10,7 +10,7 @@ export { buildMenuButtons } from './build-menu-buttons.js';
 export { buildOpEmbed } from './build-op-embed.js';
 export { buildPaginationButtons } from './build-pagination-buttons.js';
 export { getQuery } from './get-query.js';
-export { getTargetUser } from './get-target-user.js';
+export { resolveTargetUser } from './resolve-target-user.js';
 export { clampPage, splitIntoPages } from './paginate.js';
 export { parseBigintArg } from './parse-bigint-arg.js';
 export { parseIntegerArg } from './parse-integer-arg.js';
