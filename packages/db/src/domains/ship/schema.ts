@@ -1,6 +1,6 @@
 import { integer, pgTable, serial, varchar } from 'drizzle-orm/pg-core';
 
-import { timestamps } from '../../shared/helpers.js';
+import { buildTimestampColumns } from '../../shared/columns/index.js';
 import { player } from '../player/schema.js';
 
 export const ship = pgTable('ship', {
@@ -21,7 +21,7 @@ export const ship = pgTable('ship', {
   cabinsLevel: integer('cabins_level').notNull().default(1),
   cargoLevel: integer('cargo_level').notNull().default(1),
 
-  ...timestamps(),
+  ...buildTimestampColumns(),
 });
 
 export type Ship = typeof ship.$inferSelect;
