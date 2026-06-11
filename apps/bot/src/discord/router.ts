@@ -12,6 +12,7 @@ import { playerCommands } from '../domains/player/index.js';
 import { findOrCreatePlayer } from '../domains/player/service.js';
 import { resourceCommands } from '../domains/resource/index.js';
 import { shipCommands } from '../domains/ship/commands/index.js';
+import { tavernCommands } from '../domains/tavern/index.js';
 import { buildRegistry } from '../shared/build-registry.js';
 
 import { AppError } from './errors.js';
@@ -29,6 +30,7 @@ const allCommands = [
   ...guildCommands,
   ...eventCommands,
   ...onboardingCommands,
+  ...tavernCommands,
 ];
 const registry = buildRegistry(allCommands, (command) =>
   Array.isArray(command.name) ? command.name.map((name) => name.toLowerCase()) : command.name.toLowerCase(),

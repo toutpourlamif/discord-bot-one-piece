@@ -21,7 +21,7 @@ import { getCrewDisplayName } from './get-crew-display-name.js';
 import { isInCrewFilter } from './is-in-crew-filter.js';
 
 export function buildBoardingView(player: Player, ship: Ship, characters: Array<Character>, page: number, ownerDiscordId: string): View {
-  const menuRow = buildMenuButtons(BOARDING_BUTTON_NAME, ownerDiscordId, player.id);
+  const menuRow = buildMenuButtons(BOARDING_BUTTON_NAME, ownerDiscordId, player);
 
   const crew = characters.filter(isInCrewFilter);
   const reserve = characters.filter((c) => c.joinedCrewAt === null);

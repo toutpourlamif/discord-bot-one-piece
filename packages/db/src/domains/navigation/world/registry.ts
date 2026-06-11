@@ -1,6 +1,7 @@
+import type { TavernConfig } from '../../tavern/types.js';
+
 import { EAST_BLUE_ISLAND_REGISTRY } from './east-blue/island-registry.js';
 import { PARADISE_ISLAND_REGISTRY } from './paradise/island-registry.js';
-import type { TavernConfig } from './types/tavern.js';
 import type { Zone } from './zones.js';
 
 const ISLAND_REGISTRY = [...EAST_BLUE_ISLAND_REGISTRY, ...PARADISE_ISLAND_REGISTRY];
@@ -38,6 +39,6 @@ export const ISLAND_ENTRY_SUB_ZONE = Object.fromEntries(ISLAND_REGISTRY.map((isl
 >;
 
 // Tavernes déclarées au niveau de chaque île (champ optionnel de defineIsland) : une zone absente n'a pas de taverne.
-export const TAVERN_BY_ZONE = Object.fromEntries(
-  ISLAND_REGISTRY.filter((island) => island.tavern).map((island) => [island.key, island.tavern]),
+export const TAVERN_CONFIG_BY_ZONE = Object.fromEntries(
+  ISLAND_REGISTRY.filter((island) => island.tavernConfig).map((island) => [island.key, island.tavernConfig]),
 ) as Partial<Record<Zone, TavernConfig>>;

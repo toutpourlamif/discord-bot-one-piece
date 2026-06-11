@@ -23,8 +23,10 @@ export {
   type SubZone,
   type TravelModifier,
   type Zone,
+  TAVERN_CONFIG_BY_ZONE,
   WORLD_EDGES,
 } from './domains/navigation/index.js';
+export { type TavernActivityType, type TavernConfig } from './domains/tavern/index.js';
 export { ONBOARDING_STEP_IDS, type OnboardingStepId, type Player } from './domains/player/index.js';
 export { type DevilFruitTemplate } from './domains/devil_fruit/index.js';
 export {

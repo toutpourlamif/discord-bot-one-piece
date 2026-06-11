@@ -10,6 +10,7 @@ import { onboardingButtonHandlers } from '../domains/onboarding/index.js';
 import { playerButtonHandlers } from '../domains/player/index.js';
 import { resourceButtonHandlers } from '../domains/resource/index.js';
 import { shipButtonHandlers } from '../domains/ship/index.js';
+import { tavernButtonHandlers } from '../domains/tavern/index.js';
 import { buildRegistry } from '../shared/build-registry.js';
 
 import { CUSTOM_ID_SEPARATOR } from './constants.js';
@@ -28,6 +29,7 @@ const allButtonHandlers: Array<ButtonHandler> = [
   ...eventButtonHandlers,
   ...onboardingButtonHandlers,
   ...devButtonHandlers,
+  ...tavernButtonHandlers,
 ];
 const buttonRegistry = buildRegistry(allButtonHandlers, (h) => h.name);
 
