@@ -33,7 +33,7 @@ export type GeneratorContext = {
 type GeneratorBase = {
   key: string;
   isInteractive: boolean;
-  seedScope: SeedScope;
+  seedScope?: SeedScope;
   conditions?: (ctx: GeneratorContext) => boolean;
   cooldownBuckets?: number;
   oneTime?: boolean;
