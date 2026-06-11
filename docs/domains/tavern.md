@@ -11,7 +11,7 @@ Une taverne est **liée à l'île courante** du joueur (`player.currentZone`)
 - En mer : pas de taverne, le joueur doit revenir à quai.
 - Sur une île sans taverne déclarée : message « Pas de taverne ici ».
 
-Les tavernes sont déclarées au niveau de chaque île dans le registry de `packages/db` (`TAVERN_BY_ZONE`).
+Les tavernes sont déclarées au niveau de chaque île dans le registry de `packages/db` (`TAVERN_CONFIG_BY_ZONE`).
 Quand on déclare une île (voir fonction `defineIsland`) on peut lui passer une clé `tavern` ; si `island.tavern` est `undefined`, l'île n'a tout simplement pas de taverne.
 
 ## Sections

@@ -23,7 +23,7 @@ export {
   type SubZone,
   type TravelModifier,
   type Zone,
-  TAVERN_BY_ZONE,
+  TAVERN_CONFIG_BY_ZONE,
   WORLD_EDGES,
 } from './domains/navigation/index.js';
 export { type TavernActivityType, type TavernConfig } from './domains/tavern/index.js';
