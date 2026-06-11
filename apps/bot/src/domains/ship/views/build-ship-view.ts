@@ -24,7 +24,7 @@ export async function buildShipView(player: Player, ownerDiscordId: string): Pro
     });
   }
 
-  const navRow = buildMenuButtons(SHIP_BUTTON_NAME, ownerDiscordId, player.id);
+  const navRow = buildMenuButtons(SHIP_BUTTON_NAME, ownerDiscordId, player);
   const isOwner = player.discordId === ownerDiscordId;
   const upgradeRow = isOwner ? buildUpgradeShipButtonRow(player.id, ownerDiscordId) : null;
 
