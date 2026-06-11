@@ -1,6 +1,6 @@
 import { integer, pgTable, serial, uniqueIndex } from 'drizzle-orm/pg-core';
 
-import { timestamps } from '../../../shared/helpers.js';
+import { buildTimestampColumns } from '../../../shared/columns/index.js';
 import { player } from '../../player/schema.js';
 import { devilFruitTemplate } from '../devil_fruit_template/schema.js';
 
@@ -14,7 +14,7 @@ export const devilFruitInstance = pgTable(
     playerId: integer('player_id')
       .notNull()
       .references(() => player.id, { onDelete: 'cascade' }),
-    ...timestamps(),
+    ...buildTimestampColumns(),
   },
   (table) => [uniqueIndex('devil_fruit_instance_player_template_uniq').on(table.playerId, table.templateId)],
 );

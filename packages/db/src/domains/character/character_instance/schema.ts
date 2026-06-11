@@ -1,7 +1,7 @@
 import { sql } from 'drizzle-orm';
 import { boolean, check, integer, pgTable, serial, timestamp, uniqueIndex } from 'drizzle-orm/pg-core';
 
-import { timestamps } from '../../../shared/helpers.js';
+import { buildTimestampColumns } from '../../../shared/columns/index.js';
 import { devilFruitTemplate } from '../../devil_fruit/devil_fruit_template/schema.js';
 import { player } from '../../player/schema.js';
 import { characterTemplate } from '../character_template/schema.js';
@@ -21,7 +21,7 @@ export const characterInstance = pgTable(
     devilFruitTemplateId: integer('devil_fruit_template_id').references(() => devilFruitTemplate.id, {
       onDelete: 'restrict',
     }),
-    ...timestamps(),
+    ...buildTimestampColumns(),
   },
   (table) => [
     uniqueIndex('character_instance_player_template_uniq').on(table.playerId, table.templateId),
