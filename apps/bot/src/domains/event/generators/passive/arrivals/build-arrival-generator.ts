@@ -16,7 +16,6 @@ export function buildArrivalGenerator(island: Island, content: ArrivalContent): 
   return {
     key: `${camelCase(island)}Arrival`,
     isInteractive: false,
-    seedScope: 'player',
     probability: noProbability,
     compute: noCompute,
     render: () =>

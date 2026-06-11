@@ -8,7 +8,6 @@ import { noProbability } from '../utils.js';
 export const cheatTeleport: InteractiveGenerator = {
   key: 'cheatTeleport',
   isInteractive: true,
-  seedScope: 'player',
   probability: noProbability,
 
   initialStep: 'pickDestination',
