@@ -22,7 +22,7 @@ const EMOJIS: Array<{ emoji: string; name: string }> = [
 ];
 
 export const emojiCommand: Command = {
-  name: 'emoji',
+  name: { fr: 'emoji', en: 'emoji' },
   async handler({ message }) {
     const embed = buildOpEmbed().setTitle('Emojis').setDescription('Choisis un emoji ! ');
     const fiveEmojis = sampleSize(EMOJIS, 5);

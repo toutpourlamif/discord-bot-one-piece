@@ -5,7 +5,7 @@ import { renameCrew } from '../service.js';
 import { getCrewDisplayName } from '../utils/get-crew-display-name.js';
 
 export const renameCrewCommand: Command = {
-  name: 'renamecrew',
+  name: { fr: 'renamecrew', en: 'renamecrew' },
   async handler({ message, args, player }) {
     const name = getQuery(args, { emptyMessage: 'Tu dois donner un nom.', minLength: MIN_CREW_NAME_LENGTH });
     const renamed = await renameCrew(player.id, name);

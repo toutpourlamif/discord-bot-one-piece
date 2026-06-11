@@ -12,12 +12,11 @@ import { playerCommands } from '../domains/player/index.js';
 import { findOrCreatePlayer } from '../domains/player/service.js';
 import { resourceCommands } from '../domains/resource/index.js';
 import { shipCommands } from '../domains/ship/commands/index.js';
-import { buildRegistry } from '../shared/build-registry.js';
 
+import { buildCommandRegistry, resolveCommand } from './commands/registry.js';
 import { AppError } from './errors.js';
 import { buildOpEmbed } from './utils/index.js';
 
-// TODO: Séparer dans un fichier command-registry.ts
 const allCommands = [
   ...playerCommands,
   ...infoCommands,
@@ -30,9 +29,7 @@ const allCommands = [
   ...eventCommands,
   ...onboardingCommands,
 ];
-const registry = buildRegistry(allCommands, (command) =>
-  Array.isArray(command.name) ? command.name.map((name) => name.toLowerCase()) : command.name.toLowerCase(),
-);
+const registry = buildCommandRegistry(allCommands);
 
 /** Dispatche un message vers le bon handler de commande. Voir `docs/discord.md`. */
 export async function routeMessage(message: Message): Promise<void> {
@@ -48,7 +45,7 @@ export async function routeMessage(message: Message): Promise<void> {
     const [rawName, ...args] = content.slice(guild.prefix.length).trim().split(/\s+/);
     if (!rawName) return;
 
-    const command = registry.get(rawName.toLowerCase());
+    const command = resolveCommand(registry, rawName, guild.language);
     if (!command) return;
 
     const { player } = await findOrCreatePlayer(message.author.id, message.author.username, guild.id);

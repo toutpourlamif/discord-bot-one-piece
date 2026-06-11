@@ -12,7 +12,7 @@ const MIN_QUERY_LENGTH = 2;
 const ENTITIES_DISPLAYED_LIMIT = 10;
 
 export const infoCommand: Command = {
-  name: 'info',
+  name: { fr: 'info', en: 'info' },
   requiresOnboardingFinished: false,
   requiresSynchronization: false,
   async handler({ message, args }) {

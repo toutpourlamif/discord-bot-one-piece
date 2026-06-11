@@ -32,7 +32,7 @@ const DEBUG_TABLES: Record<string, TableWithIdColumn> = {
 const helpMessage = `Usage : \`debug <table> <id>\`\nTables : ${Object.keys(DEBUG_TABLES).join(', ')}`;
 
 export const debugCommand: Command = {
-  name: 'debug',
+  name: { fr: 'debug', en: 'debug' },
   async handler({ message, args }) {
     const tableName = parseStringArg(args[0]);
     const table = tableName ? DEBUG_TABLES[tableName] : undefined;
