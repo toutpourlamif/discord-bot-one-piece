@@ -12,7 +12,7 @@ import {
   clampPage,
   splitIntoPages,
 } from '../../../discord/utils/index.js';
-import type { CharacterRow } from '../../character/types.js';
+import type { Character } from '../../character/types.js';
 import { BOARDING_BUTTON_NAME, DISEMBARK_BUTTON_NAME, EMBARK_BUTTON_NAME } from '../constants.js';
 
 import { formatLine } from './captain-prefix.js';
@@ -20,7 +20,7 @@ import { getCrewCapacity } from './get-crew-capacity.js';
 import { getCrewDisplayName } from './get-crew-display-name.js';
 import { isInCrewFilter } from './is-in-crew-filter.js';
 
-export function buildBoardingView(player: Player, ship: Ship, characters: Array<CharacterRow>, page: number, ownerDiscordId: string): View {
+export function buildBoardingView(player: Player, ship: Ship, characters: Array<Character>, page: number, ownerDiscordId: string): View {
   const menuRow = buildMenuButtons(BOARDING_BUTTON_NAME, ownerDiscordId, player.id);
 
   const crew = characters.filter(isInCrewFilter);
@@ -53,26 +53,26 @@ export function buildBoardingView(player: Player, ship: Ship, characters: Array<
   };
 }
 
-function buildEmbarkButtonRows(crew: Array<CharacterRow>, page: number): Array<ActionRowBuilder<ButtonBuilder>> {
+function buildEmbarkButtonRows(crew: Array<Character>, page: number): Array<ActionRowBuilder<ButtonBuilder>> {
   return chunk(crew, DISCORD_ACTION_ROW_MAX_BUTTONS).map((rowCharacters) =>
     new ActionRowBuilder<ButtonBuilder>().addComponents(rowCharacters.map((c) => buildEmbarkButton(c, page))),
   );
 }
 
-function buildDisembarkButtonRows(crew: Array<CharacterRow>, page: number): Array<ActionRowBuilder<ButtonBuilder>> {
+function buildDisembarkButtonRows(crew: Array<Character>, page: number): Array<ActionRowBuilder<ButtonBuilder>> {
   return chunk(crew, DISCORD_ACTION_ROW_MAX_BUTTONS).map((rowCharacters) =>
     new ActionRowBuilder<ButtonBuilder>().addComponents(rowCharacters.map((c) => buildDisembarkButton(c, page))),
   );
 }
 
-function buildEmbarkButton(character: CharacterRow, page: number): ButtonBuilder {
+function buildEmbarkButton(character: Character, page: number): ButtonBuilder {
   return new ButtonBuilder()
     .setCustomId(buildCustomId(EMBARK_BUTTON_NAME, character.instanceId, page))
     .setLabel(character.name)
     .setStyle(ButtonStyle.Success);
 }
 
-function buildDisembarkButton(character: CharacterRow, page: number): ButtonBuilder {
+function buildDisembarkButton(character: Character, page: number): ButtonBuilder {
   return new ButtonBuilder()
     .setCustomId(buildCustomId(DISEMBARK_BUTTON_NAME, character.instanceId, page))
     .setLabel(character.name)
