@@ -23,7 +23,7 @@ On ouvre un domaine (dossier + doc) uniquement au moment où on commence à code
 | `economy`     | Berry, shops, marchands                                                                                                                                   |
 | `resource`    | Matériaux de craft, artefacts de main story, FDD non consommés                                                                                            |
 | `fishing`     | Action `!fishing` à la demande : loot, events, avancée scénario                                                                                           |
-| `tavern`      | Hub social d'une île (`!tavern`) : sections boutique / recrutement / jeux dérivées des activités de l'île                                                  |
+| `tavern`      | Hub social d'une île (`!tavern`) : sections boutique / recrutement / jeux dérivées des activités de l'île                                                 |
 | `history`     | HISTORIQUE DE tout ce qu'il se passe et qui peut servir plus tard pour analyser / pour des events                                                         |
 | `guild`       | Informations des guildes (serveurs discord) où le bot a déjà été éxécuté, on stocke aussi leur langue, leur prefixe, et leur nom (rafraîchi à chaque msg) |
 
