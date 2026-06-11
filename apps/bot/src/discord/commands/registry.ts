@@ -1,7 +1,8 @@
 import type { SupportedLanguage } from '@one-piece/db';
 
-import { getCommandTriggerNameEntries } from './command-names.js';
-import type { Command } from './types.js';
+import type { Command } from '../types.js';
+
+import { getCommandTriggerNameEntries } from './names.js';
 
 type CommandMatch = {
   command: Command;

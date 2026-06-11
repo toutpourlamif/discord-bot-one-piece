@@ -13,7 +13,7 @@ import { findOrCreatePlayer } from '../domains/player/service.js';
 import { resourceCommands } from '../domains/resource/index.js';
 import { shipCommands } from '../domains/ship/commands/index.js';
 
-import { buildCommandRegistry, resolveCommand } from './command-registry.js';
+import { buildCommandRegistry, resolveCommand } from './commands/registry.js';
 import { AppError } from './errors.js';
 import { buildOpEmbed } from './utils/index.js';
 

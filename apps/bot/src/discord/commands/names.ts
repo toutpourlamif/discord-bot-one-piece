@@ -1,6 +1,6 @@
 import { SUPPORTED_LANGUAGES, type SupportedLanguage } from '@one-piece/db';
 
-import type { Command } from './types.js';
+import type { Command } from '../types.js';
 
 type CommandTriggerName = {
   language: SupportedLanguage;
