@@ -13,7 +13,7 @@ export type DialogueSpeaker = {
   emotions?: Array<DialogueEmotion>;
 };
 
-type DialogueEmotion = 'default' | 'happy' | 'crying' | 'scared';
+type DialogueEmotion = 'default' | 'happy' | 'crying' | 'scared' | 'laughing' | 'thinking' | 'angry';
 
 type BuildDialogueEmbedOptions = { emotion?: DialogueEmotion; variant?: EmbedVariant; verb?: DialogueVerb };
 
