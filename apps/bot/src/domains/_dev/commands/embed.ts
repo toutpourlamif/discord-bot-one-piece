@@ -2,7 +2,7 @@ import type { Command } from '../../../discord/types.js';
 import { buildOpEmbed } from '../../../discord/utils/index.js';
 
 export const embedCommand: Command = {
-  name: 'embed',
+  name: { fr: 'embed', en: 'embed' },
   async handler({ message }) {
     const dateUnix = Math.floor(Date.now() / 1000);
 

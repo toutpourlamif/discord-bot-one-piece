@@ -6,7 +6,8 @@ import { findOrCreatePlayer } from '../../player/service.js';
 
 // TODO: supprimer avant la prod
 export const giveCharacterCommand: Command = {
-  name: ['givecharacter', 'gc'],
+  name: { fr: 'givecharacter', en: 'givecharacter' },
+  alias: { fr: 'gc', en: 'gc' },
   async handler({ message, args }) {
     const target = getTargetUser(message);
     const queryArgs = message.mentions.users.first() ? args.slice(1) : args;

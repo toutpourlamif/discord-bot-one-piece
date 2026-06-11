@@ -10,7 +10,7 @@ function toHex(color: number): string {
 }
 
 export const colorCommand: Command = {
-  name: 'color',
+  name: { fr: 'color', en: 'color' },
   async handler({ message }) {
     const color = getRandomColor();
     const hex = toHex(color);

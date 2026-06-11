@@ -1,3 +1,4 @@
+import { getCommandDisplayName } from '../../../discord/command-names.js';
 import type { Command } from '../../../discord/types.js';
 import { buildOpEmbed } from '../../../discord/utils/build-op-embed.js';
 import { getCrewByPlayerId } from '../service.js';
@@ -5,10 +6,8 @@ import { buildSetCaptainView } from '../utils/build-change-captain-view.js';
 
 import { crewCommand } from './crew.js';
 
-const [crewCommandName] = Array.isArray(crewCommand.name) ? crewCommand.name : [crewCommand.name];
-
 export const changeCaptainCommand: Command = {
-  name: 'changecaptain',
+  name: { fr: 'changecaptain', en: 'changecaptain' },
   async handler({ message, player, guild }) {
     const crew = await getCrewByPlayerId(player.id);
 
@@ -19,7 +18,7 @@ export const changeCaptainCommand: Command = {
         embeds: [
           buildOpEmbed('warn')
             .setDescription(`Votre équipage n'est composé que de **${captain.name}**.`)
-            .setFooter({ text: `${guild.prefix}${crewCommandName} pour voir votre équipage!` }),
+            .setFooter({ text: `${guild.prefix}${getCommandDisplayName(crewCommand, guild.language)} pour voir votre équipage!` }),
         ],
       });
       return;

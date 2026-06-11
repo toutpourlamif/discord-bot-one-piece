@@ -12,7 +12,8 @@ import { resolveTargetPlayer } from '../../player/index.js';
 import * as playerRepository from '../../player/repository.js';
 
 export const forceEventCommand: Command = {
-  name: ['forceEvent', 'force-event', 'fe'],
+  name: { fr: 'forceEvent', en: 'forceEvent' },
+  alias: { fr: 'fe', en: 'fe' },
   async handler(ctx) {
     const { targetPlayer, rest } = await resolveTargetPlayer(ctx);
     const [eventKey] = rest;

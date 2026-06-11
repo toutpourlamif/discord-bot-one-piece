@@ -1,7 +1,7 @@
-import type { Guild, Player } from '@one-piece/db';
+import type { Guild, Player, SupportedLanguage } from '@one-piece/db';
 import type { ActionRowBuilder, ButtonBuilder, ButtonInteraction, EmbedBuilder, Message } from 'discord.js';
 
-export type CommandName = string | Array<string>;
+type CommandName = Record<SupportedLanguage, string>;
 
 export type CommandContext = {
   message: Message;
@@ -12,6 +12,7 @@ export type CommandContext = {
 
 export type Command = {
   name: CommandName;
+  alias?: CommandName;
   handler: (ctx: CommandContext) => Promise<void>;
   requiresSynchronization?: boolean;
   requiresOpAdmin?: boolean;

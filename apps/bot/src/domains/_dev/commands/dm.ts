@@ -5,7 +5,7 @@ import { buildOpEmbed } from '../../../discord/utils/index.js';
 import { sendDirectMessage } from '../../../discord/utils/send-direct-message.js';
 
 export const dmCommand: Command = {
-  name: 'dm',
+  name: { fr: 'dm', en: 'dm' },
   async handler({ message, args }) {
     const target = getTargetUser(message);
     const queryArgs = message.mentions.users.first() ? args.slice(1) : args;
