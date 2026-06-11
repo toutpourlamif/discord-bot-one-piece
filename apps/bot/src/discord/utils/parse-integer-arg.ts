@@ -1,9 +1,10 @@
 import { ValidationError } from '../errors.js';
 
+import { isValidPostgresInteger } from './is-valid-postgres-integer.js';
 export function parseIntegerArg(raw: string | undefined): number {
   const value = Number(raw);
 
-  if (!Number.isInteger(value)) {
+  if (!isValidPostgresInteger(value)) {
     throw new ValidationError(`"${raw}" n'est pas un nombre entier !`);
   }
 
