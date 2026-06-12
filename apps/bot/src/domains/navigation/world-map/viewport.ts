@@ -1,17 +1,22 @@
 import sharp from 'sharp';
 
-import { rasterizeSvg, RETINA_SCALE } from '../../../image-builder/rasterize-svg.js';
+import { resolveAssetPath } from '../../../image-builder/load-asset-data-uri.js';
+import { RETINA_SCALE } from '../../../image-builder/rasterize-svg.js';
 
 import { WORLD_MAP_HEIGHT, WORLD_MAP_WIDTH, worldMapPng } from './build-world-map.js';
-import { buildCloudBand, CLOUD_BLUR_FILTER } from './clouds.js';
 import type { WorldPoint } from './world-positions.js';
+
+const VIGNETTE_SIZE = 1.75;
+const VIGNETTE_BLUR = 15;
+// Décale la frame vers la droite (négatif = vers la gauche), en pixels viewport.
+const VIGNETTE_SHIFT_X = -20;
 
 /** Fenêtre fixe affichée par la card `!ship` : zoom constant, centré sur le navire. */
 export const VIEWPORT_WIDTH = 800;
 export const VIEWPORT_HEIGHT = 450;
 
-/** Brume sur les bords de la fenêtre (centre transparent), rendue une fois au lancement. */
-export const cloudVignetteDataUri = renderCloudVignette();
+/** Nuages sur les bords de la fenêtre (centre transparent), rendus une fois au lancement. */
+export const cloudVignetteDataUri = await renderCloudVignette();
 
 export type Viewport = {
   dataUri: string;
@@ -35,10 +40,21 @@ export async function extractViewport(center: WorldPoint): Promise<Viewport> {
   return { dataUri: `data:image/png;base64,${png.toString('base64')}`, origin: { x: left, y: top } };
 }
 
-function renderCloudVignette(): string {
-  const band = buildCloudBand({ width: VIEWPORT_WIDTH, height: VIEWPORT_HEIGHT, thickness: 60, opacity: 0.5 });
-  const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${VIEWPORT_WIDTH}" height="${VIEWPORT_HEIGHT}" viewBox="0 0 ${VIEWPORT_WIDTH} ${VIEWPORT_HEIGHT}"><defs>${CLOUD_BLUR_FILTER}</defs>${band}</svg>`;
-  return `data:image/png;base64,${rasterizeSvg(svg, { width: VIEWPORT_WIDTH }).toString('base64')}`;
+async function renderCloudVignette(): Promise<string> {
+  const width = Math.round(VIEWPORT_WIDTH * RETINA_SCALE * VIGNETTE_SIZE);
+  const height = Math.round(VIEWPORT_HEIGHT * RETINA_SCALE * VIGNETTE_SIZE);
+  const png = await sharp(resolveAssetPath('world/clouds.webp'))
+    .resize(width, height, { fit: 'fill' })
+    .extract({
+      left: Math.round((width - VIEWPORT_WIDTH * RETINA_SCALE) / 2) - VIGNETTE_SHIFT_X * RETINA_SCALE,
+      top: Math.round((height - VIEWPORT_HEIGHT * RETINA_SCALE) / 2),
+      width: VIEWPORT_WIDTH * RETINA_SCALE,
+      height: VIEWPORT_HEIGHT * RETINA_SCALE,
+    })
+    .blur(VIGNETTE_BLUR)
+    .png()
+    .toBuffer();
+  return `data:image/png;base64,${png.toString('base64')}`;
 }
 
 function clamp(value: number, min: number, max: number): number {

@@ -47,7 +47,12 @@ export async function buildShipCard(player: Player, ship: Ship): Promise<Buffer>
       </div>
       <div style={{ display: 'flex', position: 'relative', width: VIEWPORT_WIDTH, height: VIEWPORT_HEIGHT }}>
         <img src={viewport.dataUri} width={VIEWPORT_WIDTH} height={VIEWPORT_HEIGHT} />
-        <img src={cloudVignetteDataUri} width={VIEWPORT_WIDTH} height={VIEWPORT_HEIGHT} style={{ position: 'absolute', top: 0, left: 0 }} />
+        <img
+          src={cloudVignetteDataUri}
+          width={VIEWPORT_WIDTH}
+          height={VIEWPORT_HEIGHT}
+          style={{ position: 'absolute', top: 0, left: 0, opacity: 0.6 }}
+        />
         {route && buildRouteLine(route)}
         {position && (
           <div
@@ -131,6 +136,7 @@ function clipRouteToViewport(route: Route): Route | null {
   };
 }
 
+// TODO: enlever les route lines
 function buildRouteLine(route: Route) {
   const dx = route.to.x - route.from.x;
   const dy = route.to.y - route.from.y;
@@ -153,12 +159,14 @@ function buildRouteLine(route: Route) {
   );
 }
 
+// TODO: extraire l'hp bar dans son propre fichier
 function hpBarColor(ratio: number): string {
   if (ratio > 0.5) return '#4ade80';
   if (ratio > 0.25) return '#fb923c';
   return '#ef4444';
 }
 
+// TODO: utiliser clamp de lodash
 function clamp(value: number, min: number, max: number): number {
   return Math.min(Math.max(value, min), max);
 }

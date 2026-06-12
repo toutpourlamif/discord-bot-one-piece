@@ -32,7 +32,9 @@ La card affiche une fenêtre fixe de 800×450 (`VIEWPORT_WIDTH/HEIGHT` dans `vie
 
 ## Les textures et les nuages
 
-Tout est programmatique, dans le SVG du fond (`buildBackgroundSvg`) : dégradé d'océan, motif de vagues, halos de haut-fonds et ombres sous les îles. Les nuages (`clouds.ts`) habillent les bords du monde (« terra incognita », cuits dans le fond) et les bords de chaque card (vignette de brume transparente au centre, rendue une fois aussi). Ils sont déterministes : pas de `Math.random`, même carte à chaque lancement.
+Le fond est programmatique, dans son SVG (`buildBackgroundSvg`) : dégradé d'océan, motif de vagues, halos de haut-fonds et ombres sous les îles. Les nuages procéduraux (`clouds.ts`) habillent les bords du monde (« terra incognita », cuits dans le fond). Ils sont déterministes : pas de `Math.random`, même carte à chaque lancement.
+
+Les bords de chaque card portent en plus une frame de nuages dessinée (`assets/world/clouds.webp`), agrandie et recadrée au centre (`VIGNETTE_OVERSCAN` dans `viewport.ts`) pour ne garder qu'une bordure fine — pré-rendue une fois au lancement.
 
 Le jour où on veut de vrais assets (parchemin, îles dessinées), ça se remplace **uniquement dans `buildBackgroundSvg`** — le viewport et la card ne voient qu'un PNG, rien d'autre ne bouge.
 
@@ -43,9 +45,9 @@ apps/bot/src/domains/navigation/world-map/
   world-positions.ts   ← un point par île — la source de vérité des deux rendus
   mds-layout.ts        ← la mécanique de layout (Floyd-Warshall, SMACOF, anti-chevauchement)
   palette.ts           ← les couleurs, partagées avec pnpm world
-  clouds.ts            ← dessin des nuages (helpers purs)
+  clouds.ts            ← nuages procéduraux des bords du monde (helpers purs)
   build-world-map.ts   ← le fond : SVG à la main → PNG, rendu une fois au lancement
-  viewport.ts          ← le crop zoomé + la vignette de brume
+  viewport.ts          ← le crop zoomé + la frame de nuages des cards
 ```
 
 ## pnpm world et la card : qui partage quoi
