@@ -1,9 +1,18 @@
 import type { Player, Ship } from '@one-piece/db';
+import type { AttachmentBuilder } from 'discord.js';
 
 import type { View } from '../../../discord/types.js';
-import { buildMenuButtons, buildOpEmbed, buildPaginationButtons, clampPage, splitIntoPages } from '../../../discord/utils/index.js';
+import {
+  attachImage,
+  buildMenuButtons,
+  buildOpEmbed,
+  buildPaginationButtons,
+  clampPage,
+  splitIntoPages,
+} from '../../../discord/utils/index.js';
 import { buildAssetUrl } from '../../../shared/build-asset-url.js';
 import type { Character } from '../../character/types.js';
+import { buildCrewCard } from '../cards/build-crew-card.js';
 import { CREW_BUTTON_NAME } from '../constants.js';
 
 import { formatLine } from './captain-prefix.js';
@@ -11,7 +20,13 @@ import { getCrewCapacity } from './get-crew-capacity.js';
 import { getCrewDisplayName } from './get-crew-display-name.js';
 import { isInCrewFilter } from './is-in-crew-filter.js';
 
-export function buildCrewView(player: Player, ship: Ship, characters: Array<Character>, page: number, ownerDiscordId: string): View {
+export async function buildCrewView(
+  player: Player,
+  ship: Ship,
+  characters: Array<Character>,
+  page: number,
+  ownerDiscordId: string,
+): Promise<View> {
   const menuRow = buildMenuButtons(CREW_BUTTON_NAME, ownerDiscordId, player);
 
   const crew = characters.filter(isInCrewFilter);
@@ -23,6 +38,7 @@ export function buildCrewView(player: Player, ship: Ship, characters: Array<Char
 
   const embed = buildOpEmbed();
   const isCrewPage = currentPage === 0;
+  const files: Array<AttachmentBuilder> = [];
 
   if (isCrewPage) {
     const crewCapacity = getCrewCapacity(ship);
@@ -31,6 +47,7 @@ export function buildCrewView(player: Player, ship: Ship, characters: Array<Char
     if (captain?.imageUrl) {
       embed.setThumbnail(buildAssetUrl(captain.imageUrl));
     }
+    if (crew.length > 0) attachImage({ embed, files, image: await buildCrewCard(crew) });
   } else {
     const reservePage = reservePages[currentPage - 1];
     if (!reservePage) throw new Error(`Page de réserve introuvable: ${currentPage}/${reservePages.length}`);
@@ -44,5 +61,6 @@ export function buildCrewView(player: Player, ship: Ship, characters: Array<Char
   return {
     embeds: [embed],
     components: [...buildPaginationButtons(CREW_BUTTON_NAME, ownerDiscordId, player.id, currentPage, pageCount), menuRow],
+    files,
   };
 }

@@ -1,7 +1,7 @@
 import type { ButtonInteraction } from 'discord.js';
 
 import type { ButtonHandler } from '../../../discord/types.js';
-import { assertInteractorIsTheOwner, parseIntegerArg, parseOwnerDiscordId } from '../../../discord/utils/index.js';
+import { assertInteractorIsTheOwner, editReply, parseIntegerArg, parseOwnerDiscordId } from '../../../discord/utils/index.js';
 import { getCharactersByPlayerId } from '../../character/repository.js';
 import * as playerRepository from '../../player/repository.js';
 import * as shipRepository from '../../ship/repository.js';
@@ -20,7 +20,7 @@ async function handle(interaction: ButtonInteraction, args: Array<string>): Prom
   const ship = await shipRepository.findByPlayerIdOrThrow(player.id);
 
   const characters = await getCharactersByPlayerId(player.id);
-  await interaction.editReply(buildCrewView(player, ship, characters, page, ownerDiscordId));
+  await editReply(interaction, await buildCrewView(player, ship, characters, page, ownerDiscordId));
 }
 
 export const crewPaginationButtonHandler: ButtonHandler = {

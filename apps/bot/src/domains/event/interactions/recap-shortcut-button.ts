@@ -2,7 +2,7 @@ import type { ButtonInteraction } from 'discord.js';
 
 import { NotFoundError } from '../../../discord/errors.js';
 import type { ButtonHandler } from '../../../discord/types.js';
-import { assertInteractorIsTheOwner, parseOwnerDiscordId } from '../../../discord/utils/index.js';
+import { assertInteractorIsTheOwner, editReply, parseOwnerDiscordId } from '../../../discord/utils/index.js';
 import * as playerRepository from '../../player/repository.js';
 import { buildRecapView } from '../recap/build-recap-view.js';
 
@@ -14,7 +14,7 @@ async function handle(interaction: ButtonInteraction, args: Array<string>): Prom
   const player = await playerRepository.findByDiscordId(ownerDiscordId);
   if (!player) throw new NotFoundError('Joueur introuvable.');
 
-  await interaction.editReply(await buildRecapView(player));
+  await editReply(interaction, await buildRecapView(player));
 }
 
 export const recapShortcutButtonHandler: ButtonHandler = {

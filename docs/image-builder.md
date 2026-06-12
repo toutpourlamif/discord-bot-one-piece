@@ -72,7 +72,7 @@ apps/bot/src/
     fonts.ts                   ← chargement des fonts au démarrage (une fois)
     load-asset-data-uri.ts     ← lecture des assets du disque + cache mémoire
     components/                ← primitives réutilisables (extraites au 2e usage, pas avant)
-  domains/crew/utils/
+  domains/crew/cards/
     build-crew-card.tsx        ← le layout JSX de la carte !crew
 ```
 

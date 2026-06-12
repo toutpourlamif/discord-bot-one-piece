@@ -1,4 +1,5 @@
 export { assertGuildMemberIsAdmin } from './assert-guild-member-is-admin.js';
+export { attachImage } from './attach-image.js';
 export { assertInteractorIsTheOwner } from './assert-interactor-is-the-owner.js';
 export { buildBackAction, buildBackButton } from './build-back-action.js';
 export { buildCancelButton, cancelButtonHandler } from './cancel-button.js';
@@ -9,6 +10,7 @@ export { buildDiscordTimestamp } from './build-discord-timestamp.js';
 export { buildMenuButtons } from './build-menu-buttons.js';
 export { buildOpEmbed } from './build-op-embed.js';
 export { buildPaginationButtons } from './build-pagination-buttons.js';
+export { editReply } from './edit-reply.js';
 export { getQuery } from './get-query.js';
 export { resolveTargetUser } from './resolve-target-user.js';
 export { clampPage, splitIntoPages } from './paginate.js';
