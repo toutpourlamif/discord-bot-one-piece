@@ -1,3 +1,4 @@
+import chalk from 'chalk';
 import sharp from 'sharp';
 
 import { resolveAssetPath } from '../../../image-builder/load-asset-data-uri.js';
@@ -15,8 +16,12 @@ const VIGNETTE_SHIFT_X = -20;
 export const VIEWPORT_WIDTH = 800;
 export const VIEWPORT_HEIGHT = 450;
 
+const vignetteStartedAt = performance.now();
+
 /** Nuages sur les bords de la fenêtre (centre transparent), rendus une fois au lancement. */
 export const cloudVignetteDataUri = await renderCloudVignette();
+
+console.log(`☁️ Vignette de nuages ${chalk.green('OK')} ${chalk.yellow(`(${Math.round(performance.now() - vignetteStartedAt)} ms)`)}`);
 
 export type Viewport = {
   dataUri: string;

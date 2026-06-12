@@ -1,4 +1,5 @@
 import { ISLANDS, WORLD_EDGES, ZONE_LABELS } from '@one-piece/db';
+import chalk from 'chalk';
 
 import { PIRATA_ONE_FONT_FILE } from '../../../image-builder/fonts.js';
 import { rasterizeSvg } from '../../../image-builder/rasterize-svg.js';
@@ -27,8 +28,12 @@ export const WORLD_MAP_WIDTH = MAP_WIDTH;
 
 export const WORLD_MAP_HEIGHT = projection.height;
 
+const renderStartedAt = performance.now();
+
 /** PNG du fond de carte (rendu retina 2×), généré une seule fois au lancement du bot. */
 export const worldMapPng: Buffer = rasterizeSvg(buildBackgroundSvg(), { width: MAP_WIDTH, fontFiles: [PIRATA_ONE_FONT_FILE] });
+
+console.log(`🗺️ Fond de carte monde ${chalk.green('OK')} ${chalk.yellow(`(${Math.round(performance.now() - renderStartedAt)} ms)`)}`);
 
 /** Coordonnées monde (cf `world-positions.ts`) → pixels dans l'image de la carte. */
 export function projectToMap(point: WorldPoint): WorldPoint {

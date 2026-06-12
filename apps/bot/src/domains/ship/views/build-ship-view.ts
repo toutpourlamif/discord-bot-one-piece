@@ -1,4 +1,4 @@
-import { SHIP_MODULE_KEYS, SHIP_MODULE_LEVEL_COLUMNS, ZONE_LABELS, type Player } from '@one-piece/db';
+import { ZONE_LABELS, type Player } from '@one-piece/db';
 import { ActionRowBuilder, ButtonBuilder, ButtonStyle, type APIEmbedField, type AttachmentBuilder } from 'discord.js';
 
 import type { View } from '../../../discord/types.js';
@@ -6,7 +6,7 @@ import { attachImage, buildCustomId, buildDiscordTimestamp, buildMenuButtons, bu
 import { getStartDateOfBucket } from '../../event/engine/bucket.js';
 import { buildShipCard } from '../cards/build-ship-card.js';
 import { SHIP_BUTTON_NAME, UPGRADE_MODULE_EMOJI, UPGRADE_SHIP_BUTTON_NAME } from '../constants.js';
-import { SHIP_MODULE_LABELS, SHIP_MODULES } from '../modules.js';
+import { SHIP_MODULES } from '../modules.js';
 import { findByPlayerIdOrThrow } from '../repository.js';
 
 export async function buildShipView(player: Player, ownerDiscordId: string): Promise<View> {
@@ -15,24 +15,24 @@ export async function buildShipView(player: Player, ownerDiscordId: string): Pro
   const embed = buildOpEmbed().setTitle(`🚢 ${ship.name}`);
   embed.addFields(...buildLocationFields(player));
 
+  const maxHp = SHIP_MODULES.hull.valueByLevel[ship.hullLevel - 1] ?? 100;
+  const hpRatio = Math.min(Math.max(ship.hp / maxHp, 0), 1);
+  embed.addFields({ name: 'HP', value: `${buildHpBar(hpRatio)} ${ship.hp}/${maxHp}`, inline: false });
+
   const files: Array<AttachmentBuilder> = [];
   attachImage({ embed, files, image: await buildShipCard(player, ship) });
-  // TODO: Redesign this shit
-  for (const key of SHIP_MODULE_KEYS) {
-    const level = ship[SHIP_MODULE_LEVEL_COLUMNS[key]];
-    const value = SHIP_MODULES[key].valueByLevel[level - 1];
-    embed.addFields({
-      name: `${SHIP_MODULE_LABELS[key]} (niveau ${level})`,
-      value: value !== undefined ? String(value) : '—',
-      inline: true,
-    });
-  }
 
   const navRow = buildMenuButtons(SHIP_BUTTON_NAME, ownerDiscordId, player);
   const isOwner = player.discordId === ownerDiscordId;
   const upgradeRow = isOwner ? buildUpgradeShipButtonRow(player.id, ownerDiscordId) : null;
 
   return { embeds: [embed], components: upgradeRow ? [upgradeRow, navRow] : [navRow], files };
+}
+
+function buildHpBar(ratio: number): string {
+  const filled = ratio === 0 ? 0 : Math.max(1, Math.round(ratio * 10));
+  const color = ratio > 0.5 ? '🟩' : ratio > 0.25 ? '🟧' : '🟥';
+  return color.repeat(filled) + '⬜'.repeat(10 - filled);
 }
 
 function buildLocationFields(player: Player): Array<APIEmbedField> {
