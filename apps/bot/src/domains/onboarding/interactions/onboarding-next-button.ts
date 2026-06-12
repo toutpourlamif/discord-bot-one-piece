@@ -31,7 +31,7 @@ export const onboardingNextButtonHandler: ButtonHandler = {
 
     const view =
       resultingStep === null
-        ? buildOnboardingCompletedView()
+        ? buildOnboardingCompletedView(guild.language)
         : buildOnboardingView({ stepId: resultingStep, prefix: guild.prefix, ownerDiscordId });
     await interaction.editReply(view);
   },
