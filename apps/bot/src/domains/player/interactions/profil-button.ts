@@ -1,7 +1,7 @@
 import type { ButtonInteraction } from 'discord.js';
 
 import type { ButtonHandler } from '../../../discord/types.js';
-import { assertInteractorIsTheOwner, parseIntegerArg, parseOwnerDiscordId } from '../../../discord/utils/index.js';
+import { assertInteractorIsTheOwner, editReply, parseIntegerArg, parseOwnerDiscordId } from '../../../discord/utils/index.js';
 import { buildProfilView } from '../build-profil-view.js';
 import { PROFIL_BUTTON_NAME } from '../constants.js';
 
@@ -11,7 +11,7 @@ async function handle(interaction: ButtonInteraction, args: Array<string>): Prom
   const playerId = parseIntegerArg(args[1]);
 
   await interaction.deferUpdate();
-  await interaction.editReply(await buildProfilView(playerId, ownerDiscordId));
+  await editReply(interaction, await buildProfilView(playerId, ownerDiscordId));
 }
 
 export const profilButtonHandler: ButtonHandler = {

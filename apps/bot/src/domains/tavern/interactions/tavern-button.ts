@@ -1,7 +1,7 @@
 import type { ButtonInteraction } from 'discord.js';
 
 import type { ButtonHandler } from '../../../discord/types.js';
-import { assertInteractorIsTheOwner, parseIntegerArg, parseOwnerDiscordId } from '../../../discord/utils/index.js';
+import { assertInteractorIsTheOwner, editReply, parseIntegerArg, parseOwnerDiscordId } from '../../../discord/utils/index.js';
 import { assertPlayerIsNotAtSea } from '../../navigation/guards/index.js';
 import * as playerRepository from '../../player/repository.js';
 import { TAVERN_BUTTON_NAME } from '../constants.js';
@@ -17,7 +17,7 @@ async function handle(interaction: ButtonInteraction, args: Array<string>): Prom
 
   assertPlayerIsNotAtSea(player);
 
-  await interaction.editReply(buildTavernView({ player, ownerDiscordId }));
+  await editReply(interaction, buildTavernView({ player, ownerDiscordId }));
 }
 
 export const tavernButtonHandler: ButtonHandler = {

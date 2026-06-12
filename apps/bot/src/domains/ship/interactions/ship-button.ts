@@ -1,7 +1,7 @@
 import type { ButtonInteraction } from 'discord.js';
 
 import type { ButtonHandler } from '../../../discord/types.js';
-import { assertInteractorIsTheOwner, parseIntegerArg, parseOwnerDiscordId } from '../../../discord/utils/index.js';
+import { assertInteractorIsTheOwner, editReply, parseIntegerArg, parseOwnerDiscordId } from '../../../discord/utils/index.js';
 import * as playerRepository from '../../player/repository.js';
 import { SHIP_BUTTON_NAME } from '../constants.js';
 import { buildShipView } from '../views/index.js';
@@ -13,7 +13,7 @@ async function handle(interaction: ButtonInteraction, args: Array<string>): Prom
 
   await interaction.deferUpdate();
   const player = await playerRepository.findByIdOrThrow(playerId);
-  await interaction.editReply(await buildShipView(player, ownerDiscordId));
+  await editReply(interaction, await buildShipView(player, ownerDiscordId));
 }
 
 export const shipButtonHandler: ButtonHandler = {

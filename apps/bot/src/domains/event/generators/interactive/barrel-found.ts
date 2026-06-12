@@ -7,7 +7,7 @@ export const barrelFound: InteractiveGenerator = {
   key: 'barrelFound',
   isInteractive: true,
   cooldownBuckets: inBuckets('3d'),
-  probability: () => 0.1,
+  probability: () => 0.01,
 
   initialStep: 'openOrLeave',
   steps: {
