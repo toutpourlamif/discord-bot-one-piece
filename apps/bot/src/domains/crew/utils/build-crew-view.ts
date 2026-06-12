@@ -3,7 +3,7 @@ import type { Player, Ship } from '@one-piece/db';
 import type { View } from '../../../discord/types.js';
 import { buildMenuButtons, buildOpEmbed, buildPaginationButtons, clampPage, splitIntoPages } from '../../../discord/utils/index.js';
 import { buildAssetUrl } from '../../../shared/build-asset-url.js';
-import type { CharacterRow } from '../../character/types.js';
+import type { Character } from '../../character/types.js';
 import { CREW_BUTTON_NAME } from '../constants.js';
 
 import { formatLine } from './captain-prefix.js';
@@ -11,8 +11,8 @@ import { getCrewCapacity } from './get-crew-capacity.js';
 import { getCrewDisplayName } from './get-crew-display-name.js';
 import { isInCrewFilter } from './is-in-crew-filter.js';
 
-export function buildCrewView(player: Player, ship: Ship, characters: Array<CharacterRow>, page: number, ownerDiscordId: string): View {
-  const menuRow = buildMenuButtons(CREW_BUTTON_NAME, ownerDiscordId, player.id);
+export function buildCrewView(player: Player, ship: Ship, characters: Array<Character>, page: number, ownerDiscordId: string): View {
+  const menuRow = buildMenuButtons(CREW_BUTTON_NAME, ownerDiscordId, player);
 
   const crew = characters.filter(isInCrewFilter);
   const reserve = characters.filter((c) => c.joinedCrewAt === null);

@@ -1,6 +1,6 @@
-import type { CharacterRow } from '../../character/types.js';
+import type { Character } from '../../character/types.js';
 
-export function formatLine(row: CharacterRow): string {
+export function formatLine(row: Character): string {
   const prefix = row.isCaptain ? '⭐ ' : '';
   return `${prefix}${row.name}`;
 }
