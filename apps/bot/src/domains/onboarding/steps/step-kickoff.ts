@@ -1,5 +1,5 @@
 import type { View } from '../../../discord/types.js';
-import { buildOpEmbed } from '../../../discord/utils/index.js';
+import { buildOpEmbed, formatCommand } from '../../../discord/utils/index.js';
 
 export function runKickoff(): View {
   return {
@@ -11,7 +11,9 @@ export function runKickoff(): View {
 export function buildKickoffReminder(prefix: string, expects: string): View {
   return {
     embeds: [
-      buildOpEmbed('info').setTitle('Bienvenue sur Grand Line.').setDescription(`Démarre ton aventure en tapant \`${prefix}${expects}\`.`),
+      buildOpEmbed('info')
+        .setTitle('Bienvenue sur Grand Line.')
+        .setDescription(`Démarre ton aventure en tapant ${formatCommand(prefix, expects)}.`),
     ],
     components: [],
   };
