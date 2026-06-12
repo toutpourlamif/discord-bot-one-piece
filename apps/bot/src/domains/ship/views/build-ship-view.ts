@@ -20,7 +20,7 @@ export async function buildShipView(player: Player, ownerDiscordId: string): Pro
   embed.addFields({ name: 'HP', value: `${buildHpBar(hpRatio)} ${ship.hp}/${maxHp}`, inline: false });
 
   const files: Array<AttachmentBuilder> = [];
-  attachImage({ embed, files, image: await buildShipCard(player, ship) });
+  attachImage({ embed, files, image: await buildShipCard(player) });
 
   const navRow = buildMenuButtons(SHIP_BUTTON_NAME, ownerDiscordId, player);
   const isOwner = player.discordId === ownerDiscordId;

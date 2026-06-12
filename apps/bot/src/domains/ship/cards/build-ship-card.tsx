@@ -1,4 +1,4 @@
-import type { Player, Ship } from '@one-piece/db';
+import type { Player } from '@one-piece/db';
 
 import { buildImage } from '../../../image-builder/build-image.js';
 import { getNowBucketId } from '../../event/engine/bucket.js';
@@ -6,18 +6,12 @@ import { isSea } from '../../navigation/utils/index.js';
 import { projectToMap, WORLD_MAP_HEIGHT, WORLD_MAP_WIDTH } from '../../navigation/world-map/build-world-map.js';
 import { cloudVignetteDataUri, extractViewport, VIEWPORT_HEIGHT, VIEWPORT_WIDTH } from '../../navigation/world-map/viewport.js';
 import { WORLD_POSITIONS, type WorldPoint } from '../../navigation/world-map/world-positions.js';
-import { SHIP_MODULES } from '../modules.js';
 
-const HEADER_HEIGHT = 64;
-const HEADER_COLOR = '#10141f';
-const HP_TRACK_COLOR = '#2a2f3f';
 const SHIP_MARKER_SIZE = 22;
 const MARKER_COLOR = '#fbbf24';
 const ROUTE_COLOR = '#ffd166';
 
-export async function buildShipCard(player: Player, ship: Ship): Promise<Buffer> {
-  const maxHp = SHIP_MODULES.hull.valueByLevel[ship.hullLevel - 1] ?? 100;
-  const hpRatio = clamp(ship.hp / maxHp, 0, 1);
+export async function buildShipCard(player: Player): Promise<Buffer> {
   const marker = computeShipMarker(player);
 
   // Zoom fixe : on croppe le fond autour du navire (ou du centre de la carte à défaut),
@@ -31,46 +25,31 @@ export async function buildShipCard(player: Player, ship: Ship): Promise<Buffer>
     clipRouteToViewport({ from: toViewport(marker.route.from, viewport.origin), to: toViewport(marker.route.to, viewport.origin) });
 
   return buildImage(
-    <div style={{ display: 'flex', flexDirection: 'column', width: '100%', height: '100%' }}>
-      <div
-        style={{ display: 'flex', alignItems: 'center', gap: 16, padding: '0 20px', height: HEADER_HEIGHT, backgroundColor: HEADER_COLOR }}
-      >
-        <span style={{ fontFamily: 'Pirata One', fontSize: 30, color: '#f8fafc' }}>HP</span>
-        <div style={{ display: 'flex', flexGrow: 1, height: 18, backgroundColor: HP_TRACK_COLOR, borderRadius: 9 }}>
-          <div
-            style={{ display: 'flex', width: `${hpRatio * 100}%`, height: '100%', backgroundColor: hpBarColor(hpRatio), borderRadius: 9 }}
-          />
-        </div>
-        <span style={{ fontFamily: 'Lato', fontWeight: 700, fontSize: 22, color: '#f8fafc' }}>
-          {ship.hp}/{maxHp}
-        </span>
-      </div>
-      <div style={{ display: 'flex', position: 'relative', width: VIEWPORT_WIDTH, height: VIEWPORT_HEIGHT }}>
-        <img src={viewport.dataUri} width={VIEWPORT_WIDTH} height={VIEWPORT_HEIGHT} />
-        <img
-          src={cloudVignetteDataUri}
-          width={VIEWPORT_WIDTH}
-          height={VIEWPORT_HEIGHT}
-          style={{ position: 'absolute', top: 0, left: 0, opacity: 0.6 }}
+    <div style={{ display: 'flex', position: 'relative', width: VIEWPORT_WIDTH, height: VIEWPORT_HEIGHT }}>
+      <img src={viewport.dataUri} width={VIEWPORT_WIDTH} height={VIEWPORT_HEIGHT} />
+      <img
+        src={cloudVignetteDataUri}
+        width={VIEWPORT_WIDTH}
+        height={VIEWPORT_HEIGHT}
+        style={{ position: 'absolute', top: 0, left: 0, opacity: 0.6 }}
+      />
+      {route && buildRouteLine(route)}
+      {position && (
+        <div
+          style={{
+            position: 'absolute',
+            left: position.x - SHIP_MARKER_SIZE / 2,
+            top: position.y - SHIP_MARKER_SIZE / 2,
+            width: SHIP_MARKER_SIZE,
+            height: SHIP_MARKER_SIZE,
+            borderRadius: '50%',
+            backgroundColor: MARKER_COLOR,
+            border: '3px solid #ffffff',
+          }}
         />
-        {route && buildRouteLine(route)}
-        {position && (
-          <div
-            style={{
-              position: 'absolute',
-              left: position.x - SHIP_MARKER_SIZE / 2,
-              top: position.y - SHIP_MARKER_SIZE / 2,
-              width: SHIP_MARKER_SIZE,
-              height: SHIP_MARKER_SIZE,
-              borderRadius: '50%',
-              backgroundColor: MARKER_COLOR,
-              border: '3px solid #ffffff',
-            }}
-          />
-        )}
-      </div>
+      )}
     </div>,
-    { width: VIEWPORT_WIDTH, height: HEADER_HEIGHT + VIEWPORT_HEIGHT },
+    { width: VIEWPORT_WIDTH, height: VIEWPORT_HEIGHT },
   );
 }
 
@@ -157,13 +136,6 @@ function buildRouteLine(route: Route) {
       }}
     />
   );
-}
-
-// TODO: extraire l'hp bar dans son propre fichier
-function hpBarColor(ratio: number): string {
-  if (ratio > 0.5) return '#4ade80';
-  if (ratio > 0.25) return '#fb923c';
-  return '#ef4444';
 }
 
 // TODO: utiliser clamp de lodash
