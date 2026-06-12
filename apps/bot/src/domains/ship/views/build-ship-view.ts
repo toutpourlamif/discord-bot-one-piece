@@ -1,9 +1,10 @@
 import { SHIP_MODULE_KEYS, SHIP_MODULE_LEVEL_COLUMNS, ZONE_LABELS, type Player } from '@one-piece/db';
-import { ActionRowBuilder, ButtonBuilder, ButtonStyle, type APIEmbedField } from 'discord.js';
+import { ActionRowBuilder, ButtonBuilder, ButtonStyle, type APIEmbedField, type AttachmentBuilder } from 'discord.js';
 
 import type { View } from '../../../discord/types.js';
-import { buildCustomId, buildDiscordTimestamp, buildMenuButtons, buildOpEmbed } from '../../../discord/utils/index.js';
+import { attachImage, buildCustomId, buildDiscordTimestamp, buildMenuButtons, buildOpEmbed } from '../../../discord/utils/index.js';
 import { getStartDateOfBucket } from '../../event/engine/bucket.js';
+import { buildShipCard } from '../cards/build-ship-card.js';
 import { SHIP_BUTTON_NAME, UPGRADE_MODULE_EMOJI, UPGRADE_SHIP_BUTTON_NAME } from '../constants.js';
 import { SHIP_MODULE_LABELS, SHIP_MODULES } from '../modules.js';
 import { findByPlayerIdOrThrow } from '../repository.js';
@@ -11,8 +12,11 @@ import { findByPlayerIdOrThrow } from '../repository.js';
 export async function buildShipView(player: Player, ownerDiscordId: string): Promise<View> {
   const ship = await findByPlayerIdOrThrow(player.id);
 
-  const embed = buildOpEmbed().setTitle(`🚢 ${ship.name}`).setDescription(`HP : ${ship.hp}`);
+  const embed = buildOpEmbed().setTitle(`🚢 ${ship.name}`);
   embed.addFields(...buildLocationFields(player));
+
+  const files: Array<AttachmentBuilder> = [];
+  attachImage({ embed, files, image: await buildShipCard(player, ship) });
   // TODO: Redesign this shit
   for (const key of SHIP_MODULE_KEYS) {
     const level = ship[SHIP_MODULE_LEVEL_COLUMNS[key]];
@@ -28,7 +32,7 @@ export async function buildShipView(player: Player, ownerDiscordId: string): Pro
   const isOwner = player.discordId === ownerDiscordId;
   const upgradeRow = isOwner ? buildUpgradeShipButtonRow(player.id, ownerDiscordId) : null;
 
-  return { embeds: [embed], components: upgradeRow ? [upgradeRow, navRow] : [navRow] };
+  return { embeds: [embed], components: upgradeRow ? [upgradeRow, navRow] : [navRow], files };
 }
 
 function buildLocationFields(player: Player): Array<APIEmbedField> {

@@ -10,8 +10,10 @@ export {
   type SupportedLanguage,
 } from './domains/guild/index.js';
 export {
+  EAST_BLUE_ISLANDS,
   ISLAND_ENTRY_SUB_ZONE,
   ISLANDS,
+  PARADISE_ISLANDS,
   SEAS,
   SUB_ZONE_LABELS,
   SUB_ZONES_BY_ISLAND,

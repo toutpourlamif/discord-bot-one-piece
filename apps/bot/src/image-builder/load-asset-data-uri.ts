@@ -20,11 +20,14 @@ export async function loadAssetDataUri(path: string): Promise<string> {
   return dataUri;
 }
 
-async function readAsDataUri(path: string): Promise<string> {
-  const absolutePath = fileURLToPath(new URL(path, ASSETS_DIR));
+/** Chemin absolu d'un asset de `/assets` — pour les traitements sharp custom. */
+export function resolveAssetPath(path: string): string {
+  return fileURLToPath(new URL(path, ASSETS_DIR));
+}
 
-  // satori ne sait pas décoder le webp : on convertit en png d'abord
-  const pngBuffer = await sharp(absolutePath).png().toBuffer();
+async function readAsDataUri(path: string): Promise<string> {
+  // satori ne sait pas décoder le webp, il faut passer par du png
+  const pngBuffer = await sharp(resolveAssetPath(path)).png().toBuffer();
 
   const base64 = pngBuffer.toString('base64');
   return `data:image/png;base64,${base64}`;
