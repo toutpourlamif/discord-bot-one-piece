@@ -2,6 +2,13 @@ import { buildImage } from '../../../image-builder/build-image.js';
 import { loadAssetDataUri } from '../../../image-builder/load-asset-data-uri.js';
 import type { Character } from '../../character/types.js';
 
+const MAX_PORTRAITS = 10;
+const CELL_WIDTH = 120;
+const CELL_HEIGHT = 220;
+const BAND_WIDTH = 8;
+const BAND_COLOR = '#000000';
+const CELL_COLOR = '#1b1e2b';
+
 export async function buildCrewCard(crew: Array<Character>): Promise<Buffer> {
   const members = crew.slice(0, MAX_PORTRAITS);
   const portraits = await Promise.all(members.map(async (member) => (member.imageUrl ? loadAssetDataUri(member.imageUrl) : null)));
@@ -20,10 +27,3 @@ export async function buildCrewCard(crew: Array<Character>): Promise<Buffer> {
     { width, height },
   );
 }
-
-const MAX_PORTRAITS = 10;
-const CELL_WIDTH = 120;
-const CELL_HEIGHT = 220;
-const BAND_WIDTH = 8;
-const BAND_COLOR = '#000000';
-const CELL_COLOR = '#1b1e2b';

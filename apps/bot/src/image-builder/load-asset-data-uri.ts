@@ -2,6 +2,13 @@ import { fileURLToPath } from 'node:url';
 
 import sharp from 'sharp';
 
+const ASSETS_DIR = new URL('../../../../assets/', import.meta.url);
+
+/** On cache les promesses entières, pas seulement les résultats.
+comme ça on couvre le cas où on demande deux fois la même valuer en même temps :
+On fetch pas deux fois, les deux attendent la même promesse */
+const cache = new Map<string, Promise<string>>();
+
 /** Lit un asset de `/assets` et le retourne en data-URI
  * Possède un système de cache. */
 export async function loadAssetDataUri(path: string): Promise<string> {
@@ -12,13 +19,6 @@ export async function loadAssetDataUri(path: string): Promise<string> {
   cache.set(path, dataUri);
   return dataUri;
 }
-
-const ASSETS_DIR = new URL('../../../../assets/', import.meta.url);
-
-/** On cache les promesses entières, pas seulement les résultats.
-comme ça on couvre le cas où on demande deux fois la même valuer en même temps : 
-On fetch pas deux fois, les deux attendent la même promesse */
-const cache = new Map<string, Promise<string>>();
 
 async function readAsDataUri(path: string): Promise<string> {
   const absolutePath = fileURLToPath(new URL(path, ASSETS_DIR));

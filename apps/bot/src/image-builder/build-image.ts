@@ -4,6 +4,8 @@ import satori from 'satori';
 
 import { fonts } from './fonts.js';
 
+const RETINA_SCALE = 2;
+
 export type BuildImageOptions = {
   width: number;
   height: number;
@@ -15,5 +17,3 @@ export async function buildImage(element: ReactNode, options: BuildImageOptions)
   const png = new Resvg(svg, { fitTo: { mode: 'width', value: options.width * RETINA_SCALE } }).render().asPng();
   return Buffer.from(png);
 }
-
-const RETINA_SCALE = 2;
