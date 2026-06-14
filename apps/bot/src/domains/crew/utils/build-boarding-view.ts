@@ -46,35 +46,35 @@ export function buildBoardingView(player: Player, ship: Ship, characters: Array<
     embeds: [embed],
     components: [
       ...buildPaginationButtons(BOARDING_BUTTON_NAME, ownerDiscordId, player.id, currentPage, pageCount),
-      ...buildDisembarkButtonRows(crew, page),
-      ...buildEmbarkButtonRows(reserve, page),
+      ...buildDisembarkButtonRows(crew, page, ownerDiscordId),
+      ...buildEmbarkButtonRows(reserve, page, ownerDiscordId),
       menuRow,
     ],
   };
 }
 
-function buildEmbarkButtonRows(crew: Array<Character>, page: number): Array<ActionRowBuilder<ButtonBuilder>> {
+function buildEmbarkButtonRows(crew: Array<Character>, page: number, ownerDiscordId: string): Array<ActionRowBuilder<ButtonBuilder>> {
   return chunk(crew, DISCORD_ACTION_ROW_MAX_BUTTONS).map((rowCharacters) =>
-    new ActionRowBuilder<ButtonBuilder>().addComponents(rowCharacters.map((c) => buildEmbarkButton(c, page))),
+    new ActionRowBuilder<ButtonBuilder>().addComponents(rowCharacters.map((c) => buildEmbarkButton(c, page, ownerDiscordId))),
   );
 }
 
-function buildDisembarkButtonRows(crew: Array<Character>, page: number): Array<ActionRowBuilder<ButtonBuilder>> {
+function buildDisembarkButtonRows(crew: Array<Character>, page: number, ownerDiscordId: string): Array<ActionRowBuilder<ButtonBuilder>> {
   return chunk(crew, DISCORD_ACTION_ROW_MAX_BUTTONS).map((rowCharacters) =>
-    new ActionRowBuilder<ButtonBuilder>().addComponents(rowCharacters.map((c) => buildDisembarkButton(c, page))),
+    new ActionRowBuilder<ButtonBuilder>().addComponents(rowCharacters.map((c) => buildDisembarkButton(c, page, ownerDiscordId))),
   );
 }
 
-function buildEmbarkButton(character: Character, page: number): ButtonBuilder {
+function buildEmbarkButton(character: Character, page: number, ownerDiscordId: string): ButtonBuilder {
   return new ButtonBuilder()
-    .setCustomId(buildCustomId(EMBARK_BUTTON_NAME, character.instanceId, page))
+    .setCustomId(buildCustomId(EMBARK_BUTTON_NAME, ownerDiscordId, character.instanceId, page))
     .setLabel(character.name)
     .setStyle(ButtonStyle.Success);
 }
 
-function buildDisembarkButton(character: Character, page: number): ButtonBuilder {
+function buildDisembarkButton(character: Character, page: number, ownerDiscordId: string): ButtonBuilder {
   return new ButtonBuilder()
-    .setCustomId(buildCustomId(DISEMBARK_BUTTON_NAME, character.instanceId, page))
+    .setCustomId(buildCustomId(DISEMBARK_BUTTON_NAME, ownerDiscordId, character.instanceId, page))
     .setLabel(character.name)
     .setStyle(ButtonStyle.Danger)
     .setDisabled(character.isCaptain);
