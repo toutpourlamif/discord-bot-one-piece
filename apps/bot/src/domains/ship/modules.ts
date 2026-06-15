@@ -68,3 +68,8 @@ export const SHIP_MODULE_LABELS = {
   cabins: 'Chambres',
   cargo: 'Cale',
 } as const satisfies Record<ShipModuleKey, string>;
+
+/** HP max d'un navire = valeur de la coque au niveau courant. Source unique pour la barre HP, le drift et l'init d'un template. */
+export function getMaxHpForHullLevel(hullLevel: number): number {
+  return SHIP_MODULES.hull.valueByLevel[hullLevel - 1] ?? 100;
+}

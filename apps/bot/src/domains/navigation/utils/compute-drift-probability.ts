@@ -2,6 +2,7 @@ import type { Edge, Island, Sea, Ship, TravelModifier } from '@one-piece/db';
 import clamp from 'lodash/clamp.js';
 
 import type { Inventory } from '../../resource/types.js';
+import { getMaxHpForHullLevel } from '../../ship/modules.js';
 
 import { hasLogOrEternalPoseForIsland, findEdge } from './index.js';
 
@@ -9,7 +10,6 @@ const DRIFT_BASE_PROBABILITY = 0.02;
 const DRIFT_MAX_PROBABILITY = 0.5;
 const DRIFT_SHIP_DAMAGE_WEIGHT = 0.3;
 const DRIFT_NO_POSE_PENALTY = 0.2;
-const MAX_SHIP_HP = 100;
 
 type ComputeDriftProbabilityParams = {
   ship: Ship;
@@ -27,7 +27,7 @@ export function computeDriftProbability({ ship, inventory, fromSea, intendedZone
   // TODO: brancher hasNavigator quand le système de skills character existera
   const modifierDriftDelta = sumModifierDriftDelta(findEdge(fromSea, intendedZone), { hasNavigator: false });
 
-  const damagePenalty = (1 - ship.hp / MAX_SHIP_HP) * DRIFT_SHIP_DAMAGE_WEIGHT;
+  const damagePenalty = (1 - ship.hp / getMaxHpForHullLevel(ship.hullLevel)) * DRIFT_SHIP_DAMAGE_WEIGHT;
   const posePenalty = hasPose ? 0 : DRIFT_NO_POSE_PENALTY;
 
   return clamp(DRIFT_BASE_PROBABILITY + damagePenalty + posePenalty + modifierDriftDelta, DRIFT_BASE_PROBABILITY, DRIFT_MAX_PROBABILITY);

@@ -1,0 +1,1 @@
+ALTER TABLE "ship" ADD COLUMN "template_key" varchar(64) DEFAULT 'barque' NOT NULL;

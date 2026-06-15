@@ -19,7 +19,7 @@ export async function findOrCreatePlayer(discordId: string, name: string, guildI
   const created = await db.transaction(async (transaction) => {
     const newPlayer = await playerRepository.create(discordId, name, guildId, transaction);
     await characterRepository.createPlayerAsCharacterInstance(newPlayer.id, newPlayer.name, transaction);
-    await findOrCreateShip(newPlayer.id, undefined, transaction);
+    await findOrCreateShip(newPlayer.id, transaction);
     return newPlayer;
   });
 

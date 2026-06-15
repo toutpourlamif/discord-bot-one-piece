@@ -9,21 +9,37 @@ import * as resourceRepository from '../resource/repository.js';
 import { debitResourcesByName } from '../resource/service.js';
 
 import { MAX_SHIP_NAME_LENGTH } from './constants.js';
+import { getMaxHpForHullLevel } from './modules.js';
 import * as shipRepository from './repository.js';
-import type { ShipModuleUpgradePreview } from './types.js';
+import { DEFAULT_SHIP_TEMPLATE_KEY, getShipTemplate, type ShipTemplateKey } from './templates.js';
+import type { ShipModuleUpgradePreview, ShipTemplateState } from './types.js';
 import { buildShipModuleUpgradePreview, getShipModuleBerryCost, getShipModuleResourceCosts } from './utils/index.js';
 
 type FindOrCreateResult = { ship: Ship; created: boolean };
 
-export async function findOrCreateShip(
-  playerId: number,
-  name = 'Navire sans nom',
-  client: DbOrTransaction = db,
-): Promise<FindOrCreateResult> {
+export async function findOrCreateShip(playerId: number, client: DbOrTransaction = db): Promise<FindOrCreateResult> {
   const existing = await shipRepository.findByPlayerId(playerId, client);
   if (existing) return { ship: existing, created: false };
-  const created = await shipRepository.create(playerId, name, client);
+  const created = await shipRepository.create(playerId, buildShipTemplateState(DEFAULT_SHIP_TEMPLATE_KEY), client);
   return { ship: created, created: true };
+}
+
+/** Change de navire : reset complet aux valeurs de départ du template (les niveaux investis sur l'ancien sont perdus). */
+export async function switchShipTemplate(playerId: number, templateKey: ShipTemplateKey): Promise<Ship> {
+  return db.transaction(async (transaction) => {
+    const current = await shipRepository.findByPlayerIdOrThrow(playerId, transaction, { forUpdate: true });
+    const updated = await shipRepository.resetToTemplate(current.id, buildShipTemplateState(templateKey), transaction);
+
+    await historyRepository.appendHistory({
+      type: 'ship.template-switched',
+      payload: { oldTemplate: current.templateKey, newTemplate: templateKey },
+      actorPlayerId: playerId,
+      target: { type: 'ship', id: updated.id },
+      client: transaction,
+    });
+
+    return updated;
+  });
 }
 
 export async function renameShip(playerId: number, newName: string): Promise<Ship> {
@@ -35,7 +51,7 @@ export async function renameShip(playerId: number, newName: string): Promise<Shi
     throw new ValidationError(`Le nom du bateau ne peut pas dépasser ${MAX_SHIP_NAME_LENGTH} caractères.`);
   }
   return db.transaction(async (transaction) => {
-    const { ship } = await findOrCreateShip(playerId, undefined, transaction);
+    const { ship } = await findOrCreateShip(playerId, transaction);
     const renamed = await shipRepository.rename(ship.id, sanitized, transaction);
 
     await historyRepository.appendHistory({
@@ -86,4 +102,18 @@ export async function upgradeShipModule(playerId: number, moduleKey: ShipModuleK
 
     return shipRepository.updateModuleLevel(ship.id, moduleKey, nextLevel, transaction);
   });
+}
+
+function buildShipTemplateState(templateKey: ShipTemplateKey): ShipTemplateState {
+  const { label, startingLevels } = getShipTemplate(templateKey);
+  return {
+    templateKey,
+    name: label,
+    hp: getMaxHpForHullLevel(startingLevels.hull),
+    hullLevel: startingLevels.hull,
+    sailLevel: startingLevels.sail,
+    decksLevel: startingLevels.decks,
+    cabinsLevel: startingLevels.cabins,
+    cargoLevel: startingLevels.cargo,
+  };
 }

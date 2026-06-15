@@ -6,4 +6,12 @@ export type ShipRenamedLog = {
   };
 };
 
-export type ShipLog = ShipRenamedLog;
+export type ShipTemplateSwitchedLog = {
+  type: 'ship.template-switched';
+  payload: {
+    oldTemplate: string;
+    newTemplate: string;
+  };
+};
+
+export type ShipLog = ShipRenamedLog | ShipTemplateSwitchedLog;
