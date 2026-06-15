@@ -17,7 +17,7 @@ au lancement (1 fois)
 à chaque !ship
   build-ship-card.tsx   → position du marqueur (à quai : l'île ; en mer : interpolation départ → cible)
   viewport.ts           → crop 800×450 centré sur le marqueur, clampé aux bords (sharp.extract)
-  build-ship-card.tsx   → header HP + crop + brume + route + marqueur (satori)
+  build-ship-card.tsx   → crop + brume + trajet en pointillés + marqueur (satori)
 ```
 
 L'origine d'un voyage vient de `player.travelStartZone`, écrite par `startTravel` et vidée à l'arrivée — pas de lookup en history.
@@ -57,6 +57,6 @@ apps/bot/src/domains/navigation/world-map/
 ## Points importants
 
 - **Cas à connaître** : pendant un voyage, `player.currentZone` est la **mer** — l'île de départ vit dans `travelStartZone`. Une bifurcation change la cible mais pas le départ : la route repart de l'île d'origine.
-- **Piège satori** : `overflow: hidden` est appliqué sur la boîte **avant** `transform: rotate` — une div tournée qui déborde se fait tronquer au mauvais endroit. Ne jamais compter sur le clip CSS pour un élément tourné : clipper les segments mathématiquement (cf `clipRouteToViewport`).
+- **Piège satori** : `overflow: hidden` est appliqué sur la boîte **avant** `transform: rotate` — une div tournée qui déborde se fait tronquer au mauvais endroit. C'est pour ça que le trajet est dessiné en points posés en absolu (pas de div rotatée), clippés mathématiquement au cadre (cf `clipRouteToViewport`).
 - **Coût à l'import** : `worldMapPng` est rendu au chargement du module. Tout script qui importe (même indirectement) `build-world-map.ts` paie ~1 s de rendu — voulu pour le bot, piège pour un petit script CLI.
 - **resvg et les fonts** : le SVG à la main contient du `<text>`, donc `rasterizeSvg` reçoit le chemin du `.ttf` (satori n'en a pas besoin, il convertit le texte en paths).

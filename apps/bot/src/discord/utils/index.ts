@@ -19,3 +19,4 @@ export { parseIntegerArg } from './parse-integer-arg.js';
 export { parseOwnerDiscordId } from './parse-owner-discord-id.js';
 export { parseStringArg } from './parse-string-arg.js';
 export { replyDebugData } from './reply-debug-data.js';
+export { convertJsHexToCssHex } from './convert-js-hex-to-css-hex.js';

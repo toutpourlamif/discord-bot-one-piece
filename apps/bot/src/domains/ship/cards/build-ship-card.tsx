@@ -1,4 +1,6 @@
-import type { Player } from '@one-piece/db';
+// VIBECODÉ
+import type { Player, Ship } from '@one-piece/db';
+import clamp from 'lodash/clamp.js';
 
 import { buildImage } from '../../../image-builder/build-image.js';
 import { getNowBucketId } from '../../event/engine/bucket.js';
@@ -7,19 +9,21 @@ import { projectToMap, WORLD_MAP_HEIGHT, WORLD_MAP_WIDTH } from '../../navigatio
 import { cloudVignetteDataUri, extractViewport, VIEWPORT_HEIGHT, VIEWPORT_WIDTH } from '../../navigation/world-map/viewport.js';
 import { WORLD_POSITIONS, type WorldPoint } from '../../navigation/world-map/world-positions.js';
 
+import { buildHpBar } from './build-hp-bar.js';
+
 const SHIP_MARKER_SIZE = 22;
 const MARKER_COLOR = '#fbbf24';
-const ROUTE_COLOR = '#ffd166';
+const ROUTE_DOT_RADIUS = 3;
+const ROUTE_DOT_SPACING = 18;
 
-export async function buildShipCard(player: Player): Promise<Buffer> {
+export async function buildShipCard(player: Player, ship: Ship): Promise<Buffer> {
   const marker = computeShipMarker(player);
 
   // Zoom fixe : on croppe le fond autour du navire (ou du centre de la carte à défaut),
   // puis on replace marqueur et route dans le repère du crop.
   const viewport = await extractViewport(marker.position ?? { x: WORLD_MAP_WIDTH / 2, y: WORLD_MAP_HEIGHT / 2 });
   const position = marker.position && toViewport(marker.position, viewport.origin);
-  // satori applique l'overflow sur la boîte avant rotation, ce qui tronquerait la ligne :
-  // on clippe le segment nous-mêmes au cadre, pas de clip CSS.
+  // On clippe le segment au cadre pour ne pas poser de points hors de la fenêtre.
   const route =
     marker.route &&
     clipRouteToViewport({ from: toViewport(marker.route.from, viewport.origin), to: toViewport(marker.route.to, viewport.origin) });
@@ -33,7 +37,7 @@ export async function buildShipCard(player: Player): Promise<Buffer> {
         height={VIEWPORT_HEIGHT}
         style={{ position: 'absolute', top: 0, left: 0, opacity: 0.6 }}
       />
-      {route && buildRouteLine(route)}
+      {route && buildRouteDots(route)}
       {position && (
         <div
           style={{
@@ -48,6 +52,7 @@ export async function buildShipCard(player: Player): Promise<Buffer> {
           }}
         />
       )}
+      {buildHpBar(ship)}
     </div>,
     { width: VIEWPORT_WIDTH, height: VIEWPORT_HEIGHT },
   );
@@ -116,29 +121,31 @@ function clipRouteToViewport(route: Route): Route | null {
 }
 
 // TODO: enlever les route lines
-function buildRouteLine(route: Route) {
+// Trajet en pointillés : un rond tous les ROUTE_DOT_SPACING px le long du segment.
+// Pas de div rotaté (satori clippe sur la boîte avant rotation), juste des points posés en absolu.
+function buildRouteDots(route: Route) {
   const dx = route.to.x - route.from.x;
   const dy = route.to.y - route.from.y;
   const length = Math.hypot(dx, dy);
-  const angle = (Math.atan2(dy, dx) * 180) / Math.PI;
+  if (length === 0) return null;
 
-  return (
-    <div
-      style={{
-        position: 'absolute',
-        left: route.from.x,
-        top: route.from.y,
-        width: length,
-        height: 0,
-        borderTop: `3px dashed ${ROUTE_COLOR}`,
-        transform: `rotate(${angle}deg)`,
-        transformOrigin: 'left center',
-      }}
-    />
-  );
-}
-
-// TODO: utiliser clamp de lodash
-function clamp(value: number, min: number, max: number): number {
-  return Math.min(Math.max(value, min), max);
+  const dots = [];
+  for (let distance = 0; distance <= length; distance += ROUTE_DOT_SPACING) {
+    const t = distance / length;
+    dots.push(
+      <div
+        style={{
+          position: 'absolute',
+          left: route.from.x + dx * t - ROUTE_DOT_RADIUS,
+          top: route.from.y + dy * t - ROUTE_DOT_RADIUS,
+          width: ROUTE_DOT_RADIUS * 2,
+          height: ROUTE_DOT_RADIUS * 2,
+          borderRadius: '50%',
+          backgroundColor: '#ffffff',
+          opacity: 0.5,
+        }}
+      />,
+    );
+  }
+  return dots;
 }

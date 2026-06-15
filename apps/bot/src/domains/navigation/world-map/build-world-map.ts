@@ -1,8 +1,8 @@
-import { ISLANDS, WORLD_EDGES, ZONE_LABELS } from '@one-piece/db';
+import { ISLANDS, ZONE_LABELS } from '@one-piece/db';
 import chalk from 'chalk';
 
 import { PIRATA_ONE_FONT_FILE } from '../../../image-builder/fonts.js';
-import { rasterizeSvg } from '../../../image-builder/rasterize-svg.js';
+import { rasterizeSvgCached } from '../../../image-builder/rasterize-svg-cached.js';
 
 import { buildCloudBand, CLOUD_BLUR_FILTER } from './clouds.js';
 import { WORLD_MAP_COLORS } from './palette.js';
@@ -15,8 +15,8 @@ const MAP_WIDTH = 3200;
 // Marge en unités monde autour du contenu (laisse la place aux labels en bord de carte).
 const WORLD_MARGIN = 80;
 
-const ISLAND_RADIUS = 14;
-const ISLAND_LABEL_SIZE = 19;
+const ISLAND_RADIUS = 22;
+const ISLAND_LABEL_SIZE = 30;
 const REGION_LABEL_SIZE = 64;
 const WAVE_TILE = 160;
 // Bande de « terra incognita » nuageuse sur le pourtour du monde.
@@ -30,8 +30,8 @@ export const WORLD_MAP_HEIGHT = projection.height;
 
 const renderStartedAt = performance.now();
 
-/** PNG du fond de carte (rendu retina 2×), généré une seule fois au lancement du bot. */
-export const worldMapPng: Buffer = rasterizeSvg(buildBackgroundSvg(), { width: MAP_WIDTH, fontFiles: [PIRATA_ONE_FONT_FILE] });
+/** PNG du fond de carte (rendu retina 2×), généré une seule fois au lancement du bot (caché sur disque). */
+export const worldMapPng: Buffer = rasterizeSvgCached(buildBackgroundSvg(), { width: MAP_WIDTH, fontFiles: [PIRATA_ONE_FONT_FILE] });
 
 console.log(`🗺️ Fond de carte monde ${chalk.green('OK')} ${chalk.yellow(`(${Math.round(performance.now() - renderStartedAt)} ms)`)}`);
 
@@ -91,19 +91,6 @@ function buildBackgroundSvg(): string {
     );
   }
 
-  for (const edge of WORLD_EDGES) {
-    const from = WORLD_POSITIONS.get(edge.from);
-    const to = WORLD_POSITIONS.get(edge.to);
-    if (!from || !to) continue;
-    const a = projectToMap(from);
-    const b = projectToMap(to);
-    const hasRequirement = (edge.requirements?.length ?? 0) > 0;
-    const stroke = hasRequirement
-      ? `stroke="${WORLD_MAP_COLORS.requirementEdge}" stroke-dasharray="7 5"`
-      : `stroke="${WORLD_MAP_COLORS.edge}" stroke-opacity="0.55"`;
-    parts.push(`<line x1="${a.x}" y1="${a.y}" x2="${b.x}" y2="${b.y}" ${stroke} stroke-width="2"/>`);
-  }
-
   for (const island of ISLANDS) {
     const position = WORLD_POSITIONS.get(island);
     if (!position) continue;
@@ -112,9 +99,9 @@ function buildBackgroundSvg(): string {
     const labelY = y + ISLAND_RADIUS + ISLAND_LABEL_SIZE;
     parts.push(
       `<circle cx="${x}" cy="${y}" r="${ISLAND_RADIUS * 2.4}" fill="${WORLD_MAP_COLORS.shallows}" fill-opacity="0.14"/>`,
-      `<circle cx="${x}" cy="${y + 4}" r="${ISLAND_RADIUS}" fill="#000000" fill-opacity="0.3"/>`,
-      `<circle cx="${x}" cy="${y}" r="${ISLAND_RADIUS}" fill="${WORLD_MAP_COLORS.island}" stroke="${WORLD_MAP_COLORS.islandBorder}" stroke-width="2"/>`,
-      `<text x="${x}" y="${labelY}" font-family="Pirata One" font-size="${ISLAND_LABEL_SIZE}" text-anchor="middle" fill="${WORLD_MAP_COLORS.label}" stroke="${WORLD_MAP_COLORS.labelOutline}" stroke-width="3" paint-order="stroke">${label}</text>`,
+      `<circle cx="${x}" cy="${y + 6}" r="${ISLAND_RADIUS}" fill="#000000" fill-opacity="0.3"/>`,
+      `<circle cx="${x}" cy="${y}" r="${ISLAND_RADIUS}" fill="${WORLD_MAP_COLORS.island}" stroke="${WORLD_MAP_COLORS.islandBorder}" stroke-width="3"/>`,
+      `<text x="${x}" y="${labelY}" font-family="Pirata One" font-size="${ISLAND_LABEL_SIZE}" text-anchor="middle" fill="${WORLD_MAP_COLORS.label}" stroke="${WORLD_MAP_COLORS.labelOutline}" stroke-width="4" paint-order="stroke">${label}</text>`,
     );
   }
 
