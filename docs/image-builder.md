@@ -69,12 +69,18 @@ Le moteur est de l'infra générique, les templates sont du formatage de donnée
 apps/bot/src/
   image-builder/               ← moteur générique, aucun savoir métier
     build-image.ts             ← buildImage(element, options) → Promise<Buffer>
+    rasterize-svg.ts           ← SVG → PNG retina (utilisé par buildImage, et en direct pour du SVG écrit à la main)
     fonts.ts                   ← chargement des fonts au démarrage (une fois)
     load-asset-data-uri.ts     ← lecture des assets du disque + cache mémoire
     components/                ← primitives réutilisables (extraites au 2e usage, pas avant)
   domains/crew/cards/
     build-crew-card.tsx        ← le layout JSX de la carte !crew
+  domains/navigation/world-map/  ← la carte du monde (sa propre doc : world-map.md)
+  domains/ship/cards/
+    build-ship-card.tsx        ← barre de HP + carte du monde avec la position du navire
 ```
+
+Le fond de carte du monde est le cas particulier : du SVG écrit à la main (plus simple qu'en flexbox pour des lignes/cercles/labels) passé directement à `rasterize-svg`, généré une seule fois au lancement. Tout le détail (positions, zoom, textures, nuages) est dans [world-map.md](./world-map.md).
 
 Points importants :
 

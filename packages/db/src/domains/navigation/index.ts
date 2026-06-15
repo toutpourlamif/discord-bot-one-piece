@@ -3,8 +3,10 @@ export { subZoneEnum } from './sub-zone-enum.js';
 export { ZONE_LABELS, ZONES, type Zone } from './world/zones.js';
 export { SEAS, type Sea } from './world/seas.js';
 export {
+  EAST_BLUE_ISLANDS,
   ISLAND_ENTRY_SUB_ZONE,
   ISLANDS,
+  PARADISE_ISLANDS,
   SUB_ZONE_LABELS,
   SUB_ZONES,
   SUB_ZONES_BY_ISLAND,
