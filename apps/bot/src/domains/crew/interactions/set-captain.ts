@@ -3,6 +3,7 @@ import type { ButtonInteraction } from 'discord.js';
 import { ValidationError } from '../../../discord/errors.js';
 import type { ButtonHandler } from '../../../discord/types.js';
 import { buildOpEmbed } from '../../../discord/utils/build-op-embed.js';
+import { editReply } from '../../../discord/utils/index.js';
 import { parseIntegerArg } from '../../../discord/utils/parse-integer-arg.js';
 import type { Character } from '../../character/types.js';
 import { findOrCreatePlayer } from '../../player/service.js';
@@ -30,7 +31,7 @@ async function handle(interaction: ButtonInteraction, args: Array<string>): Prom
   const embed = buildOpEmbed('success')
     .setTitle('Capitaine changé !')
     .setDescription(`**${selectedMember.name}** est maintenant le capitaine de ton équipage.`);
-  await interaction.editReply({ embeds: [embed], components: [] });
+  await editReply(interaction, { embeds: [embed], components: [] });
 }
 
 function assertCharacterBelongsToPlayer(ownerPlayerId: number | undefined, playerId: number): void {

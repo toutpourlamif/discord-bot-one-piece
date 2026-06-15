@@ -2,7 +2,7 @@ import { ActionRowBuilder, ButtonBuilder, ButtonStyle, type ButtonInteraction } 
 
 import { PAGINATION } from '../../../discord/constants.js';
 import type { ButtonHandler } from '../../../discord/types.js';
-import { assertInteractorIsTheOwner, buildConsequenceEmbed, parseOwnerDiscordId } from '../../../discord/utils/index.js';
+import { assertInteractorIsTheOwner, buildConsequenceEmbed, editReply, parseOwnerDiscordId } from '../../../discord/utils/index.js';
 import { EVENT_CONSEQUENCE_BUTTON_NAME } from '../constants.js';
 import { buildEventNextCustomId } from '../utils/build-event-custom-id.js';
 
@@ -18,7 +18,7 @@ async function handle(interaction: ButtonInteraction, args: Array<string>): Prom
       .setLabel(PAGINATION.next.label)
       .setStyle(ButtonStyle.Primary),
   );
-  await interaction.editReply({ embeds: [buildConsequenceEmbed()], components: [row] });
+  await editReply(interaction, { embeds: [buildConsequenceEmbed()], components: [row] });
 }
 
 export const eventConsequenceButtonHandler: ButtonHandler = {

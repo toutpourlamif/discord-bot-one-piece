@@ -2,7 +2,7 @@ import type { ButtonInteraction } from 'discord.js';
 
 import { ValidationError } from '../../../discord/errors.js';
 import type { ButtonHandler } from '../../../discord/types.js';
-import { assertInteractorIsTheOwner, buildOpEmbed, parseIntegerArg, parseOwnerDiscordId } from '../../../discord/utils/index.js';
+import { assertInteractorIsTheOwner, buildOpEmbed, editReply, parseIntegerArg, parseOwnerDiscordId } from '../../../discord/utils/index.js';
 import * as historyService from '../../history/services/index.js';
 import type { WipeHistoryMode } from '../../history/services/index.js';
 import * as playerRepository from '../../player/repository.js';
@@ -28,7 +28,7 @@ async function handle(interaction: ButtonInteraction, args: Array<string>): Prom
     mode,
   });
 
-  await interaction.editReply({
+  await editReply(interaction, {
     embeds: [buildOpEmbed('success').setDescription(buildWipeHistoryMessage(targetPlayer.name, kind, mode, result))],
     components: [],
   });

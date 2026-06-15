@@ -1,0 +1,1 @@
+ALTER TABLE "player" ADD COLUMN "travel_start_zone" "zone";

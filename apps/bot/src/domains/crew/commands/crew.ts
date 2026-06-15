@@ -10,6 +10,6 @@ export const crewCommand: Command = {
     const { targetPlayer } = await resolveTargetPlayer(ctx);
     const ship = await shipRepository.findByPlayerIdOrThrow(targetPlayer.id);
     const characters = await getCharactersByPlayerId(targetPlayer.id);
-    await ctx.message.reply(buildCrewView(targetPlayer, ship, characters, 0, ctx.message.author.id));
+    await ctx.message.reply(await buildCrewView(targetPlayer, ship, characters, 0, ctx.message.author.id));
   },
 };

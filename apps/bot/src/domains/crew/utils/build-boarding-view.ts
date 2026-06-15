@@ -15,7 +15,7 @@ import {
 import type { Character } from '../../character/types.js';
 import { BOARDING_BUTTON_NAME, DISEMBARK_BUTTON_NAME, EMBARK_BUTTON_NAME } from '../constants.js';
 
-import { formatLine } from './captain-prefix.js';
+import { formatCharacterName } from './format-character-name.js';
 import { getCrewCapacity } from './get-crew-capacity.js';
 import { getCrewDisplayName } from './get-crew-display-name.js';
 import { isInCrewFilter } from './is-in-crew-filter.js';
@@ -26,7 +26,7 @@ export function buildBoardingView(player: Player, ship: Ship, characters: Array<
   const crew = characters.filter(isInCrewFilter);
   const reserve = characters.filter((c) => c.joinedCrewAt === null);
 
-  const reservePages = splitIntoPages(reserve.map(formatLine));
+  const reservePages = splitIntoPages(reserve.map(formatCharacterName));
   const pageCount = reservePages.length;
   const currentPage = clampPage(page, pageCount);
 
@@ -35,7 +35,7 @@ export function buildBoardingView(player: Player, ship: Ship, characters: Array<
   embed.setTitle(`Composition de ${getCrewDisplayName(player)} (${crew.length}/${crewCapacity})`);
 
   const reservePage = reservePages[currentPage] ?? '';
-  const crewLines = crew.map(formatLine).join('\n');
+  const crewLines = crew.map(formatCharacterName).join('\n');
   embed.setDescription(`**À bord**\n${crewLines}\n\n**Réserve**\n${reservePage}`);
 
   if (pageCount > 1) {

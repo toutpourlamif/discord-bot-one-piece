@@ -18,6 +18,11 @@ export type SubZone = SubZonesOf<IslandDefinitions>;
 
 export const ISLANDS = ISLAND_REGISTRY.map((island) => island.key) as [Island, ...Array<Island>];
 
+export const EAST_BLUE_ISLANDS: Array<Island> = EAST_BLUE_ISLAND_REGISTRY.map((island) => island.key);
+
+/** Ordonnées d'ouest en est (l'ordre du registry suit la progression sur la Grand Line). */
+export const PARADISE_ISLANDS: Array<Island> = PARADISE_ISLAND_REGISTRY.map((island) => island.key);
+
 export const ISLAND_LABELS = Object.fromEntries(ISLAND_REGISTRY.map((island) => [island.key, island.name])) as Record<Island, string>;
 
 export const SUB_ZONE_LABELS = Object.fromEntries(ISLAND_REGISTRY.flatMap((island) => Object.entries(island.subZones))) as Record<

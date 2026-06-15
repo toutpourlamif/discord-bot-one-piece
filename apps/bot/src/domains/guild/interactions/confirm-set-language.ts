@@ -8,6 +8,7 @@ import {
   buildOpEmbed,
   parseOwnerDiscordId,
   parseStringArg,
+  editReply,
 } from '../../../discord/utils/index.js';
 import { CONFIRM_SET_LANGUAGE_BUTTON_NAME, LANGUAGE_NAMES } from '../constants.js';
 import { isSupportedLanguage, requireGuildId } from '../guards.js';
@@ -29,7 +30,7 @@ async function handle(interaction: ButtonInteraction, args: Array<string>): Prom
   const embed = buildOpEmbed('success')
     .setTitle('Langue mise à jour !')
     .setDescription(`Le serveur est désormais en ${LANGUAGE_NAMES[rawLanguage]}.`);
-  await interaction.editReply({ embeds: [embed], components: [] });
+  await editReply(interaction, { embeds: [embed], components: [] });
 }
 
 export const confirmSetLanguageButtonHandler: ButtonHandler = {
