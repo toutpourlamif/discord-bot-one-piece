@@ -6,7 +6,7 @@ import { buildCrewView } from '../utils/build-crew-view.js';
 
 export const crewCommand: Command = {
   name: { fr: 'equipage', en: 'crew' },
-  alias: { fr: 'equipe', en: 'team' },
+  aliases: { fr: 'equipe', en: 'team' },
   async handler(ctx) {
     const { targetPlayer } = await resolveTargetPlayer(ctx);
     const ship = await shipRepository.findByPlayerIdOrThrow(targetPlayer.id);

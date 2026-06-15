@@ -13,8 +13,8 @@ import { findOrCreatePlayer } from '../domains/player/service.js';
 import { resourceCommands } from '../domains/resource/index.js';
 import { shipCommands } from '../domains/ship/commands/index.js';
 
-import { buildCommandRegistry, resolveCommand } from './commands/registry.js';
 import { AppError } from './errors.js';
+import { buildCommandRegistry, resolveCommand } from './routing/registry.js';
 import { buildOpEmbed } from './utils/index.js';
 
 const allCommands = [
@@ -29,7 +29,7 @@ const allCommands = [
   ...eventCommands,
   ...onboardingCommands,
 ];
-const registry = buildCommandRegistry(allCommands);
+buildCommandRegistry(allCommands);
 
 /** Dispatche un message vers le bon handler de commande. Voir `docs/discord.md`. */
 export async function routeMessage(message: Message): Promise<void> {
@@ -45,7 +45,7 @@ export async function routeMessage(message: Message): Promise<void> {
     const [rawName, ...args] = content.slice(guild.prefix.length).trim().split(/\s+/);
     if (!rawName) return;
 
-    const command = resolveCommand(registry, rawName, guild.language);
+    const command = resolveCommand(rawName, guild.language);
     if (!command) return;
 
     const { player } = await findOrCreatePlayer(message.author.id, message.author.username, guild.id);

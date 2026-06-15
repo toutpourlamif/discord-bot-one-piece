@@ -18,7 +18,7 @@ const WIPE_HISTORY_USAGE = [
 
 export const wipeHistoryCommand: Command = {
   name: { fr: 'wipeHistory', en: 'wipeHistory' },
-  alias: { fr: 'wh', en: 'wh' },
+  aliases: { fr: 'wh', en: 'wh' },
   async handler(ctx) {
     const { targetPlayer, rest } = await resolveTargetPlayer(ctx);
     const { mode, kind } = parseWipeHistoryArgs(rest);

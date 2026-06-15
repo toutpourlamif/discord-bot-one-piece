@@ -3,7 +3,7 @@ import { buildRecapView } from '../recap/build-recap-view.js';
 
 export const recapCommand: Command = {
   name: { fr: 'recap', en: 'recap' },
-  alias: { fr: 'r', en: 'r' },
+  aliases: { fr: 'r', en: 'r' },
   requiresSynchronization: false,
   async handler(ctx) {
     await ctx.message.reply(await buildRecapView(ctx.player));

@@ -6,7 +6,7 @@ import { buildBoardingView } from '../utils/build-boarding-view.js';
 
 export const boardingCommand: Command = {
   name: { fr: 'embarquer', en: 'boarding' },
-  alias: { fr: 'compo', en: 'embark' },
+  aliases: { fr: 'compo', en: 'embark' },
   async handler(ctx) {
     const { targetPlayer } = await resolveTargetPlayer(ctx);
     const ship = await shipRepository.findByPlayerIdOrThrow(targetPlayer.id);

@@ -1,8 +1,9 @@
 import { SUPPORTED_LANGUAGES, type SupportedLanguage } from '@one-piece/db';
+import uniq from 'lodash/uniq.js';
 
 import type { Command } from '../types.js';
 
-type CommandTriggerName = {
+type CommandCall = {
   language: SupportedLanguage;
   name: string;
 };
@@ -11,13 +12,13 @@ export function getCommandDisplayName(command: Command, language: SupportedLangu
   return command.name[language];
 }
 
-export function getCommandTriggerNameEntries(command: Command): Array<CommandTriggerName> {
+export function getCommandCalls(command: Command): Array<CommandCall> {
   return SUPPORTED_LANGUAGES.flatMap((language) => [
     { language, name: command.name[language] },
-    ...(command.alias ? [{ language, name: command.alias[language] }] : []),
+    ...(command.aliases ? [{ language, name: command.aliases[language] }] : []),
   ]);
 }
 
-export function getCommandTriggerNames(command: Command): Array<string> {
-  return Array.from(new Set(getCommandTriggerNameEntries(command).map((entry) => entry.name)));
+export function getCommandCallNames(command: Command): Array<string> {
+  return uniq(getCommandCalls(command).map((call) => call.name));
 }

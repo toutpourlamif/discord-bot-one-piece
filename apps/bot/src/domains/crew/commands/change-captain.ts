@@ -1,4 +1,4 @@
-import { getCommandDisplayName } from '../../../discord/commands/names.js';
+import { getCommandDisplayName } from '../../../discord/routing/calls.js';
 import type { Command } from '../../../discord/types.js';
 import { buildOpEmbed } from '../../../discord/utils/build-op-embed.js';
 import { getCrewByPlayerId } from '../service.js';
