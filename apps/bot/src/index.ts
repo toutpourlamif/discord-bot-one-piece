@@ -1,3 +1,4 @@
+import chalk from 'chalk';
 import { Client, Events, GatewayIntentBits } from 'discord.js';
 
 import { setBotIconUrl } from './discord/branding.js';
@@ -21,7 +22,7 @@ const client = new Client({
 
 client.once(Events.ClientReady, (c) => {
   setBotIconUrl(c.user.displayAvatarURL());
-  console.log(`Bot connecté : ${c.user.tag}`);
+  console.log(`🤖 Bot connecté : ${chalk.blue(c.user.tag)} ${chalk.yellow(`(${process.uptime().toFixed(1)} s depuis le lancement)`)}`);
 });
 
 client.on(Events.MessageCreate, async (message) => routeMessage(message));

@@ -11,26 +11,12 @@ import { and, asc, desc, eq, getTableColumns, ilike, isNull, or, sql } from 'dri
 
 import { InternalError } from '../../discord/errors.js';
 
-import type { CharacterRow, CharacterTemplateWithDevilFruit } from './types.js';
+import type { Character, CharacterTemplateWithDevilFruit } from './types.js';
 
 //TODO: regarder si on peut select all ou pas
-export async function getCharactersByPlayerId(playerId: number, client: DbOrTransaction = db): Promise<Array<CharacterRow>> {
+export async function getCharactersByPlayerId(playerId: number, client: DbOrTransaction = db): Promise<Array<Character>> {
   return client
-    .select({
-      instanceId: characterInstance.id,
-      name: characterTemplate.name,
-      imageUrl: characterTemplate.imageUrl,
-      hp: characterTemplate.hp,
-      combat: characterTemplate.combat,
-      devilFruit: getTableColumns(devilFruitTemplate),
-      joinedCrewAt: characterInstance.joinedCrewAt,
-      isCaptain: characterInstance.isCaptain,
-      captainCombatMultiplier: characterTemplate.captainCombatMultiplier,
-      captainHpMultiplier: characterTemplate.captainHpMultiplier,
-      captainBerryGainMultiplier: characterTemplate.captainBerryGainMultiplier,
-      captainKarmaMultiplier: characterTemplate.captainKarmaMultiplier,
-      captainMoraleMultiplier: characterTemplate.captainMoraleMultiplier,
-    })
+    .select(characterColumns)
     .from(characterInstance)
     .innerJoin(characterTemplate, eq(characterInstance.templateId, characterTemplate.id))
     .leftJoin(
@@ -50,7 +36,7 @@ export async function findTemplateByName(name: string, client: DbOrTransaction =
 }
 
 // TODO: multi-statement → service avec tx
-export async function createCharacterInstance(playerId: number, templateId: number, client: DbOrTransaction = db): Promise<CharacterRow> {
+export async function createCharacterInstance(playerId: number, templateId: number, client: DbOrTransaction = db): Promise<Character> {
   const [created] = await client
     .insert(characterInstance)
     .values({
@@ -61,21 +47,7 @@ export async function createCharacterInstance(playerId: number, templateId: numb
   if (!created) throw new InternalError('Impossible de créer ce personnage.');
 
   const [createdRow] = await client
-    .select({
-      instanceId: characterInstance.id,
-      name: characterTemplate.name,
-      imageUrl: characterTemplate.imageUrl,
-      hp: characterTemplate.hp,
-      combat: characterTemplate.combat,
-      devilFruit: getTableColumns(devilFruitTemplate),
-      joinedCrewAt: characterInstance.joinedCrewAt,
-      isCaptain: characterInstance.isCaptain,
-      captainCombatMultiplier: characterTemplate.captainCombatMultiplier,
-      captainHpMultiplier: characterTemplate.captainHpMultiplier,
-      captainBerryGainMultiplier: characterTemplate.captainBerryGainMultiplier,
-      captainKarmaMultiplier: characterTemplate.captainKarmaMultiplier,
-      captainMoraleMultiplier: characterTemplate.captainMoraleMultiplier,
-    })
+    .select(characterColumns)
     .from(characterInstance)
     .innerJoin(characterTemplate, eq(characterInstance.templateId, characterTemplate.id))
     .leftJoin(
@@ -155,3 +127,19 @@ export async function createPlayerAsCharacterInstance(
 export async function updatePlayerAsCharacterName(playerId: number, name: string, client: DbOrTransaction = db): Promise<void> {
   await client.update(characterTemplate).set({ name }).where(eq(characterTemplate.playerId, playerId));
 }
+
+const characterColumns = {
+  instanceId: characterInstance.id,
+  name: characterTemplate.name,
+  imageUrl: characterTemplate.imageUrl,
+  hp: characterTemplate.hp,
+  combat: characterTemplate.combat,
+  devilFruit: getTableColumns(devilFruitTemplate),
+  joinedCrewAt: characterInstance.joinedCrewAt,
+  isCaptain: characterInstance.isCaptain,
+  captainCombatMultiplier: characterTemplate.captainCombatMultiplier,
+  captainHpMultiplier: characterTemplate.captainHpMultiplier,
+  captainBerryGainMultiplier: characterTemplate.captainBerryGainMultiplier,
+  captainKarmaMultiplier: characterTemplate.captainKarmaMultiplier,
+  captainMoraleMultiplier: characterTemplate.captainMoraleMultiplier,
+} as const;

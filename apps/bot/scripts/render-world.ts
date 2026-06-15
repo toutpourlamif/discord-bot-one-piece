@@ -5,13 +5,14 @@ import { readFileSync, writeFileSync } from 'node:fs';
 import { createRequire } from 'node:module';
 import path from 'node:path';
 
-import { SUB_ZONE_LABELS, SUB_ZONES_BY_ISLAND, WORLD_EDGES, ZONE_LABELS, type Island } from '@one-piece/db';
+import { ISLANDS, SUB_ZONE_LABELS, SUB_ZONES_BY_ISLAND, WORLD_EDGES, ZONE_LABELS, type Island } from '@one-piece/db';
 import open from 'open';
+
+import { WORLD_MAP_COLORS } from '../src/domains/navigation/world-map/palette.js';
+import { WORLD_POSITIONS, WORLD_REGIONS, type WorldPoint } from '../src/domains/navigation/world-map/world-positions.js';
 
 const require = createRequire(import.meta.url);
 const cytoscapeJs = readFileSync(require.resolve('cytoscape/dist/cytoscape.min.js'), 'utf-8');
-
-type Position = { x: number; y: number };
 
 const WORLD_COLORS = {
   blue: '#4472C4',
@@ -21,7 +22,6 @@ const WORLD_COLORS = {
   black: '#000000',
   gold: '#BF8F00',
   purple: '#7030A0',
-  neutral: '#c9a37c',
 } as const;
 
 const LEGEND_WIDTH = 760;
@@ -59,100 +59,31 @@ const ISLAND_NODE_COLORS: Partial<Record<Island, string>> = {
   pole_star: WORLD_COLORS.gold,
 };
 
-// Positions manuelles : graine du layout MDS pour East Blue (la Grand Line est placée plus bas).
-const WORLD_NODE_POSITIONS: Partial<Record<Island, Position>> = {
-  satsuruzo: { x: 1585, y: -20 },
-  yotsuba: { x: 1600, y: 220 },
-  dawn: { x: 2010, y: 310 },
-  goat: { x: 1680, y: 555 },
-  mirrorball: { x: 995, y: 465 },
-  nagagutsu: { x: 980, y: 180 },
-  organ: { x: 1205, y: 475 },
-  gecko: { x: 755, y: 755 },
-  baratie: { x: 645, y: 1145 },
-  conomi: { x: 165, y: 730 },
-  cozia: { x: -265, y: 770 },
-  frauce: { x: -90, y: 490 },
-  oykot: { x: 115, y: 1320 },
-  pole_star: { x: -215, y: 1785 },
-  rare_animal: { x: 1170, y: 765 },
-  kumate: { x: 1455, y: 770 },
-  sixis: { x: 1965, y: 1020 },
-  tequila_wolf: { x: 1425, y: 1795 },
+const LEGEND_POSITION: WorldPoint = {
+  x: WORLD_REGIONS.eastBlue.center.x - WORLD_REGIONS.eastBlue.width / 2 + LEGEND_MARGIN + LEGEND_WIDTH / 2,
+  y: WORLD_REGIONS.eastBlue.center.y - WORLD_REGIONS.eastBlue.height / 2 + LEGEND_MARGIN + LEGEND_HEIGHT / 2,
 };
 
-const islands = [...new Set(WORLD_EDGES.flatMap((edge) => [edge.from, edge.to]))];
-
-// La Grand Line (Paradise) est une chaîne linéaire, ordonnée d'ouest en est, posée en
-// rangée sous East Blue. East Blue = tout le reste, placé par l'algo de layout MDS.
-const GRAND_LINE_ISLANDS: Array<Island> = ['reverse_mountain', 'whisky_peak', 'little_garden', 'drum', 'alabasta', 'wano'];
-
-const eastBlueIslands = islands.filter((id) => !GRAND_LINE_ISLANDS.includes(id));
-
-// East Blue : positions calculées par MDS (stress majorization) — la distance à l'écran
-// reflète la durée de trajet en buckets. Cf. computeWorldPositions plus bas.
-const worldPositions = computeWorldPositions();
-
-const REGION_PADDING = 300;
-const REGION_GAP = 220;
-const GRAND_LINE_SPACING = 500;
-const GRAND_LINE_START_OFFSET_X = 600;
-
-const eastBlueBox = boundingBox(eastBlueIslands.map((id) => worldPositions.get(id) ?? { x: 0, y: 0 }));
-const EAST_BLUE_REGION = {
-  id: 'region:east_blue',
-  label: 'East Blue',
-  position: {
-    x: (eastBlueBox.minX + eastBlueBox.maxX) / 2,
-    y: (eastBlueBox.minY + eastBlueBox.maxY) / 2,
-  },
-  width: eastBlueBox.maxX - eastBlueBox.minX + REGION_PADDING * 2,
-  height: eastBlueBox.maxY - eastBlueBox.minY + REGION_PADDING * 2,
-};
-
-const LEGEND_POSITION: Position = {
-  x: EAST_BLUE_REGION.position.x - EAST_BLUE_REGION.width / 2 + LEGEND_MARGIN + LEGEND_WIDTH / 2,
-  y: EAST_BLUE_REGION.position.y - EAST_BLUE_REGION.height / 2 + LEGEND_MARGIN + LEGEND_HEIGHT / 2,
-};
-
-// Grand Line : rangée horizontale (ouest → est) sous East Blue. reverse_mountain (l'entrée)
-// part en bas-à-gauche de Loguetown (pole_star), point de sortie d'East Blue.
-const poleStarX = worldPositions.get('pole_star')?.x ?? EAST_BLUE_REGION.position.x;
-const loguetownX = poleStarX - GRAND_LINE_START_OFFSET_X;
-const grandLineY = EAST_BLUE_REGION.position.y + EAST_BLUE_REGION.height / 2 + REGION_GAP + REGION_PADDING;
-GRAND_LINE_ISLANDS.forEach((id, i) => {
-  worldPositions.set(id, { x: loguetownX + i * GRAND_LINE_SPACING, y: grandLineY });
-});
-
-const grandLineBox = boundingBox(GRAND_LINE_ISLANDS.map((id) => worldPositions.get(id) ?? { x: 0, y: 0 }));
-const GRAND_LINE_REGION = {
-  id: 'region:grand_line_paradise',
-  label: 'Grand Line Paradise',
-  position: { x: (grandLineBox.minX + grandLineBox.maxX) / 2, y: grandLineY },
-  width: grandLineBox.maxX - grandLineBox.minX + REGION_PADDING * 2,
-  height: REGION_PADDING * 2,
-};
-
-const islandNodes = islands.map((id) => ({
+const islandNodes = ISLANDS.map((id) => ({
   data: {
     id,
     type: 'island',
     label: ZONE_LABELS[id],
-    color: ISLAND_NODE_COLORS[id] ?? WORLD_COLORS.neutral,
+    color: ISLAND_NODE_COLORS[id] ?? WORLD_MAP_COLORS.island,
     subZones: SUB_ZONES_BY_ISLAND[id].map((subZone) => SUB_ZONE_LABELS[subZone]),
   },
-  position: worldPositions.get(id) ?? { x: 0, y: 0 },
+  position: WORLD_POSITIONS.get(id) ?? { x: 0, y: 0 },
 }));
 
-const regionNodes = [EAST_BLUE_REGION, GRAND_LINE_REGION].map((region) => ({
+const regionNodes = Object.values(WORLD_REGIONS).map((region) => ({
   data: {
-    id: region.id,
+    id: `region:${region.id}`,
     type: 'region',
     label: region.label,
     width: region.width,
     height: region.height,
   },
-  position: region.position,
+  position: region.center,
   selectable: false,
   grabbable: false,
 }));
@@ -232,7 +163,7 @@ const edges = WORLD_EDGES.map((edge) => {
   };
 });
 
-const BG = '#1e5b8a';
+const BG = WORLD_MAP_COLORS.ocean;
 
 const html = `<!doctype html>
 <html lang="fr">
@@ -284,10 +215,10 @@ const html = `<!doctype html>
               'shape': 'roundrectangle',
               'width': 'data(width)',
               'height': 'data(height)',
-              'background-color': '#bfdbfe',
+              'background-color': '${WORLD_MAP_COLORS.regionFill}',
               'background-opacity': 0.08,
               'border-width': 2,
-              'border-color': '#dbeafe',
+              'border-color': '${WORLD_MAP_COLORS.regionBorder}',
               'border-opacity': 0.3,
               'label': 'data(label)',
               'color': 'rgba(219, 234, 254, 0.34)',
@@ -307,11 +238,11 @@ const html = `<!doctype html>
               'shape': 'ellipse',
               'background-color': 'data(color)',
               'border-width': 3,
-              'border-color': '#fff7d6',
+              'border-color': '${WORLD_MAP_COLORS.islandBorder}',
               'label': 'data(label)',
-              'color': '#f8fafc',
+              'color': '${WORLD_MAP_COLORS.label}',
               'text-outline-width': 3,
-              'text-outline-color': '#172033',
+              'text-outline-color': '${WORLD_MAP_COLORS.labelOutline}',
               'text-valign': 'bottom',
               'text-halign': 'center',
               'font-weight': '900',
@@ -405,9 +336,9 @@ const html = `<!doctype html>
               'source-arrow-shape': 'triangle',
               'target-arrow-shape': 'triangle',
               'width': 3,
-              'line-color': '#e2e8f0',
-              'source-arrow-color': '#e2e8f0',
-              'target-arrow-color': '#e2e8f0',
+              'line-color': '${WORLD_MAP_COLORS.edge}',
+              'source-arrow-color': '${WORLD_MAP_COLORS.edge}',
+              'target-arrow-color': '${WORLD_MAP_COLORS.edge}',
               'label': 'data(label)',
               'font-size': 13,
               'font-weight': 'bold',
@@ -430,9 +361,9 @@ const html = `<!doctype html>
           {
             selector: 'edge[?hasRequirement]',
             style: {
-              'line-color': '#fbbf24',
-              'source-arrow-color': '#fbbf24',
-              'target-arrow-color': '#fbbf24',
+              'line-color': '${WORLD_MAP_COLORS.requirementEdge}',
+              'source-arrow-color': '${WORLD_MAP_COLORS.requirementEdge}',
+              'target-arrow-color': '${WORLD_MAP_COLORS.requirementEdge}',
               'line-style': 'dashed',
             },
           },
@@ -453,186 +384,3 @@ const outPath = path.resolve(import.meta.dirname, '../world.html');
 writeFileSync(outPath, html, 'utf-8');
 console.log(`Rendu : ${outPath}`);
 await open(outPath);
-
-function fallbackPosition(index: number): Position {
-  return {
-    x: 1180 + (index % 6) * 190,
-    y: 760 + Math.floor(index / 6) * 130,
-  };
-}
-
-function computeWorldPositions(): Map<Island, Position> {
-  const positions = new Map<Island, Position>();
-  islands.forEach((id, index) => {
-    positions.set(id, WORLD_NODE_POSITIONS[id] ?? fallbackPosition(index));
-  });
-
-  const seed = eastBlueIslands.map((id) => positions.get(id) ?? { x: 0, y: 0 });
-  const bucketDist = computeBucketDistances(eastBlueIslands);
-  const connected = bucketDist.every((row) => row.every((d) => Number.isFinite(d)));
-  if (!connected) {
-    console.warn('Graphe East Blue non connexe : positions manuelles conservées.');
-    return positions;
-  }
-
-  const laidOut = separateOverlaps(smacofLayout(bucketDist, seed));
-  eastBlueIslands.forEach((id, i) => {
-    const p = laidOut[i];
-    if (p) positions.set(id, p);
-  });
-  return positions;
-}
-
-function boundingBox(points: Array<Position>): { minX: number; maxX: number; minY: number; maxY: number } {
-  const xs = points.map((p) => p.x);
-  const ys = points.map((p) => p.y);
-  return {
-    minX: Math.min(...xs),
-    maxX: Math.max(...xs),
-    minY: Math.min(...ys),
-    maxY: Math.max(...ys),
-  };
-}
-
-// Floyd-Warshall sur le sous-graphe East Blue, arêtes pondérées par baseDurationBuckets.
-function computeBucketDistances(subset: Array<Island>): Array<Array<number>> {
-  const n = subset.length;
-  const idx = new Map(subset.map((id, i) => [id, i] as const));
-  const dist: Array<Array<number>> = Array.from({ length: n }, (_, i) => Array.from({ length: n }, (_, j) => (i === j ? 0 : Infinity)));
-  for (const edge of WORLD_EDGES) {
-    const i = idx.get(edge.from);
-    const j = idx.get(edge.to);
-    if (i === undefined || j === undefined) continue;
-    const rowI = dist[i];
-    const rowJ = dist[j];
-    if (!rowI || !rowJ) continue;
-    rowI[j] = Math.min(rowI[j] ?? Infinity, edge.baseDurationBuckets);
-    rowJ[i] = Math.min(rowJ[i] ?? Infinity, edge.baseDurationBuckets);
-  }
-  for (let k = 0; k < n; k++) {
-    const rowK = dist[k];
-    if (!rowK) continue;
-    for (let i = 0; i < n; i++) {
-      const rowI = dist[i];
-      const ik = rowI?.[k];
-      if (!rowI || ik === undefined) continue;
-      for (let j = 0; j < n; j++) {
-        const kj = rowK[j];
-        const ij = rowI[j];
-        if (kj === undefined || ij === undefined) continue;
-        if (ik + kj < ij) rowI[j] = ik + kj;
-      }
-    }
-  }
-  return dist;
-}
-
-// MDS par stress majorization (SMACOF) : déplace les points pour que les distances
-// euclidiennes collent aux distances-cibles. La graine est la carte manuelle, ce qui
-// garde l'orientation/cadrage habituels — seul l'espacement est recalculé.
-function smacofLayout(bucketDist: Array<Array<number>>, seed: Array<Position>): Array<Position> {
-  const iterations = 400;
-  const n = seed.length;
-
-  // Échelle : on cale la somme des distances-cibles sur celle de la graine pour
-  // conserver la taille globale de la carte actuelle.
-  let seedSum = 0;
-  let bucketSum = 0;
-  for (let i = 0; i < n; i++) {
-    const pi = seed[i];
-    const row = bucketDist[i];
-    if (!pi || !row) continue;
-    for (let j = i + 1; j < n; j++) {
-      const pj = seed[j];
-      const target = row[j];
-      if (!pj || target === undefined) continue;
-      seedSum += Math.hypot(pi.x - pj.x, pi.y - pj.y);
-      bucketSum += target;
-    }
-  }
-  const scale = bucketSum > 0 ? seedSum / bucketSum : 1;
-
-  let pos = seed.map((p) => ({ x: p.x, y: p.y }));
-  for (let iter = 0; iter < iterations; iter++) {
-    const next: Array<Position> = Array.from({ length: n }, () => ({ x: 0, y: 0 }));
-    for (let i = 0; i < n; i++) {
-      const pi = pos[i];
-      const ni = next[i];
-      const row = bucketDist[i];
-      if (!pi || !ni || !row) continue;
-      // Transformation de Guttman : x_i ← (1/n) Σ_j B_ij x_j
-      let bii = 0;
-      for (let j = 0; j < n; j++) {
-        if (j === i) continue;
-        const pj = pos[j];
-        const target = row[j];
-        if (!pj || target === undefined) continue;
-        const d = Math.hypot(pi.x - pj.x, pi.y - pj.y);
-        const bij = d > 1e-9 ? -(target * scale) / d : 0;
-        bii -= bij;
-        ni.x += bij * pj.x;
-        ni.y += bij * pj.y;
-      }
-      ni.x = (ni.x + bii * pi.x) / n;
-      ni.y = (ni.y + bii * pi.y) / n;
-    }
-    pos = next;
-  }
-
-  // SMACOF recentre le nuage sur l'origine : on le retranslate sur le centroïde de la graine.
-  const seedCentroid = centroid(seed);
-  const posCentroid = centroid(pos);
-  for (const p of pos) {
-    p.x += seedCentroid.x - posCentroid.x;
-    p.y += seedCentroid.y - posCentroid.y;
-  }
-  return pos;
-}
-
-function centroid(points: Array<Position>): Position {
-  let x = 0;
-  let y = 0;
-  for (const p of points) {
-    x += p.x;
-    y += p.y;
-  }
-  return { x: x / points.length, y: y / points.length };
-}
-
-// Passe anti-chevauchement : le MDS colle les îles quasi-jumelles (mêmes voisins) au même
-// endroit. On écarte itérativement toute paire plus proche que minDistance — les poussées
-// sont symétriques, donc le centroïde (et donc le cadrage) ne bougent pas.
-function separateOverlaps(points: Array<Position>): Array<Position> {
-  const minDistance = 160;
-  const iterations = 200;
-  const pos = points.map((p) => ({ x: p.x, y: p.y }));
-  const n = pos.length;
-  for (let iter = 0; iter < iterations; iter++) {
-    let moved = false;
-    for (let i = 0; i < n; i++) {
-      for (let j = i + 1; j < n; j++) {
-        const pi = pos[i];
-        const pj = pos[j];
-        if (!pi || !pj) continue;
-        let dx = pj.x - pi.x;
-        let dy = pj.y - pi.y;
-        let d = Math.hypot(dx, dy);
-        if (d >= minDistance) continue;
-        // Deux îles pile au même point : on les sépare sur un axe déterministe.
-        if (d < 1e-9) {
-          dx = 1;
-          dy = 0;
-          d = 1;
-        }
-        const push = (minDistance - d) / 2;
-        pi.x -= (dx / d) * push;
-        pi.y -= (dy / d) * push;
-        pj.x += (dx / d) * push;
-        pj.y += (dy / d) * push;
-        moved = true;
-      }
-    }
-    if (!moved) break;
-  }
-  return pos;
-}

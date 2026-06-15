@@ -1,19 +1,15 @@
 import type { Command } from '../../../discord/types.js';
-import { buildOpEmbed } from '../../../discord/utils/index.js';
+import { buildOpEmbed, convertJsHexToCssHex } from '../../../discord/utils/index.js';
 
 function getRandomColor(): number {
   return Math.floor(Math.random() * 0xffffff);
-}
-
-function toHex(color: number): string {
-  return `#${color.toString(16).padStart(6, '0').toUpperCase()}`;
 }
 
 export const colorCommand: Command = {
   name: { fr: 'color', en: 'color' },
   async handler({ message }) {
     const color = getRandomColor();
-    const hex = toHex(color);
+    const hex = convertJsHexToCssHex(color);
 
     const embed = buildOpEmbed().setTitle('🎨 Couleur aléatoire').setDescription(`Couleur tirée au hasard : **${hex}**`).setColor(color);
 

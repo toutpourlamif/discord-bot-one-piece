@@ -12,6 +12,7 @@ import { playerCommands } from '../domains/player/index.js';
 import { findOrCreatePlayer } from '../domains/player/service.js';
 import { resourceCommands } from '../domains/resource/index.js';
 import { shipCommands } from '../domains/ship/commands/index.js';
+import { tavernCommands } from '../domains/tavern/index.js';
 
 import { AppError } from './errors.js';
 import { buildCommandRegistry, resolveCommand } from './routing/registry.js';
@@ -28,6 +29,7 @@ const allCommands = [
   ...guildCommands,
   ...eventCommands,
   ...onboardingCommands,
+  ...tavernCommands,
 ];
 buildCommandRegistry(allCommands);
 
