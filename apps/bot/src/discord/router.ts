@@ -1,3 +1,4 @@
+import type { Guild } from '@one-piece/db';
 import type { Message } from 'discord.js';
 
 import { devCommands } from '../domains/_dev/index.js';
@@ -40,19 +41,25 @@ const registry = buildRegistry(allCommands, (command) =>
 export async function routeMessage(message: Message): Promise<void> {
   if (message.author.bot) return;
 
+  let guild: Guild;
   try {
     const guildId = requireGuildId(message.guildId);
-    const guild = await guildRepository.findOrCreate(guildId, message.guild!.name);
+    guild = await guildRepository.findOrCreate(guildId, message.guild!.name);
+  } catch (error) {
+    console.error(error);
+    return;
+  }
 
-    const content = message.content.trim();
-    if (!content.startsWith(guild.prefix)) return;
+  const content = message.content.trim();
+  if (!content.startsWith(guild.prefix)) return;
 
-    const [rawName, ...args] = content.slice(guild.prefix.length).trim().split(/\s+/);
-    if (!rawName) return;
+  const [rawName, ...args] = content.slice(guild.prefix.length).trim().split(/\s+/);
+  if (!rawName) return;
 
-    const command = registry.get(rawName.toLowerCase());
-    if (!command) return;
+  const command = registry.get(rawName.toLowerCase());
+  if (!command) return;
 
+  try {
     const { player } = await findOrCreatePlayer(message.author.id, message.author.username, guild.id);
 
     if (command.requiresOpAdmin) {
