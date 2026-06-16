@@ -1,5 +1,5 @@
 import type { Guild, Player } from '@one-piece/db';
-import type { ActionRowBuilder, ButtonBuilder, ButtonInteraction, EmbedBuilder, Message } from 'discord.js';
+import type { ActionRowBuilder, AttachmentBuilder, ButtonBuilder, ButtonInteraction, EmbedBuilder, Message } from 'discord.js';
 
 export type CommandName = string | Array<string>;
 
@@ -26,4 +26,5 @@ export type ButtonHandler = {
 export type View = {
   embeds: Array<EmbedBuilder>;
   components: Array<ActionRowBuilder<ButtonBuilder>>;
+  files?: Array<AttachmentBuilder>;
 };

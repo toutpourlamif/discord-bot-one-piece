@@ -1,5 +1,5 @@
-import type { CharacterRow } from '../../character/types.js';
+import type { Character } from '../../character/types.js';
 
-export function isInCrewFilter(character: CharacterRow): boolean {
+export function isInCrewFilter(character: Character): boolean {
   return character.joinedCrewAt !== null;
 }

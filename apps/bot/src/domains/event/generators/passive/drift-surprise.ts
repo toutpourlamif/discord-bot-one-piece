@@ -14,7 +14,6 @@ const DRIFT_SURPRISE_MESSAGES = [
 export const driftSurprise: PassiveGenerator = {
   key: 'driftSurprise',
   isInteractive: false,
-  seedScope: 'player',
   probability: noProbability,
   compute: (_ctx, rng) => {
     const message = pickRandom(rng, DRIFT_SURPRISE_MESSAGES);

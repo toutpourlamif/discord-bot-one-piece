@@ -1,9 +1,9 @@
-import type { TavernConfig } from '../types/tavern.js';
+import type { TavernConfig } from '../../../tavern/types.js';
 
 export function defineIsland<
   const Key extends string,
   const SubZones extends Record<string, string>,
   const Entry extends keyof SubZones,
->(island: { key: Key; name: string; subZones: SubZones; entrySubZone: Entry; tavern?: TavernConfig }) {
+>(island: { key: Key; name: string; subZones: SubZones; entrySubZone: Entry; tavernConfig?: TavernConfig }) {
   return island;
 }

@@ -5,10 +5,10 @@ import chunk from 'lodash/chunk.js';
 import { DISCORD_ACTION_ROW_MAX_BUTTONS, DISCORD_MESSAGE_MAX_BUTTONS } from '../../../discord/constants.js';
 import type { View } from '../../../discord/types.js';
 import { buildCustomId, buildOpEmbed } from '../../../discord/utils/index.js';
-import type { CharacterRow } from '../../character/types.js';
+import type { Character } from '../../character/types.js';
 import { SET_CAPTAIN_BUTTON_NAME } from '../constants.js';
 
-export function buildSetCaptainView(player: Player, crew: Array<CharacterRow>): View {
+export function buildSetCaptainView(player: Player, crew: Array<Character>): View {
   const visibleCrew = crew.slice(0, DISCORD_MESSAGE_MAX_BUTTONS);
 
   return {
@@ -17,13 +17,13 @@ export function buildSetCaptainView(player: Player, crew: Array<CharacterRow>): 
   };
 }
 
-function buildCaptainButtonRows(crew: Array<CharacterRow>): Array<ActionRowBuilder<ButtonBuilder>> {
+function buildCaptainButtonRows(crew: Array<Character>): Array<ActionRowBuilder<ButtonBuilder>> {
   return chunk(crew, DISCORD_ACTION_ROW_MAX_BUTTONS).map((rowCharacters) =>
     new ActionRowBuilder<ButtonBuilder>().addComponents(rowCharacters.map(buildCaptainButton)),
   );
 }
 
-function buildCaptainButton(character: CharacterRow): ButtonBuilder {
+function buildCaptainButton(character: Character): ButtonBuilder {
   return new ButtonBuilder()
     .setCustomId(buildCustomId(SET_CAPTAIN_BUTTON_NAME, character.instanceId))
     .setLabel(character.name)
