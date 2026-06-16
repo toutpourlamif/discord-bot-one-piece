@@ -5,6 +5,7 @@ import type { ButtonHandler } from '../types.js';
 import { assertInteractorIsTheOwner } from './assert-interactor-is-the-owner.js';
 import { buildCustomId } from './build-custom-id.js';
 import { buildOpEmbed } from './build-op-embed.js';
+import { editReply } from './edit-reply.js';
 import { parseOwnerDiscordId } from './parse-owner-discord-id.js';
 
 const CANCEL_BUTTON_NAME = 'cancel';
@@ -22,7 +23,7 @@ async function handle(interaction: ButtonInteraction, args: Array<string>): Prom
   assertInteractorIsTheOwner(interaction, ownerDiscordId);
   await interaction.deferUpdate();
   const embed = buildOpEmbed('default').setDescription(CANCEL_MESSAGE);
-  await interaction.editReply({ content: null, embeds: [embed], components: [] });
+  await editReply(interaction, { content: null, embeds: [embed], components: [] });
 }
 
 export const cancelButtonHandler: ButtonHandler = {

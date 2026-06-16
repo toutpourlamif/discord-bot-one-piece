@@ -3,36 +3,20 @@ import {
   characterTemplate,
   db,
   devilFruitTemplate,
-  PLAYER_AS_CHARACTER_TEMPLATE_NAME,
   type CharacterInstance,
   type CharacterTemplate,
   type DbOrTransaction,
 } from '@one-piece/db';
-import { and, asc, desc, eq, getTableColumns, ilike, ne, or, sql } from 'drizzle-orm';
+import { and, asc, desc, eq, getTableColumns, ilike, isNull, or, sql } from 'drizzle-orm';
 
-import { InternalError, NotFoundError } from '../../discord/errors.js';
+import { InternalError } from '../../discord/errors.js';
 
-import type { CharacterRow, CharacterTemplateWithDevilFruit } from './types.js';
+import type { Character, CharacterTemplateWithDevilFruit } from './types.js';
 
 //TODO: regarder si on peut select all ou pas
-export async function getCharactersByPlayerId(playerId: number, client: DbOrTransaction = db): Promise<Array<CharacterRow>> {
+export async function getCharactersByPlayerId(playerId: number, client: DbOrTransaction = db): Promise<Array<Character>> {
   return client
-    .select({
-      instanceId: characterInstance.id,
-      name: characterTemplate.name,
-      nickname: characterInstance.nickname,
-      imageUrl: characterTemplate.imageUrl,
-      hp: characterTemplate.hp,
-      combat: characterTemplate.combat,
-      devilFruit: getTableColumns(devilFruitTemplate),
-      joinedCrewAt: characterInstance.joinedCrewAt,
-      isCaptain: characterInstance.isCaptain,
-      captainCombatMultiplier: characterTemplate.captainCombatMultiplier,
-      captainHpMultiplier: characterTemplate.captainHpMultiplier,
-      captainBerryGainMultiplier: characterTemplate.captainBerryGainMultiplier,
-      captainKarmaMultiplier: characterTemplate.captainKarmaMultiplier,
-      captainMoraleMultiplier: characterTemplate.captainMoraleMultiplier,
-    })
+    .select(characterColumns)
     .from(characterInstance)
     .innerJoin(characterTemplate, eq(characterInstance.templateId, characterTemplate.id))
     .leftJoin(
@@ -52,7 +36,7 @@ export async function findTemplateByName(name: string, client: DbOrTransaction =
 }
 
 // TODO: multi-statement → service avec tx
-export async function createCharacterInstance(playerId: number, templateId: number, client: DbOrTransaction = db): Promise<CharacterRow> {
+export async function createCharacterInstance(playerId: number, templateId: number, client: DbOrTransaction = db): Promise<Character> {
   const [created] = await client
     .insert(characterInstance)
     .values({
@@ -63,22 +47,7 @@ export async function createCharacterInstance(playerId: number, templateId: numb
   if (!created) throw new InternalError('Impossible de créer ce personnage.');
 
   const [createdRow] = await client
-    .select({
-      instanceId: characterInstance.id,
-      name: characterTemplate.name,
-      nickname: characterInstance.nickname,
-      imageUrl: characterTemplate.imageUrl,
-      hp: characterTemplate.hp,
-      combat: characterTemplate.combat,
-      devilFruit: getTableColumns(devilFruitTemplate),
-      joinedCrewAt: characterInstance.joinedCrewAt,
-      isCaptain: characterInstance.isCaptain,
-      captainCombatMultiplier: characterTemplate.captainCombatMultiplier,
-      captainHpMultiplier: characterTemplate.captainHpMultiplier,
-      captainBerryGainMultiplier: characterTemplate.captainBerryGainMultiplier,
-      captainKarmaMultiplier: characterTemplate.captainKarmaMultiplier,
-      captainMoraleMultiplier: characterTemplate.captainMoraleMultiplier,
-    })
+    .select(characterColumns)
     .from(characterInstance)
     .innerJoin(characterTemplate, eq(characterInstance.templateId, characterTemplate.id))
     .leftJoin(
@@ -95,6 +64,7 @@ export async function createCharacterInstance(playerId: number, templateId: numb
   return createdRow;
 }
 
+// `player_id IS NULL` ne garde que les templates recrutables (les templates perso d'un joueur ne sortent pas du recrutement).
 export async function searchManyByName(query: string): Promise<Array<{ entity: CharacterTemplate; score: number }>> {
   const rows = await db
     .select({
@@ -103,10 +73,7 @@ export async function searchManyByName(query: string): Promise<Array<{ entity: C
     })
     .from(characterTemplate)
     .where(
-      and(
-        or(sql`${characterTemplate.name} % ${query}`, ilike(characterTemplate.name, `%${query}%`)),
-        ne(characterTemplate.name, PLAYER_AS_CHARACTER_TEMPLATE_NAME),
-      ),
+      and(or(sql`${characterTemplate.name} % ${query}`, ilike(characterTemplate.name, `%${query}%`)), isNull(characterTemplate.playerId)),
     )
     .orderBy(sql`similarity(${characterTemplate.name}, ${query}) desc`)
     .limit(25);
@@ -126,25 +93,30 @@ export async function findById(id: number): Promise<CharacterTemplateWithDevilFr
   return row;
 }
 
-export async function getPlayerAsCharacterTemplate(): Promise<CharacterTemplate> {
-  const [row] = await db.select().from(characterTemplate).where(eq(characterTemplate.name, PLAYER_AS_CHARACTER_TEMPLATE_NAME)).limit(1);
-  if (!row) throw new NotFoundError(`Template ${PLAYER_AS_CHARACTER_TEMPLATE_NAME} introuvable — exécute le seed.`);
-  return row;
-}
-
 // TODO: multi-statement → service avec tx
 export async function createPlayerAsCharacterInstance(
   playerId: number,
-  nickname: string,
+  name: string,
   client: DbOrTransaction = db,
 ): Promise<CharacterInstance> {
-  const playerAsCharacterTemplate = await getPlayerAsCharacterTemplate();
+  const [template] = await client
+    .insert(characterTemplate)
+    .values({
+      name,
+      playerId,
+      race: 'HUMAN',
+      hp: 10,
+      combat: 10,
+      imageUrl: null,
+    })
+    .returning();
+  if (!template) throw new InternalError('Impossible de créer le template du joueur.');
+
   const [row] = await client
     .insert(characterInstance)
     .values({
-      templateId: playerAsCharacterTemplate.id,
+      templateId: template.id,
       playerId,
-      nickname,
       isCaptain: true,
       joinedCrewAt: new Date(),
     })
@@ -152,11 +124,22 @@ export async function createPlayerAsCharacterInstance(
   return row!;
 }
 
-// TODO: multi-statement → service avec tx
-export async function updatePlayerAsCharacterNickname(playerId: number, nickname: string, client: DbOrTransaction = db): Promise<void> {
-  const playerAsCharacterTemplate = await getPlayerAsCharacterTemplate();
-  await client
-    .update(characterInstance)
-    .set({ nickname })
-    .where(and(eq(characterInstance.playerId, playerId), eq(characterInstance.templateId, playerAsCharacterTemplate.id)));
+export async function updatePlayerAsCharacterName(playerId: number, name: string, client: DbOrTransaction = db): Promise<void> {
+  await client.update(characterTemplate).set({ name }).where(eq(characterTemplate.playerId, playerId));
 }
+
+const characterColumns = {
+  instanceId: characterInstance.id,
+  name: characterTemplate.name,
+  imageUrl: characterTemplate.imageUrl,
+  hp: characterTemplate.hp,
+  combat: characterTemplate.combat,
+  devilFruit: getTableColumns(devilFruitTemplate),
+  joinedCrewAt: characterInstance.joinedCrewAt,
+  isCaptain: characterInstance.isCaptain,
+  captainCombatMultiplier: characterTemplate.captainCombatMultiplier,
+  captainHpMultiplier: characterTemplate.captainHpMultiplier,
+  captainBerryGainMultiplier: characterTemplate.captainBerryGainMultiplier,
+  captainKarmaMultiplier: characterTemplate.captainKarmaMultiplier,
+  captainMoraleMultiplier: characterTemplate.captainMoraleMultiplier,
+} as const;

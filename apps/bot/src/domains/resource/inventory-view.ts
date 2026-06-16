@@ -12,7 +12,7 @@ const EMPTY_INVENTORY_DESCRIPTION = 'Inventaire vide';
 export function buildInventoryView(player: Player, inventory: Inventory, page: number, ownerDiscordId: string): View {
   const embed = buildOpEmbed().setTitle(`Inventaire de ${player.name}`);
   embed.addFields({ name: '💰 Berries', value: formatBerry(player.berries), inline: true });
-  const menuRow = buildMenuButtons(INVENTORY_BUTTON_NAME, ownerDiscordId, player.id);
+  const menuRow = buildMenuButtons(INVENTORY_BUTTON_NAME, ownerDiscordId, player);
 
   if (inventory.length === 0) {
     embed.setDescription(EMPTY_INVENTORY_DESCRIPTION);

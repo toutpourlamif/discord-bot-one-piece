@@ -1,4 +1,3 @@
-import { PLAYER_AS_CHARACTER_TEMPLATE_NAME } from './constants.js';
 import { FAKE_STRAW_HATS_DATA } from './data/fake-straw-hats.js';
 import { STRAW_HATS_DATA } from './data/straw-hats.js';
 import type { CharacterTemplateSeed } from './data/types.js';
@@ -10,13 +9,6 @@ function buildCharacterImageUrl(crew: string, slug: string): string {
 // TODO: supprimer/modifier en prod
 // TODO: compléter les types de base quand ils sont moins évidents que la race.
 export const CHARACTER_TEMPLATES_DATA: Array<CharacterTemplateSeed> = [
-  {
-    name: PLAYER_AS_CHARACTER_TEMPLATE_NAME,
-    race: 'HUMAN',
-    hp: 10,
-    combat: 10,
-    imageUrl: null,
-  },
   {
     name: 'Monkey D. Luffy',
     hp: 10,
@@ -51,7 +43,7 @@ export const CHARACTER_TEMPLATES_DATA: Array<CharacterTemplateSeed> = [
     hp: 24,
     combat: 30,
     race: 'HUMAN',
-    rarity: 'LEGENDARY',
+    rarity: 'S',
     imageUrl: 'characters/dracule-mihawk.webp',
     description: 'Le plus grand épéiste du monde, calme et impitoyable.',
   },
@@ -60,7 +52,7 @@ export const CHARACTER_TEMPLATES_DATA: Array<CharacterTemplateSeed> = [
     hp: 18,
     combat: 24,
     race: 'HUMAN',
-    rarity: 'VERY_RARE',
+    rarity: 'B',
     imageUrl: 'characters/crocodile.webp',
     description: "Ancien Grand Corsaire, stratège froid et maître d'Alabasta.",
   },
@@ -69,7 +61,7 @@ export const CHARACTER_TEMPLATES_DATA: Array<CharacterTemplateSeed> = [
     hp: 16,
     combat: 20,
     race: 'HUMAN',
-    rarity: 'RARE',
+    rarity: 'C',
     imageUrl: 'characters/smoker.webp',
     description: 'Marine obstiné qui poursuit les pirates sans relâche.',
   },
@@ -79,7 +71,7 @@ export const CHARACTER_TEMPLATES_DATA: Array<CharacterTemplateSeed> = [
     combat: 18,
     race: 'FISHMAN',
     types: ['WATER'],
-    rarity: 'RARE',
+    rarity: 'C',
     imageUrl: 'characters/arlong.webp',
     description: "Capitaine homme-poisson brutal venu imposer sa loi à l'East Blue.",
   },
@@ -88,7 +80,7 @@ export const CHARACTER_TEMPLATES_DATA: Array<CharacterTemplateSeed> = [
     hp: 13,
     combat: 15,
     race: 'HUMAN',
-    rarity: 'COMMON',
+    rarity: 'D',
     imageUrl: null,
     description: "Chef pirate de l'East Blue, dangereux surtout par son arsenal.",
   },
@@ -97,7 +89,7 @@ export const CHARACTER_TEMPLATES_DATA: Array<CharacterTemplateSeed> = [
     hp: 22,
     combat: 26,
     race: 'HUMAN',
-    rarity: 'LEGENDARY',
+    rarity: 'A',
     skills: ['CONQUERORS_HAKI'],
     imageUrl: buildCharacterImageUrl('whitebeard-pirates', 'portgas-d-ace'),
     devilFruitName: 'Mera Mera no Mi',
@@ -108,7 +100,7 @@ export const CHARACTER_TEMPLATES_DATA: Array<CharacterTemplateSeed> = [
     hp: 30,
     combat: 28,
     race: 'HUMAN',
-    rarity: 'LEGENDARY',
+    rarity: 'S',
     imageUrl: buildCharacterImageUrl('blackbeard-pirates', 'marshall-d-teach'),
     devilFruitName: 'Yami Yami no Mi',
     description: 'Capitaine des Pirates de Barbe Noire, seul homme connu à porter deux fruits du démon.',
@@ -118,7 +110,7 @@ export const CHARACTER_TEMPLATES_DATA: Array<CharacterTemplateSeed> = [
     hp: 24,
     combat: 26,
     race: 'HUMAN',
-    rarity: 'LEGENDARY',
+    rarity: 'A',
     skills: ['CONQUERORS_HAKI'],
     imageUrl: buildCharacterImageUrl('kid-pirates', 'eustass-kid'),
     devilFruitName: 'Jiki Jiki no Mi',
@@ -129,7 +121,7 @@ export const CHARACTER_TEMPLATES_DATA: Array<CharacterTemplateSeed> = [
     hp: 18,
     combat: 23,
     race: 'HUMAN',
-    rarity: 'VERY_RARE',
+    rarity: 'B',
     imageUrl: buildCharacterImageUrl('beasts-pirates', 'basil-hawkins'),
     description: "Le Mage, Supernova énigmatique qui lit l'avenir dans ses cartes de tarot.",
   },

@@ -2,7 +2,7 @@ import { db, history, type DbOrTransaction, type JSONFromSQL } from '@one-piece/
 import { asc, eq } from 'drizzle-orm';
 
 export type HistoryLog = {
-  kind: string;
+  type: string;
   occurredAt: Date;
   bucketId: number | null;
   payload: JSONFromSQL;
@@ -11,7 +11,7 @@ export type HistoryLog = {
 export async function loadAllForPlayer(playerId: number, client: DbOrTransaction = db): Promise<Array<HistoryLog>> {
   return client
     .select({
-      kind: history.kind,
+      type: history.type,
       occurredAt: history.occurredAt,
       bucketId: history.bucketId,
       payload: history.payload,

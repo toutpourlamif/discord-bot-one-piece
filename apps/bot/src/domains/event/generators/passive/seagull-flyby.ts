@@ -17,7 +17,6 @@ const IMAGES = ['events/passive/seagull-far.webp', 'events/passive/seagull-flyby
 export const seagullFlyby: PassiveGenerator = {
   key: 'seagullFlyby',
   isInteractive: false,
-  seedScope: 'player',
   conditions: (ctx) => isSea(ctx.zone),
   cooldownBuckets: inBuckets('1d'),
   probability: () => 0.3,

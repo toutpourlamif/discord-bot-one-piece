@@ -10,7 +10,7 @@ Le `player` (table) tient ce qui est **compte-level** : identité Discord, bount
 
 Le joueur **existe aussi comme personnage dans le monde** : c'est le **PlayerAsCharacter** (voir `character`). Tout ce qui est "trucs qu'un perso a" — race, Fruit du Démon, stats, équipement — vit sur ce `character_instance`, **pas** sur `player`. Ça évite de dupliquer chaque feature des personnages côté player.
 
-À la création d'un player (`findOrCreatePlayer`), son PlayerAsCharacter est créé dans la même transaction. Quand le joueur se rename, le `nickname` du PlayerAsCharacter est mis à jour pour rester cohérent avec son nom affiché.
+À la création d'un player (`findOrCreatePlayer`), son PlayerAsCharacter est créé dans la même transaction. Quand le joueur se rename, le `name` du template de son PlayerAsCharacter est mis à jour pour rester cohérent avec son nom affiché.
 
 ## Position courante
 

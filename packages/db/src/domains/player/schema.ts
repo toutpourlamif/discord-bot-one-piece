@@ -1,8 +1,8 @@
 import { sql } from 'drizzle-orm';
 import { pgTable, serial, varchar, bigint, integer, boolean } from 'drizzle-orm/pg-core';
 
+import { buildTimestampColumns } from '../../shared/columns/index.js';
 import { MAX_CHARACTER_NAME_LENGTH, MAX_CREW_NAME_LENGTH } from '../../shared/constants.js';
-import { timestamps } from '../../shared/helpers.js';
 import { guild } from '../guild/schema.js';
 import { subZoneEnum } from '../navigation/sub-zone-enum.js';
 import { ISLAND_ENTRY_SUB_ZONE, type Island } from '../navigation/world/registry.js';
@@ -33,12 +33,13 @@ export const player = pgTable('player', {
   berries: bigint('berries', { mode: 'bigint' })
     .notNull()
     .default(sql`0`),
-  ...timestamps(),
+  ...buildTimestampColumns(),
   lastProcessedBucketId: integer('last_processed_bucket_id').notNull(),
   isAdmin: boolean('is_admin').notNull().default(false),
   currentZone: zoneEnum('current_zone').notNull().default('dawn'),
   currentSubZone: subZoneEnum('current_sub_zone').default(ISLAND_ENTRY_SUB_ZONE.dawn),
   travelTargetZone: zoneEnum('travel_target_zone').$type<Island>(),
+  travelStartZone: zoneEnum('travel_start_zone').$type<Island>(),
   travelStartedBucket: integer('travel_started_bucket'),
   travelEtaBucket: integer('travel_eta_bucket'),
   onboardingStep: onboardingStepEnum('onboarding_step').default(ONBOARDING_STEP_IDS[0]),
