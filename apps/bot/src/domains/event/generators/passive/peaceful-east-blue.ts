@@ -6,7 +6,6 @@ import { noCompute } from '../utils.js';
 export const peacefulEastBlue: PassiveGenerator = {
   key: 'peacefulEastBlue',
   isInteractive: false,
-  seedScope: 'player',
   conditions: (ctx) => ctx.zone === 'sea_east_blue',
   oneTime: true,
   probability: () => 0.05,
