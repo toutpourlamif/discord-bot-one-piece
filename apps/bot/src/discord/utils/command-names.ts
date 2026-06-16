@@ -3,22 +3,22 @@ import uniq from 'lodash/uniq.js';
 
 import type { Command } from '../types.js';
 
-type CommandCall = {
+type CommandNameEntry = {
   language: SupportedLanguage;
   name: string;
 };
 
 export function getCommandDisplayName(command: Command, language: SupportedLanguage): string {
-  return command.name[language];
+  return command.names[language];
 }
 
-export function getCommandCalls(command: Command): Array<CommandCall> {
+export function getCommandNameEntries(command: Command): Array<CommandNameEntry> {
   return SUPPORTED_LANGUAGES.flatMap((language) => [
-    { language, name: command.name[language] },
+    { language, name: command.names[language] },
     ...(command.aliases ? [{ language, name: command.aliases[language] }] : []),
   ]);
 }
 
-export function getCommandCallNames(command: Command): Array<string> {
-  return uniq(getCommandCalls(command).map((call) => call.name));
+export function getCommandLookupNames(command: Command): Array<string> {
+  return uniq(getCommandNameEntries(command).map((entry) => entry.name));
 }

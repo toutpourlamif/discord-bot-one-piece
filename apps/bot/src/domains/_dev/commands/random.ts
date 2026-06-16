@@ -2,7 +2,7 @@ import type { Command } from '../../../discord/types.js';
 
 // TODO: SUPPRIMER EN PROD
 export const randomCommand: Command = {
-  name: { fr: 'random', en: 'random' },
+  names: { fr: 'random', en: 'random' },
   async handler({ message }) {
     const min = 1;
     const max = 1000;

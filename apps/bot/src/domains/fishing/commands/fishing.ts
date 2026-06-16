@@ -6,7 +6,7 @@ import { resolveTargetPlayer } from '../../player/index.js';
 import { runFishingAttempt } from '../service.js';
 
 export const fishingCommand: Command = {
-  name: { fr: 'fishing', en: 'fishing' },
+  names: { fr: 'fishing', en: 'fishing' },
   aliases: { fr: 'fish', en: 'fish' },
   async handler(ctx) {
     const { targetPlayer } = await resolveTargetPlayer(ctx);

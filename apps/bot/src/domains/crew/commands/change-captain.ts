@@ -1,13 +1,13 @@
-import { getCommandDisplayName } from '../../../discord/routing/calls.js';
 import type { Command } from '../../../discord/types.js';
 import { buildOpEmbed } from '../../../discord/utils/build-op-embed.js';
+import { getCommandDisplayName } from '../../../discord/utils/index.js';
 import { getCrewByPlayerId } from '../service.js';
 import { buildSetCaptainView } from '../utils/build-change-captain-view.js';
 
 import { crewCommand } from './crew.js';
 
 export const changeCaptainCommand: Command = {
-  name: { fr: 'changecaptain', en: 'changecaptain' },
+  names: { fr: 'changecaptain', en: 'changecaptain' },
   async handler({ message, player, guild }) {
     const crew = await getCrewByPlayerId(player.id);
 

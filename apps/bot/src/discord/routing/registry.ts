@@ -3,8 +3,7 @@ import uniq from 'lodash/uniq.js';
 
 import { ValidationError } from '../errors.js';
 import type { Command } from '../types.js';
-
-import { getCommandCalls } from './calls.js';
+import { getCommandNameEntries } from '../utils/index.js';
 
 type CommandMatch = {
   command: Command;
@@ -19,16 +18,16 @@ export function buildCommandRegistry(commands: Array<Command>): void {
   const registry: CommandRegistry = new Map();
 
   for (const command of commands) {
-    for (const call of getCommandCalls(command)) {
-      const key = call.name.toLowerCase();
+    for (const entry of getCommandNameEntries(command)) {
+      const key = entry.name.toLowerCase();
       const matches = registry.get(key) ?? [];
 
-      if (matches.some((match) => match.command === command && match.language === call.language)) continue;
+      if (matches.some((match) => match.command === command && match.language === entry.language)) continue;
 
-      const duplicate = matches.find((match) => match.language === call.language);
-      if (duplicate) throw new Error(`Doublon dans le registre: "${key}" pour la langue "${call.language}"`);
+      const duplicate = matches.find((match) => match.language === entry.language);
+      if (duplicate) throw new Error(`Doublon dans le registre: "${key}" pour la langue "${entry.language}"`);
 
-      matches.push({ command, language: call.language });
+      matches.push({ command, language: entry.language });
       registry.set(key, matches);
     }
   }
@@ -43,17 +42,13 @@ export function resolveCommand(rawName: string, language: SupportedLanguage): Co
   if (!matches) return undefined;
 
   const matchesForLanguage = matches.filter((match) => match.language === language);
-  const languageCommands = uniqueCommands(matchesForLanguage.map((match) => match.command));
+  const languageCommands = uniq(matchesForLanguage.map((match) => match.command));
   if (languageCommands.length === 1) return languageCommands[0];
 
-  const commands = uniqueCommands(matches.map((match) => match.command));
+  const commands = uniq(matches.map((match) => match.command));
   if (commands.length === 1) return commands[0];
 
   throw new ValidationError(buildAmbiguousCommandMessage(rawName, commands));
-}
-
-function uniqueCommands(commands: Array<Command>): Array<Command> {
-  return uniq(commands);
 }
 
 function buildAmbiguousCommandMessage(rawName: string, commands: Array<Command>): string {
@@ -62,5 +57,5 @@ function buildAmbiguousCommandMessage(rawName: string, commands: Array<Command>)
 }
 
 function formatCommandNames(command: Command): string {
-  return uniq(Object.values(command.name)).join(' / ');
+  return uniq(Object.values(command.names)).join(' / ');
 }

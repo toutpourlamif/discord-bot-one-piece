@@ -7,7 +7,7 @@ import * as playerRepository from '../../player/repository.js';
 // passer onboardingStep à null. Il faudra plus tard matcher les items/récompenses obtenus
 // pendant l'onboarding, la localisation de départ, etc.
 export const skipOnboardingCommand: Command = {
-  name: { fr: 'skip-onboarding', en: 'skip-onboarding' },
+  names: { fr: 'skip-onboarding', en: 'skip-onboarding' },
   aliases: { fr: 'skipob', en: 'skipob' },
   async handler(ctx) {
     const { targetPlayer } = await resolveTargetPlayer(ctx);

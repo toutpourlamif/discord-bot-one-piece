@@ -1,37 +1,14 @@
 import type { Message } from 'discord.js';
 
-import { devCommands } from '../domains/_dev/index.js';
-import { infoCommands } from '../domains/_info/index.js';
-import { crewCommands } from '../domains/crew/index.js';
-import { autoSyncBeforeAction, eventCommands } from '../domains/event/index.js';
-import { fishingCommands } from '../domains/fishing/index.js';
-import { guildCommands, requireGuildId } from '../domains/guild/index.js';
+import { autoSyncBeforeAction } from '../domains/event/index.js';
+import { requireGuildId } from '../domains/guild/index.js';
 import * as guildRepository from '../domains/guild/repository.js';
-import { interceptOnboardingCommand, onboardingCommands } from '../domains/onboarding/index.js';
-import { playerCommands } from '../domains/player/index.js';
+import { interceptOnboardingCommand } from '../domains/onboarding/index.js';
 import { findOrCreatePlayer } from '../domains/player/service.js';
-import { resourceCommands } from '../domains/resource/index.js';
-import { shipCommands } from '../domains/ship/commands/index.js';
-import { tavernCommands } from '../domains/tavern/index.js';
 
+import { resolveCommand } from './command-registry.js';
 import { AppError } from './errors.js';
-import { buildCommandRegistry, resolveCommand } from './routing/registry.js';
 import { buildOpEmbed } from './utils/index.js';
-
-const allCommands = [
-  ...playerCommands,
-  ...infoCommands,
-  ...devCommands,
-  ...shipCommands,
-  ...resourceCommands,
-  ...fishingCommands,
-  ...crewCommands,
-  ...guildCommands,
-  ...eventCommands,
-  ...onboardingCommands,
-  ...tavernCommands,
-];
-buildCommandRegistry(allCommands);
 
 /** Dispatche un message vers le bon handler de commande. Voir `docs/discord.md`. */
 export async function routeMessage(message: Message): Promise<void> {

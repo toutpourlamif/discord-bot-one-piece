@@ -6,7 +6,7 @@ import { resolveTargetPlayer } from '../../player/index.js';
 
 // TODO: supprimer avant la prod
 export const giveCharacterCommand: Command = {
-  name: { fr: 'givecharacter', en: 'givecharacter' },
+  names: { fr: 'givecharacter', en: 'givecharacter' },
   aliases: { fr: 'gc', en: 'gc' },
   async handler(ctx) {
     const { targetPlayer, rest } = await resolveTargetPlayer(ctx);

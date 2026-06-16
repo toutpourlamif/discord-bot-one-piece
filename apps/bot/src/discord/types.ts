@@ -11,7 +11,7 @@ export type CommandContext = {
 };
 
 export type Command = {
-  name: CommandNames;
+  names: CommandNames;
   aliases?: CommandNames;
   handler: (ctx: CommandContext) => Promise<void>;
   requiresSynchronization?: boolean;

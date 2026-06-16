@@ -3,7 +3,7 @@ import { buy } from '../../economy/index.js';
 import { formatBerry } from '../../economy/utils/format-berry.js';
 
 export const buyCommand: Command = {
-  name: { fr: 'buy', en: 'buy' },
+  names: { fr: 'buy', en: 'buy' },
   async handler({ message, args, player }) {
     const amount = BigInt(args[0] ?? '0');
     const newBerriesAmount = await buy(player.id, amount);

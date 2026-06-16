@@ -3,7 +3,7 @@ import { buildOpEmbed, resolveTargetUser } from '../../../discord/utils/index.js
 
 // TODO: supprimer avant la prod
 export const moiCommand: Command = {
-  name: { fr: 'moi', en: 'moi' },
+  names: { fr: 'moi', en: 'moi' },
   async handler({ message }) {
     const user = resolveTargetUser(message);
     const embed = buildOpEmbed()

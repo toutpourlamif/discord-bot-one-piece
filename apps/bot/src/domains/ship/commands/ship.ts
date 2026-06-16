@@ -3,7 +3,7 @@ import { resolveTargetPlayer } from '../../player/index.js';
 import { buildShipView } from '../views/index.js';
 
 export const shipCommand: Command = {
-  name: { fr: 'ship', en: 'ship' },
+  names: { fr: 'ship', en: 'ship' },
   async handler(ctx) {
     const { targetPlayer } = await resolveTargetPlayer(ctx);
     await ctx.message.reply(await buildShipView(targetPlayer, ctx.message.author.id));

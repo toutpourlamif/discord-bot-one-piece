@@ -4,7 +4,7 @@ import { getEndDateOfBucket, getLatestProcessableBucket, getNowBucketId, getStar
 import { formatBucketTime } from '../../event/utils/format-bucket-time.js';
 
 export const bucketsCommand: Command = {
-  name: { fr: 'buckets', en: 'buckets' },
+  names: { fr: 'buckets', en: 'buckets' },
   async handler({ message }) {
     const nowBucketId = getNowBucketId();
     const latestProcessableBucketId = getLatestProcessableBucket();

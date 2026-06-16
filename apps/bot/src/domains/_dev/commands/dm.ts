@@ -5,7 +5,7 @@ import { resolveTargetUser } from '../../../discord/utils/resolve-target-user.js
 import { sendDirectMessage } from '../../../discord/utils/send-direct-message.js';
 
 export const dmCommand: Command = {
-  name: { fr: 'dm', en: 'dm' },
+  names: { fr: 'dm', en: 'dm' },
   async handler({ message, args }) {
     const target = resolveTargetUser(message);
     const queryArgs = message.mentions.users.first() ? args.slice(1) : args;
