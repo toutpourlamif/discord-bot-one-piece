@@ -13,6 +13,7 @@ export const clearEventsCommand: Command = {
   name: ['clearevents', 'clear-events'],
   async handler(ctx) {
     const { targetPlayer, rest } = await resolveTargetPlayer(ctx);
+    // TODO: remplacer cet usage hardcodé par l'util de formatage commande + préfixe + langue de guilde.
     if (rest.length > 0) throw new ValidationError('Usage: `!clearevents [@joueur]`');
 
     const result = await db.transaction(async (tx) => {
