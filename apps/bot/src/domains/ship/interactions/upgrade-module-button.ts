@@ -1,7 +1,7 @@
 import type { ButtonInteraction } from 'discord.js';
 
 import type { ButtonHandler } from '../../../discord/types.js';
-import { assertInteractorIsTheOwner, parseIntegerArg, parseOwnerDiscordId } from '../../../discord/utils/index.js';
+import { assertInteractorIsTheOwner, editReply, parseIntegerArg, parseOwnerDiscordId } from '../../../discord/utils/index.js';
 import { UPGRADE_SHIP_MODULE_BUTTON_NAME } from '../constants.js';
 import { parseShipModuleKey } from '../utils/index.js';
 import { buildUpgradeModuleView } from '../views/index.js';
@@ -13,7 +13,7 @@ async function handle(interaction: ButtonInteraction, args: Array<string>): Prom
   const moduleKey = parseShipModuleKey(args[2]);
 
   await interaction.deferUpdate();
-  await interaction.editReply(await buildUpgradeModuleView(playerId, ownerDiscordId, moduleKey));
+  await editReply(interaction, await buildUpgradeModuleView(playerId, ownerDiscordId, moduleKey));
 }
 
 export const upgradeShipModuleButtonHandler: ButtonHandler = {

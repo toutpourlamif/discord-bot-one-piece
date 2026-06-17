@@ -1,7 +1,7 @@
 import type { ButtonInteraction } from 'discord.js';
 
 import type { ButtonHandler } from '../../../discord/types.js';
-import { assertInteractorIsTheOwner, parseIntegerArg, parseOwnerDiscordId } from '../../../discord/utils/index.js';
+import { assertInteractorIsTheOwner, editReply, parseIntegerArg, parseOwnerDiscordId } from '../../../discord/utils/index.js';
 import * as playerRepository from '../../player/repository.js';
 import { INVENTORY_BUTTON_NAME } from '../constants.js';
 import { buildInventoryView } from '../inventory-view.js';
@@ -18,7 +18,7 @@ async function handle(interaction: ButtonInteraction, args: Array<string>): Prom
   const player = await playerRepository.findByIdOrThrow(playerId);
 
   const inventory = await getInventory(player.id);
-  await interaction.editReply(buildInventoryView(player, inventory, page, ownerDiscordId));
+  await editReply(interaction, buildInventoryView(player, inventory, page, ownerDiscordId));
 }
 
 export const inventoryPaginationButtonHandler: ButtonHandler = {

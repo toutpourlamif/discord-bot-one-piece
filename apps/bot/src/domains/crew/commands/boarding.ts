@@ -5,7 +5,8 @@ import * as shipRepository from '../../ship/repository.js';
 import { buildBoardingView } from '../utils/build-boarding-view.js';
 
 export const boardingCommand: Command = {
-  name: ['boarding', 'embarquer', 'embark', 'composition', 'compo'],
+  names: { fr: 'embarquer', en: 'boarding' },
+  aliases: { fr: ['compo'], en: ['embark'] },
   async handler(ctx) {
     const { targetPlayer } = await resolveTargetPlayer(ctx);
     const ship = await shipRepository.findByPlayerIdOrThrow(targetPlayer.id);

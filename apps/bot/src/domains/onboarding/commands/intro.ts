@@ -2,7 +2,7 @@ import type { Command } from '../../../discord/types.js';
 import { buildOpEmbed } from '../../../discord/utils/index.js';
 
 export const introCommand: Command = {
-  name: 'intro',
+  names: { fr: 'intro', en: 'intro' },
   requiresSynchronization: false,
   async handler(ctx) {
     await ctx.message.reply({

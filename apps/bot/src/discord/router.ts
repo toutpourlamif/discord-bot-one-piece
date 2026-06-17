@@ -1,58 +1,39 @@
+import type { Guild } from '@one-piece/db';
 import type { Message } from 'discord.js';
 
-import { devCommands } from '../domains/_dev/index.js';
-import { infoCommands } from '../domains/_info/index.js';
-import { crewCommands } from '../domains/crew/index.js';
-import { autoSyncBeforeAction, eventCommands } from '../domains/event/index.js';
-import { fishingCommands } from '../domains/fishing/index.js';
-import { guildCommands, requireGuildId } from '../domains/guild/index.js';
+import { autoSyncBeforeAction } from '../domains/event/index.js';
+import { requireGuildId } from '../domains/guild/index.js';
 import * as guildRepository from '../domains/guild/repository.js';
-import { interceptOnboardingCommand, onboardingCommands } from '../domains/onboarding/index.js';
-import { playerCommands } from '../domains/player/index.js';
+import { interceptOnboardingCommand } from '../domains/onboarding/index.js';
 import { findOrCreatePlayer } from '../domains/player/service.js';
-import { resourceCommands } from '../domains/resource/index.js';
-import { shipCommands } from '../domains/ship/commands/index.js';
-import { tavernCommands } from '../domains/tavern/index.js';
-import { buildRegistry } from '../shared/build-registry.js';
 
+import { resolveCommand } from './command-registry.js';
 import { AppError } from './errors.js';
 import { buildOpEmbed } from './utils/index.js';
-
-// TODO: Séparer dans un fichier command-registry.ts
-const allCommands = [
-  ...playerCommands,
-  ...infoCommands,
-  ...devCommands,
-  ...shipCommands,
-  ...resourceCommands,
-  ...fishingCommands,
-  ...crewCommands,
-  ...guildCommands,
-  ...eventCommands,
-  ...onboardingCommands,
-  ...tavernCommands,
-];
-const registry = buildRegistry(allCommands, (command) =>
-  Array.isArray(command.name) ? command.name.map((name) => name.toLowerCase()) : command.name.toLowerCase(),
-);
 
 /** Dispatche un message vers le bon handler de commande. Voir `docs/discord.md`. */
 export async function routeMessage(message: Message): Promise<void> {
   if (message.author.bot) return;
 
+  let guild: Guild;
   try {
     const guildId = requireGuildId(message.guildId);
-    const guild = await guildRepository.findOrCreate(guildId, message.guild!.name);
+    guild = await guildRepository.findOrCreate(guildId, message.guild!.name);
+  } catch (error) {
+    console.error(error);
+    return;
+  }
 
-    const content = message.content.trim();
-    if (!content.startsWith(guild.prefix)) return;
+  const content = message.content.trim();
+  if (!content.startsWith(guild.prefix)) return;
 
-    const [rawName, ...args] = content.slice(guild.prefix.length).trim().split(/\s+/);
-    if (!rawName) return;
+  const [rawName, ...args] = content.slice(guild.prefix.length).trim().split(/\s+/);
+  if (!rawName) return;
 
-    const command = registry.get(rawName.toLowerCase());
-    if (!command) return;
+  const command = resolveCommand(rawName, guild.language);
+  if (!command) return;
 
+  try {
     const { player } = await findOrCreatePlayer(message.author.id, message.author.username, guild.id);
 
     if (command.requiresOpAdmin) {
