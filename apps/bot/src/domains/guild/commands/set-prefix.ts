@@ -11,6 +11,7 @@ const WHITESPACE_REGEX = /\s/;
 
 export const setPrefixCommand: Command = {
   names: { fr: 'prefixe', en: 'prefix' },
+  aliases: { fr: ['px'], en: ['px'] },
   requiresSynchronization: false,
   requiresOnboardingFinished: false,
   async handler({ message, args, guild }) {
