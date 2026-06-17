@@ -1,4 +1,4 @@
-import { getCommandDisplayName } from '../../../discord/command-names.js';
+import { getCommandDisplayNameByLanguage } from '../../../discord/command-names.js';
 import type { Command } from '../../../discord/types.js';
 import { buildOpEmbed } from '../../../discord/utils/build-op-embed.js';
 import { getCrewByPlayerId } from '../service.js';
@@ -19,7 +19,9 @@ export const changeCaptainCommand: Command = {
         embeds: [
           buildOpEmbed('warn')
             .setDescription(`Votre équipage n'est composé que de **${captain.name}**.`)
-            .setFooter({ text: `${guild.prefix}${getCommandDisplayName(crewCommand, guild.language)} pour voir votre équipage!` }),
+            .setFooter({
+              text: `${guild.prefix}${getCommandDisplayNameByLanguage(crewCommand, guild.language)} pour voir votre équipage!`,
+            }),
         ],
       });
       return;
