@@ -10,7 +10,8 @@ import { resolveTargetPlayer } from '../../player/index.js';
 import * as playerRepository from '../../player/repository.js';
 
 export const clearEventsCommand: Command = {
-  name: ['clearevents', 'clear-events'],
+  names: { fr: 'clear-events', en: 'clear-events' },
+  aliases: { fr: ['clearevents', 'ce'], en: ['clearevents', 'ce'] },
   async handler(ctx) {
     const { targetPlayer, rest } = await resolveTargetPlayer(ctx);
     // TODO: remplacer cet usage hardcodé par l'util de formatage commande + préfixe + langue de guilde.

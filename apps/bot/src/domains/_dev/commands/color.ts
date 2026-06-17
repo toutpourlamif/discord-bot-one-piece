@@ -6,7 +6,7 @@ function getRandomColor(): number {
 }
 
 export const colorCommand: Command = {
-  name: 'color',
+  names: { fr: 'color', en: 'color' },
   async handler({ message }) {
     const color = getRandomColor();
     const hex = convertJsHexToCssHex(color);
