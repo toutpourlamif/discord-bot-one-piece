@@ -1,4 +1,4 @@
-import { SUPPORTED_LANGUAGES, type SupportedLanguage } from '@one-piece/db';
+import type { SupportedLanguage } from '@one-piece/db';
 import uniq from 'lodash/uniq.js';
 
 import { devCommands } from '../domains/_dev/index.js';
@@ -13,6 +13,7 @@ import { resourceCommands } from '../domains/resource/index.js';
 import { shipCommands } from '../domains/ship/commands/index.js';
 import { tavernCommands } from '../domains/tavern/index.js';
 
+import { listCommandKeywords } from './command-names.js';
 import { ValidationError } from './errors.js';
 import type { Command } from './types.js';
 
@@ -47,31 +48,16 @@ export function resolveCommand(rawName: string, language: SupportedLanguage): Co
   throw new ValidationError(buildAmbiguousCommandMessage(rawName, candidates));
 }
 
-/** Nom affichable d'une commande dans une langue donnée (footer, rappels d'onboarding, …). */
-export function getCommandDisplayName(command: Command, language: SupportedLanguage): string {
-  return command.names[language];
-}
-
-/** Tous les mots qui déclenchent une commande (noms + alias, toutes langues), dédupliqués. */
-export function getCommandKeywords(command: Command): Array<string> {
-  return uniq(listKeywords(command).map((keyword) => keyword.value));
-}
-
 type CommandMatch = {
   command: Command;
   language: SupportedLanguage;
-};
-
-type CommandKeyword = {
-  language: SupportedLanguage;
-  value: string;
 };
 
 function buildRegistry(commands: Array<Command>): Map<string, Array<CommandMatch>> {
   const registry = new Map<string, Array<CommandMatch>>();
 
   for (const command of commands) {
-    for (const keyword of listKeywords(command)) {
+    for (const keyword of listCommandKeywords(command)) {
       const key = keyword.value.toLowerCase();
       const matches = registry.get(key) ?? [];
 
@@ -86,13 +72,6 @@ function buildRegistry(commands: Array<Command>): Map<string, Array<CommandMatch
   }
 
   return registry;
-}
-
-function listKeywords(command: Command): Array<CommandKeyword> {
-  return SUPPORTED_LANGUAGES.flatMap((language) => [
-    { language, value: command.names[language] },
-    ...(command.aliases?.[language] ?? []).map((value) => ({ language, value })),
-  ]);
 }
 
 function buildAmbiguousCommandMessage(rawName: string, commands: Array<Command>): string {

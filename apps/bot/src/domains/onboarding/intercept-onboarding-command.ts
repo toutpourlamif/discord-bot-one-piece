@@ -1,6 +1,6 @@
 import { type OnboardingStepId, db } from '@one-piece/db';
 
-import { getCommandKeywords } from '../../discord/command-registry.js';
+import { getCommandKeywords } from '../../discord/command-names.js';
 import type { Command, CommandContext, View } from '../../discord/types.js';
 import * as playerRepository from '../player/repository.js';
 
