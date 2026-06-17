@@ -1,5 +1,6 @@
 import { bucketsCommand } from './buckets.js';
 import { buyCommand } from './buy.js';
+import { clearEventsCommand } from './clear-events.js';
 import { colorCommand } from './color.js';
 import { debugCommand } from './debug/index.js';
 import { dmCommand } from './dm.js';
@@ -33,6 +34,7 @@ export const devCommands = [
   debugCommand,
   emojiCommand,
   bucketsCommand,
+  clearEventsCommand,
   buyCommand,
   sellCommand,
   upgradeShipCommand,
