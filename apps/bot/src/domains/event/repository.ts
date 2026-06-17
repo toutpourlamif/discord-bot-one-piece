@@ -49,6 +49,11 @@ export async function deleteById(id: bigint, client: DbOrTransaction = db): Prom
   return { deleted: rows.length > 0 };
 }
 
+export async function deletePendingEventsForPlayer(playerId: number, client: DbOrTransaction = db): Promise<number> {
+  const rows = await client.delete(eventInstance).where(eq(eventInstance.playerId, playerId)).returning({ id: eventInstance.id });
+  return rows.length;
+}
+
 type CountPendingEventsOptions = {
   eventKey?: string;
   client?: DbOrTransaction;
