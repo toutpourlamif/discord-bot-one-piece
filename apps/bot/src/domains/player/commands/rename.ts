@@ -3,7 +3,7 @@ import { buildOpEmbed, getQuery } from '../../../discord/utils/index.js';
 import { renamePlayer } from '../service.js';
 
 export const renameCommand: Command = {
-  names: { fr: 'rename', en: 'rename' },
+  names: { fr: 'renommer', en: 'rename' },
   async handler({ message, args, player }) {
     const name = getQuery(args, { emptyMessage: 'Tu dois donner un nom.' });
     const renamed = await renamePlayer(player.id, name);

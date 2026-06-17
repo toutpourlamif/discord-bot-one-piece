@@ -6,8 +6,8 @@ import { resolveTargetPlayer } from '../../player/index.js';
 import { runFishingAttempt } from '../service.js';
 
 export const fishingCommand: Command = {
-  names: { fr: 'fishing', en: 'fishing' },
-  aliases: { fr: 'fish', en: 'fish' },
+  names: { fr: 'pêche', en: 'fishing' },
+  aliases: { fr: ['peche'], en: ['fish'] },
   async handler(ctx) {
     const { targetPlayer } = await resolveTargetPlayer(ctx);
     const result = await db.transaction(async (tx) => runFishingAttempt(targetPlayer.id, tx));

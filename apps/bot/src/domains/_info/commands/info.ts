@@ -13,6 +13,7 @@ const ENTITIES_DISPLAYED_LIMIT = 10;
 
 export const infoCommand: Command = {
   names: { fr: 'info', en: 'info' },
+  aliases: { fr: ['aide'], en: ['help'] },
   requiresOnboardingFinished: false,
   requiresSynchronization: false,
   async handler({ message, args }) {

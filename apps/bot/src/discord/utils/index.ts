@@ -7,7 +7,6 @@ export { buildConsequenceEmbed } from './build-consequence-embed.js';
 export { buildCustomId } from './build-custom-id.js';
 export { buildDialogueEmbed, type DialogueSpeaker } from './build-dialogue-embed.js';
 export { buildDiscordTimestamp } from './build-discord-timestamp.js';
-export { getCommandDisplayName, getCommandLookupNames, getCommandNameEntries } from './command-names.js';
 export { buildMenuButtons } from './build-menu-buttons.js';
 export { buildOpEmbed } from './build-op-embed.js';
 export { buildPaginationButtons } from './build-pagination-buttons.js';

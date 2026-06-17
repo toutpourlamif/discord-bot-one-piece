@@ -8,7 +8,7 @@ import * as playerRepository from '../../player/repository.js';
 // pendant l'onboarding, la localisation de départ, etc.
 export const skipOnboardingCommand: Command = {
   names: { fr: 'skip-onboarding', en: 'skip-onboarding' },
-  aliases: { fr: 'skipob', en: 'skipob' },
+  aliases: { fr: ['skipob'], en: ['skipob'] },
   async handler(ctx) {
     const { targetPlayer } = await resolveTargetPlayer(ctx);
     await playerRepository.setOnboardingStep(targetPlayer.id, null);

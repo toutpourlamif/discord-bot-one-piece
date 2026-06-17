@@ -4,7 +4,8 @@ import { buildInventoryView } from '../inventory-view.js';
 import { getInventory } from '../repository.js';
 
 export const inventaireCommand: Command = {
-  names: { fr: 'inventaire', en: 'inventaire' },
+  names: { fr: 'inventaire', en: 'inventory' },
+  aliases: { fr: ['inv'], en: ['inv'] },
   async handler(ctx) {
     const { targetPlayer } = await resolveTargetPlayer(ctx);
     const inventory = await getInventory(targetPlayer.id);

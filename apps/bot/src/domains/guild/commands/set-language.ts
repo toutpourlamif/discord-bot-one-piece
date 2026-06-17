@@ -6,7 +6,7 @@ import { assertGuildMemberIsAdmin, buildCancelButton, buildCustomId, buildOpEmbe
 import { LANGUAGE_FLAGS, SELECT_LANGUAGE_BUTTON_NAME } from '../constants.js';
 
 export const setLanguageCommand: Command = {
-  names: { fr: 'setlanguage', en: 'setlanguage' },
+  names: { fr: 'langue', en: 'language' },
   requiresSynchronization: false,
   requiresOnboardingFinished: false,
   async handler({ message, guild }) {

@@ -1,7 +1,7 @@
 import { type OnboardingStepId, db } from '@one-piece/db';
 
+import { getCommandKeywords } from '../../discord/command-registry.js';
 import type { Command, CommandContext, View } from '../../discord/types.js';
-import { getCommandLookupNames } from '../../discord/utils/index.js';
 import * as playerRepository from '../player/repository.js';
 
 import { OnboardingPendingError } from './errors.js';
@@ -24,7 +24,7 @@ export async function interceptOnboardingCommand({ ctx, command }: GateArgs): Pr
 
   if (step.type === 'scene') throw new OnboardingPendingError(buildOnboardingView({ stepId, prefix, ownerDiscordId }));
 
-  if (!getCommandLookupNames(command).includes(step.expects)) throw new OnboardingPendingError(step.reminder(prefix, step.expects));
+  if (!getCommandKeywords(command).includes(step.expects)) throw new OnboardingPendingError(step.reminder(prefix, step.expects));
 
   const result = await db.transaction(async (tx) => {
     const locked = await playerRepository.findByIdOrThrow(playerId, tx, { forUpdate: true });
