@@ -15,11 +15,13 @@ export function getCommandDisplayNameByLanguage(command: Command, language: Supp
 
 /** Tous les mots qui déclenchent une commande (noms + alias, toutes langues), dédupliqués. */
 export function getCommandKeywords(command: Command): Array<string> {
-  return uniq(listCommandKeywords(command).map((keyword) => keyword.value));
+  return uniq(getAllKeywordsOfCommand(command).map((keyword) => keyword.value));
 }
 
-/** Mots déclencheurs avec leur langue, pour construire le registre : pour chaque langue, le nom puis ses alias. */
-export function listCommandKeywords(command: Command): Array<CommandKeyword> {
+/** Tous les mots déclencheurs d'une commande (nom puis alias, pour chaque langue), avec leur langue.
+ * Exemple pour `ship` : [{ language: 'fr', value: 'navire' }, { language: 'fr', value: 'bateau' }, { language: 'en', value: 'ship' }, { language: 'en', value: 'boat' }]
+ */
+export function getAllKeywordsOfCommand(command: Command): Array<CommandKeyword> {
   const keywords: Array<CommandKeyword> = [];
 
   for (const language of SUPPORTED_LANGUAGES) {

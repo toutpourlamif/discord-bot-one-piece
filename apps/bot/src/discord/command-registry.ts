@@ -13,7 +13,7 @@ import { resourceCommands } from '../domains/resource/index.js';
 import { shipCommands } from '../domains/ship/commands/index.js';
 import { tavernCommands } from '../domains/tavern/index.js';
 
-import { listCommandKeywords } from './command-names.js';
+import { getAllKeywordsOfCommand } from './command-names.js';
 import { ValidationError } from './errors.js';
 import type { Command } from './types.js';
 
@@ -57,7 +57,7 @@ function buildRegistry(commands: Array<Command>): Map<string, Array<CommandMatch
   const registry = new Map<string, Array<CommandMatch>>();
 
   for (const command of commands) {
-    for (const keyword of listCommandKeywords(command)) {
+    for (const keyword of getAllKeywordsOfCommand(command)) {
       const key = keyword.value.toLowerCase();
       const matches = registry.get(key) ?? [];
 
