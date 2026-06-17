@@ -1,13 +1,13 @@
 import type { Command } from '../../../discord/types.js';
 import { getQuery } from '../../../discord/utils/get-query.js';
-import { getTargetUser } from '../../../discord/utils/get-target-user.js';
 import { buildOpEmbed } from '../../../discord/utils/index.js';
+import { resolveTargetUser } from '../../../discord/utils/resolve-target-user.js';
 import { sendDirectMessage } from '../../../discord/utils/send-direct-message.js';
 
 export const dmCommand: Command = {
-  name: 'dm',
+  names: { fr: 'dm', en: 'dm' },
   async handler({ message, args }) {
-    const target = getTargetUser(message);
+    const target = resolveTargetUser(message);
     const queryArgs = message.mentions.users.first() ? args.slice(1) : args;
     const query = getQuery(queryArgs, { emptyMessage: 'Tu dois fournir un message.', minLength: 3 });
 

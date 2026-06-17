@@ -7,7 +7,8 @@ import { LANGUAGE_FLAGS, SELECT_LANGUAGE_BUTTON_NAME } from '../constants.js';
 import { translations } from '../translations.js';
 
 export const setLanguageCommand: Command = {
-  name: 'setlanguage',
+  names: { fr: 'langue', en: 'language' },
+  aliases: { fr: ['lang'], en: ['lang'] },
   requiresSynchronization: false,
   requiresOnboardingFinished: false,
   async handler({ message, guild }) {

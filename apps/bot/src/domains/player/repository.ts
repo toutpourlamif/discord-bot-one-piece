@@ -60,7 +60,7 @@ export async function clearTravel(playerId: number, options: ClientOptions = {})
   const { client = db } = options;
   await client
     .update(player)
-    .set({ travelTargetZone: null, travelStartedBucket: null, travelEtaBucket: null })
+    .set({ travelTargetZone: null, travelStartZone: null, travelStartedBucket: null, travelEtaBucket: null })
     .where(eq(player.id, playerId));
 }
 export async function updateCrewName(playerId: number, crewName: string, client: DbOrTransaction = db): Promise<Player> {

@@ -4,7 +4,7 @@ import { renamePlayer } from '../service.js';
 import { translations } from '../translations.js';
 
 export const renameCommand: Command = {
-  name: 'rename',
+  names: { fr: 'renommer', en: 'rename' },
   async handler({ message, args, guild, player }) {
     const name = getQuery(args, { emptyMessage: translations.renameMissingName[guild.language] });
     const renamed = await renamePlayer(player.id, name);

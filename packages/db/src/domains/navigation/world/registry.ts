@@ -1,5 +1,8 @@
+import type { TavernConfig } from '../../tavern/types.js';
+
 import { EAST_BLUE_ISLAND_REGISTRY } from './east-blue/island-registry.js';
 import { PARADISE_ISLAND_REGISTRY } from './paradise/island-registry.js';
+import type { Zone } from './zones.js';
 
 const ISLAND_REGISTRY = [...EAST_BLUE_ISLAND_REGISTRY, ...PARADISE_ISLAND_REGISTRY];
 
@@ -14,6 +17,11 @@ type SubZonesOf<T> = T extends { subZones: infer S } ? keyof S : never;
 export type SubZone = SubZonesOf<IslandDefinitions>;
 
 export const ISLANDS = ISLAND_REGISTRY.map((island) => island.key) as [Island, ...Array<Island>];
+
+export const EAST_BLUE_ISLANDS: Array<Island> = EAST_BLUE_ISLAND_REGISTRY.map((island) => island.key);
+
+/** Ordonnées d'ouest en est (l'ordre du registry suit la progression sur la Grand Line). */
+export const PARADISE_ISLANDS: Array<Island> = PARADISE_ISLAND_REGISTRY.map((island) => island.key);
 
 export const ISLAND_LABELS = Object.fromEntries(ISLAND_REGISTRY.map((island) => [island.key, island.name])) as Record<Island, string>;
 
@@ -34,3 +42,8 @@ export const ISLAND_ENTRY_SUB_ZONE = Object.fromEntries(ISLAND_REGISTRY.map((isl
   Island,
   SubZone
 >;
+
+// Tavernes déclarées au niveau de chaque île (champ optionnel de defineIsland) : une zone absente n'a pas de taverne.
+export const TAVERN_CONFIG_BY_ZONE = Object.fromEntries(
+  ISLAND_REGISTRY.filter((island) => island.tavernConfig).map((island) => [island.key, island.tavernConfig]),
+) as Partial<Record<Zone, TavernConfig>>;

@@ -1,7 +1,7 @@
 import type { Player, Ship, Transaction } from '@one-piece/db';
 
 import * as characterRepository from '../../character/repository.js';
-import type { CharacterRow } from '../../character/types.js';
+import type { Character } from '../../character/types.js';
 import { isInCrewFilter } from '../../crew/utils/is-in-crew-filter.js';
 import * as historyRepository from '../../history/index.js';
 import type { HistoryLog } from '../../history/index.js';
@@ -16,7 +16,7 @@ export type GeneratorContextData = {
   player: Player;
   ship: Ship;
   inventory: Inventory;
-  characters: Array<CharacterRow>;
+  characters: Array<Character>;
   historyLogs: Array<HistoryRow>;
 };
 
@@ -46,9 +46,9 @@ export function buildGeneratorContext(ctxData: GeneratorContextData, bucketId: n
   };
 }
 
-function buildCrewAccessor(members: Array<CharacterRow>): GeneratorContext['crew'] {
-  function find(name: string): CharacterRow | undefined {
-    return members.find((m) => m.name === name || m.nickname === name);
+function buildCrewAccessor(members: Array<Character>): GeneratorContext['crew'] {
+  function find(name: string): Character | undefined {
+    return members.find((m) => m.name === name);
   }
   return {
     members,

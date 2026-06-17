@@ -1,7 +1,8 @@
-import type { Guild, Player } from '@one-piece/db';
-import type { ActionRowBuilder, ButtonBuilder, ButtonInteraction, EmbedBuilder, Message } from 'discord.js';
+import type { Guild, Player, SupportedLanguage } from '@one-piece/db';
+import type { ActionRowBuilder, AttachmentBuilder, ButtonBuilder, ButtonInteraction, EmbedBuilder, Message } from 'discord.js';
 
-export type CommandName = string | Array<string>;
+type CommandNames = Record<SupportedLanguage, string>;
+type CommandAliases = Record<SupportedLanguage, Array<string>>;
 
 export type CommandContext = {
   message: Message;
@@ -11,7 +12,8 @@ export type CommandContext = {
 };
 
 export type Command = {
-  name: CommandName;
+  names: CommandNames;
+  aliases?: CommandAliases;
   handler: (ctx: CommandContext) => Promise<void>;
   requiresSynchronization?: boolean;
   requiresOpAdmin?: boolean;
@@ -26,4 +28,5 @@ export type ButtonHandler = {
 export type View = {
   embeds: Array<EmbedBuilder>;
   components: Array<ActionRowBuilder<ButtonBuilder>>;
+  files?: Array<AttachmentBuilder>;
 };

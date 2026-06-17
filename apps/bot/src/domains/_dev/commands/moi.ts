@@ -1,11 +1,11 @@
 import type { Command } from '../../../discord/types.js';
-import { buildOpEmbed, getTargetUser } from '../../../discord/utils/index.js';
+import { buildOpEmbed, resolveTargetUser } from '../../../discord/utils/index.js';
 
 // TODO: supprimer avant la prod
 export const moiCommand: Command = {
-  name: 'moi',
+  names: { fr: 'moi', en: 'moi' },
   async handler({ message }) {
-    const user = getTargetUser(message);
+    const user = resolveTargetUser(message);
     const embed = buildOpEmbed()
       .setAuthor({
         name: user.username,

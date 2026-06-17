@@ -66,7 +66,7 @@ export function createRng(seed: number): Rng {
   };
 }
 
-/** Crée le RNG d'un générateur pour un bucket donné, en suivant son `seedScope` (zone ou player). */
+/** Crée le RNG d'un générateur pour un bucket donné, en suivant son `seedScope`. Par défaut (champ absent), le scope est `player`. */
 export function createRngForGenerator(gen: EventGenerator, ctx: GeneratorContext): Rng {
   const seed =
     gen.seedScope === 'zone' ? seedFromBucketAndZone(ctx.bucketId, ctx.zone) : seedFromBucketAndPlayer(ctx.bucketId, ctx.player.id);

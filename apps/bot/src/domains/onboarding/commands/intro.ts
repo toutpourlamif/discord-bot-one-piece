@@ -3,7 +3,7 @@ import { buildOpEmbed } from '../../../discord/utils/index.js';
 import { translations } from '../translations.js';
 
 export const introCommand: Command = {
-  name: 'intro',
+  names: { fr: 'intro', en: 'intro' },
   requiresSynchronization: false,
   async handler({ guild, message }) {
     await message.reply({

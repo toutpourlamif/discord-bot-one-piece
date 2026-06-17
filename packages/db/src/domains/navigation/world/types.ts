@@ -2,7 +2,7 @@ import type { ResourceName } from '../../resource/index.js';
 
 import type { Island } from './registry.js';
 import type { Sea } from './seas.js';
-
+// TODO: Déplacer les types dans le dossier types
 export type Edge = {
   from: Island;
   to: Island;
