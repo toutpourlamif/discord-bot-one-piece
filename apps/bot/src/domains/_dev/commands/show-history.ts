@@ -4,7 +4,8 @@ import * as historyRepository from '../../history/index.js';
 import { resolveTargetPlayer } from '../../player/index.js';
 
 export const showHistoryCommand: Command = {
-  name: ['showHistory', 'show-history'],
+  names: { fr: 'afficherHistorique', en: 'showHistory' },
+  aliases: { fr: ['ah'], en: ['sh'] },
   async handler(ctx) {
     const { targetPlayer } = await resolveTargetPlayer(ctx);
     const history = await historyRepository.loadAllForPlayer(targetPlayer.id);
