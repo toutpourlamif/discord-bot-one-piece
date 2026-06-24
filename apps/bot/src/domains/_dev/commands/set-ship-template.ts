@@ -7,7 +7,8 @@ import * as shipService from '../../ship/service.js';
 import { SHIP_TEMPLATES, isShipTemplateKey } from '../../ship/templates.js';
 
 export const setShipTemplateCommand: Command = {
-  name: ['set-ship', 'setship'],
+  names: { fr: 'set-ship', en: 'set-ship' },
+  aliases: { fr: ['ss'], en: ['ss'] },
   async handler(ctx) {
     const { targetPlayer, rest } = await resolveTargetPlayer(ctx);
     const key = rest[0];
