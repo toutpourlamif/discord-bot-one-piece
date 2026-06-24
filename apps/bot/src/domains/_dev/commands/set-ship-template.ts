@@ -1,3 +1,4 @@
+import { ValidationError } from '../../../discord/errors.js';
 import type { Command } from '../../../discord/types.js';
 import { buildOpEmbed } from '../../../discord/utils/index.js';
 import { resolveTargetPlayer } from '../../player/index.js';
@@ -12,14 +13,18 @@ export const setShipTemplateCommand: Command = {
 
     if (!key || !isShipTemplateKey(key)) {
       const available = Object.keys(SHIP_TEMPLATES).join(', ');
-      await ctx.message.reply({ embeds: [buildOpEmbed().setDescription(`Template inconnu. Disponibles : \`${available}\`.`)] });
-      return;
+      throw new ValidationError(`Template inconnu. Disponibles : \`${available}\`.`);
     }
 
-    const updated = await shipService.switchShipTemplate(targetPlayer.id, key);
+    const updatedShip = await shipService.switchShipTemplate(targetPlayer.id, key);
 
+    // TODO: utiliser wrapInBackticks autour de `key` quand l'util sera dispo
     await ctx.message.reply({
-      embeds: [buildOpEmbed().setDescription(`${targetPlayer.name} navigue désormais sur **${updated.name}** (\`${key}\`).`)],
+      embeds: [
+        buildOpEmbed('success').setDescription(
+          `${targetPlayer.crewName ?? targetPlayer.name} navigue désormais sur **${updatedShip.name}** (\`${key}\`).`,
+        ),
+      ],
     });
   },
 };

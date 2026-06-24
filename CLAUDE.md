@@ -26,6 +26,9 @@ Bot Discord autour de l'univers One Piece. Le joueur recrute un équipage, amél
 - **Short guards inline** : `if (cond) return …;`, `if (cond) throw …;`, etc. tiennent sur **une ligne sans accolades**. Pas d'ESLint `curly`.
 - **YAGNI** (_You Aren't Gonna Need It_) : on n'ajoute pas une feature, une dep, un helper, un validator tant qu'un code actuel ne l'utilise pas. Pas d'abstractions spéculatives — 3 lignes similaires valent mieux qu'un helper prématuré.
 - Les erreurs : gérer aux frontières (entrée Discord, APIs externes, DB). Faire confiance au code interne.
+- **Erreurs de validation = `throw`, pas `return`** : dans un handler, en cas d'erreur (input invalide, état interdit…) on `throw` une `AppError` (`ValidationError`, `NotFoundError`, …) plutôt que de répondre manuellement puis `return`. Le boundary (`discord/router.ts`) formate le message et le log — on ne le refait pas à la main.
+- **Embeds de feedback** : `buildOpEmbed('success')` quand une action réussit (feedback positif, bonne UX) ; `'warn'`/`'error'` portés par l'`AppError` correspondante. `default` seulement pour de l'affichage neutre.
+- **History log types** : le `type` se nomme en camelCase après le préfixe de domaine (ex : `ship.templateSwitched`, `player.subZoneChanged`), pas en kebab/snake.
 - **TODO** : tout code temporaire (test manuel, stub, placeholder, hack) doit être marqué `// TODO: <raison>`. Permet de le retrouver facilement (`rg TODO`) et de nettoyer avant merge.
 - **Repositories & services** : import en namespace, jamais nommé. Ex : `import * as playerRepository from '../player/repository.js'` puis `playerRepository.findById(...)` ; `import * as onboardingService from '../services/index.js'` puis `onboardingService.advanceOnboarding(...)`. Les fonctions n'ont pas le suffixe d'entité (`findOrCreate`, pas `findOrCreatePlayer`) — le namespace porte déjà l'info.
 - **Signatures de fonctions** :

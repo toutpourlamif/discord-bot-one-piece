@@ -4,7 +4,7 @@ import clamp from 'lodash/clamp.js';
 
 import { EMBED_COLORS } from '../../../discord/branding.js';
 import { convertJsHexToCssHex } from '../../../discord/utils/index.js';
-import { getMaxHpForHullLevel } from '../modules.js';
+import { getMaxHpForHullLevel } from '../utils/index.js';
 
 const TRACK_WIDTH = 220;
 const TRACK_COLOR = '#2a2f3f';

@@ -2,7 +2,7 @@ import type { Edge, Island, Sea, Ship, TravelModifier } from '@one-piece/db';
 import clamp from 'lodash/clamp.js';
 
 import type { Inventory } from '../../resource/types.js';
-import { getMaxHpForHullLevel } from '../../ship/modules.js';
+import { getMaxHpForHullLevel } from '../../ship/utils/index.js';
 
 import { hasLogOrEternalPoseForIsland, findEdge } from './index.js';
 

@@ -7,7 +7,7 @@ export type ShipRenamedLog = {
 };
 
 export type ShipTemplateSwitchedLog = {
-  type: 'ship.template-switched';
+  type: 'ship.templateSwitched';
   payload: {
     oldTemplate: string;
     newTemplate: string;

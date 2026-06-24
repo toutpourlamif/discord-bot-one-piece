@@ -9,11 +9,10 @@ import * as resourceRepository from '../resource/repository.js';
 import { debitResourcesByName } from '../resource/service.js';
 
 import { MAX_SHIP_NAME_LENGTH } from './constants.js';
-import { getMaxHpForHullLevel } from './modules.js';
 import * as shipRepository from './repository.js';
 import { DEFAULT_SHIP_TEMPLATE_KEY, getShipTemplate, type ShipTemplateKey } from './templates.js';
 import type { ShipModuleUpgradePreview, ShipTemplateState } from './types.js';
-import { buildShipModuleUpgradePreview, getShipModuleBerryCost, getShipModuleResourceCosts } from './utils/index.js';
+import { buildShipModuleUpgradePreview, getMaxHpForHullLevel, getShipModuleBerryCost, getShipModuleResourceCosts } from './utils/index.js';
 
 type FindOrCreateResult = { ship: Ship; created: boolean };
 
@@ -28,17 +27,17 @@ export async function findOrCreateShip(playerId: number, client: DbOrTransaction
 export async function switchShipTemplate(playerId: number, templateKey: ShipTemplateKey): Promise<Ship> {
   return db.transaction(async (transaction) => {
     const current = await shipRepository.findByPlayerIdOrThrow(playerId, transaction, { forUpdate: true });
-    const updated = await shipRepository.resetToTemplate(current.id, buildShipTemplateState(templateKey), transaction);
+    const updatedShip = await shipRepository.resetToTemplate(current.id, buildShipTemplateState(templateKey), transaction);
 
     await historyRepository.appendHistory({
-      type: 'ship.template-switched',
+      type: 'ship.templateSwitched',
       payload: { oldTemplate: current.templateKey, newTemplate: templateKey },
       actorPlayerId: playerId,
-      target: { type: 'ship', id: updated.id },
+      target: { type: 'ship', id: updatedShip.id },
       client: transaction,
     });
 
-    return updated;
+    return updatedShip;
   });
 }
 
