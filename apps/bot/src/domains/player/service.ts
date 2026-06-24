@@ -3,7 +3,7 @@ import { db, type Player } from '@one-piece/db';
 import { sanitizeName } from '../../shared/sanitize-name.js';
 import * as characterRepository from '../character/repository.js';
 import * as historyRepository from '../history/index.js';
-import { findOrCreateShip } from '../ship/service.js';
+import * as shipService from '../ship/services/index.js';
 
 import { assertNameNotEmpty, assertNameWithinMaxLength } from './guards/index.js';
 import * as playerRepository from './repository.js';
@@ -19,7 +19,7 @@ export async function findOrCreatePlayer(discordId: string, name: string, guildI
   const created = await db.transaction(async (transaction) => {
     const newPlayer = await playerRepository.create(discordId, name, guildId, transaction);
     await characterRepository.createPlayerAsCharacterInstance(newPlayer.id, newPlayer.name, transaction);
-    await findOrCreateShip(newPlayer.id, transaction);
+    await shipService.findOrCreateShip(newPlayer.id, transaction);
     return newPlayer;
   });
 

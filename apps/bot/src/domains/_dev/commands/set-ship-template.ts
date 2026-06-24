@@ -3,7 +3,7 @@ import type { Command } from '../../../discord/types.js';
 import { buildOpEmbed } from '../../../discord/utils/index.js';
 import { getCrewDisplayName } from '../../crew/index.js';
 import { resolveTargetPlayer } from '../../player/index.js';
-import * as shipService from '../../ship/service.js';
+import * as shipService from '../../ship/services/index.js';
 import { SHIP_TEMPLATES, isShipTemplateKey, type ShipTemplateKey } from '../../ship/templates.js';
 
 export const setShipTemplateCommand: Command = {
