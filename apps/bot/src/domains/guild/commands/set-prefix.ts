@@ -10,7 +10,8 @@ import { CONFIRM_SET_PREFIX_BUTTON_NAME } from '../constants.js';
 const WHITESPACE_REGEX = /\s/;
 
 export const setPrefixCommand: Command = {
-  name: 'setprefix',
+  names: { fr: 'prefixe', en: 'prefix' },
+  aliases: { fr: ['px'], en: ['px'] },
   requiresSynchronization: false,
   requiresOnboardingFinished: false,
   async handler({ message, args, guild }) {
