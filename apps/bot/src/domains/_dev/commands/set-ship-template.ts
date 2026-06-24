@@ -1,6 +1,7 @@
 import { ValidationError } from '../../../discord/errors.js';
 import type { Command } from '../../../discord/types.js';
 import { buildOpEmbed } from '../../../discord/utils/index.js';
+import { getCrewDisplayName } from '../../crew/index.js';
 import { resolveTargetPlayer } from '../../player/index.js';
 import * as shipService from '../../ship/service.js';
 import { SHIP_TEMPLATES, isShipTemplateKey } from '../../ship/templates.js';
@@ -22,7 +23,7 @@ export const setShipTemplateCommand: Command = {
     await ctx.message.reply({
       embeds: [
         buildOpEmbed('success').setDescription(
-          `${targetPlayer.crewName ?? targetPlayer.name} navigue désormais sur **${updatedShip.name}** (\`${key}\`).`,
+          `${getCrewDisplayName(targetPlayer)} navigue désormais sur **${updatedShip.name}** (\`${key}\`).`,
         ),
       ],
     });
