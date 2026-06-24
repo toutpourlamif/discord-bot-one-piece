@@ -4,7 +4,8 @@ import { resolveTargetPlayer } from '../../player/index.js';
 import * as playerRepository from '../../player/repository.js';
 
 export const setBucketCommand: Command = {
-  name: ['setbucket', 'sb'],
+  names: { fr: 'setbucket', en: 'setbucket'},
+  aliases: { fr: ['sb'], en: ['sb']},
   async handler(ctx) {
     const { targetPlayer, rest } = await resolveTargetPlayer(ctx);
     const bucketId = parseIntegerArg(rest[0]);

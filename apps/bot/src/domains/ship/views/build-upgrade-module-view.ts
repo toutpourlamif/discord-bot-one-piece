@@ -7,13 +7,13 @@ import { buildBackAction, buildCustomId, buildOpEmbed } from '../../../discord/u
 import { formatBerry } from '../../economy/utils/format-berry.js';
 import { CONFIRM_SHIP_MODULE_UPGRADE_BUTTON_NAME, UPGRADE_SHIP_BUTTON_NAME } from '../constants.js';
 import { SHIP_MODULE_LABELS } from '../modules.js';
-import { getShipModuleUpgradePreview } from '../service.js';
+import * as shipService from '../services/index.js';
 import type { ShipModuleUpgradePreview } from '../types.js';
 
 import { buildMaxLevelView } from './build-max-level-view.js';
 
 export async function buildUpgradeModuleView(playerId: number, ownerDiscordId: string, moduleKey: ShipModuleKey): Promise<View> {
-  const preview = await getShipModuleUpgradePreview(playerId, moduleKey);
+  const preview = await shipService.getShipModuleUpgradePreview(playerId, moduleKey);
   if (preview === null) {
     return buildMaxLevelView(playerId, ownerDiscordId, moduleKey);
   }
