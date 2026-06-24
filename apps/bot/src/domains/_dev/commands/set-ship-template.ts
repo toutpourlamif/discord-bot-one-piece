@@ -11,20 +11,20 @@ export const setShipTemplateCommand: Command = {
   aliases: { fr: ['ss'], en: ['ss'] },
   async handler(ctx) {
     const { targetPlayer, rest } = await resolveTargetPlayer(ctx);
-    const key = rest[0];
+    const shipKey = rest[0];
 
-    if (!key || !isShipTemplateKey(key)) {
+    if (!shipKey || !isShipTemplateKey(shipKey)) {
       const available = Object.keys(SHIP_TEMPLATES).join(', ');
       throw new ValidationError(`Template inconnu. Disponibles : \`${available}\`.`);
     }
 
-    const updatedShip = await shipService.switchShipTemplate(targetPlayer.id, key);
+    const updatedShip = await shipService.switchShipTemplate(targetPlayer.id, shipKey);
 
-    // TODO: utiliser wrapInBackticks autour de `key` quand l'util sera dispo
+    // TODO: utiliser wrapInBackticks autour de `shipKey` quand l'util sera dispo
     await ctx.message.reply({
       embeds: [
         buildOpEmbed('success').setDescription(
-          `${getCrewDisplayName(targetPlayer)} navigue désormais sur **${updatedShip.name}** (\`${key}\`).`,
+          `${getCrewDisplayName(targetPlayer)} navigue désormais sur **${updatedShip.name}** (\`${shipKey}\`).`,
         ),
       ],
     });
