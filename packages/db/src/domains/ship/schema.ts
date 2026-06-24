@@ -13,6 +13,8 @@ export const ship = pgTable('ship', {
 
   name: varchar('name', { length: 128 }).notNull(),
 
+  templateKey: varchar('template_key', { length: 64 }).notNull().default('barque'),
+
   hp: integer('hp').notNull().default(100),
 
   hullLevel: integer('hull_level').notNull().default(1),
