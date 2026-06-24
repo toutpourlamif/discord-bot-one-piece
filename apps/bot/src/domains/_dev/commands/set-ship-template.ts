@@ -4,7 +4,7 @@ import { buildOpEmbed } from '../../../discord/utils/index.js';
 import { getCrewDisplayName } from '../../crew/index.js';
 import { resolveTargetPlayer } from '../../player/index.js';
 import * as shipService from '../../ship/service.js';
-import { SHIP_TEMPLATES, isShipTemplateKey } from '../../ship/templates.js';
+import { SHIP_TEMPLATES, isShipTemplateKey, type ShipTemplateKey } from '../../ship/templates.js';
 
 export const setShipTemplateCommand: Command = {
   names: { fr: 'set-ship', en: 'set-ship' },
@@ -12,11 +12,7 @@ export const setShipTemplateCommand: Command = {
   async handler(ctx) {
     const { targetPlayer, rest } = await resolveTargetPlayer(ctx);
     const shipKey = rest[0];
-
-    if (!shipKey || !isShipTemplateKey(shipKey)) {
-      const available = Object.keys(SHIP_TEMPLATES).join(', ');
-      throw new ValidationError(`Template inconnu. Disponibles : \`${available}\`.`);
-    }
+    assertIsShipTemplateKey(shipKey);
 
     const updatedShip = await shipService.switchShipTemplate(targetPlayer.id, shipKey);
 
@@ -30,3 +26,9 @@ export const setShipTemplateCommand: Command = {
     });
   },
 };
+
+function assertIsShipTemplateKey(shipKey: string | undefined): asserts shipKey is ShipTemplateKey {
+  if (shipKey && isShipTemplateKey(shipKey)) return;
+  const availableKeys = Object.keys(SHIP_TEMPLATES).join(', ');
+  throw new ValidationError(`Template inconnu. Disponibles : \`${availableKeys}\`.`);
+}
