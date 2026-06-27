@@ -4,7 +4,7 @@ import clamp from 'lodash/clamp.js';
 
 import { EMBED_COLORS } from '../../../discord/branding.js';
 import { convertJsHexToCssHex } from '../../../discord/utils/index.js';
-import { SHIP_MODULES } from '../modules.js';
+import { getMaxHpForHullLevel } from '../utils/index.js';
 
 const TRACK_WIDTH = 220;
 const TRACK_COLOR = '#2a2f3f';
@@ -14,7 +14,7 @@ const DROP_SHADOW = '0 2px 6px rgba(0, 0, 0, 0.35)';
 
 /** Overlay HP posé en haut à gauche de la card : fond sombre translucide + ombre pour rester lisible sur la carte. */
 export function buildHpBar(ship: Ship) {
-  const maxHp = SHIP_MODULES.hull.valueByLevel[ship.hullLevel - 1] ?? 100;
+  const maxHp = getMaxHpForHullLevel(ship.hullLevel);
   const ratio = clamp(ship.hp / maxHp, 0, 1);
 
   return (

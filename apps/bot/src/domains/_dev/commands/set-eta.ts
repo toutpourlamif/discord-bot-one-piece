@@ -6,7 +6,7 @@ import { resolveTargetPlayer } from '../../player/index.js';
 import * as playerRepository from '../../player/repository.js';
 
 export const setEtaCommand: Command = {
-  name: ['set-eta', 'seteta'],
+  names: { fr: 'seteta', en: 'seteta' },
   async handler(ctx) {
     const { targetPlayer, rest } = await resolveTargetPlayer(ctx);
     const { travelTargetZone } = targetPlayer;

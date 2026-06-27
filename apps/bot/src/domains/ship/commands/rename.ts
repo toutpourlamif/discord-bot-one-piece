@@ -1,11 +1,11 @@
 import type { Command } from '../../../discord/types.js';
 import { buildOpEmbed } from '../../../discord/utils/index.js';
-import { renameShip } from '../service.js';
+import * as shipService from '../services/index.js';
 
 export const renameShipCommand: Command = {
   names: { fr: 'renommernavire', en: 'renameship' },
   async handler({ message, args, player }) {
-    const renamed = await renameShip(player.id, args.join(' '));
+    const renamed = await shipService.renameShip(player.id, args.join(' '));
 
     const embed = buildOpEmbed().setTitle('Bateau renommé !').setDescription(`Ton bateau s'appelle maintenant **${renamed.name}**.`);
     await message.reply({
