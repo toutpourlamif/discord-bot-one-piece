@@ -20,12 +20,26 @@ Bot Discord autour de l'univers One Piece. Le joueur recrute un équipage, amél
 - `type`, jamais `interface`
 - N'exporter un `type` que s'il est importé ailleurs
 - `Array<T>`, jamais `T[]` (ESLint actif)
+- **Imports relatifs ESM** : toujours mettre l'extension `.js`, même depuis un fichier `.ts`. NodeNext/`tsx` résout le `.ts` source, mais l'import doit ressembler au JS exécuté.
+  ```ts
+  import { buy, sell } from './service.js';
+  ```
 - Helpers et fonctions top-level : `function foo() {}`, pas `const foo = () => {}`
 - **Public first, private after** : dans un fichier, les constantes privées en haut (juste après les imports), puis les exports (API publique), puis les helpers/types privés en dessous. On lit d'abord ce que le fichier expose, les détails ensuite.
+- **Unions de strings depuis un tableau `as const`** : pour un ensemble fini de valeurs string, déclarer la liste une seule fois et dériver le type. Ça garde le type synchronisé avec les valeurs disponibles à l'exécution.
+  ```ts
+  export const SHIP_MODULE_KEYS = ['hull', 'sail', 'decks', 'cabins', 'cargo'] as const;
+  export type ShipModuleKey = (typeof SHIP_MODULE_KEYS)[number];
+  ```
 - Pas de commentaires qui décrivent **ce que** fait le code — uniquement **pourquoi** quand le « pourquoi » est non évident
 - **Short guards inline** : `if (cond) return …;`, `if (cond) throw …;`, etc. tiennent sur **une ligne sans accolades**. Pas d'ESLint `curly`.
 - **YAGNI** (_You Aren't Gonna Need It_) : on n'ajoute pas une feature, une dep, un helper, un validator tant qu'un code actuel ne l'utilise pas. Pas d'abstractions spéculatives — 3 lignes similaires valent mieux qu'un helper prématuré.
 - **Lisibilité = priorité MÉGA importante.** Toujours nommer variables/fonctions/types pour que le sens soit évident sans lire l'implémentation (`shipKey`, pas `key` ; `updatedShip`, pas `updated`). Pas de `data`/`tmp`/`res`/lettres seules (sauf index de boucle triviaux). Découper agressivement, au niveau macro (petites fonctions/fichiers bien nommés) **et** local (extraire des consts intermédiaires nommées plutôt qu'imbriquer/chaîner des expressions illisibles). On optimise pour le prochain lecteur, pas pour le nombre de lignes.
+- **Types Drizzle inférés depuis les tables** : ne pas réécrire à la main le type d'une ligne DB. Utiliser `$inferSelect`; pour les insertions, utiliser `$inferInsert` et le suffixe `Insert`.
+  ```ts
+  export type Ship = typeof ship.$inferSelect;
+  export type ShipInsert = typeof ship.$inferInsert;
+  ```
 - **Gardes** : dès qu'une validation/précondition dépasse le guard inline trivial, l'extraire dans une garde (fonction `assert*` qui **throw**, jamais de retour d'erreur). Si la garde est réutilisée par plusieurs fichiers → `guards/` + export ; si elle ne sert que dans un seul fichier → helper privé **dans ce même fichier** (pas de fichier/dossier dédié pour une garde utilisée une seule fois). Cf. `assertPlayerIsAdmin`, `assertCrewHasAvailableSlot`.
 - Les erreurs : gérer aux frontières (entrée Discord, APIs externes, DB). Faire confiance au code interne.
 - **Erreurs de validation = `throw`, pas `return`** : dans un handler, en cas d'erreur (input invalide, état interdit…) on `throw` une `AppError` (`ValidationError`, `NotFoundError`, …) plutôt que de répondre manuellement puis `return`. Le boundary (`discord/router.ts`) formate le message et le log — on ne le refait pas à la main.
