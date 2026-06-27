@@ -351,6 +351,13 @@
       "when": 1781272395590,
       "tag": "0049_travel_start_zone",
       "breakpoints": true
+    },
+    {
+      "idx": 50,
+      "version": "7",
+      "when": 1781519137369,
+      "tag": "0050_ship_template_key",
+      "breakpoints": true
     }
   ]
 }
