@@ -8,6 +8,7 @@ import {
   wrapInBackticks,
   parseOwnerDiscordId,
   parseStringArg,
+  editReply,
 } from '../../../discord/utils/index.js';
 import { CONFIRM_SET_PREFIX_BUTTON_NAME } from '../constants.js';
 import { requireGuildId } from '../guards.js';
@@ -27,7 +28,7 @@ async function handle(interaction: ButtonInteraction, args: Array<string>): Prom
   const embed = buildOpEmbed('success')
     .setTitle('Préfixe changé !')
     .setDescription(`Le préfixe du serveur est maintenant ${wrapInBackticks(updated.prefix)}.`);
-  await interaction.editReply({ embeds: [embed], components: [] });
+  await editReply(interaction, { embeds: [embed], components: [] });
 }
 
 export const confirmSetPrefixButtonHandler: ButtonHandler = {
