@@ -1,5 +1,6 @@
 import { bucketsCommand } from './buckets.js';
 import { buyCommand } from './buy.js';
+import { clearEventsCommand } from './clear-events.js';
 import { colorCommand } from './color.js';
 import { debugCommand } from './debug/index.js';
 import { dmCommand } from './dm.js';
@@ -14,6 +15,7 @@ import { randomCommand } from './random.js';
 import { randomCatCommand } from './randomcat.js';
 import { repeatCommand } from './repeat.js';
 import { sellCommand } from './sell.js';
+import { setShipTemplateCommand } from './set-ship-template.js';
 import { showHistoryCommand } from './show-history.js';
 import { skipOnboardingCommand } from './skip-onboarding.js';
 import { upgradeShipCommand } from './upgrade-ship.js';
@@ -33,9 +35,11 @@ export const devCommands = [
   debugCommand,
   emojiCommand,
   bucketsCommand,
+  clearEventsCommand,
   buyCommand,
   sellCommand,
   upgradeShipCommand,
+  setShipTemplateCommand,
   dmCommand,
   showHistoryCommand,
   wipeHistoryCommand,

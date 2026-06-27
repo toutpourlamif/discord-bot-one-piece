@@ -5,7 +5,8 @@ import { getCrewByPlayerId } from '../service.js';
 import { buildSetCaptainView } from '../utils/build-change-captain-view.js';
 
 export const changeCaptainCommand: Command = {
-  name: 'changecaptain',
+  names: { fr: 'changercapitaine', en: 'changecaptain' },
+  aliases: { fr: ['capitaine', 'cc'], en: ['captain', 'cc'] },
   async handler({ message, player, guild }) {
     const crew = await getCrewByPlayerId(player.id);
 

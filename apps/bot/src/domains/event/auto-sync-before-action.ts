@@ -37,7 +37,7 @@ export async function autoSyncBeforeAction(message: Message, player: Player, gui
     await message.reply({
       embeds: [
         buildOpEmbed('info').setDescription(
-          `📜 Votre équipage a vécu ${eventCountText} ${elapsed}. Tapez ${formatCommand(guild.prefix, recapCommand.name[0]!)} pour les revivre.`,
+          `📜 Votre équipage a vécu ${eventCountText} ${elapsed}. Tapez ${formatCommand(guild.prefix, recapCommand.names[guild.language])} pour les revivre.`,
         ),
       ],
     });
