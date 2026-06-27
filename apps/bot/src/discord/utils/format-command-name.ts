@@ -1,10 +1,10 @@
 import { wrapInBackticks } from './index.js';
 
 type FormatCommandOptions = {
-  hasBackticks: boolean;
+  wrapInBackticks: boolean;
 };
 
 export function formatCommand(prefix: string, commandName: string, options?: FormatCommandOptions): string {
   const command = `${prefix}${commandName}`;
-  return options?.hasBackticks ? wrapInBackticks(command) : command;
+  return options?.wrapInBackticks ? wrapInBackticks(command) : command;
 }
