@@ -1,22 +1,22 @@
-import type { CharacterTemplate, DevilFruitTemplate } from '@one-piece/db';
+import type { CharacterInstance, CharacterTemplate, DevilFruitTemplate } from '@one-piece/db';
 
-// TODO: RENOMMER EN Character tout court et ajouter le type devil fruit et PICK depuis les schémas db
-/** Row (character_instance + character_template) utilisée par les vues métier. */
-export type CharacterRow = {
-  instanceId: number;
-  name: string;
-  imageUrl: string | null;
-  hp: number;
-  combat: number;
-  devilFruit: DevilFruitTemplate | null;
-  joinedCrewAt: Date | null;
-  isCaptain: boolean;
-  captainCombatMultiplier: number;
-  captainHpMultiplier: number;
-  captainBerryGainMultiplier: number;
-  captainKarmaMultiplier: number;
-  captainMoraleMultiplier: number;
-};
+/** Personnage enrôlé : instance + champs d'affichage du template + fruit effectif (coalesce template/instance). */
+export type Character = Pick<CharacterInstance, 'joinedCrewAt' | 'isCaptain'> &
+  Pick<
+    CharacterTemplate,
+    | 'name'
+    | 'imageUrl'
+    | 'hp'
+    | 'combat'
+    | 'captainCombatMultiplier'
+    | 'captainHpMultiplier'
+    | 'captainBerryGainMultiplier'
+    | 'captainKarmaMultiplier'
+    | 'captainMoraleMultiplier'
+  > & {
+    instanceId: number;
+    devilFruit: DevilFruitTemplate | null;
+  };
 
 export type CharacterTemplateWithDevilFruit = CharacterTemplate & {
   devilFruit: DevilFruitTemplate | null;

@@ -1,6 +1,6 @@
 import { ValidationError } from '../../../discord/errors.js';
 import type { ButtonHandler } from '../../../discord/types.js';
-import { parseIntegerArg } from '../../../discord/utils/index.js';
+import { editReply, parseIntegerArg } from '../../../discord/utils/index.js';
 import type { DomainName } from '../../../shared/domains.js';
 import { infoProviderByDomain } from '../registry.js';
 
@@ -27,6 +27,6 @@ export const infoButtonHandler: ButtonHandler = {
 
     await interaction.deferUpdate();
     const embed = await provider.buildEmbedById(id);
-    await interaction.editReply({ content: '', embeds: [embed], components: [] });
+    await editReply(interaction, { content: '', embeds: [embed], components: [] });
   },
 };

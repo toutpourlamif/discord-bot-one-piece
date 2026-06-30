@@ -39,6 +39,7 @@ export const player = pgTable('player', {
   currentZone: zoneEnum('current_zone').notNull().default('dawn'),
   currentSubZone: subZoneEnum('current_sub_zone').default(ISLAND_ENTRY_SUB_ZONE.dawn),
   travelTargetZone: zoneEnum('travel_target_zone').$type<Island>(),
+  travelStartZone: zoneEnum('travel_start_zone').$type<Island>(),
   travelStartedBucket: integer('travel_started_bucket'),
   travelEtaBucket: integer('travel_eta_bucket'),
   onboardingStep: onboardingStepEnum('onboarding_step').default(ONBOARDING_STEP_IDS[0]),

@@ -1,9 +1,9 @@
 import type { CaptainBoosts, CharacterCombatStats } from '@one-piece/db';
 
-import type { CharacterRow, CharacterTemplateWithDevilFruit } from '../types.js';
+import type { Character } from '../types.js';
 
 export function getEffectiveStats(
-  character: CharacterRow | CharacterTemplateWithDevilFruit,
+  character: Pick<Character, 'combat' | 'hp' | 'devilFruit'>,
   captainBoosts?: CaptainBoosts,
 ): CharacterCombatStats {
   const baseCombat = character.combat;

@@ -4,15 +4,19 @@ import { ActionRowBuilder, ButtonBuilder, ButtonStyle } from 'discord.js';
 import type { Command } from '../../../discord/types.js';
 import { assertGuildMemberIsAdmin, buildCancelButton, buildCustomId, buildOpEmbed } from '../../../discord/utils/index.js';
 import { LANGUAGE_FLAGS, SELECT_LANGUAGE_BUTTON_NAME } from '../constants.js';
+import { translations } from '../translations.js';
 
 export const setLanguageCommand: Command = {
-  name: 'setlanguage',
+  names: { fr: 'langue', en: 'language' },
+  aliases: { fr: ['lang'], en: ['lang'] },
   requiresSynchronization: false,
   requiresOnboardingFinished: false,
   async handler({ message, guild }) {
     assertGuildMemberIsAdmin(message.member);
 
-    const embed = buildOpEmbed('info').setTitle('Langue du serveur').setDescription('Dans quelle langue veux-tu que le bot te parle ?');
+    const embed = buildOpEmbed('info')
+      .setTitle(translations.setLanguageTitle[guild.language])
+      .setDescription(translations.setLanguageDescription[guild.language]);
     const languageRow = new ActionRowBuilder<ButtonBuilder>().addComponents(
       buildCancelButton(message.author.id),
       ...SUPPORTED_LANGUAGES.map((language) =>

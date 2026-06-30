@@ -10,8 +10,10 @@ export {
   type SupportedLanguage,
 } from './domains/guild/index.js';
 export {
+  EAST_BLUE_ISLANDS,
   ISLAND_ENTRY_SUB_ZONE,
   ISLANDS,
+  PARADISE_ISLANDS,
   SEAS,
   SUB_ZONE_LABELS,
   SUB_ZONES_BY_ISLAND,
@@ -23,8 +25,10 @@ export {
   type SubZone,
   type TravelModifier,
   type Zone,
+  TAVERN_CONFIG_BY_ZONE,
   WORLD_EDGES,
 } from './domains/navigation/index.js';
+export { type TavernActivityType, type TavernConfig } from './domains/tavern/index.js';
 export { ONBOARDING_STEP_IDS, type OnboardingStepId, type Player } from './domains/player/index.js';
 export { type DevilFruitTemplate } from './domains/devil_fruit/index.js';
 export {

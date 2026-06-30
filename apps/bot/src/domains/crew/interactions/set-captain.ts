@@ -3,8 +3,9 @@ import type { ButtonInteraction } from 'discord.js';
 import { ValidationError } from '../../../discord/errors.js';
 import type { ButtonHandler } from '../../../discord/types.js';
 import { buildOpEmbed } from '../../../discord/utils/build-op-embed.js';
+import { editReply } from '../../../discord/utils/index.js';
 import { parseIntegerArg } from '../../../discord/utils/parse-integer-arg.js';
-import type { CharacterRow } from '../../character/types.js';
+import type { Character } from '../../character/types.js';
 import { findOrCreatePlayer } from '../../player/service.js';
 import { SET_CAPTAIN_BUTTON_NAME } from '../constants.js';
 import * as crewRepository from '../repository.js';
@@ -30,7 +31,7 @@ async function handle(interaction: ButtonInteraction, args: Array<string>): Prom
   const embed = buildOpEmbed('success')
     .setTitle('Capitaine changé !')
     .setDescription(`**${selectedMember.name}** est maintenant le capitaine de ton équipage.`);
-  await interaction.editReply({ embeds: [embed], components: [] });
+  await editReply(interaction, { embeds: [embed], components: [] });
 }
 
 function assertCharacterBelongsToPlayer(ownerPlayerId: number | undefined, playerId: number): void {
@@ -39,7 +40,7 @@ function assertCharacterBelongsToPlayer(ownerPlayerId: number | undefined, playe
   throw new ValidationError("Tu ne peux pas changer le capitaine de quelqu'un d'autre.");
 }
 
-function assertCharacterIsInCrew(member: CharacterRow | undefined): asserts member is CharacterRow {
+function assertCharacterIsInCrew(member: Character | undefined): asserts member is Character {
   if (member) return;
 
   throw new ValidationError("Ce personnage n'est pas dans ton équipage.");

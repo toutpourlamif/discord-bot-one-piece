@@ -38,6 +38,7 @@ export async function applyEffects(effects: Array<EventEffect>, ctx: GeneratorCo
       case 'startTravel':
         await startTravel({ playerId: ctx.player.id, edge: effect.edge, etaBucket: effect.etaBucket, bucketId: ctx.bucketId, tx });
         ctx.player.travelTargetZone = effect.edge.to;
+        ctx.player.travelStartZone = effect.edge.from;
         ctx.player.travelStartedBucket = ctx.bucketId;
         ctx.player.travelEtaBucket = effect.etaBucket;
         ctx.player.currentZone = effect.edge.via;
@@ -57,6 +58,7 @@ export async function applyEffects(effects: Array<EventEffect>, ctx: GeneratorCo
           tx,
         });
         ctx.player.travelTargetZone = null;
+        ctx.player.travelStartZone = null;
         ctx.player.travelStartedBucket = null;
         ctx.player.travelEtaBucket = null;
         ctx.player.currentZone = effect.arrivedZone;

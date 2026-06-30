@@ -2,7 +2,7 @@ import { db } from '@one-piece/db';
 import type { ButtonInteraction } from 'discord.js';
 
 import type { ButtonHandler } from '../../../discord/types.js';
-import { assertInteractorIsTheOwner, parseOwnerDiscordId, parseStringArg } from '../../../discord/utils/index.js';
+import { assertInteractorIsTheOwner, editReply, parseOwnerDiscordId, parseStringArg } from '../../../discord/utils/index.js';
 import { requireGuildId } from '../../guild/index.js';
 import * as guildRepository from '../../guild/repository.js';
 import * as playerRepository from '../../player/repository.js';
@@ -31,8 +31,8 @@ export const onboardingNextButtonHandler: ButtonHandler = {
 
     const view =
       resultingStep === null
-        ? buildOnboardingCompletedView()
+        ? buildOnboardingCompletedView(guild.language)
         : buildOnboardingView({ stepId: resultingStep, prefix: guild.prefix, ownerDiscordId });
-    await interaction.editReply(view);
+    await editReply(interaction, view);
   },
 };

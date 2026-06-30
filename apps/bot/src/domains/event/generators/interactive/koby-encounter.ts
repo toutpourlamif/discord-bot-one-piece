@@ -4,9 +4,8 @@ import type { GeneratorContext, InteractiveGenerator, Resolution } from '../../t
 export const kobyEncounter: InteractiveGenerator = {
   key: 'kobyEncounter',
   isInteractive: true,
-  seedScope: 'player',
   oneTime: true,
-  probability: () => 0.05,
+  probability: () => 0.001,
 
   initialStep: 'kobyGreets',
   steps: {

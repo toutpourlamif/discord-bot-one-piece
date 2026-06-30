@@ -10,6 +10,7 @@ import {
   buildOpEmbed,
   parseOwnerDiscordId,
   parseStringArg,
+  editReply,
 } from '../../../discord/utils/index.js';
 import { CONFIRM_SET_LANGUAGE_BUTTON_NAME, LANGUAGE_NAMES, SELECT_LANGUAGE_BUTTON_NAME } from '../constants.js';
 import { ServerOnlyError } from '../errors.js';
@@ -37,7 +38,7 @@ async function handle(interaction: ButtonInteraction, args: Array<string>): Prom
   const embed = buildOpEmbed('info')
     .setTitle(`Mettre le serveur en ${LANGUAGE_NAMES[rawLanguage]} ?`)
     .setFooter({ text: `⚠️ Ce changement s'appliquera à tout le serveur ${interaction.guild.name}.` });
-  await interaction.editReply({ embeds: [embed], components: [row] });
+  await editReply(interaction, { embeds: [embed], components: [row] });
 }
 
 export const selectLanguageButtonHandler: ButtonHandler = {

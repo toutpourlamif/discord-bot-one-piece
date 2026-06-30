@@ -4,7 +4,7 @@ import { ActionRowBuilder, ButtonBuilder, ButtonStyle, type ButtonInteraction } 
 import { PAGINATION } from '../../../discord/constants.js';
 import { InternalError } from '../../../discord/errors.js';
 import type { ButtonHandler, View } from '../../../discord/types.js';
-import { parseBigintArg, parseStringArg } from '../../../discord/utils/index.js';
+import { editReply, parseBigintArg, parseStringArg } from '../../../discord/utils/index.js';
 import * as historyRepository from '../../history/index.js';
 import * as playerRepository from '../../player/repository.js';
 import { EVENT_BUTTON_NAME } from '../constants.js';
@@ -35,7 +35,7 @@ export const eventChoiceButtonHandler: ButtonHandler = {
     if (!generator.isInteractive) {
       const player = await playerRepository.findByIdOrThrow(instance.playerId);
       await eventRepository.deleteById(instance.id);
-      await interaction.editReply(await buildRecapView(player, true));
+      await editReply(interaction, await buildRecapView(player, true));
       return;
     }
 
@@ -50,12 +50,12 @@ export const eventChoiceButtonHandler: ButtonHandler = {
         bucketId: instance.bucketId,
         ctx: outcome.ctx,
       });
-      await interaction.editReply(view);
+      await editReply(interaction, view);
       return;
     }
 
     await synchronizePlayer(outcome.player.id);
-    await interaction.editReply(buildResolutionView(outcome.resolution, outcome.player.discordId));
+    await editReply(interaction, buildResolutionView(outcome.resolution, outcome.player.discordId));
   },
 };
 

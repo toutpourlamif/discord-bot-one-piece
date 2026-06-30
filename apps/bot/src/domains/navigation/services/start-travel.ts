@@ -26,7 +26,7 @@ export async function startTravel({ playerId, edge, etaBucket, bucketId, tx }: S
 
   await tx
     .update(player)
-    .set({ travelTargetZone: edge.to, travelStartedBucket: bucketId, travelEtaBucket: etaBucket })
+    .set({ travelTargetZone: edge.to, travelStartZone: edge.from, travelStartedBucket: bucketId, travelEtaBucket: etaBucket })
     .where(eq(player.id, playerId));
 
   await recordZoneChange({ playerId, newZone: edge.via, bucketId, tx });
