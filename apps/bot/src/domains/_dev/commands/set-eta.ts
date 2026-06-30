@@ -1,3 +1,4 @@
+import { getCommandDisplayNameByLanguage } from '../../../discord/command-names.js';
 import { ValidationError } from '../../../discord/errors.js';
 import type { Command } from '../../../discord/types.js';
 import { buildOpEmbed } from '../../../discord/utils/build-op-embed.js';
@@ -9,11 +10,13 @@ export const setEtaCommand: Command = {
   names: { fr: 'seteta', en: 'seteta' },
   async handler(ctx) {
     const { targetPlayer, rest } = await resolveTargetPlayer(ctx);
+    const { guild } = ctx;
     const { travelTargetZone } = targetPlayer;
     const parsedBucket = parseIntegerArg(rest[0]);
+    const commandName = getCommandDisplayNameByLanguage(setEtaCommand, guild.language);
 
     if (!travelTargetZone) {
-      throw new ValidationError(`Usage: !seteta <@user> <bucket(integer)> \n\n Il faut un voyage en cours!`);
+      throw new ValidationError(`Usage: ${guild.prefix}${commandName} <@user> <bucket(integer)> \n\n Il faut un voyage en cours!`);
     }
 
     const currentEtaBucket = targetPlayer.travelEtaBucket;
