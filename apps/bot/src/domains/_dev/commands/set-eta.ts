@@ -16,8 +16,15 @@ export const setEtaCommand: Command = {
       throw new ValidationError(`Usage: !seteta <@user> <bucket(integer)> \n\n Il faut un voyage en cours!`);
     }
 
-    if (parsedBucket < parsedBucket) {
-      throw new ValidationError(`Tu ne peux pas arriver dans le passé \n(la machine à remonter le temps n'existe pas encore.)`);
+    const currentEtaBucket = targetPlayer.travelEtaBucket;
+
+    if (currentEtaBucket === null) {
+      throw new ValidationError('Aucun ETA en cours.');
+    }
+
+    if (parsedBucket < currentEtaBucket) {
+      throw new ValidationError(`Tu ne peux pas arriver dans le passé
+(la machine à remonter le temps n'existe pas encore.)`);
     }
 
     await playerRepository.setTravelEtaBucket(targetPlayer.id, parsedBucket);
