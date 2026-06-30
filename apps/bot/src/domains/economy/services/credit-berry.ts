@@ -3,16 +3,6 @@ import { findCaptainByPlayerId } from '../../crew/service.js';
 import { extractCaptainBoosts } from '../../crew/utils/captain-boost.js';
 import * as playerRepository from '../repository.js';
 
-// TODO: renommer la fonction quand besoin métier
-export async function buy(playerId: number, amount: bigint): Promise<bigint> {
-  return playerRepository.debitBerry(playerId, amount);
-}
-
-// TODO: pareil qu'en haut, renommer la fonction quand besoin métier
-export async function sell(playerId: number, amount: bigint): Promise<bigint> {
-  return playerRepository.creditBerry(playerId, amount);
-}
-
 type CreditBerryOptions = {
   considerCaptainBoosts?: boolean;
 };
