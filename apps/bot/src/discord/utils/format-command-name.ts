@@ -1,10 +1,14 @@
+import type { Guild } from '@one-piece/db';
+
+import type { Command } from '../types.js';
+
 import { wrapInBackticks } from './index.js';
 
 type FormatCommandOptions = {
   wrapInBackticks: boolean;
 };
 
-export function formatCommand(prefix: string, commandName: string, options?: FormatCommandOptions): string {
-  const command = `${prefix}${commandName}`;
-  return options?.wrapInBackticks ? wrapInBackticks(command) : command;
+export function getFormattedCommand(guild: Guild, command: Command, options?: FormatCommandOptions): string {
+  const format = `${guild.prefix}${command.names[guild.language]}`;
+  return options?.wrapInBackticks ? wrapInBackticks(format) : format;
 }

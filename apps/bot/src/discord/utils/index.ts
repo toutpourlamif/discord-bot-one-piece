@@ -21,4 +21,4 @@ export { parseStringArg } from './parse-string-arg.js';
 export { replyDebugData } from './reply-debug-data.js';
 export { convertJsHexToCssHex } from './convert-js-hex-to-css-hex.js';
 export { wrapInBackticks } from './inline-code.js';
-export { formatCommand } from './format-command-name.js';
+export { getFormattedCommand } from './format-command-name.js';

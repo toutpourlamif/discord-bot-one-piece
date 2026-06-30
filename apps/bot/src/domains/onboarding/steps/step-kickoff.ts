@@ -1,5 +1,7 @@
-import type { View } from '../../../discord/types.js';
-import { buildOpEmbed, formatCommand } from '../../../discord/utils/index.js';
+import type { Guild } from '@one-piece/db';
+
+import type { Command, View } from '../../../discord/types.js';
+import { buildOpEmbed, getFormattedCommand } from '../../../discord/utils/index.js';
 
 export function runKickoff(): View {
   return {
@@ -8,12 +10,12 @@ export function runKickoff(): View {
   };
 }
 
-export function buildKickoffReminder(prefix: string, expects: string): View {
+export function buildKickoffReminder(guild: Guild, command: Command): View {
   return {
     embeds: [
       buildOpEmbed('info')
         .setTitle('Bienvenue sur Grand Line.')
-        .setDescription(`Démarre ton aventure en tapant ${formatCommand(prefix, expects)}.`),
+        .setDescription(`Démarre ton aventure en tapant ${getFormattedCommand(guild, command)}.`),
     ],
     components: [],
   };

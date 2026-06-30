@@ -3,7 +3,7 @@ import type { Message } from 'discord.js';
 import sample from 'lodash/sample.js';
 
 import { buildOpEmbed } from '../../discord/utils/build-op-embed.js';
-import { formatCommand } from '../../discord/utils/index.js';
+import { getFormattedCommand } from '../../discord/utils/index.js';
 import { pluralize } from '../../shared/pluralize.js';
 
 import { recapCommand } from './commands/recap.js';
@@ -37,7 +37,7 @@ export async function autoSyncBeforeAction(message: Message, player: Player, gui
     await message.reply({
       embeds: [
         buildOpEmbed('info').setDescription(
-          `📜 Votre équipage a vécu ${eventCountText} ${elapsed}. Tapez ${formatCommand(guild.prefix, recapCommand.names[guild.language])} pour les revivre.`,
+          `📜 Votre équipage a vécu ${eventCountText} ${elapsed}. Tapez ${getFormattedCommand(guild, recapCommand)} pour les revivre.`,
         ),
       ],
     });
