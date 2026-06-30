@@ -4,7 +4,7 @@ import { type Transaction } from '@one-piece/db';
 import { NotFoundError } from '../../../discord/errors.js';
 import * as characterRepository from '../../character/repository.js';
 import * as economyRepository from '../../economy/repository.js';
-import * as economyServices from '../../economy/services/index.js';
+import * as economyService from '../../economy/services/index.js';
 import { changeSubZone } from '../../navigation/services/change-sub-zone.js';
 import { completeTravel } from '../../navigation/services/complete-travel.js';
 import { startTravel } from '../../navigation/services/start-travel.js';
@@ -23,7 +23,7 @@ export async function applyEffects(effects: Array<EventEffect>, ctx: GeneratorCo
   for (const effect of effects) {
     switch (effect.type) {
       case 'addBerries': {
-        const boostedAmount = await economyServices.creditBerry({
+        const boostedAmount = await economyService.creditBerry({
           playerId: ctx.player.id,
           amount: effect.amount,
           options: { considerCaptainBoosts: true },
