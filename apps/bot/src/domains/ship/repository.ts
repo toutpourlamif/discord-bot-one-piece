@@ -3,6 +3,8 @@ import { eq } from 'drizzle-orm';
 
 import { NotFoundError } from '../../discord/errors.js';
 
+import type { ShipTemplateState } from './types.js';
+
 type FindByPlayerIdOptions = {
   forUpdate?: boolean;
 };
@@ -31,8 +33,17 @@ export async function findByPlayerIdOrThrow(
   return row;
 }
 
-export async function create(playerId: number, name: string, client: DbOrTransaction = db): Promise<Ship> {
-  const [row] = await client.insert(ship).values({ playerId, name }).returning();
+export async function create(playerId: number, state: ShipTemplateState, client: DbOrTransaction = db): Promise<Ship> {
+  const [row] = await client
+    .insert(ship)
+    .values({ playerId, ...state })
+    .returning();
+  return row!;
+}
+
+/** Réécrit le navire aux valeurs d'un template (changement de bateau = reset in-place, l'id est conservé). */
+export async function resetToTemplate(shipId: number, state: ShipTemplateState, client: DbOrTransaction = db): Promise<Ship> {
+  const [row] = await client.update(ship).set(state).where(eq(ship.id, shipId)).returning();
   return row!;
 }
 

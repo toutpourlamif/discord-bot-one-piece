@@ -1,5 +1,16 @@
 import type { ResourceName } from '@one-piece/db';
 
+export type ShipTemplateState = {
+  templateKey: string;
+  name: string;
+  hp: number;
+  hullLevel: number;
+  sailLevel: number;
+  decksLevel: number;
+  cabinsLevel: number;
+  cargoLevel: number;
+};
+
 export type ResourceCostPreview = {
   name: ResourceName;
   requiredQuantity: number;
