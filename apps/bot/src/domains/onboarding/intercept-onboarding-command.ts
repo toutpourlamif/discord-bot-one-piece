@@ -1,4 +1,4 @@
-import { type OnboardingStepId, type SupportedLanguage, db } from '@one-piece/db';
+import { type Guild, type OnboardingStepId, type SupportedLanguage, db } from '@one-piece/db';
 
 import { getCommandKeywords } from '../../discord/command-names.js';
 import type { Command, CommandContext, View } from '../../discord/types.js';
@@ -22,20 +22,20 @@ export async function interceptOnboardingCommand({ ctx, command }: GateArgs): Pr
   const ownerDiscordId = ctx.player.discordId;
   const step = getStep(stepId);
 
-  if (step.type === 'scene') throw new OnboardingPendingError(buildOnboardingView({ stepId, prefix, ownerDiscordId }));
+  if (step.type === 'scene') throw new OnboardingPendingError(buildOnboardingView({ stepId, guild: ctx.guild, ownerDiscordId }));
 
-  if (!getCommandKeywords(command).includes(step.expects)) throw new OnboardingPendingError(step.reminder(prefix, step.expects));
+  if (!getCommandKeywords(command).includes(step.expects)) throw new OnboardingPendingError(step.reminder(ctx.guild, step.command));
 
   const result = await db.transaction(async (tx) => {
     const locked = await playerRepository.findByIdOrThrow(playerId, tx, { forUpdate: true });
     if (locked.onboardingStep !== stepId)
-      throw new OnboardingPendingError(viewForStep({ stepId: locked.onboardingStep, language, prefix, ownerDiscordId }));
+      throw new OnboardingPendingError(viewForStep({ stepId: locked.onboardingStep, language, guild: ctx.guild, ownerDiscordId }));
     const reply = await step.run(playerId, tx);
     const { nextStep } = await onboardingService.advanceOnboarding(playerId, tx);
     return { reply, nextStep };
   });
 
-  const followUp = viewForStep({ stepId: result.nextStep, language, prefix, ownerDiscordId });
+  const followUp = viewForStep({ stepId: result.nextStep, language, guild: ctx.guild, ownerDiscordId });
   await ctx.message.reply({
     embeds: [...result.reply.embeds, ...followUp.embeds],
     components: [...result.reply.components, ...followUp.components],
@@ -43,8 +43,8 @@ export async function interceptOnboardingCommand({ ctx, command }: GateArgs): Pr
   return true;
 }
 
-type ViewForStepParams = { stepId: OnboardingStepId | null; language: SupportedLanguage; prefix: string; ownerDiscordId: string };
+type ViewForStepParams = { stepId: OnboardingStepId | null; language: SupportedLanguage; guild: Guild; ownerDiscordId: string };
 
-function viewForStep({ stepId, language, prefix, ownerDiscordId }: ViewForStepParams): View {
-  return stepId === null ? buildOnboardingCompletedView(language) : buildOnboardingView({ stepId, prefix, ownerDiscordId });
+function viewForStep({ stepId, language, guild, ownerDiscordId }: ViewForStepParams): View {
+  return stepId === null ? buildOnboardingCompletedView(language) : buildOnboardingView({ stepId, guild, ownerDiscordId });
 }
