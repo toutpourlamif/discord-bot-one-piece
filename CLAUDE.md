@@ -2,6 +2,8 @@
 
 Ce fichier est le point d'entrée pour Claude Code et tout nouveau contributeur. Il doit rester **court** et pointer vers le reste.
 
+Un `CLAUDE.md` n'est pas une documentation exhaustive comme le `README.md` ou les docs métier. C'est un mémo de contexte : il explique à Claude Code les règles réellement utilisées dans le repo pour que ses modifications ressemblent au code existant. Toute règle ajoutée ici doit donc être concrète, appliquée aujourd'hui, et assez claire pour être suivie sans deviner.
+
 ## Le jeu
 
 Bot Discord autour de l'univers One Piece. Le joueur recrute un équipage, améliore son navire, explore, combat. Persistant et multijoueur.
@@ -20,13 +22,13 @@ Bot Discord autour de l'univers One Piece. Le joueur recrute un équipage, amél
 - `type`, jamais `interface`
 - N'exporter un `type` que s'il est importé ailleurs
 - `Array<T>`, jamais `T[]` (ESLint actif)
-- **Imports relatifs ESM** : toujours mettre l'extension `.js`, même depuis un fichier `.ts`. NodeNext/`tsx` résout le `.ts` source, mais l'import doit ressembler au JS exécuté.
+- **Imports relatifs ESM** : ESM est le système `import`/`export` natif de Node. En ESM, un import relatif doit pointer vers le fichier JS qui existera à l'exécution : on écrit donc `.js`, même depuis un fichier source `.ts`. NodeNext/`tsx` fait le lien avec le `.ts` pendant le dev.
   ```ts
   import { buy, sell } from './service.js';
   ```
 - Helpers et fonctions top-level : `function foo() {}`, pas `const foo = () => {}`
 - **Public first, private after** : dans un fichier, les constantes privées en haut (juste après les imports), puis les exports (API publique), puis les helpers/types privés en dessous. On lit d'abord ce que le fichier expose, les détails ensuite.
-- **Unions de strings depuis un tableau `as const`** : pour un ensemble fini de valeurs string, déclarer la liste une seule fois et dériver le type. Ça garde le type synchronisé avec les valeurs disponibles à l'exécution.
+- **Unions de strings depuis un tableau `as const`** : quand une valeur ne peut prendre qu'une liste finie de strings, la liste runtime est la source de vérité. On déclare le tableau une seule fois, puis TypeScript dérive le type depuis ce tableau. Ça évite d'avoir une union écrite à la main qui peut se désynchroniser.
   ```ts
   export const SHIP_MODULE_KEYS = ['hull', 'sail', 'decks', 'cabins', 'cargo'] as const;
   export type ShipModuleKey = (typeof SHIP_MODULE_KEYS)[number];
@@ -35,7 +37,7 @@ Bot Discord autour de l'univers One Piece. Le joueur recrute un équipage, amél
 - **Short guards inline** : `if (cond) return …;`, `if (cond) throw …;`, etc. tiennent sur **une ligne sans accolades**. Pas d'ESLint `curly`.
 - **YAGNI** (_You Aren't Gonna Need It_) : on n'ajoute pas une feature, une dep, un helper, un validator tant qu'un code actuel ne l'utilise pas. Pas d'abstractions spéculatives — 3 lignes similaires valent mieux qu'un helper prématuré.
 - **Lisibilité = priorité MÉGA importante.** Toujours nommer variables/fonctions/types pour que le sens soit évident sans lire l'implémentation (`shipKey`, pas `key` ; `updatedShip`, pas `updated`). Pas de `data`/`tmp`/`res`/lettres seules (sauf index de boucle triviaux). Découper agressivement, au niveau macro (petites fonctions/fichiers bien nommés) **et** local (extraire des consts intermédiaires nommées plutôt qu'imbriquer/chaîner des expressions illisibles). On optimise pour le prochain lecteur, pas pour le nombre de lignes.
-- **Types Drizzle inférés depuis les tables** : ne pas réécrire à la main le type d'une ligne DB. Utiliser `$inferSelect`; pour les insertions, utiliser `$inferInsert` et le suffixe `Insert`.
+- **Types Drizzle inférés depuis les tables** : le schéma Drizzle est la source de vérité de la DB. Ne pas réécrire à la main le type d'une ligne : utiliser `$inferSelect` pour une ligne lue en base. Pour un objet à insérer, utiliser `$inferInsert` et le suffixe `Insert`.
   ```ts
   export type Ship = typeof ship.$inferSelect;
   export type ShipInsert = typeof ship.$inferInsert;
