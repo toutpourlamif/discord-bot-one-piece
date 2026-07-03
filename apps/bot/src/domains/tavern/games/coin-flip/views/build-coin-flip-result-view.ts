@@ -20,16 +20,20 @@ type BuildCoinFlipResultViewParams = {
 const KEEPER_WIN_REACTION = 'Rrah… la chance était avec toi cette fois. Profites-en.';
 const KEEPER_LOSS_REACTION = 'Hahaha ! La maison gagne toujours, mon petit.';
 
+const WIN_FOOTER = 'On ne va pas s’arrêter en si bon chemin… si ?';
+const LOSS_FOOTER = 'On ne peut pas s’arrêter sur une défaite… pas vrai ?';
+
 export function buildCoinFlipResultView({ outcome, tavernKeeper, ownerDiscordId, playerId }: BuildCoinFlipResultViewParams): View {
   const dialogueSpeaker = buildTavernKeeperDialogueSpeaker(tavernKeeper);
   const reactionText = outcome.hasWon ? KEEPER_WIN_REACTION : KEEPER_LOSS_REACTION;
 
   const balanceDeltaLabel = outcome.hasWon ? `+${formatBerry(outcome.balanceDelta)}` : `-${formatBerry(-outcome.balanceDelta)}`;
-  const outcomeLabel = outcome.hasWon ? '🎉 Gagné' : '💀 Perdu';
-  const embed = buildDialogueEmbed(dialogueSpeaker, reactionText, { emotion: outcome.hasWon ? 'angry' : 'happy' }).addFields(
-    { name: 'La pièce est tombée sur', value: `${formatSide(outcome.revealedSide)} — ${outcomeLabel}` },
-    { name: 'Nouveau solde', value: `${formatBerry(outcome.newBalance)} (${balanceDeltaLabel})` },
-  );
+  const embed = buildDialogueEmbed(dialogueSpeaker, reactionText, { emotion: outcome.hasWon ? 'angry' : 'happy' })
+    .addFields(
+      { name: 'La pièce est tombée sur', value: formatSide(outcome.revealedSide) },
+      { name: 'Nouveau solde', value: `${formatBerry(outcome.newBalance)} (${balanceDeltaLabel})` },
+    )
+    .setFooter({ text: outcome.hasWon ? WIN_FOOTER : LOSS_FOOTER });
 
   const replayButton = new ButtonBuilder()
     .setCustomId(buildCustomId(TAVERN_GAME_BUTTON_NAME, ownerDiscordId, playerId, COIN_FLIP_GAME_ID))
