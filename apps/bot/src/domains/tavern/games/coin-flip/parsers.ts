@@ -13,8 +13,7 @@ export function parsePositiveBet(raw: string): bigint {
   return betAmount;
 }
 
-/** Quand l'user clique sur une réaction; le côté de la pièce qu'il a choisi
- * est encodé dans un customId; donc on doit le parser. */
+/** Valide le côté choisi dans le select du modal (valeur brute renvoyée par `getStringSelectValues`). */
 export function parseCoinSide(raw: string | undefined): CoinSide {
   const side = parseStringArg(raw);
   if (side !== 'heads' && side !== 'tails') throw new ValidationError(`Côté de pièce invalide : ${side}`);

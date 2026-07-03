@@ -24,6 +24,6 @@ export function buildBetModal(ownerDiscordId: string, playerId: number): ModalBu
 
   return new ModalBuilder()
     .setCustomId(buildCustomId(COIN_FLIP_BET_MODAL_NAME, ownerDiscordId, playerId))
-    .setTitle('Combien souhaites-tu miser?')
+    .setTitle('Combien souhaites-tu miser ?')
     .addLabelComponents(betAmountLabel, coinSideLabel);
 }
