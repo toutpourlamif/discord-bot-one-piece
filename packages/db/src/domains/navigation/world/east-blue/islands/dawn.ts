@@ -13,7 +13,7 @@ export const DAWN = defineIsland({
   key: 'dawn',
   name: 'Île Dawn',
   entrySubZone: 'goa_kingdom',
-  tavernConfig: { tavernKeeper: DAWN_TAVERN_KEEPER, activities: ['juste-prix'] },
+  tavernConfig: { tavernKeeper: DAWN_TAVERN_KEEPER, activities: ['coin-flip'] },
   subZones: {
     goa_kingdom: 'Royaume de Goa',
     foosha_village: 'Village de Foosha',

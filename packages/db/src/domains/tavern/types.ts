@@ -1,4 +1,4 @@
-export type TavernGameId = 'blackjack' | 'juste-prix';
+export type TavernGameId = 'blackjack' | 'juste-prix' | 'coin-flip';
 
 export type TavernActivityType = 'shop' | 'recruit' | TavernGameId;
 

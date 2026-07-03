@@ -26,11 +26,16 @@ export function buildTavernGamesView({ tavernConfig, ownerDiscordId, playerId }:
     return { embeds: [emptyEmbed], components: [backRow] };
   }
 
-  const embed = buildOpEmbed().setTitle(GAMES_SECTION_EMBED_TITLE).setDescription('Choisis ton jeu :');
+  const embed = buildOpEmbed().setTitle(GAMES_SECTION_EMBED_TITLE).setDescription(buildGamesListDescription(tavernGames));
   const tavernGameButtons = tavernGames.map((tavernGame) => buildTavernGameButton(tavernGame, ownerDiscordId, playerId));
   const tavernGamesRow = new ActionRowBuilder<ButtonBuilder>().addComponents(...tavernGameButtons);
 
   return { embeds: [embed], components: [tavernGamesRow, backRow] };
+}
+
+function buildGamesListDescription(tavernGames: Array<TavernGame>): string {
+  const gameLines = tavernGames.map((tavernGame) => `${tavernGame.emoji} **${tavernGame.label}** — ${tavernGame.description}`);
+  return ['À quel jeu souhaiterais-tu jouer?', '', ...gameLines].join('\n');
 }
 
 function buildTavernGameButton(tavernGame: TavernGame, ownerDiscordId: string, playerId: number): ButtonBuilder {
