@@ -1,1 +1,1 @@
-export { type TavernActivityType, type TavernConfig, type TavernKeeper } from './types.js';
+export { type TavernActivityType, type TavernConfig, type TavernGameId, type TavernKeeper } from './types.js';
