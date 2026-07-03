@@ -7,8 +7,6 @@ export type TavernGame = {
   id: TavernGameId;
   label: string;
   emoji: string;
-  description: string;
-  /** Ne defer PAS l'interaction : le jeu possède sa réponse (souvent un `showModal`, impossible après un defer). */
   open: (params: { interaction: ButtonInteraction; ownerDiscordId: string; playerId: number }) => Promise<void>;
   buttonHandlers?: Array<ButtonHandler>;
   modalHandlers?: Array<ModalHandler>;

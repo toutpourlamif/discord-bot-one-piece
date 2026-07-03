@@ -2,10 +2,11 @@ import { ZONE_LABELS, type Player, type TavernConfig } from '@one-piece/db';
 import { ActionRowBuilder, ButtonBuilder, ButtonStyle } from 'discord.js';
 
 import type { View } from '../../../discord/types.js';
-import { buildBackAction, buildCustomId, buildOpEmbed } from '../../../discord/utils/index.js';
-import { PROFIL_BUTTON_NAME } from '../../player/constants.js';
+import { buildCustomId, buildOpEmbed } from '../../../discord/utils/index.js';
+import { buildProfilButton } from '../../player/build-profil-button.js';
 import { TAVERN_SECTION_BUTTON_NAME, TAVERN_SECTIONS, type TavernSection } from '../constants.js';
 import { getTavernGames } from '../games/registry.js';
+import { buildTavernKeeperGreetingEmbed } from '../utils/build-tavern-keeper-greeting-embed.js';
 import { getReachableTavern } from '../utils/get-reachable-tavern.js';
 
 type BuildTavernViewParams = {
@@ -20,14 +21,14 @@ export function buildTavernView({ player, ownerDiscordId }: BuildTavernViewParam
     return { embeds: [embed], components: [] };
   }
 
-  const embed = buildOpEmbed()
-    .setTitle(`🍺 Taverne — ${ZONE_LABELS[player.currentZone]}`)
-    .setDescription("Pousse la porte : un verre, une partie, du recrutement et de quoi t'équiper.");
+  const greetingEmbed = buildTavernKeeperGreetingEmbed(tavernConfig.tavernKeeper);
 
   const sectionRow = buildSectionRow(player.id, ownerDiscordId, tavernConfig);
-  const navRow = buildBackAction(buildCustomId(PROFIL_BUTTON_NAME, ownerDiscordId, player.id));
+  const navRow = new ActionRowBuilder<ButtonBuilder>().addComponents(
+    buildProfilButton(ownerDiscordId, player.id, { label: 'Retourner au profil' }),
+  );
 
-  return { embeds: [embed], components: [sectionRow, navRow] };
+  return { embeds: [greetingEmbed], components: [sectionRow, navRow] };
 }
 
 function buildSectionRow(playerId: number, ownerDiscordId: string, tavernConfig: TavernConfig): ActionRowBuilder<ButtonBuilder> {
