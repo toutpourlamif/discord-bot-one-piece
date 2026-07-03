@@ -1,5 +1,13 @@
 import type { Guild, Player, SupportedLanguage } from '@one-piece/db';
-import type { ActionRowBuilder, AttachmentBuilder, ButtonBuilder, ButtonInteraction, EmbedBuilder, Message } from 'discord.js';
+import type {
+  ActionRowBuilder,
+  AttachmentBuilder,
+  ButtonBuilder,
+  ButtonInteraction,
+  EmbedBuilder,
+  Message,
+  ModalSubmitInteraction,
+} from 'discord.js';
 
 type CommandNames = Record<SupportedLanguage, string>;
 type CommandAliases = Record<SupportedLanguage, Array<string>>;
@@ -23,6 +31,11 @@ export type Command = {
 export type ButtonHandler = {
   name: string;
   handle: (interaction: ButtonInteraction, args: Array<string>) => Promise<void>;
+};
+
+export type ModalHandler = {
+  name: string;
+  handle: (interaction: ModalSubmitInteraction, args: Array<string>) => Promise<void>;
 };
 
 export type View = {

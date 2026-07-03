@@ -5,6 +5,7 @@ import type { View } from '../../../discord/types.js';
 import { buildBackAction, buildCustomId, buildOpEmbed } from '../../../discord/utils/index.js';
 import { PROFIL_BUTTON_NAME } from '../../player/constants.js';
 import { TAVERN_SECTION_BUTTON_NAME, TAVERN_SECTIONS, type TavernSection } from '../constants.js';
+import { getTavernGames } from '../games/registry.js';
 import { getReachableTavern } from '../utils/get-reachable-tavern.js';
 
 type BuildTavernViewParams = {
@@ -30,10 +31,10 @@ export function buildTavernView({ player, ownerDiscordId }: BuildTavernViewParam
 }
 
 function buildSectionRow(playerId: number, ownerDiscordId: string, tavernConfig: TavernConfig): ActionRowBuilder<ButtonBuilder> {
-  const sections: Array<TavernSection> = ['barkeep'];
+  const sections: Array<TavernSection> = ['talk'];
   if (tavernConfig.activities.includes('shop')) sections.push('shop');
   if (tavernConfig.activities.includes('recruit')) sections.push('recruit');
-  if (tavernConfig.activities.includes('blackjack') || tavernConfig.activities.includes('juste-prix')) sections.push('games');
+  if (getTavernGames(tavernConfig.activities).length > 0) sections.push('games');
 
   const buttons = sections.map((section) =>
     new ButtonBuilder()
