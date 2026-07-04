@@ -1,3 +1,4 @@
+// VIBE CODÉ
 import { execFile } from 'node:child_process';
 import { mkdir, readdir, writeFile } from 'node:fs/promises';
 import { createServer, type IncomingMessage, type ServerResponse } from 'node:http';
@@ -29,7 +30,7 @@ type CharacterOption = {
 type DialogueEmotion = (typeof SHEET.emotions)[number];
 
 type SliceResult = {
-  emotion: DialogueEmotion;
+  emotion: DialogueEmotion | 'default';
   path: string;
   bytes: number;
 };
@@ -111,6 +112,10 @@ function sendHtml(response: ServerResponse): void {
 
 function isSafeCharacterPath(value: string): boolean {
   return value.length > 0 && !path.isAbsolute(value) && !value.split(/[\\/]/).includes('..');
+}
+
+function isDialogueEmotion(value: string): value is DialogueEmotion {
+  return (SHEET.emotions as ReadonlyArray<string>).includes(value);
 }
 
 function resolveCharacterDirectory(character: string): string {
@@ -389,7 +394,7 @@ function squareFromSubjectBox(raw: RawImage, subjectBox: GridBox, containerBox: 
   };
 }
 
-async function sliceDialogueSheet(character: string, input: Buffer): Promise<Array<SliceResult>> {
+async function sliceEmotionSheet(character: string, input: Buffer, defaultEmotion: DialogueEmotion): Promise<Array<SliceResult>> {
   if (input.length === 0) {
     throw new Error('Aucune image recue.');
   }
@@ -413,6 +418,8 @@ async function sliceDialogueSheet(character: string, input: Buffer): Promise<Arr
   await mkdir(outputDirectory, { recursive: true });
 
   const results: Array<SliceResult> = [];
+  let defaultOutput: Buffer | null = null;
+
   for (const [index, emotion] of SHEET.emotions.entries()) {
     const detectedBox = boxes[index];
 
@@ -431,17 +438,32 @@ async function sliceDialogueSheet(character: string, input: Buffer): Promise<Arr
     const output = await sharp(input)
       .extract(box)
       .resize(OUTPUT_SIZE, OUTPUT_SIZE, { fit: 'cover', position: 'centre' })
-      .webp({ quality: 82, effort: 6, smartSubsample: true, preset: 'picture' })
+      .webp({ lossless: true, effort: 6 })
       .toBuffer();
     const outputPath = path.join(outputDirectory, `dialogue-${emotion}.webp`);
 
     await writeFile(outputPath, output);
+    if (emotion === defaultEmotion) {
+      defaultOutput = output;
+    }
     results.push({
       emotion,
       path: path.relative(ROOT_DIR, outputPath),
       bytes: output.length,
     });
   }
+
+  if (defaultOutput === null) {
+    throw new Error('Emotion par defaut invalide.');
+  }
+
+  const defaultOutputPath = path.join(outputDirectory, 'dialogue-default.webp');
+  await writeFile(defaultOutputPath, defaultOutput);
+  results.push({
+    emotion: 'default',
+    path: path.relative(ROOT_DIR, defaultOutputPath),
+    bytes: defaultOutput.length,
+  });
 
   return results;
 }
@@ -461,8 +483,14 @@ async function handleRequest(request: IncomingMessage, response: ServerResponse)
 
   if (request.method === 'POST' && url.pathname === '/api/slice') {
     const character = url.searchParams.get('character') ?? '';
+    const defaultEmotion = url.searchParams.get('defaultEmotion') ?? SHEET.emotions[0];
+
+    if (!isDialogueEmotion(defaultEmotion)) {
+      throw new Error('Emotion par defaut invalide.');
+    }
+
     const input = await readRequestBody(request);
-    const files = await sliceDialogueSheet(character, input);
+    const files = await sliceEmotionSheet(character, input, defaultEmotion);
     sendJson(response, 200, { files });
     return;
   }
@@ -484,7 +512,7 @@ function buildPage(): string {
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Dialogue Image</title>
+    <title>Parse Emotion Sheet</title>
     <style>
       :root {
         color-scheme: light;
@@ -529,7 +557,7 @@ function buildPage(): string {
 
       form {
         display: grid;
-        grid-template-columns: minmax(220px, 1fr) minmax(220px, 1fr) auto;
+        grid-template-columns: minmax(220px, 1fr) minmax(150px, 0.5fr) minmax(220px, 1fr) auto;
         gap: 12px;
         align-items: end;
         padding: 16px;
@@ -547,6 +575,7 @@ function buildPage(): string {
       }
 
       input[list],
+      select,
       input[type="file"],
       button {
         min-height: 40px;
@@ -558,6 +587,7 @@ function buildPage(): string {
       }
 
       input[list],
+      select,
       input[type="file"] {
         width: 100%;
         padding: 8px 10px;
@@ -622,6 +652,11 @@ function buildPage(): string {
         background: #ffffff;
       }
 
+      .output-card.is-default {
+        border-color: #147849;
+        box-shadow: inset 0 0 0 2px #147849;
+      }
+
       .output-card img {
         display: block;
         width: 100%;
@@ -678,7 +713,7 @@ function buildPage(): string {
   <body>
     <main>
       <header>
-        <h1>Dialogue Image</h1>
+        <h1>Parse Emotion Sheet</h1>
       </header>
 
       <form id="form">
@@ -686,6 +721,10 @@ function buildPage(): string {
           Personnage
           <input id="character" list="characters" required placeholder="whitebeard-pirates/portgas-d-ace" />
           <datalist id="characters"></datalist>
+        </label>
+        <label>
+          Default
+          <select id="default-emotion" required></select>
         </label>
         <label>
           Sheet
@@ -709,6 +748,7 @@ function buildPage(): string {
       const sheet = ${sheet};
       const characterInput = document.querySelector("#character");
       const characterSuggestions = document.querySelector("#characters");
+      const defaultEmotionSelect = document.querySelector("#default-emotion");
       const sheetInput = document.querySelector("#sheet");
       const submitButton = document.querySelector("#submit");
       const statusNode = document.querySelector("#status");
@@ -718,6 +758,18 @@ function buildPage(): string {
       const context = canvas.getContext("2d");
 
       let selectedFile = null;
+
+      function loadDefaultEmotions() {
+        defaultEmotionSelect.replaceChildren(
+          ...sheet.emotions.map((emotion) => {
+            const option = document.createElement("option");
+            option.value = emotion;
+            option.textContent = emotion;
+            return option;
+          }),
+        );
+        defaultEmotionSelect.value = sheet.emotions[0];
+      }
 
       async function loadCharacters() {
         const response = await fetch("/api/characters");
@@ -744,6 +796,13 @@ function buildPage(): string {
 
       function formatSize(bytes) {
         return Math.max(1, Math.round(bytes / 1024)) + " KB";
+      }
+
+      function markDefaultCard() {
+        const cards = [...outputList.querySelectorAll(".output-card")];
+        for (let index = 0; index < cards.length; index += 1) {
+          cards[index].classList.toggle("is-default", sheet.emotions[index] === defaultEmotionSelect.value);
+        }
       }
 
       function isLightPixel(data, offset) {
@@ -984,6 +1043,8 @@ function buildPage(): string {
       function renderWrittenOutputs(files) {
         const cards = [...outputList.querySelectorAll(".output-card")];
         for (const file of files) {
+          if (file.emotion === "default") continue;
+
           const index = sheet.emotions.indexOf(file.emotion);
           const card = cards[index];
           const info = card?.querySelector(".output-meta span");
@@ -991,6 +1052,13 @@ function buildPage(): string {
             info.textContent = formatSize(file.bytes) + " - " + file.path;
             card.title = file.path;
           }
+        }
+
+        const defaultFile = files.find((file) => file.emotion === "default");
+        const defaultIndex = sheet.emotions.indexOf(defaultEmotionSelect.value);
+        const defaultCard = cards[defaultIndex];
+        if (defaultFile && defaultCard) {
+          defaultCard.title = [defaultCard.title, defaultFile.path].filter(Boolean).join("\\n");
         }
       }
 
@@ -1016,11 +1084,12 @@ function buildPage(): string {
           const subjectBox = detectSubjectBox(pixels.data, canvas.width, panelBox);
           const trimmedBox = subjectBox === null ? panelBox : squareFromSubjectBox(pixels.data, canvas.width, subjectBox, panelBox);
           cropContext.drawImage(canvas, trimmedBox.left, trimmedBox.top, trimmedBox.width, trimmedBox.height, 0, 0, crop.width, crop.height);
-          cards.push(buildOutputCard(sheet.emotions[index], crop.toDataURL("image/webp", 0.82), "Pret a generer"));
+          cards.push(buildOutputCard(sheet.emotions[index], crop.toDataURL("image/webp", 1), "Pret a generer"));
         }
 
         outputList.replaceChildren(...cards);
         empty.hidden = cards.length > 0;
+        markDefaultCard();
       }
 
       function clearOutputs() {
@@ -1029,16 +1098,42 @@ function buildPage(): string {
         empty.hidden = false;
       }
 
-      sheetInput.addEventListener("change", async () => {
-        selectedFile = sheetInput.files?.[0] ?? null;
+      async function useSelectedFile(file) {
+        selectedFile = file;
         clearOutputs();
         syncSubmit();
         if (!selectedFile) return;
         await renderOutputPreview(selectedFile);
         setStatus(selectedFile.name);
+      }
+
+      sheetInput.addEventListener("change", async () => {
+        await useSelectedFile(sheetInput.files?.[0] ?? null);
       });
 
       characterInput.addEventListener("input", syncSubmit);
+      defaultEmotionSelect.addEventListener("change", markDefaultCard);
+
+      document.addEventListener("paste", async (event) => {
+        const items = [...(event.clipboardData?.items ?? [])];
+        const imageItem = items.find((item) => item.kind === "file" && item.type.startsWith("image/"));
+
+        if (!imageItem) return;
+
+        const pastedFile = imageItem.getAsFile();
+        if (!pastedFile) return;
+
+        event.preventDefault();
+
+        const file =
+          pastedFile.name.length > 0
+            ? pastedFile
+            : new File([await pastedFile.arrayBuffer()], "emotion-sheet.png", { type: pastedFile.type || "image/png" });
+        const transfer = new DataTransfer();
+        transfer.items.add(file);
+        sheetInput.files = transfer.files;
+        await useSelectedFile(file);
+      });
 
       document.querySelector("#form").addEventListener("submit", async (event) => {
         event.preventDefault();
@@ -1050,6 +1145,7 @@ function buildPage(): string {
         try {
           const params = new URLSearchParams({
             character: characterInput.value.trim(),
+            defaultEmotion: defaultEmotionSelect.value,
           });
           const response = await fetch("/api/slice?" + params.toString(), {
             method: "POST",
@@ -1067,6 +1163,7 @@ function buildPage(): string {
         }
       });
 
+      loadDefaultEmotions();
       loadCharacters().catch((error) => setStatus(error.message, "error"));
     </script>
   </body>
@@ -1082,6 +1179,6 @@ const server = createServer((request, response) => {
 
 server.listen(PORT, '127.0.0.1', () => {
   const url = `http://localhost:${PORT}`;
-  console.log(`Dialogue Image: ${url}`);
+  console.log(`Parse Emotion Sheet: ${url}`);
   openBrowser(url);
 });
