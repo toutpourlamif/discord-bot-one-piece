@@ -1,2 +1,2 @@
 export { tavernCommands } from './commands/index.js';
-export { tavernButtonHandlers } from './interactions/index.js';
+export { tavernButtonHandlers, tavernModalHandlers } from './interactions/index.js';
