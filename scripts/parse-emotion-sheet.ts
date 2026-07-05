@@ -557,7 +557,7 @@ function buildPage(): string {
 
       form {
         display: grid;
-        grid-template-columns: minmax(220px, 1fr) minmax(150px, 0.5fr) minmax(220px, 1fr) auto;
+        grid-template-columns: minmax(220px, 1fr) minmax(220px, 1fr) auto;
         gap: 12px;
         align-items: end;
         padding: 16px;
@@ -575,7 +575,6 @@ function buildPage(): string {
       }
 
       input[list],
-      select,
       input[type="file"],
       button {
         min-height: 40px;
@@ -587,7 +586,6 @@ function buildPage(): string {
       }
 
       input[list],
-      select,
       input[type="file"] {
         width: 100%;
         padding: 8px 10px;
@@ -646,10 +644,12 @@ function buildPage(): string {
       }
 
       .output-card {
+        position: relative;
         overflow: hidden;
         border: 1px solid #e5dfd2;
         border-radius: 8px;
         background: #ffffff;
+        cursor: pointer;
       }
 
       .output-card.is-default {
@@ -663,6 +663,24 @@ function buildPage(): string {
         aspect-ratio: 1;
         object-fit: cover;
         background: #eef2f5;
+      }
+
+      .default-badge {
+        display: none;
+        position: absolute;
+        top: 8px;
+        left: 8px;
+        padding: 2px 8px;
+        border-radius: 999px;
+        background: #147849;
+        color: #ffffff;
+        font-size: 11px;
+        font-weight: 800;
+        text-transform: uppercase;
+      }
+
+      .output-card.is-default .default-badge {
+        display: inline-block;
       }
 
       .output-meta {
@@ -723,10 +741,6 @@ function buildPage(): string {
           <datalist id="characters"></datalist>
         </label>
         <label>
-          Default
-          <select id="default-emotion" required></select>
-        </label>
-        <label>
           Sheet
           <input id="sheet" type="file" accept="image/*" required />
         </label>
@@ -748,7 +762,6 @@ function buildPage(): string {
       const sheet = ${sheet};
       const characterInput = document.querySelector("#character");
       const characterSuggestions = document.querySelector("#characters");
-      const defaultEmotionSelect = document.querySelector("#default-emotion");
       const sheetInput = document.querySelector("#sheet");
       const submitButton = document.querySelector("#submit");
       const statusNode = document.querySelector("#status");
@@ -758,18 +771,7 @@ function buildPage(): string {
       const context = canvas.getContext("2d");
 
       let selectedFile = null;
-
-      function loadDefaultEmotions() {
-        defaultEmotionSelect.replaceChildren(
-          ...sheet.emotions.map((emotion) => {
-            const option = document.createElement("option");
-            option.value = emotion;
-            option.textContent = emotion;
-            return option;
-          }),
-        );
-        defaultEmotionSelect.value = sheet.emotions[0];
-      }
+      let defaultEmotion = sheet.emotions[0];
 
       async function loadCharacters() {
         const response = await fetch("/api/characters");
@@ -801,8 +803,13 @@ function buildPage(): string {
       function markDefaultCard() {
         const cards = [...outputList.querySelectorAll(".output-card")];
         for (let index = 0; index < cards.length; index += 1) {
-          cards[index].classList.toggle("is-default", sheet.emotions[index] === defaultEmotionSelect.value);
+          cards[index].classList.toggle("is-default", sheet.emotions[index] === defaultEmotion);
         }
+      }
+
+      function selectDefaultEmotion(emotion) {
+        defaultEmotion = emotion;
+        markDefaultCard();
       }
 
       function isLightPixel(data, offset) {
@@ -1025,18 +1032,22 @@ function buildPage(): string {
       function buildOutputCard(emotion, src, detail) {
         const item = document.createElement("li");
         const image = document.createElement("img");
+        const badge = document.createElement("span");
         const meta = document.createElement("div");
         const name = document.createElement("strong");
         const info = document.createElement("span");
 
         item.className = "output-card";
+        item.addEventListener("click", () => selectDefaultEmotion(emotion));
         image.src = src;
         image.alt = emotion;
+        badge.className = "default-badge";
+        badge.textContent = "Défaut";
         meta.className = "output-meta";
         name.textContent = emotion;
         info.textContent = detail;
         meta.append(name, info);
-        item.append(image, meta);
+        item.append(image, badge, meta);
         return item;
       }
 
@@ -1055,7 +1066,7 @@ function buildPage(): string {
         }
 
         const defaultFile = files.find((file) => file.emotion === "default");
-        const defaultIndex = sheet.emotions.indexOf(defaultEmotionSelect.value);
+        const defaultIndex = sheet.emotions.indexOf(defaultEmotion);
         const defaultCard = cards[defaultIndex];
         if (defaultFile && defaultCard) {
           defaultCard.title = [defaultCard.title, defaultFile.path].filter(Boolean).join("\\n");
@@ -1112,7 +1123,6 @@ function buildPage(): string {
       });
 
       characterInput.addEventListener("input", syncSubmit);
-      defaultEmotionSelect.addEventListener("change", markDefaultCard);
 
       document.addEventListener("paste", async (event) => {
         const items = [...(event.clipboardData?.items ?? [])];
@@ -1145,7 +1155,7 @@ function buildPage(): string {
         try {
           const params = new URLSearchParams({
             character: characterInput.value.trim(),
-            defaultEmotion: defaultEmotionSelect.value,
+            defaultEmotion,
           });
           const response = await fetch("/api/slice?" + params.toString(), {
             method: "POST",
@@ -1163,7 +1173,6 @@ function buildPage(): string {
         }
       });
 
-      loadDefaultEmotions();
       loadCharacters().catch((error) => setStatus(error.message, "error"));
     </script>
   </body>
