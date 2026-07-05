@@ -9,6 +9,6 @@ type FormatCommandOptions = {
 };
 
 export function getFormattedCommand(guild: Guild, command: Command, options?: FormatCommandOptions): string {
-  const format = `${guild.prefix}${command.names[guild.language]}`;
-  return options?.wrapInBackticks ? wrapInBackticks(format) : format;
+  const formatted = `${guild.prefix}${command.names[guild.language]}`;
+  return options?.wrapInBackticks ? wrapInBackticks(formatted) : formatted;
 }
