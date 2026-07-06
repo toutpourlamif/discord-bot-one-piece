@@ -25,6 +25,8 @@
     "db:wipe": "docker exec one-piece-db psql -U one_piece -d postgres -c \"DROP DATABASE IF EXISTS one_piece WITH (FORCE)\" -c \"CREATE DATABASE one_piece\"",
     "db:r": "pnpm db:reset",
     "db:reset": "pnpm db:wipe && pnpm db:m:a && pnpm db:seed",
+    "pes": "pnpm parse-emotion-sheet",
+    "parse-emotion-sheet": "tsx scripts/parse-emotion-sheet.ts",
     "images:optimize": "tsx scripts/optimize-staged-images.ts",
     "prepare": "husky"
   },
