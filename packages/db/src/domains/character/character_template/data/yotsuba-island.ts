@@ -2,6 +2,7 @@ import type { CharacterTemplateSeed } from './types.js';
 
 export const YOTSUBA_ISLAND_DATA: Array<CharacterTemplateSeed> = [
   {
+    // LA VERSION GROSSE N'a pas encore mangé le FDD
     name: 'Alvida',
     hp: 11,
     combat: 12,
