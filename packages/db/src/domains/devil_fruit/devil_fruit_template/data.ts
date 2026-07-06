@@ -64,7 +64,6 @@ export const DEVIL_FRUIT_TEMPLATES_DATA = [
     description:
       "Le Ope Ope no Mi est un fruit du démon de type Paramecia, surnommé le fruit ultime. Il permet de créer une « Room », un espace sphérique dans lequel l'utilisateur manipule à sa guise tout ce qui s'y trouve : trancher, déplacer, échanger ou opérer sans causer de blessure mortelle.",
   },
-  // TODO: ajouter assets/devil-fruits/sube/info.webp.
   {
     name: 'Sube Sube no Mi',
     types: [],
