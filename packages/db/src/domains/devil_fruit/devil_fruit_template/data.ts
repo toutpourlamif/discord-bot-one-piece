@@ -63,6 +63,15 @@ export const DEVIL_FRUIT_TEMPLATES_DATA = [
     description:
       "Le Ope Ope no Mi est un fruit du démon de type Paramecia, surnommé le fruit ultime. Il permet de créer une « Room », un espace sphérique dans lequel l'utilisateur manipule à sa guise tout ce qui s'y trouve : trancher, déplacer, échanger ou opérer sans causer de blessure mortelle.",
   },
+  {
+    name: 'Bara Bara no Mi',
+    types: [],
+    hpBonus: 0,
+    combatBonus: 18,
+    imageUrl: buildDevilFruitImageUrl('bara-bara'),
+    description:
+      'Le Bara Bara no Mi est un fruit du démon de type Paramecia qui permet à son utilisateur de séparer son corps en morceaux et de les contrôler à distance, tout en le rendant insensible aux attaques tranchantes.',
+  },
 ] as const satisfies ReadonlyArray<DevilFruitTemplateInsert>;
 
 export type DevilFruitName = (typeof DEVIL_FRUIT_TEMPLATES_DATA)[number]['name'];

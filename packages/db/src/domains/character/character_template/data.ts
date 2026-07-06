@@ -76,6 +76,16 @@ export const CHARACTER_TEMPLATES_DATA: Array<CharacterTemplateSeed> = [
     description: "Capitaine homme-poisson brutal venu imposer sa loi à l'East Blue.",
   },
   {
+    name: 'Baggy le Clown',
+    hp: 14,
+    combat: 17,
+    race: 'HUMAN',
+    rarity: 'C',
+    imageUrl: buildCharacterImageUrl('orange-town', 'baggy'),
+    devilFruitName: 'Bara Bara no Mi',
+    description: "Capitaine pirate extravagant d'Orange Town, capable de separer son corps grace au Bara Bara no Mi.",
+  },
+  {
     name: 'Don Krieg',
     hp: 13,
     combat: 15,
