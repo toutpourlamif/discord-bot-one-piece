@@ -11,7 +11,9 @@ const ROOT_DIR = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..'
 const CHARACTERS_DIR = path.join(ROOT_DIR, 'assets/characters');
 const PORT = Number(process.env.PORT ?? 5174);
 const OUTPUT_SIZE = 512;
-const LIGHT_BORDER_RGB = 238;
+const LEGACY_BORDER_RGB_THRESHOLD = 238;
+const BORDER_COLOR_TOLERANCE = 18;
+const BORDER_SAMPLE_INSET = 3;
 const GRID_SEPARATOR_RATIO = 0.94;
 const EDGE_TRIM_RATIO = 0.88;
 const SUBJECT_PADDING_PERCENT = 4;
@@ -52,6 +54,12 @@ type RawImage = {
   width: number;
   height: number;
   channels: number;
+};
+
+type BorderColor = {
+  red: number;
+  green: number;
+  blue: number;
 };
 
 async function listCharacterFolders(): Promise<Array<CharacterOption>> {
@@ -126,13 +134,58 @@ function resolveCharacterDirectory(character: string): string {
   return path.join(CHARACTERS_DIR, character);
 }
 
-function isLightPixel(data: Buffer, offset: number, channels: number): boolean {
+function colorDistance(left: BorderColor, right: BorderColor): number {
+  return Math.hypot(left.red - right.red, left.green - right.green, left.blue - right.blue);
+}
+
+function readCornerColor(raw: RawImage, x: number, y: number): BorderColor & { isTransparent: boolean } {
+  const offset = (y * raw.width + x) * raw.channels;
+  const alpha = raw.channels > 3 ? (raw.data[offset + 3] ?? 255) : 255;
+
+  return {
+    red: raw.data[offset] ?? 0,
+    green: raw.data[offset + 1] ?? 0,
+    blue: raw.data[offset + 2] ?? 0,
+    isTransparent: alpha < 12,
+  };
+}
+
+// La sheet generee n'a pas toujours une bordure blanc pur (papier beige/creme selon le prompt) :
+// on echantillonne la couleur reelle des 4 coins plutot que de figer un seuil "blanc".
+function detectBorderColor(raw: RawImage): BorderColor | null {
+  const inset = BORDER_SAMPLE_INSET;
+  const corners = [
+    readCornerColor(raw, inset, inset),
+    readCornerColor(raw, raw.width - 1 - inset, inset),
+    readCornerColor(raw, inset, raw.height - 1 - inset),
+    readCornerColor(raw, raw.width - 1 - inset, raw.height - 1 - inset),
+  ];
+
+  if (corners.some((corner) => corner.isTransparent)) return null;
+
+  const meanColor: BorderColor = {
+    red: corners.reduce((total, corner) => total + corner.red, 0) / corners.length,
+    green: corners.reduce((total, corner) => total + corner.green, 0) / corners.length,
+    blue: corners.reduce((total, corner) => total + corner.blue, 0) / corners.length,
+  };
+  const isUniform = corners.every((corner) => colorDistance(corner, meanColor) <= BORDER_COLOR_TOLERANCE);
+
+  return isUniform ? meanColor : null;
+}
+
+function isBorderColorPixel(data: Buffer, offset: number, channels: number, borderColor: BorderColor | null): boolean {
+  const alpha = channels > 3 ? (data[offset + 3] ?? 255) : 255;
+  if (alpha < 12) return true;
+
   const red = data[offset] ?? 0;
   const green = data[offset + 1] ?? 0;
   const blue = data[offset + 2] ?? 0;
-  const alpha = channels > 3 ? (data[offset + 3] ?? 255) : 255;
 
-  return alpha < 12 || (red >= LIGHT_BORDER_RGB && green >= LIGHT_BORDER_RGB && blue >= LIGHT_BORDER_RGB);
+  if (borderColor === null) {
+    return red >= LEGACY_BORDER_RGB_THRESHOLD && green >= LEGACY_BORDER_RGB_THRESHOLD && blue >= LEGACY_BORDER_RGB_THRESHOLD;
+  }
+
+  return colorDistance({ red, green, blue }, borderColor) <= BORDER_COLOR_TOLERANCE;
 }
 
 function isSubjectPixel(data: Buffer, offset: number, channels: number): boolean {
@@ -162,44 +215,51 @@ function isSkinPixel(data: Buffer, offset: number, channels: number): boolean {
   return red > 105 && green > 65 && blue < 175 && red > blue + 18 && green > blue + 4 && red >= green - 8;
 }
 
-function getLightColumnRatio(data: Buffer, width: number, height: number, channels: number, x: number): number {
-  let light = 0;
+function getBorderColumnRatio(
+  data: Buffer,
+  width: number,
+  height: number,
+  channels: number,
+  x: number,
+  borderColor: BorderColor | null,
+): number {
+  let border = 0;
   for (let y = 0; y < height; y += 1) {
-    if (isLightPixel(data, (y * width + x) * channels, channels)) {
-      light += 1;
+    if (isBorderColorPixel(data, (y * width + x) * channels, channels, borderColor)) {
+      border += 1;
     }
   }
-  return light / height;
+  return border / height;
 }
 
-function getLightRowRatio(data: Buffer, width: number, channels: number, y: number): number {
-  let light = 0;
+function getBorderRowRatio(data: Buffer, width: number, channels: number, y: number, borderColor: BorderColor | null): number {
+  let border = 0;
   for (let x = 0; x < width; x += 1) {
-    if (isLightPixel(data, (y * width + x) * channels, channels)) {
-      light += 1;
+    if (isBorderColorPixel(data, (y * width + x) * channels, channels, borderColor)) {
+      border += 1;
     }
   }
-  return light / width;
+  return border / width;
 }
 
-function getBoxColumnLightRatio(raw: RawImage, box: GridBox, x: number): number {
-  let light = 0;
+function getBoxColumnBorderRatio(raw: RawImage, box: GridBox, x: number, borderColor: BorderColor | null): number {
+  let border = 0;
   for (let y = box.top; y < box.top + box.height; y += 1) {
-    if (isLightPixel(raw.data, (y * raw.width + x) * raw.channels, raw.channels)) {
-      light += 1;
+    if (isBorderColorPixel(raw.data, (y * raw.width + x) * raw.channels, raw.channels, borderColor)) {
+      border += 1;
     }
   }
-  return light / box.height;
+  return border / box.height;
 }
 
-function getBoxRowLightRatio(raw: RawImage, box: GridBox, y: number): number {
-  let light = 0;
+function getBoxRowBorderRatio(raw: RawImage, box: GridBox, y: number, borderColor: BorderColor | null): number {
+  let border = 0;
   for (let x = box.left; x < box.left + box.width; x += 1) {
-    if (isLightPixel(raw.data, (y * raw.width + x) * raw.channels, raw.channels)) {
-      light += 1;
+    if (isBorderColorPixel(raw.data, (y * raw.width + x) * raw.channels, raw.channels, borderColor)) {
+      border += 1;
     }
   }
-  return light / box.width;
+  return border / box.width;
 }
 
 function buildSegments(length: number, isSeparator: (index: number) => boolean): Array<Segment> {
@@ -233,13 +293,16 @@ function findRegularSegments(segments: Array<Segment>, expectedCount: number): A
   return selected.length === expectedCount ? selected : null;
 }
 
-function detectGridBoxes(raw: RawImage): Array<GridBox> | null {
+function detectGridBoxes(raw: RawImage, borderColor: BorderColor | null): Array<GridBox> | null {
   const columnSegments = findRegularSegments(
-    buildSegments(raw.width, (x) => getLightColumnRatio(raw.data, raw.width, raw.height, raw.channels, x) >= GRID_SEPARATOR_RATIO),
+    buildSegments(
+      raw.width,
+      (x) => getBorderColumnRatio(raw.data, raw.width, raw.height, raw.channels, x, borderColor) >= GRID_SEPARATOR_RATIO,
+    ),
     SHEET.columns,
   );
   const rowSegments = findRegularSegments(
-    buildSegments(raw.height, (y) => getLightRowRatio(raw.data, raw.width, raw.channels, y) >= GRID_SEPARATOR_RATIO),
+    buildSegments(raw.height, (y) => getBorderRowRatio(raw.data, raw.width, raw.channels, y, borderColor) >= GRID_SEPARATOR_RATIO),
     SHEET.rows,
   );
 
@@ -281,7 +344,7 @@ function buildFallbackGridBoxes(width: number, height: number): Array<GridBox> {
   return boxes;
 }
 
-function trimLightEdges(raw: RawImage, box: GridBox): GridBox {
+function trimLightEdges(raw: RawImage, box: GridBox, borderColor: BorderColor | null): GridBox {
   let left = box.left;
   let right = box.left + box.width - 1;
   let top = box.top;
@@ -289,28 +352,28 @@ function trimLightEdges(raw: RawImage, box: GridBox): GridBox {
 
   while (
     right - left + 1 > 64 &&
-    getBoxColumnLightRatio(raw, { left, top, width: right - left + 1, height: bottom - top + 1 }, left) >= EDGE_TRIM_RATIO
+    getBoxColumnBorderRatio(raw, { left, top, width: right - left + 1, height: bottom - top + 1 }, left, borderColor) >= EDGE_TRIM_RATIO
   ) {
     left += 1;
   }
 
   while (
     right - left + 1 > 64 &&
-    getBoxColumnLightRatio(raw, { left, top, width: right - left + 1, height: bottom - top + 1 }, right) >= EDGE_TRIM_RATIO
+    getBoxColumnBorderRatio(raw, { left, top, width: right - left + 1, height: bottom - top + 1 }, right, borderColor) >= EDGE_TRIM_RATIO
   ) {
     right -= 1;
   }
 
   while (
     bottom - top + 1 > 64 &&
-    getBoxRowLightRatio(raw, { left, top, width: right - left + 1, height: bottom - top + 1 }, top) >= EDGE_TRIM_RATIO
+    getBoxRowBorderRatio(raw, { left, top, width: right - left + 1, height: bottom - top + 1 }, top, borderColor) >= EDGE_TRIM_RATIO
   ) {
     top += 1;
   }
 
   while (
     bottom - top + 1 > 64 &&
-    getBoxRowLightRatio(raw, { left, top, width: right - left + 1, height: bottom - top + 1 }, bottom) >= EDGE_TRIM_RATIO
+    getBoxRowBorderRatio(raw, { left, top, width: right - left + 1, height: bottom - top + 1 }, bottom, borderColor) >= EDGE_TRIM_RATIO
   ) {
     bottom -= 1;
   }
@@ -414,7 +477,8 @@ async function sliceEmotionSheet(character: string, input: Buffer, defaultEmotio
     height: rawResult.info.height,
     channels: rawResult.info.channels,
   };
-  const boxes = detectGridBoxes(raw) ?? buildFallbackGridBoxes(metadata.width, metadata.height);
+  const borderColor = detectBorderColor(raw);
+  const boxes = detectGridBoxes(raw, borderColor) ?? buildFallbackGridBoxes(metadata.width, metadata.height);
   await mkdir(outputDirectory, { recursive: true });
 
   const results: Array<SliceResult> = [];
@@ -427,7 +491,7 @@ async function sliceEmotionSheet(character: string, input: Buffer, defaultEmotio
       throw new Error(`Impossible de decouper ${emotion}.`);
     }
 
-    const panelBox = trimLightEdges(raw, detectedBox);
+    const panelBox = trimLightEdges(raw, detectedBox, borderColor);
     const subjectBox = detectSubjectBox(raw, panelBox);
     const box = subjectBox === null ? panelBox : squareFromSubjectBox(raw, subjectBox, panelBox);
 
@@ -812,22 +876,62 @@ function buildPage(): string {
         markDefaultCard();
       }
 
-      function isLightPixel(data, offset) {
-        return data[offset + 3] < 12 || (data[offset] >= 238 && data[offset + 1] >= 238 && data[offset + 2] >= 238);
+      function colorDistance(left, right) {
+        return Math.hypot(left.red - right.red, left.green - right.green, left.blue - right.blue);
       }
 
-      function lightColumnRatio(data, width, height, x) {
+      function readCornerColor(data, imageWidth, x, y) {
+        const offset = (y * imageWidth + x) * 4;
+        return { red: data[offset], green: data[offset + 1], blue: data[offset + 2], isTransparent: data[offset + 3] < 12 };
+      }
+
+      function detectBorderColor(data, width, height) {
+        const inset = 3;
+        const corners = [
+          readCornerColor(data, width, inset, inset),
+          readCornerColor(data, width, width - 1 - inset, inset),
+          readCornerColor(data, width, inset, height - 1 - inset),
+          readCornerColor(data, width, width - 1 - inset, height - 1 - inset),
+        ];
+
+        if (corners.some((corner) => corner.isTransparent)) return null;
+
+        const meanColor = {
+          red: corners.reduce((total, corner) => total + corner.red, 0) / corners.length,
+          green: corners.reduce((total, corner) => total + corner.green, 0) / corners.length,
+          blue: corners.reduce((total, corner) => total + corner.blue, 0) / corners.length,
+        };
+        const isUniform = corners.every((corner) => colorDistance(corner, meanColor) <= 18);
+
+        return isUniform ? meanColor : null;
+      }
+
+      function isLightPixel(data, offset, borderColor) {
+        if (data[offset + 3] < 12) return true;
+
+        const red = data[offset];
+        const green = data[offset + 1];
+        const blue = data[offset + 2];
+
+        if (borderColor === null) {
+          return red >= 238 && green >= 238 && blue >= 238;
+        }
+
+        return colorDistance({ red, green, blue }, borderColor) <= 18;
+      }
+
+      function lightColumnRatio(data, width, height, x, borderColor) {
         let light = 0;
         for (let y = 0; y < height; y += 1) {
-          if (isLightPixel(data, (y * width + x) * 4)) light += 1;
+          if (isLightPixel(data, (y * width + x) * 4, borderColor)) light += 1;
         }
         return light / height;
       }
 
-      function lightRowRatio(data, width, height, y) {
+      function lightRowRatio(data, width, height, y, borderColor) {
         let light = 0;
         for (let x = 0; x < width; x += 1) {
-          if (isLightPixel(data, (y * width + x) * 4)) light += 1;
+          if (isLightPixel(data, (y * width + x) * 4, borderColor)) light += 1;
         }
         return light / width;
       }
@@ -876,41 +980,41 @@ function buildPage(): string {
         return boxes;
       }
 
-      function boxColumnLightRatio(data, imageWidth, box, x) {
+      function boxColumnLightRatio(data, imageWidth, box, x, borderColor) {
         let light = 0;
         for (let y = box.top; y < box.top + box.height; y += 1) {
-          if (isLightPixel(data, (y * imageWidth + x) * 4)) light += 1;
+          if (isLightPixel(data, (y * imageWidth + x) * 4, borderColor)) light += 1;
         }
         return light / box.height;
       }
 
-      function boxRowLightRatio(data, imageWidth, box, y) {
+      function boxRowLightRatio(data, imageWidth, box, y, borderColor) {
         let light = 0;
         for (let x = box.left; x < box.left + box.width; x += 1) {
-          if (isLightPixel(data, (y * imageWidth + x) * 4)) light += 1;
+          if (isLightPixel(data, (y * imageWidth + x) * 4, borderColor)) light += 1;
         }
         return light / box.width;
       }
 
-      function trimLightEdges(data, imageWidth, box) {
+      function trimLightEdges(data, imageWidth, box, borderColor) {
         let left = box.left;
         let right = box.left + box.width - 1;
         let top = box.top;
         let bottom = box.top + box.height - 1;
 
-        while (right - left + 1 > 64 && boxColumnLightRatio(data, imageWidth, { left, top, width: right - left + 1, height: bottom - top + 1 }, left) >= 0.88) {
+        while (right - left + 1 > 64 && boxColumnLightRatio(data, imageWidth, { left, top, width: right - left + 1, height: bottom - top + 1 }, left, borderColor) >= 0.88) {
           left += 1;
         }
 
-        while (right - left + 1 > 64 && boxColumnLightRatio(data, imageWidth, { left, top, width: right - left + 1, height: bottom - top + 1 }, right) >= 0.88) {
+        while (right - left + 1 > 64 && boxColumnLightRatio(data, imageWidth, { left, top, width: right - left + 1, height: bottom - top + 1 }, right, borderColor) >= 0.88) {
           right -= 1;
         }
 
-        while (bottom - top + 1 > 64 && boxRowLightRatio(data, imageWidth, { left, top, width: right - left + 1, height: bottom - top + 1 }, top) >= 0.88) {
+        while (bottom - top + 1 > 64 && boxRowLightRatio(data, imageWidth, { left, top, width: right - left + 1, height: bottom - top + 1 }, top, borderColor) >= 0.88) {
           top += 1;
         }
 
-        while (bottom - top + 1 > 64 && boxRowLightRatio(data, imageWidth, { left, top, width: right - left + 1, height: bottom - top + 1 }, bottom) >= 0.88) {
+        while (bottom - top + 1 > 64 && boxRowLightRatio(data, imageWidth, { left, top, width: right - left + 1, height: bottom - top + 1 }, bottom, borderColor) >= 0.88) {
           bottom -= 1;
         }
 
@@ -1004,14 +1108,14 @@ function buildPage(): string {
         };
       }
 
-      function detectGridBoxesFromCanvas(source) {
+      function detectGridBoxesFromCanvas(source, borderColor) {
         const pixels = source.getContext("2d").getImageData(0, 0, source.width, source.height);
         const columns = findRegularSegments(
-          buildSegments(source.width, (x) => lightColumnRatio(pixels.data, source.width, source.height, x) >= 0.94),
+          buildSegments(source.width, (x) => lightColumnRatio(pixels.data, source.width, source.height, x, borderColor) >= 0.94),
           sheet.columns,
         );
         const rows = findRegularSegments(
-          buildSegments(source.height, (y) => lightRowRatio(pixels.data, source.width, source.height, y) >= 0.94),
+          buildSegments(source.height, (y) => lightRowRatio(pixels.data, source.width, source.height, y, borderColor) >= 0.94),
           sheet.rows,
         );
 
@@ -1081,7 +1185,8 @@ function buildPage(): string {
         context.drawImage(bitmap, 0, 0);
 
         const pixels = context.getImageData(0, 0, canvas.width, canvas.height);
-        const boxes = detectGridBoxesFromCanvas(canvas);
+        const borderColor = detectBorderColor(pixels.data, canvas.width, canvas.height);
+        const boxes = detectGridBoxesFromCanvas(canvas, borderColor);
         const cards = [];
 
         for (let index = 0; index < sheet.emotions.length; index += 1) {
@@ -1091,7 +1196,7 @@ function buildPage(): string {
           crop.width = 512;
           crop.height = 512;
           const cropContext = crop.getContext("2d");
-          const panelBox = trimLightEdges(pixels.data, canvas.width, box);
+          const panelBox = trimLightEdges(pixels.data, canvas.width, box, borderColor);
           const subjectBox = detectSubjectBox(pixels.data, canvas.width, panelBox);
           const trimmedBox = subjectBox === null ? panelBox : squareFromSubjectBox(pixels.data, canvas.width, subjectBox, panelBox);
           cropContext.drawImage(canvas, trimmedBox.left, trimmedBox.top, trimmedBox.width, trimmedBox.height, 0, 0, crop.width, crop.height);
