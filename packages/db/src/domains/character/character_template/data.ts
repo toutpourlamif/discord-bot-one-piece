@@ -128,7 +128,7 @@ export const CHARACTER_TEMPLATES_DATA: Array<CharacterTemplateSeed> = [
     description: "Le Mage, Supernova énigmatique qui lit l'avenir dans ses cartes de tarot.",
   },
   ...FAKE_STRAW_HATS_DATA,
-  ...LOGUETOWN_DATA,
   ...STRAW_HATS_DATA,
   ...YOTSUBA_ISLAND_DATA,
+  ...LOGUETOWN_DATA,
 ];
