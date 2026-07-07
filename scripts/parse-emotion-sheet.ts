@@ -12,10 +12,11 @@ const CHARACTERS_DIR = path.join(ROOT_DIR, 'assets/characters');
 const PORT = Number(process.env.PORT ?? 5174);
 const OUTPUT_SIZE = 512;
 const LEGACY_BORDER_RGB_THRESHOLD = 238;
-const BORDER_COLOR_TOLERANCE = 18;
+// La bordure a un léger dégradé/ombre portée juste avant chaque photo (mesuré : distance ~30 entre le coin et le bord de la case) : la tolérance doit l'absorber.
+const BORDER_COLOR_TOLERANCE = 45;
 const BORDER_SAMPLE_INSET = 3;
 const GRID_SEPARATOR_RATIO = 0.94;
-const EDGE_TRIM_RATIO = 0.88;
+const EDGE_TRIM_RATIO = 0.8;
 const SUBJECT_PADDING_PERCENT = 4;
 const PORTRAIT_ZOOM_RATIO = 0.84;
 const SHEET = {
@@ -901,7 +902,7 @@ function buildPage(): string {
           green: corners.reduce((total, corner) => total + corner.green, 0) / corners.length,
           blue: corners.reduce((total, corner) => total + corner.blue, 0) / corners.length,
         };
-        const isUniform = corners.every((corner) => colorDistance(corner, meanColor) <= 18);
+        const isUniform = corners.every((corner) => colorDistance(corner, meanColor) <= 45);
 
         return isUniform ? meanColor : null;
       }
@@ -917,7 +918,7 @@ function buildPage(): string {
           return red >= 238 && green >= 238 && blue >= 238;
         }
 
-        return colorDistance({ red, green, blue }, borderColor) <= 18;
+        return colorDistance({ red, green, blue }, borderColor) <= 45;
       }
 
       function lightColumnRatio(data, width, height, x, borderColor) {
@@ -1002,19 +1003,19 @@ function buildPage(): string {
         let top = box.top;
         let bottom = box.top + box.height - 1;
 
-        while (right - left + 1 > 64 && boxColumnLightRatio(data, imageWidth, { left, top, width: right - left + 1, height: bottom - top + 1 }, left, borderColor) >= 0.88) {
+        while (right - left + 1 > 64 && boxColumnLightRatio(data, imageWidth, { left, top, width: right - left + 1, height: bottom - top + 1 }, left, borderColor) >= 0.8) {
           left += 1;
         }
 
-        while (right - left + 1 > 64 && boxColumnLightRatio(data, imageWidth, { left, top, width: right - left + 1, height: bottom - top + 1 }, right, borderColor) >= 0.88) {
+        while (right - left + 1 > 64 && boxColumnLightRatio(data, imageWidth, { left, top, width: right - left + 1, height: bottom - top + 1 }, right, borderColor) >= 0.8) {
           right -= 1;
         }
 
-        while (bottom - top + 1 > 64 && boxRowLightRatio(data, imageWidth, { left, top, width: right - left + 1, height: bottom - top + 1 }, top, borderColor) >= 0.88) {
+        while (bottom - top + 1 > 64 && boxRowLightRatio(data, imageWidth, { left, top, width: right - left + 1, height: bottom - top + 1 }, top, borderColor) >= 0.8) {
           top += 1;
         }
 
-        while (bottom - top + 1 > 64 && boxRowLightRatio(data, imageWidth, { left, top, width: right - left + 1, height: bottom - top + 1 }, bottom, borderColor) >= 0.88) {
+        while (bottom - top + 1 > 64 && boxRowLightRatio(data, imageWidth, { left, top, width: right - left + 1, height: bottom - top + 1 }, bottom, borderColor) >= 0.8) {
           bottom -= 1;
         }
 
