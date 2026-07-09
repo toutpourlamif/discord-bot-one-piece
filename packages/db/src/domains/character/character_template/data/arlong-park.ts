@@ -1,4 +1,4 @@
-import type { CharacterTemplateSeed } from '../types.js';
+import type { CharacterTemplateSeed } from './types.js';
 
 export const ARLONG_PARK_DATA: Array<CharacterTemplateSeed> = [
   {
@@ -6,6 +6,7 @@ export const ARLONG_PARK_DATA: Array<CharacterTemplateSeed> = [
     name: 'Arlong',
     hp: 10,
     combat: 10,
+    types: ['WATER', 'FIGHTING'],
     race: 'FISHMAN',
     rarity: 'D',
     imageUrl: 'characters/konomi-archipelago/arlong-park/arlong/info.webp',

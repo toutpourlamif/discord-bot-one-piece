@@ -1,5 +1,5 @@
+import { ARLONG_PARK_DATA } from './data/arlong-park.js';
 import { FAKE_STRAW_HATS_DATA } from './data/fake-straw-hats.js';
-import { ARLONG_PARK_DATA } from './data/konomi_archipelago/arlong-park.js';
 import { STRAW_HATS_DATA } from './data/straw-hats.js';
 import type { CharacterTemplateSeed } from './data/types.js';
 import { YOTSUBA_ISLAND_DATA } from './data/yotsuba-island.js';
