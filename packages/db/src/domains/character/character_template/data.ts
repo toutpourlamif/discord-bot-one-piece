@@ -1,3 +1,4 @@
+import { BARATIE_DATA } from './data/baratie.js';
 import { FAKE_STRAW_HATS_DATA } from './data/fake-straw-hats.js';
 import { LOGUETOWN_DATA } from './data/loguetown.js';
 import { STRAW_HATS_DATA } from './data/straw-hats.js';
@@ -78,15 +79,6 @@ export const CHARACTER_TEMPLATES_DATA: Array<CharacterTemplateSeed> = [
     description: "Capitaine homme-poisson brutal venu imposer sa loi à l'East Blue.",
   },
   {
-    name: 'Don Krieg',
-    hp: 13,
-    combat: 15,
-    race: 'HUMAN',
-    rarity: 'D',
-    imageUrl: null,
-    description: "Chef pirate de l'East Blue, dangereux surtout par son arsenal.",
-  },
-  {
     name: 'Portgas D. Ace',
     hp: 22,
     combat: 26,
@@ -127,6 +119,7 @@ export const CHARACTER_TEMPLATES_DATA: Array<CharacterTemplateSeed> = [
     imageUrl: buildCharacterImageUrl('beasts-pirates', 'basil-hawkins'),
     description: "Le Mage, Supernova énigmatique qui lit l'avenir dans ses cartes de tarot.",
   },
+  ...BARATIE_DATA,
   ...FAKE_STRAW_HATS_DATA,
   ...STRAW_HATS_DATA,
   ...YOTSUBA_ISLAND_DATA,
