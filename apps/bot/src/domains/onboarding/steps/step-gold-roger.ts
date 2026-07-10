@@ -9,7 +9,11 @@ type GoldRogerScene = { id: OnboardingStepId; text: string | null; assetPath: st
 
 // TODO:: Brancher les assets
 const GOLD_ROGER_SCENES: ReadonlyArray<GoldRogerScene> = [
-  { id: 'gold-roger-distant-march', text: 'La richesse. La gloire. Le pouvoir.', assetPath: 'onboarding/gold-roger/distant-march.webp' },
+  {
+    id: 'gold-roger-distant-march',
+    text: 'La richesse. La gloire. Le pouvoir.',
+    assetPath: 'onboarding/gold-roger/distant-march-300.webp',
+  },
   {
     id: 'gold-roger-close-march',
     text: 'Cet homme avait amassé tout ce que le monde avait à offrir.',

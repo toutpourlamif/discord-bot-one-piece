@@ -14,6 +14,12 @@ export function getStep(id: OnboardingStepId): OnboardingStep {
   return step;
 }
 
+export function getFirstStepId(): OnboardingStepId {
+  const [firstStep] = ONBOARDING_SCENARIO;
+  if (!firstStep) throw new InternalError(`ONBOARDING_SCENARIO est vide`);
+  return firstStep.id;
+}
+
 export function getNextStepId(id: OnboardingStepId): OnboardingStepId | null {
   const index = ONBOARDING_SCENARIO.findIndex((step) => step.id === id);
   if (index === -1) throw new InternalError(`Step d'onboarding introuvable: ${id}`);
