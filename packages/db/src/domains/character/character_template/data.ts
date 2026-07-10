@@ -1,6 +1,8 @@
 import { FAKE_STRAW_HATS_DATA } from './data/fake-straw-hats.js';
+import { LOGUETOWN_DATA } from './data/loguetown.js';
 import { STRAW_HATS_DATA } from './data/straw-hats.js';
 import type { CharacterTemplateSeed } from './data/types.js';
+import { YOTSUBA_ISLAND_DATA } from './data/yotsuba-island.js';
 
 function buildCharacterImageUrl(crew: string, slug: string): string {
   return `characters/${crew}/${slug}/info.webp`;
@@ -127,4 +129,6 @@ export const CHARACTER_TEMPLATES_DATA: Array<CharacterTemplateSeed> = [
   },
   ...FAKE_STRAW_HATS_DATA,
   ...STRAW_HATS_DATA,
+  ...YOTSUBA_ISLAND_DATA,
+  ...LOGUETOWN_DATA,
 ];

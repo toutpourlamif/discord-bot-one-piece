@@ -1,5 +1,6 @@
 import type { DevilFruitTemplateInsert } from './schema.js';
 
+// TODO: faire pointer vers un dossier, pas une url (car mnt on utilise des dossiers)
 function buildDevilFruitImageUrl(slug: string): string {
   return `devil-fruits/${slug}/info.webp`;
 }
@@ -62,6 +63,15 @@ export const DEVIL_FRUIT_TEMPLATES_DATA = [
     imageUrl: buildDevilFruitImageUrl('ope'),
     description:
       "Le Ope Ope no Mi est un fruit du démon de type Paramecia, surnommé le fruit ultime. Il permet de créer une « Room », un espace sphérique dans lequel l'utilisateur manipule à sa guise tout ce qui s'y trouve : trancher, déplacer, échanger ou opérer sans causer de blessure mortelle.",
+  },
+  {
+    name: 'Sube Sube no Mi',
+    types: [],
+    hpBonus: 0,
+    combatBonus: 8,
+    imageUrl: buildDevilFruitImageUrl('sube'),
+    description:
+      "Le Sube Sube no Mi est un fruit du démon de type Paramecia qui rend la peau de son utilisateur parfaitement lisse. Tout glisse dessus sans y laisser de prise : coups, projectiles, et même les sentiments d'autrui.",
   },
 ] as const satisfies ReadonlyArray<DevilFruitTemplateInsert>;
 
