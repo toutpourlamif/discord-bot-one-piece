@@ -9,7 +9,7 @@ export const ARLONG_PARK_DATA: Array<CharacterTemplateSeed> = [
     types: ['WATER', 'FIGHTING'],
     race: 'FISHMAN',
     rarity: 'D',
-    imageUrl: 'characters/konomi-archipelago/arlong-park/arlong/info.webp',
+    imageUrl: 'characters/arlong-park/arlong/info.webp',
     description: 'Homme poisson sans foi ni loi. Truand connu de tous, terrorise east blue.',
   },
 ];
