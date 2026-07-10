@@ -14,6 +14,7 @@ import { onePieceCommand } from './onepiece.js';
 import { randomCommand } from './random.js';
 import { randomCatCommand } from './randomcat.js';
 import { repeatCommand } from './repeat.js';
+import { resetOnboardingCommand } from './reset-onboarding.js';
 import { sellCommand } from './sell.js';
 import { setBucketCommand } from './set-bucket.js';
 import { setEtaCommand } from './set-eta.js';
@@ -46,6 +47,7 @@ export const devCommands = [
   showHistoryCommand,
   wipeHistoryCommand,
   skipOnboardingCommand,
+  resetOnboardingCommand,
   setBucketCommand,
   setEtaCommand,
 ].map((cmd) => ({ ...cmd, requiresOpAdmin: true, requiresSynchronization: false, requiresOnboardingFinished: false }));

@@ -39,6 +39,15 @@ export const CHARACTER_TEMPLATES_DATA: Array<CharacterTemplateSeed> = [
     imageUrl: null,
     description: 'rouqin boosté',
   },
+  // TODO: Remplacer par l'animal pour l'onboarding
+  {
+    name: 'Koby',
+    hp: 8,
+    combat: 6,
+    race: 'HUMAN',
+    imageUrl: 'characters/marines/koby-young/dialogue-default.webp',
+    description: 'Jeune marine paumé, recruté sur les quais de Dawn Island.',
+  },
   // TODO: ajouter les fichiers WebP correspondants dans assets/characters avant merge.
   {
     name: 'Dracule Mihawk',

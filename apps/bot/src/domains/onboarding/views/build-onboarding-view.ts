@@ -6,7 +6,7 @@ import { buildCustomId } from '../../../discord/utils/build-custom-id.js';
 import { ONBOARDING_NEXT_BUTTON_NAME } from '../constants.js';
 import { getStep } from '../step-registry.js';
 
-const DEFAULT_SCENE_BUTTON_LABEL = 'Continuer';
+export const DEFAULT_SCENE_BUTTON_LABEL = 'Continuer';
 
 type BuildOnboardingViewParams = { stepId: OnboardingStepId; prefix: string; ownerDiscordId: string };
 
@@ -17,13 +17,15 @@ export function buildOnboardingView({ stepId, prefix, ownerDiscordId }: BuildOnb
 
   return {
     embeds: [step.embed()],
-    components: [buildNextButtonRow({ stepId: step.id, label: step.buttonLabel ?? DEFAULT_SCENE_BUTTON_LABEL, ownerDiscordId })],
+    components: step.buildComponents
+      ? step.buildComponents({ stepId: step.id, ownerDiscordId })
+      : [buildNextButtonRow({ stepId: step.id, label: step.buttonLabel ?? DEFAULT_SCENE_BUTTON_LABEL, ownerDiscordId })],
   };
 }
 
 type NextButtonRowParams = { stepId: OnboardingStepId; label: string; ownerDiscordId: string };
 
-function buildNextButtonRow({ stepId, label, ownerDiscordId }: NextButtonRowParams): ActionRowBuilder<ButtonBuilder> {
+export function buildNextButtonRow({ stepId, label, ownerDiscordId }: NextButtonRowParams): ActionRowBuilder<ButtonBuilder> {
   return new ActionRowBuilder<ButtonBuilder>().addComponents(
     new ButtonBuilder()
       .setCustomId(buildCustomId(ONBOARDING_NEXT_BUTTON_NAME, ownerDiscordId, stepId))

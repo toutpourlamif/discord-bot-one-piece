@@ -1,0 +1,26 @@
+ALTER TYPE "public"."onboarding_step" ADD VALUE 'gold-roger-distant-march' BEFORE 'fish-mission';--> statement-breakpoint
+ALTER TYPE "public"."onboarding_step" ADD VALUE 'gold-roger-close-march' BEFORE 'fish-mission';--> statement-breakpoint
+ALTER TYPE "public"."onboarding_step" ADD VALUE 'gold-roger-chained-hands' BEFORE 'fish-mission';--> statement-breakpoint
+ALTER TYPE "public"."onboarding_step" ADD VALUE 'gold-roger-climbs-stairs' BEFORE 'fish-mission';--> statement-breakpoint
+ALTER TYPE "public"."onboarding_step" ADD VALUE 'gold-roger-blade-view' BEFORE 'fish-mission';--> statement-breakpoint
+ALTER TYPE "public"."onboarding_step" ADD VALUE 'gold-roger-accepts-fate' BEFORE 'fish-mission';--> statement-breakpoint
+ALTER TYPE "public"."onboarding_step" ADD VALUE 'gold-roger-blades-rise' BEFORE 'fish-mission';--> statement-breakpoint
+ALTER TYPE "public"."onboarding_step" ADD VALUE 'gold-roger-blade-view-behind' BEFORE 'fish-mission';--> statement-breakpoint
+ALTER TYPE "public"."onboarding_step" ADD VALUE 'gold-roger-crowd-reaction' BEFORE 'fish-mission';--> statement-breakpoint
+ALTER TYPE "public"."onboarding_step" ADD VALUE 'gold-roger-laughs' BEFORE 'fish-mission';--> statement-breakpoint
+ALTER TYPE "public"."onboarding_step" ADD VALUE 'gold-roger-treasure-reveal' BEFORE 'fish-mission';--> statement-breakpoint
+ALTER TYPE "public"."onboarding_step" ADD VALUE 'gold-roger-legacy-begins' BEFORE 'fish-mission';--> statement-breakpoint
+ALTER TYPE "public"."onboarding_step" ADD VALUE 'gold-roger-pirate-era' BEFORE 'fish-mission';--> statement-breakpoint
+ALTER TYPE "public"."onboarding_step" ADD VALUE 'storyteller-square' BEFORE 'fish-mission';--> statement-breakpoint
+ALTER TYPE "public"."onboarding_step" ADD VALUE 'storyteller-turns-to-you' BEFORE 'fish-mission';--> statement-breakpoint
+ALTER TYPE "public"."onboarding_step" ADD VALUE 'storyteller-question' BEFORE 'fish-mission';--> statement-breakpoint
+ALTER TYPE "public"."onboarding_step" ADD VALUE 'storyteller-coin-flip' BEFORE 'fish-mission';--> statement-breakpoint
+ALTER TYPE "public"."onboarding_step" ADD VALUE 'storyteller-encyclopedia' BEFORE 'fish-mission';--> statement-breakpoint
+ALTER TYPE "public"."onboarding_step" ADD VALUE 'info-mission' BEFORE 'fish-mission';--> statement-breakpoint
+ALTER TYPE "public"."onboarding_step" ADD VALUE 'crew-koby-encounter' BEFORE 'fish-mission';--> statement-breakpoint
+ALTER TYPE "public"."onboarding_step" ADD VALUE 'crew-koby-offer' BEFORE 'fish-mission';--> statement-breakpoint
+ALTER TYPE "public"."onboarding_step" ADD VALUE 'crew-mission' BEFORE 'fish-mission';--> statement-breakpoint
+ALTER TYPE "public"."onboarding_step" ADD VALUE 'boat-gifted' BEFORE 'fish-mission';--> statement-breakpoint
+ALTER TYPE "public"."onboarding_step" ADD VALUE 'boat-departure' BEFORE 'fish-mission';--> statement-breakpoint
+ALTER TYPE "public"."onboarding_step" ADD VALUE 'boat-search-supplies' BEFORE 'fish-mission';--> statement-breakpoint
+ALTER TYPE "public"."onboarding_step" ADD VALUE 'inventory-mission' BEFORE 'fish-mission';

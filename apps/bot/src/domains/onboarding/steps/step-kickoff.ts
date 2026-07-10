@@ -7,11 +7,15 @@ export function runKickoff(): View {
     components: [],
   };
 }
-
+// TODO: mettre un vrai texte
 export function buildKickoffReminder(prefix: string, expects: string): View {
   return {
     embeds: [
-      buildOpEmbed('info').setTitle('Bienvenue sur Grand Line.').setDescription(`Démarre ton aventure en tapant \`${prefix}${expects}\`.`),
+      buildOpEmbed('info')
+        .setTitle('Bienvenue sur Grand Line.')
+        .setDescription(
+          `Tu n'as pas encore commencé accès à cette commande.\nIl faut d'abord démarrer ton aventure! Commence là en tapant \`${prefix}${expects}\`.`,
+        ),
     ],
     components: [],
   };
