@@ -6,7 +6,7 @@ export type TavernSection = 'talk' | 'games' | 'shop' | 'recruit';
 
 export const TAVERN_SECTIONS: Record<TavernSection, { label: string; emoji: string }> = {
   talk: { label: 'Parler au tavernier', emoji: '💬' },
-  games: { label: 'Espace jeux', emoji: '🎲' },
+  games: { label: 'Voir les jeux', emoji: '🎲' },
   shop: { label: 'Boutique', emoji: '🛒' },
   recruit: { label: 'Recruter', emoji: '⚓' },
 };
