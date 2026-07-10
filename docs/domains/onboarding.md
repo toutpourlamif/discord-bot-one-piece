@@ -33,6 +33,16 @@ Chaque page de narration = un step à part entière (ex : `gold-roger-1`, `gold-
 { id: 'intro', type: 'scene', embed: buildIntroEmbed }
 ```
 
+Une scène n'est pas limitée à un seul bouton **« Continuer »**. Si besoin, elle peut définir plusieurs boutons en implémentant `buildComponents` (optionnel sur `SceneStep`).
+
+Par exemple, l'étape `storyteller-question` utilise cette possibilité pour afficher plusieurs réponses « flavor » (purement cosmétiques) en plus du bouton qui fait réellement avancer l'onboarding.
+
+Les boutons « flavor » sont gérés par un handler dédié : ils modifient simplement le message affiché, sans changer la valeur de `onboardingStep`.
+
+Le bouton qui permet de continuer réutilise quant à lui le custom ID `onb-next`. Il peut éventuellement ajouter un segment supplémentaire à ce custom ID afin de distinguer plusieurs boutons menant au même écran. Ce segment est ignoré par le handler `onb-next`, qui traite tous ces boutons de la même manière.
+
+Voir `steps/step-storyteller.ts` pour un exemple concret.
+
 ### `mission`
 
 Une commande riggée attendue. Le step déclare :
