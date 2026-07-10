@@ -1,7 +1,7 @@
 import { ForbiddenError } from '../../../discord/errors.js';
 import { findCaptainByPlayerId } from '../../crew/service.js';
 import { extractCaptainBoosts } from '../../crew/utils/captain-boost.js';
-import * as playerRepository from '../repository.js';
+import * as economyRepository from '../repository.js';
 
 type CreditBerryOptions = {
   considerCaptainBoosts?: boolean;
@@ -20,7 +20,7 @@ export async function creditBerry({ playerId, amount, options }: CreditBerryPara
     finalAmount = await computeBerryReward(playerId, amount);
   }
 
-  return playerRepository.creditBerry(playerId, finalAmount);
+  return economyRepository.creditBerry(playerId, finalAmount);
 }
 
 export async function computeBerryReward(playerId: number, baseAmount: bigint): Promise<bigint> {

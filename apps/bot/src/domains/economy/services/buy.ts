@@ -1,5 +1,5 @@
-import * as playerRepository from '../repository.js';
+import * as economyRepository from '../repository.js';
 
 export async function buy(playerId: number, amount: bigint): Promise<bigint> {
-  return playerRepository.debitBerry(playerId, amount);
+  return economyRepository.debitBerry(playerId, amount);
 }
