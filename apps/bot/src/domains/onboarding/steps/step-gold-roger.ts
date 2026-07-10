@@ -12,7 +12,7 @@ const GOLD_ROGER_SCENES: ReadonlyArray<GoldRogerScene> = [
   {
     id: 'gold-roger-distant-march',
     text: 'La richesse. La gloire. Le pouvoir.',
-    assetPath: 'onboarding/gold-roger/distant-march-300.webp',
+    assetPath: 'onboarding/gold-roger/distant-march-troiscent.webp',
   },
   {
     id: 'gold-roger-close-march',
