@@ -358,6 +358,13 @@
       "when": 1781519137369,
       "tag": "0050_ship_template_key",
       "breakpoints": true
+    },
+    {
+      "idx": 51,
+      "version": "7",
+      "when": 1783694152185,
+      "tag": "0051_add_onboarding_gold_roger_arc",
+      "breakpoints": true
     }
   ]
 }
