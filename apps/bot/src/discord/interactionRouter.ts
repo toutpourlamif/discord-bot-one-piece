@@ -10,12 +10,12 @@ import { onboardingButtonHandlers } from '../domains/onboarding/index.js';
 import { playerButtonHandlers } from '../domains/player/index.js';
 import { resourceButtonHandlers } from '../domains/resource/index.js';
 import { shipButtonHandlers } from '../domains/ship/index.js';
-import { tavernButtonHandlers } from '../domains/tavern/index.js';
+import { tavernButtonHandlers, tavernModalHandlers } from '../domains/tavern/index.js';
 import { buildRegistry } from '../shared/build-registry.js';
 
 import { CUSTOM_ID_SEPARATOR } from './constants.js';
 import { AppError, ValidationError } from './errors.js';
-import type { ButtonHandler } from './types.js';
+import type { ButtonHandler, ModalHandler } from './types.js';
 import { buildOpEmbed, cancelButtonHandler } from './utils/index.js';
 
 const allButtonHandlers: Array<ButtonHandler> = [
@@ -33,19 +33,27 @@ const allButtonHandlers: Array<ButtonHandler> = [
 ];
 const buttonRegistry = buildRegistry(allButtonHandlers, (h) => h.name);
 
+const allModalHandlers: Array<ModalHandler> = [...tavernModalHandlers];
+const modalRegistry = buildRegistry(allModalHandlers, (h) => h.name);
+
 /** Dispatche une interaction vers le bon handler. Voir `docs/discord.md`. */
 export async function routeInteraction(interaction: Interaction): Promise<void> {
-  if (!interaction.isButton()) return;
+  if (!interaction.isButton() && !interaction.isModalSubmit()) return;
   try {
     // TODO: passer un ButtonContext { interaction, args, guild } aux handlers (symétrie avec CommandContext, guild déjà fetché ici)
     await guildRepository.findOrCreate(requireGuildId(interaction.guildId), interaction.guild!.name);
     const [name, ...args] = interaction.customId.split(CUSTOM_ID_SEPARATOR);
     if (!name) throw new ValidationError(`nom pas trouvé: ${interaction.customId}`);
 
-    const handler = buttonRegistry.get(name);
-    if (!handler) return;
-
-    await handler.handle(interaction, args);
+    if (interaction.isButton()) {
+      const handler = buttonRegistry.get(name);
+      if (!handler) return;
+      await handler.handle(interaction, args);
+    } else {
+      const handler = modalRegistry.get(name);
+      if (!handler) return;
+      await handler.handle(interaction, args);
+    }
   } catch (error) {
     if (error instanceof AppError) {
       console[error.severity](error);
