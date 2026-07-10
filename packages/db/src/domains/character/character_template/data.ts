@@ -68,16 +68,6 @@ export const CHARACTER_TEMPLATES_DATA: Array<CharacterTemplateSeed> = [
     description: 'Marine obstiné qui poursuit les pirates sans relâche.',
   },
   {
-    name: 'Arlong',
-    hp: 15,
-    combat: 18,
-    race: 'FISHMAN',
-    types: ['WATER'],
-    rarity: 'C',
-    imageUrl: 'characters/arlong.webp',
-    description: "Capitaine homme-poisson brutal venu imposer sa loi à l'East Blue.",
-  },
-  {
     name: 'Don Krieg',
     hp: 13,
     combat: 15,
