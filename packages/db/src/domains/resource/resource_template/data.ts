@@ -3,6 +3,17 @@ type ResourceSeed = { readonly name: string; readonly imageUrl: string | null; r
 export const RESOURCE_TEMPLATES_DATA = [
   // TODO: Voir si on ajoute une ressource par rapport à l'Arbre de mille ans
   {
+    name: 'Encyclopédie de Gold Roger',
+    imageUrl: null,
+    description: 'Le journal de bord de Gold Roger, où il a détaillé tout son voyage sur Grand Line.',
+    // TODO: Ajouter invendable
+  },
+  {
+    name: 'Canne à pêche',
+    imageUrl: null,
+    // TODO: ajouter invendable
+  },
+  {
     name: 'Bois',
     imageUrl: null,
   },
