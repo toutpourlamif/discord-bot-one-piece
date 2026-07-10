@@ -205,16 +205,6 @@ function isSubjectPixel(data: Buffer, offset: number, channels: number): boolean
   return max - min > 72 && !(blue > red + 30 && blue > green + 10);
 }
 
-function isSkinPixel(data: Buffer, offset: number, channels: number): boolean {
-  if (channels > 3 && (data[offset + 3] ?? 255) < 12) return false;
-
-  const red = data[offset] ?? 0;
-  const green = data[offset + 1] ?? 0;
-  const blue = data[offset + 2] ?? 0;
-
-  return red > 105 && green > 65 && blue < 175 && red > blue + 18 && green > blue + 4 && red >= green - 8;
-}
-
 function getBorderColumnRatio(
   data: Buffer,
   width: number,
@@ -419,32 +409,15 @@ function detectSubjectBox(raw: RawImage, box: GridBox): GridBox | null {
   };
 }
 
-function detectFaceCenterX(raw: RawImage, box: GridBox): number | null {
-  let xTotal = 0;
-  let count = 0;
-  const bottom = box.top + Math.floor(box.height * 0.84);
-
-  for (let y = box.top; y < bottom; y += 1) {
-    for (let x = box.left; x < box.left + box.width; x += 1) {
-      if (isSkinPixel(raw.data, (y * raw.width + x) * raw.channels, raw.channels)) {
-        xTotal += x;
-        count += 1;
-      }
-    }
-  }
-
-  if (count < 100) return null;
-
-  return xTotal / count;
-}
-
-function squareFromSubjectBox(raw: RawImage, subjectBox: GridBox, containerBox: GridBox): GridBox {
+// Les sheets generees cadrent deja le personnage au centre du panneau : recentrer sur un
+// "visage" detecte par couleur de peau est peu fiable (fond de plage/rochers, peau non humaine
+// des fishmen...) et decale plus qu'il ne corrige. Le centre geometrique du panneau suffit.
+function squareFromSubjectBox(subjectBox: GridBox, containerBox: GridBox): GridBox {
   const side = Math.max(
     64,
     Math.min(Math.round(Math.min(containerBox.width, containerBox.height) * PORTRAIT_ZOOM_RATIO), containerBox.width, containerBox.height),
   );
-  const faceCenterX = detectFaceCenterX(raw, containerBox);
-  const centerX = faceCenterX ?? subjectBox.left + subjectBox.width / 2;
+  const centerX = containerBox.left + containerBox.width / 2;
   const idealLeft = Math.round(centerX - side / 2);
   const maxLeft = containerBox.left + containerBox.width - side;
   const maxTop = containerBox.top + containerBox.height - side;
@@ -493,7 +466,7 @@ async function sliceEmotionSheet(character: string, input: Buffer, defaultEmotio
 
     const panelBox = trimLightEdges(raw, detectedBox, borderColor);
     const subjectBox = detectSubjectBox(raw, panelBox);
-    const box = subjectBox === null ? panelBox : squareFromSubjectBox(raw, subjectBox, panelBox);
+    const box = subjectBox === null ? panelBox : squareFromSubjectBox(subjectBox, panelBox);
 
     if (box.width < 64 || box.height < 64) {
       throw new Error(`Impossible de rogner les bords pour ${emotion}.`);
@@ -1037,14 +1010,6 @@ function buildPage(): string {
         return max - min > 72 && !(blue > red + 30 && blue > green + 10);
       }
 
-      function isSkinPixel(data, offset) {
-        const red = data[offset] ?? 0;
-        const green = data[offset + 1] ?? 0;
-        const blue = data[offset + 2] ?? 0;
-
-        return data[offset + 3] >= 12 && red > 105 && green > 65 && blue < 175 && red > blue + 18 && green > blue + 4 && red >= green - 8;
-      }
-
       function detectSubjectBox(data, imageWidth, box) {
         let left = box.left + box.width;
         let right = box.left - 1;
@@ -1073,29 +1038,9 @@ function buildPage(): string {
         return { left: paddedLeft, top: paddedTop, width: paddedRight - paddedLeft + 1, height: paddedBottom - paddedTop + 1 };
       }
 
-      function detectFaceCenterX(data, imageWidth, box) {
-        let xTotal = 0;
-        let count = 0;
-        const bottom = box.top + Math.floor(box.height * 0.84);
-
-        for (let y = box.top; y < bottom; y += 1) {
-          for (let x = box.left; x < box.left + box.width; x += 1) {
-            if (isSkinPixel(data, (y * imageWidth + x) * 4)) {
-              xTotal += x;
-              count += 1;
-            }
-          }
-        }
-
-        if (count < 100) return null;
-
-        return xTotal / count;
-      }
-
-      function squareFromSubjectBox(data, imageWidth, subjectBox, containerBox) {
+      function squareFromSubjectBox(subjectBox, containerBox) {
         const side = Math.max(64, Math.min(Math.round(Math.min(containerBox.width, containerBox.height) * 0.84), containerBox.width, containerBox.height));
-        const faceCenterX = detectFaceCenterX(data, imageWidth, containerBox);
-        const centerX = faceCenterX ?? subjectBox.left + subjectBox.width / 2;
+        const centerX = containerBox.left + containerBox.width / 2;
         const idealLeft = Math.round(centerX - side / 2);
         const maxLeft = containerBox.left + containerBox.width - side;
         const maxTop = containerBox.top + containerBox.height - side;
@@ -1198,7 +1143,7 @@ function buildPage(): string {
           const cropContext = crop.getContext("2d");
           const panelBox = trimLightEdges(pixels.data, canvas.width, box, borderColor);
           const subjectBox = detectSubjectBox(pixels.data, canvas.width, panelBox);
-          const trimmedBox = subjectBox === null ? panelBox : squareFromSubjectBox(pixels.data, canvas.width, subjectBox, panelBox);
+          const trimmedBox = subjectBox === null ? panelBox : squareFromSubjectBox(subjectBox, panelBox);
           cropContext.drawImage(canvas, trimmedBox.left, trimmedBox.top, trimmedBox.width, trimmedBox.height, 0, 0, crop.width, crop.height);
           cards.push(buildOutputCard(sheet.emotions[index], crop.toDataURL("image/webp", 1), "Pret a generer"));
         }
