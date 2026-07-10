@@ -28,6 +28,7 @@ export const characterTemplate = pgTable(
 
     race: characterRaceEnum('race').notNull(),
     ...buildPokemonTypesColumn(),
+    // TODO: rename ImageUrl en path plutôt car mainteant on stocke tout dans un dossier
     ...buildImageUrlColumn(),
     ...buildTimestampColumns(),
 
