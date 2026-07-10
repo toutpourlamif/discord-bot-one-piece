@@ -48,10 +48,13 @@ Voir `steps/step-storyteller.ts` pour un exemple concret.
 Une commande riggée attendue. Le step déclare :
 
 - `expects` → le nom de la commande attendue ;
+- `matchesArgs` (optionnel) → au-delà du nom de commande, valide aussi les args tapés (ex : `info-mission` n'accepte que `!info oro jackson`) ;
 - `run` → le handler riggé exécuté à la place du vrai (a accès à `tx`) ;
 - `reminder` → l'embed affiché quand le joueur tape autre chose.
 
-Le gate exécute `run` **et** `advanceOnboarding` dans la même transaction, puis poste la suite (vue du step suivant ou completed).
+Le gate exécute `run` **puis `advanceOnboarding`, dans la même transaction** (même lock) — l'effet de `run` (ex : `resourceRepository.addResource`) et le passage au step suivant sont atomiques. Indispensable : sans ça, retaper la commande avant d'avoir cliqué "Continuer" relancerait `run` une deuxième fois (double objet obtenu).
+
+Le message posté ne montre que **le résultat de `run`, avec un bouton Continuer** — pas encore la vue du step suivant. Ce bouton réutilise `onb-next` mais garde volontairement le **step d'avant l'avance** dans son customId : au clic, `onb-next` constate que ce n'est plus le step courant (déjà avancé) et prend sa branche « clic obsolète », qui se contente de re-render la vue actuelle. C'est le même mécanisme que pour une scene, détourné comme reveal en 2 temps plutôt que comme rattrapage de clic périmé.
 
 ```ts
 { id: 'fish-mission', type: 'mission', expects: 'fish', run: runFishStep, reminder: buildFishReminder }
@@ -79,11 +82,11 @@ Comportement :
 
 `interceptOnboardingCommand` est appelé par le router avant l'auto-sync.
 
-- la commande a `requiresOnboardingFinished: false` → pass-through (`!info`, `!recap`, `_dev`). Le défaut est `true` (gated) ; `!intro` n'opt-out pas car c'est la commande attendue par la 1ʳᵉ mission ;
+- la commande a `requiresOnboardingFinished: false` → pass-through (`!recap`, `_dev`). Le défaut est `true` (gated) ; `!intro` n'opt-out pas car c'est la commande attendue par la 1ʳᵉ mission. `!info` non plus : `info-mission` a besoin de l'intercepter (cf. `matchesArgs`) ;
 - step `scene` → tout est bloqué, on renvoie `buildOnboardingView` ;
-- step `mission` → seul `expects` passe → `run` + `advanceOnboarding` en tx, puis on poste la suite ; tout le reste → `step.reminder`.
+- step `mission` → seul `expects` (+ `matchesArgs` si présent) passe → `run` puis `advanceOnboarding` dans la même tx, résultat posté avec bouton Continuer (reveal, cf. plus haut) ; tout le reste → `step.reminder`.
 
-Pendant la mission, on prend un `FOR UPDATE` sur le player et on re-vérifie la step avant d'exécuter : deux commandes simultanées ne peuvent pas avancer deux fois.
+Pendant la mission, on prend un `FOR UPDATE` sur le player et on re-vérifie la step avant d'exécuter `run` : deux commandes simultanées ne peuvent pas le déclencher deux fois.
 
 ---
 
