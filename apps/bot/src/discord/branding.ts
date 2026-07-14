@@ -8,6 +8,7 @@ export const EMBED_COLORS = {
   success: 0x57f287,
   warn: 0xfee75c,
   forest: 0x389d79,
+  goldRogerCoat: 0x411622,
 } as const;
 
 export type EmbedVariant = keyof typeof EMBED_COLORS;

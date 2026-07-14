@@ -62,6 +62,6 @@ function buildGoldRogerScene({ id, text, assetPath }: GoldRogerScene): SceneStep
   return {
     id,
     type: 'scene',
-    embed: (): EmbedBuilder => buildOpEmbed().setDescription(text).setImage(buildAssetUrl(assetPath)),
+    embed: (): EmbedBuilder => buildOpEmbed('goldRogerCoat').setDescription(text).setImage(buildAssetUrl(assetPath)),
   };
 }
