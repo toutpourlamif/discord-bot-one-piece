@@ -42,7 +42,7 @@ const GOLD_ROGER_SCENES: ReadonlyArray<GoldRogerScene> = [
   {
     id: 'gold-roger-treasure-reveal',
     text: '« Mon trésor, je vous le laisse si vous voulez ; trouvez-le ! Je l’ai laissé quelque part dans ce monde. »',
-    assetPath: 'onboarding/gold-roger/treasure-reveal.webp',
+    assetPath: 'onboarding/gold-roger/speaks.webp',
   },
   {
     id: 'gold-roger-legacy-begins',
