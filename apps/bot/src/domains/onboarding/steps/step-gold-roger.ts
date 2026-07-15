@@ -45,16 +45,6 @@ const GOLD_ROGER_SCENES: ReadonlyArray<GoldRogerScene> = [
     text: '« Mon **trésor** ? Je vous le laisse si vous voulez.\nTROUVEZ-LE !\nJe l’ai laissé quelque part dans ce monde. »',
     assetPath: 'onboarding/gold-roger/speaks.webp',
   },
-  {
-    id: 'gold-roger-legacy-begins',
-    text: 'Ses dernières paroles incitèrent les hommes de toute la planète à s’aventurer en mer.',
-    assetPath: 'onboarding/gold-roger/legacy-begins.webp',
-  },
-  {
-    id: 'gold-roger-pirate-era',
-    text: 'Tous se lancèrent sur la route de Grand Line dans l’espoir de mettre la main sur ce fameux trésor. Le monde entier connut alors une grande vague de piraterie.',
-    assetPath: 'onboarding/gold-roger/pirate-era.webp',
-  },
 ];
 
 export const goldRogerSteps: ReadonlyArray<SceneStep> = GOLD_ROGER_SCENES.map(buildGoldRogerScene);

@@ -9,12 +9,15 @@ ALTER TYPE "public"."onboarding_step" ADD VALUE 'gold-roger-blade-view-behind' B
 ALTER TYPE "public"."onboarding_step" ADD VALUE 'gold-roger-crowd-reaction' BEFORE 'fish-mission';--> statement-breakpoint
 ALTER TYPE "public"."onboarding_step" ADD VALUE 'gold-roger-laughs' BEFORE 'fish-mission';--> statement-breakpoint
 ALTER TYPE "public"."onboarding_step" ADD VALUE 'gold-roger-treasure-reveal' BEFORE 'fish-mission';--> statement-breakpoint
-ALTER TYPE "public"."onboarding_step" ADD VALUE 'gold-roger-legacy-begins' BEFORE 'fish-mission';--> statement-breakpoint
-ALTER TYPE "public"."onboarding_step" ADD VALUE 'gold-roger-pirate-era' BEFORE 'fish-mission';--> statement-breakpoint
+ALTER TYPE "public"."onboarding_step" ADD VALUE 'storyteller-legacy-begins' BEFORE 'fish-mission';--> statement-breakpoint
+ALTER TYPE "public"."onboarding_step" ADD VALUE 'storyteller-pirate-era' BEFORE 'fish-mission';--> statement-breakpoint
 ALTER TYPE "public"."onboarding_step" ADD VALUE 'storyteller-square' BEFORE 'fish-mission';--> statement-breakpoint
 ALTER TYPE "public"."onboarding_step" ADD VALUE 'storyteller-turns-to-you' BEFORE 'fish-mission';--> statement-breakpoint
 ALTER TYPE "public"."onboarding_step" ADD VALUE 'storyteller-question' BEFORE 'fish-mission';--> statement-breakpoint
+ALTER TYPE "public"."onboarding_step" ADD VALUE 'storyteller-coin-flip-answer' BEFORE 'fish-mission';--> statement-breakpoint
 ALTER TYPE "public"."onboarding_step" ADD VALUE 'storyteller-coin-flip' BEFORE 'fish-mission';--> statement-breakpoint
+ALTER TYPE "public"."onboarding_step" ADD VALUE 'storyteller-coin-flip-throw' BEFORE 'fish-mission';--> statement-breakpoint
+ALTER TYPE "public"."onboarding_step" ADD VALUE 'storyteller-coin-flip-reaction' BEFORE 'fish-mission';--> statement-breakpoint
 ALTER TYPE "public"."onboarding_step" ADD VALUE 'storyteller-encyclopedia' BEFORE 'fish-mission';--> statement-breakpoint
 ALTER TYPE "public"."onboarding_step" ADD VALUE 'info-mission' BEFORE 'fish-mission';--> statement-breakpoint
 ALTER TYPE "public"."onboarding_step" ADD VALUE 'crew-koby-encounter' BEFORE 'fish-mission';--> statement-breakpoint
