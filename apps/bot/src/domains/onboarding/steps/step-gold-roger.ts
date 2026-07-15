@@ -12,7 +12,7 @@ type GoldRogerScene = { id: OnboardingStepId; text: string | null; assetPath: st
 const GOLD_ROGER_SCENES: ReadonlyArray<GoldRogerScene> = [
   {
     id: 'gold-roger-distant-march',
-    text: `La **richesse**.\n${buildInvisibleIndent(6)}La **gloire**.\n${buildInvisibleIndent(12)}Le **pouvoir**.`,
+    text: `La **richesse**...\n${buildInvisibleIndent(6)}La **gloire**..\n${buildInvisibleIndent(12)}Le **pouvoir**.`,
     assetPath: 'onboarding/gold-roger/distant-march.webp',
   },
   {
@@ -23,13 +23,13 @@ const GOLD_ROGER_SCENES: ReadonlyArray<GoldRogerScene> = [
   { id: 'gold-roger-chained-hands', text: null, assetPath: 'onboarding/gold-roger/chained-hands.webp' },
   {
     id: 'gold-roger-climbs-stairs',
-    text: 'Et alors qu’il marchait vers sa propre mort.',
+    text: 'Et alors qu’il marchait vers sa propre **mort**.',
     assetPath: 'onboarding/gold-roger/climbs-stairs.webp',
   },
   { id: 'gold-roger-blade-view', text: 'Il avait tout d’un **roi**, fier et digne.', assetPath: 'onboarding/gold-roger/blade-view.webp' },
   {
     id: 'gold-roger-accepts-fate',
-    text: '« La **passion** et les **rêves** sont comme le temps. »',
+    text: '« La **passion** et les **rêves** sont comme le temps... » lança-t-il.',
     assetPath: 'onboarding/gold-roger/accepts-fate.webp',
   },
   { id: 'gold-roger-blades-rise', text: '« **Rien** ne peut les arrêter. »', assetPath: 'onboarding/gold-roger/blades-rise.webp' },
