@@ -17,6 +17,7 @@ ALTER TYPE "public"."onboarding_step" ADD VALUE 'storyteller-question' BEFORE 'f
 ALTER TYPE "public"."onboarding_step" ADD VALUE 'storyteller-coin-flip-answer' BEFORE 'fish-mission';--> statement-breakpoint
 ALTER TYPE "public"."onboarding_step" ADD VALUE 'storyteller-coin-flip' BEFORE 'fish-mission';--> statement-breakpoint
 ALTER TYPE "public"."onboarding_step" ADD VALUE 'storyteller-coin-flip-throw' BEFORE 'fish-mission';--> statement-breakpoint
+ALTER TYPE "public"."onboarding_step" ADD VALUE 'storyteller-coin-flip-lands' BEFORE 'fish-mission';--> statement-breakpoint
 ALTER TYPE "public"."onboarding_step" ADD VALUE 'storyteller-coin-flip-reaction' BEFORE 'fish-mission';--> statement-breakpoint
 ALTER TYPE "public"."onboarding_step" ADD VALUE 'storyteller-encyclopedia' BEFORE 'fish-mission';--> statement-breakpoint
 ALTER TYPE "public"."onboarding_step" ADD VALUE 'info-mission' BEFORE 'fish-mission';--> statement-breakpoint

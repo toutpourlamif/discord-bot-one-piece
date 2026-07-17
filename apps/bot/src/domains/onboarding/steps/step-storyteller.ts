@@ -1,7 +1,7 @@
 import type { OnboardingStepId } from '@one-piece/db';
 import { ActionRowBuilder, ButtonBuilder, ButtonStyle, type EmbedBuilder } from 'discord.js';
 
-import { buildCustomId, buildDialogueEmbed, buildOpEmbed, type DialogueSpeaker } from '../../../discord/utils/index.js';
+import { buildColorDotEmbed, buildCustomId, buildDialogueEmbed, buildOpEmbed, type DialogueSpeaker } from '../../../discord/utils/index.js';
 import { buildAssetUrl } from '../../../shared/build-asset-url.js';
 import { ONBOARDING_FLAVOR_BUTTON_NAME, ONBOARDING_NEXT_BUTTON_NAME } from '../constants.js';
 import type { SceneStep } from '../scenario.js';
@@ -9,7 +9,11 @@ import type { SceneStep } from '../scenario.js';
 // TODO: placeholder — swap for the storyteller's real assets once available (borrowing Zoro's in the meantime).
 // Même personnage : inconnu pendant qu'il narre le passé, puis révélé une fois qu'on le rencontre sur la place.
 const MYSTERIOUS_MAN: DialogueSpeaker = { name: 'Un Homme Mystérieux', path: 'characters/yotsuba-island/roronoa-zoro' };
-const STORYTELLER: DialogueSpeaker = { name: 'Le vieux conteur', path: 'characters/yotsuba-island/roronoa-zoro' };
+const STORYTELLER: DialogueSpeaker = {
+  name: 'Le vieux conteur',
+  path: 'characters/yotsuba-island/roronoa-zoro',
+  emotions: ['scared', 'default'],
+};
 
 export const STORYTELLER_FLAVOR_RESPONSES: Record<string, string> = {
   fascinating: 'TODO: texte à retravailler — réponse à "C\'est fascinant"',
@@ -30,6 +34,7 @@ export const storytellerSteps: ReadonlyArray<SceneStep> = [
     buildComponents: buildStorytellerCoinFlipComponents,
   },
   { id: 'storyteller-coin-flip-throw', type: 'scene', embed: buildStorytellerCoinFlipThrowEmbed },
+  { id: 'storyteller-coin-flip-lands', type: 'scene', embed: buildStorytellerCoinFlipLandsEmbed },
   { id: 'storyteller-coin-flip-reaction', type: 'scene', embed: buildStorytellerCoinFlipReactionEmbed },
   { id: 'storyteller-encyclopedia', type: 'scene', embed: buildStorytellerEncyclopediaEmbed },
 ];
@@ -44,19 +49,19 @@ function buildStorytellerLegacyBeginsEmbed(): EmbedBuilder {
 function buildStorytellerPirateEraEmbed(): EmbedBuilder {
   return buildDialogueEmbed(
     MYSTERIOUS_MAN,
-    'Tous se lancèrent sur la route de **Grand Line** dans l’espoir de mettre la main sur ce fameux **trésor**.\n\nLe monde entier connut alors une grande vague de piraterie.',
+    'Tous se lancèrent sur la route de **Grand Line** dans l’espoir de mettre la main sur ce fameux **trésor**.\n\nLe monde entier connut alors une **grande vague de piraterie**.',
     { variant: 'goldRogerCoat', customVerb: 'continue à expliquer' },
   ).setImage(buildAssetUrl('onboarding/gold-roger/pirate-era.webp'));
 }
 
 function buildStorytellerSquareEmbed(): EmbedBuilder {
   return buildOpEmbed().setDescription(
-    "Des années plus tard, sur la place publique de **l'île de Dawn**,\nun vieux conteur ressasse encore l'histoire du roi des pirates.",
+    "*Des années plus tard, sur la place publique de **l'île de Dawn**,\nun vieux conteur ressasse encore l'histoire du roi des pirates.*",
   );
 }
 
 function buildStorytellerTurnsToYouEmbed(): EmbedBuilder {
-  return buildOpEmbed().setDescription('Il achève son récit, puis se tourne vers toi.');
+  return buildOpEmbed().setDescription('*Il achève son récit, puis se tourne vers toi.*');
 }
 
 function buildStorytellerQuestionEmbed(): EmbedBuilder {
@@ -86,7 +91,7 @@ function buildStorytellerQuestionComponents({ stepId, ownerDiscordId }: BuildCom
 function buildStorytellerCoinFlipAnswerEmbed(): EmbedBuilder {
   return buildDialogueEmbed(
     STORYTELLER,
-    "Tu ne me croiras pas... je possède l'encyclopédie de Gold Roger, là où il a tout détaillé son voyage.",
+    "Comment je sais tout ça ?.. Et bien, j'ai en ma possession **l'Encyclopédie de Gold Roger**.\n\nCe même ouvrage où il a méticuleusement détaillé l'intégralité de son voyage.",
     {
       customVerb: 'vous répond',
     },
@@ -96,7 +101,7 @@ function buildStorytellerCoinFlipAnswerEmbed(): EmbedBuilder {
 function buildStorytellerCoinFlipEmbed(): EmbedBuilder {
   return buildDialogueEmbed(
     STORYTELLER,
-    "Je te la laisse si tu me bats à Pile ou Face. Mais bon, tu n'as aucune chance, je n'ai jamais perdu de ma vie.",
+    "Tu sais quoi ? Je te la laisse si tu me bats à **Pile ou Face**.\n\nMais bon, tu n'as aucune chance!\nJe n'ai **JAMAIS** perdu de ma vie.\n\n*Il ricane.*",
     { customVerb: 'vous propose' },
   );
 }
@@ -106,24 +111,28 @@ function buildStorytellerCoinFlipComponents({ stepId, ownerDiscordId }: BuildCom
   const row = new ActionRowBuilder<ButtonBuilder>().addComponents(
     new ButtonBuilder()
       .setCustomId(buildCustomId(ONBOARDING_NEXT_BUTTON_NAME, ownerDiscordId, stepId, 'heads'))
-      .setLabel('Pile')
+      .setLabel('Parier sur Pile')
       .setStyle(ButtonStyle.Primary),
     new ButtonBuilder()
       .setCustomId(buildCustomId(ONBOARDING_NEXT_BUTTON_NAME, ownerDiscordId, stepId, 'tails'))
-      .setLabel('Face')
+      .setLabel('Parier sur Face')
       .setStyle(ButtonStyle.Primary),
   );
   return [row];
 }
 
 function buildStorytellerCoinFlipThrowEmbed(): EmbedBuilder {
-  return buildOpEmbed().setImage(buildAssetUrl('tavern/coin-flip-throw.webp'));
+  return buildColorDotEmbed().setDescription('*La pièce est jetée dans les airs.*').setImage(buildAssetUrl('tavern/coin-flip-throw.webp'));
+}
+
+function buildStorytellerCoinFlipLandsEmbed(): EmbedBuilder {
+  return buildOpEmbed().setDescription('...');
 }
 
 function buildStorytellerCoinFlipReactionEmbed(): EmbedBuilder {
-  return buildDialogueEmbed(STORYTELLER, "Je n'y crois pas... Serais-tu... Enfin bref...", { customVerb: 'bafouille' });
+  return buildDialogueEmbed(STORYTELLER, "Je n'y crois pas...\n\nSerais-tu...", { customVerb: 'bafouille', emotion: 'scared' });
 }
 
 function buildStorytellerEncyclopediaEmbed(): EmbedBuilder {
-  return buildDialogueEmbed(STORYTELLER, 'Une promesse est une promesse, la voilà.', { customVerb: 'vous dit' });
+  return buildDialogueEmbed(STORYTELLER, 'Enfin bref..\nUne promesse est une promesse, elle est tout à toi.', { customVerb: 'vous dit' });
 }

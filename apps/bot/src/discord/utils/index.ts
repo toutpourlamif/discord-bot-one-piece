@@ -3,6 +3,7 @@ export { attachImage } from './attach-image.js';
 export { assertInteractorIsTheOwner } from './assert-interactor-is-the-owner.js';
 export { buildBackAction, buildBackButton } from './build-back-action.js';
 export { buildCancelButton, cancelButtonHandler } from './cancel-button.js';
+export { buildColorDotEmbed } from './build-color-dot-embed.js';
 export { buildConsequenceEmbed } from './build-consequence-embed.js';
 export { buildCustomId } from './build-custom-id.js';
 export { buildDialogueEmbed, type DialogueSpeaker } from './build-dialogue-embed.js';

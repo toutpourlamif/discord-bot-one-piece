@@ -22,6 +22,7 @@ export const ONBOARDING_STEP_IDS = [
   'storyteller-coin-flip-answer',
   'storyteller-coin-flip',
   'storyteller-coin-flip-throw',
+  'storyteller-coin-flip-lands',
   'storyteller-coin-flip-reaction',
   'storyteller-encyclopedia',
   'info-mission',
