@@ -1,8 +1,10 @@
-import type { Transaction } from '@one-piece/db';
+import type { SupportedLanguage, Transaction } from '@one-piece/db';
 import type { EmbedBuilder } from 'discord.js';
 
+import { buildCommandHint } from '../../../discord/command-names.js';
 import type { View } from '../../../discord/types.js';
-import { buildOpEmbed } from '../../../discord/utils/index.js';
+import { buildItemObtainedEmbed, buildOpEmbed } from '../../../discord/utils/index.js';
+import { inventaireCommand } from '../../resource/commands/inventaire.js';
 import * as resourceRepository from '../../resource/repository.js';
 import type { OnboardingStep } from '../scenario.js';
 
@@ -27,20 +29,15 @@ function buildBoatSearchSuppliesEmbed(): EmbedBuilder {
 
 export async function runInventoryMission(playerId: number, tx: Transaction): Promise<View> {
   await resourceRepository.addResource({ playerId, name: 'Canne à pêche', quantity: 1, options: { client: tx } });
-  return {
-    embeds: [
-      buildOpEmbed('success')
-        .setTitle('Une canne à pêche.')
-        .setDescription('Elle rejoint ton inventaire — ça peut toujours servir en mer.'),
-    ],
-    components: [],
-  };
+  return { embeds: [buildItemObtainedEmbed('Canne à pêche', 1)], components: [] };
 }
 
-export function buildInventoryMissionReminder(prefix: string, expects: string): View {
+export function buildInventoryMissionReminder(prefix: string, language: SupportedLanguage): View {
   return {
     embeds: [
-      buildOpEmbed('info').setTitle("Qu'as-tu trouvé ?").setDescription(`Vérifie ce que tu as ramené. Tape \`${prefix}${expects}\`.`),
+      buildOpEmbed('info')
+        .setTitle("Qu'as-tu trouvé ?")
+        .setDescription(`Vérifie ce que tu as ramené.\n\n\`${buildCommandHint(prefix, inventaireCommand, language)}\``),
     ],
     components: [],
   };

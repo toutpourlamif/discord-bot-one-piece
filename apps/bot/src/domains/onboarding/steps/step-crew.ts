@@ -1,11 +1,13 @@
-import type { Transaction } from '@one-piece/db';
+import type { SupportedLanguage, Transaction } from '@one-piece/db';
 import type { EmbedBuilder } from 'discord.js';
 
+import { buildCommandHint } from '../../../discord/command-names.js';
 import { InternalError } from '../../../discord/errors.js';
 import type { View } from '../../../discord/types.js';
 import { buildDialogueEmbed, buildOpEmbed, type DialogueSpeaker } from '../../../discord/utils/index.js';
 import { buildAssetUrl } from '../../../shared/build-asset-url.js';
 import * as characterRepository from '../../character/repository.js';
+import { crewCommand } from '../../crew/commands/crew.js';
 import * as crewRepository from '../../crew/repository.js';
 import type { OnboardingStep } from '../scenario.js';
 
@@ -39,12 +41,12 @@ export async function runCrewMission(playerId: number, tx: Transaction): Promise
   };
 }
 
-export function buildCrewMissionReminder(prefix: string, expects: string): View {
+export function buildCrewMissionReminder(prefix: string, language: SupportedLanguage): View {
   return {
     embeds: [
       buildOpEmbed('info')
         .setTitle("Koby te regarde, plein d'espoir.")
-        .setDescription(`Tape \`${prefix}${expects}\` pour l'accueillir à bord.`),
+        .setDescription(`Accueille-le à bord.\n\n\`${buildCommandHint(prefix, crewCommand, language)}\``),
     ],
     components: [],
   };

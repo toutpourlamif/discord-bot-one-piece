@@ -1,4 +1,4 @@
-import { type OnboardingStepId, type Transaction } from '@one-piece/db';
+import { type OnboardingStepId, type SupportedLanguage, type Transaction } from '@one-piece/db';
 import type { ActionRowBuilder, ButtonBuilder, EmbedBuilder } from 'discord.js';
 
 import type { View } from '../../discord/types.js';
@@ -19,6 +19,12 @@ export type SceneStep = {
   buttonLabel?: string;
   /** Hack pour les scenes à boutons multiples (comme quand on parle au conteur) — remplace le bouton "Continuer" par défaut. */
   buildComponents?: (params: { stepId: OnboardingStepId; ownerDiscordId: string }) => Array<ActionRowBuilder<ButtonBuilder>>;
+  /**
+   * Effet de bord déclenché par le clic "Continuer" (ex: octroi d'item), exécuté dans la même tx que l'avancement.
+   * Peut renvoyer un écran de conséquence (ex: "objet obtenu") affiché avant le step suivant — non persisté en DB,
+   * donc jamais revisitable et jamais rejoué si on retape la commande d'onboarding après coup.
+   */
+  onAdvance?: (playerId: number, tx: Transaction) => Promise<View | undefined> | View | undefined;
 };
 
 export type MissionStep = {
@@ -28,7 +34,7 @@ export type MissionStep = {
   /** Au-delà du nom de commande, valide les args tapés (ex: `!info oro jackson`). Absent = tous les args passent. */
   matchesArgs?: (args: Array<string>) => boolean;
   run: (playerId: number, tx: Transaction) => Promise<View> | View;
-  reminder: (prefix: string, expects: string) => View;
+  reminder: (prefix: string, language: SupportedLanguage) => View;
 };
 
 export type OnboardingStep = SceneStep | MissionStep;

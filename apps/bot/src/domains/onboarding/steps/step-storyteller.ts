@@ -1,15 +1,24 @@
-import type { OnboardingStepId } from '@one-piece/db';
+import type { OnboardingStepId, Transaction } from '@one-piece/db';
 import { ActionRowBuilder, ButtonBuilder, ButtonStyle, type EmbedBuilder } from 'discord.js';
 
-import { buildColorDotEmbed, buildCustomId, buildDialogueEmbed, buildOpEmbed, type DialogueSpeaker } from '../../../discord/utils/index.js';
+import type { View } from '../../../discord/types.js';
+import {
+  buildColorDotEmbed,
+  buildCustomId,
+  buildDialogueEmbed,
+  buildItemObtainedEmbed,
+  buildOpEmbed,
+  type DialogueSpeaker,
+} from '../../../discord/utils/index.js';
 import { buildAssetUrl } from '../../../shared/build-asset-url.js';
+import * as resourceRepository from '../../resource/repository.js';
 import { ONBOARDING_FLAVOR_BUTTON_NAME, ONBOARDING_NEXT_BUTTON_NAME } from '../constants.js';
 import type { SceneStep } from '../scenario.js';
 
 // TODO: placeholder — swap for the storyteller's real assets once available (borrowing Zoro's in the meantime).
 // Même personnage : inconnu pendant qu'il narre le passé, puis révélé une fois qu'on le rencontre sur la place.
 const MYSTERIOUS_MAN: DialogueSpeaker = { name: 'Un Homme Mystérieux', path: 'characters/yotsuba-island/roronoa-zoro' };
-const STORYTELLER: DialogueSpeaker = {
+export const STORYTELLER: DialogueSpeaker = {
   name: 'Le vieux conteur',
   path: 'characters/yotsuba-island/roronoa-zoro',
   emotions: ['scared', 'default'],
@@ -36,7 +45,7 @@ export const storytellerSteps: ReadonlyArray<SceneStep> = [
   { id: 'storyteller-coin-flip-throw', type: 'scene', embed: buildStorytellerCoinFlipThrowEmbed },
   { id: 'storyteller-coin-flip-lands', type: 'scene', embed: buildStorytellerCoinFlipLandsEmbed },
   { id: 'storyteller-coin-flip-reaction', type: 'scene', embed: buildStorytellerCoinFlipReactionEmbed },
-  { id: 'storyteller-encyclopedia', type: 'scene', embed: buildStorytellerEncyclopediaEmbed },
+  { id: 'storyteller-encyclopedia', type: 'scene', embed: buildStorytellerEncyclopediaEmbed, onAdvance: grantEncyclopedia },
 ];
 
 function buildStorytellerLegacyBeginsEmbed(): EmbedBuilder {
@@ -135,4 +144,9 @@ function buildStorytellerCoinFlipReactionEmbed(): EmbedBuilder {
 
 function buildStorytellerEncyclopediaEmbed(): EmbedBuilder {
   return buildDialogueEmbed(STORYTELLER, 'Enfin bref..\nUne promesse est une promesse, elle est tout à toi.', { customVerb: 'vous dit' });
+}
+
+async function grantEncyclopedia(playerId: number, tx: Transaction): Promise<View> {
+  await resourceRepository.addResource({ playerId, name: 'Encyclopédie de Gold Roger', quantity: 1, options: { client: tx } });
+  return { embeds: [buildItemObtainedEmbed('Encyclopédie de Gold Roger', 1)], components: [] };
 }

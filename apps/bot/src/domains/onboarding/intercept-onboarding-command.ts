@@ -22,10 +22,10 @@ export async function interceptOnboardingCommand({ ctx, command }: GateArgs): Pr
   const ownerDiscordId = ctx.player.discordId;
   const step = getStep(stepId);
 
-  if (step.type === 'scene') throw new OnboardingPendingError(buildOnboardingView({ stepId, prefix, ownerDiscordId }));
+  if (step.type === 'scene') throw new OnboardingPendingError(buildOnboardingView({ stepId, prefix, language, ownerDiscordId }));
 
   const matchesExpectedCommand = getCommandKeywords(command).includes(step.expects) && (step.matchesArgs?.(ctx.args) ?? true);
-  if (!matchesExpectedCommand) throw new OnboardingPendingError(step.reminder(prefix, step.expects));
+  if (!matchesExpectedCommand) throw new OnboardingPendingError(step.reminder(prefix, language));
 
   const reply = await db.transaction(async (tx) => {
     const locked = await playerRepository.findByIdOrThrow(playerId, tx, { forUpdate: true });
@@ -51,5 +51,5 @@ export async function interceptOnboardingCommand({ ctx, command }: GateArgs): Pr
 type ViewForStepParams = { stepId: OnboardingStepId | null; language: SupportedLanguage; prefix: string; ownerDiscordId: string };
 
 function viewForStep({ stepId, language, prefix, ownerDiscordId }: ViewForStepParams): View {
-  return stepId === null ? buildOnboardingCompletedView(language) : buildOnboardingView({ stepId, prefix, ownerDiscordId });
+  return stepId === null ? buildOnboardingCompletedView(language) : buildOnboardingView({ stepId, prefix, language, ownerDiscordId });
 }
