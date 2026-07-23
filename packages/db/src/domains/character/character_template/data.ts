@@ -1,4 +1,5 @@
 import { ARLONG_PARK_DATA } from './data/arlong-park.js';
+import { DAWN_ISLAND_DATA } from './data/dawn-island.js';
 import { FAKE_STRAW_HATS_DATA } from './data/fake-straw-hats.js';
 import { LOGUETOWN_DATA } from './data/loguetown.js';
 import { STRAW_HATS_DATA } from './data/straw-hats.js';
@@ -124,4 +125,5 @@ export const CHARACTER_TEMPLATES_DATA: Array<CharacterTemplateSeed> = [
   ...LOGUETOWN_DATA,
   ...ARLONG_PARK_DATA,
   ...SYRUP_VILLAGE_DATA,
+  ...DAWN_ISLAND_DATA,
 ];
