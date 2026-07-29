@@ -66,7 +66,7 @@ export const aceEmotionsTest: InteractiveGenerator = {
 
 const ACE: DialogueSpeaker = {
   name: 'Portgas D. Ace',
-  path: 'characters/whitebeard-pirates/portgas-d-ace',
+  path: 'characters/alabasta/portgas-d-ace',
   emotions: ['happy', 'laughing', 'thinking', 'angry', 'scared', 'crying'],
 };
 

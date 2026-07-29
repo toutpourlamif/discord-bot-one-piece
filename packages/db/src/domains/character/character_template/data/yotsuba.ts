@@ -1,6 +1,7 @@
+import { buildCharacterPath } from './build-character-path.js';
 import type { CharacterTemplateSeed } from './types.js';
 
-export const YOTSUBA_ISLAND_DATA: Array<CharacterTemplateSeed> = [
+export const YOTSUBA_DATA: Array<CharacterTemplateSeed> = [
   {
     // INFO: LA VERSION GROSSE N'a pas encore mangé le FDD
     name: 'Alvida',
@@ -8,7 +9,7 @@ export const YOTSUBA_ISLAND_DATA: Array<CharacterTemplateSeed> = [
     combat: 12,
     race: 'HUMAN',
     rarity: 'D',
-    imageUrl: 'characters/yotsuba-island/alvida/info.webp',
+    path: buildCharacterPath('yotsuba', 'alvida'),
     // TODO: trouver une vraie desc
     description: 'CERTIFIÉE GROSSE VACHE (après elle devient skinny tkt)',
   },

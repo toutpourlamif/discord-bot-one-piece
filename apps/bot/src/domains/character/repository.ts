@@ -107,7 +107,7 @@ export async function createPlayerAsCharacterInstance(
       race: 'HUMAN',
       hp: 10,
       combat: 10,
-      imageUrl: null,
+      path: null,
     })
     .returning();
   if (!template) throw new InternalError('Impossible de créer le template du joueur.');
@@ -131,7 +131,7 @@ export async function updatePlayerAsCharacterName(playerId: number, name: string
 const characterColumns = {
   instanceId: characterInstance.id,
   name: characterTemplate.name,
-  imageUrl: characterTemplate.imageUrl,
+  path: characterTemplate.path,
   hp: characterTemplate.hp,
   combat: characterTemplate.combat,
   devilFruit: getTableColumns(devilFruitTemplate),

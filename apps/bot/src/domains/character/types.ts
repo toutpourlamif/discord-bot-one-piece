@@ -5,7 +5,7 @@ export type Character = Pick<CharacterInstance, 'joinedCrewAt' | 'isCaptain'> &
   Pick<
     CharacterTemplate,
     | 'name'
-    | 'imageUrl'
+    | 'path'
     | 'hp'
     | 'combat'
     | 'captainCombatMultiplier'
