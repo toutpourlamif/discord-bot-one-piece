@@ -43,7 +43,7 @@ export const kobyEncounter: InteractiveGenerator = {
 };
 
 // TODO: Le déclarer avec tous les NPC
-const KOBY_YOUNG: DialogueSpeaker = { name: 'Koby', path: 'characters/marines/koby-young', emotions: ['happy', 'crying', 'scared'] };
+const KOBY_YOUNG: DialogueSpeaker = { name: 'Koby', path: 'characters/dawn/koby-young', emotions: ['happy', 'crying', 'scared'] };
 
 function getCaptainSpeaker(ctx: GeneratorContext): DialogueSpeaker {
   const captain = ctx.crew.members.find((member) => member.isCaptain)!;

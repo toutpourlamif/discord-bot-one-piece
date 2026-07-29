@@ -19,7 +19,7 @@ export const DEVIL_FRUIT_TEMPLATES_DATA = [
     types: ['FIRE'],
     hpBonus: 0,
     combatBonus: 25,
-    path: buildDevilFruitPath('mera'),
+    path: buildDevilFruitPath('mera-mera-no-mi'),
     description:
       "Le Mera Mera no Mi est un fruit du démon de type Logia qui confère à son utilisateur la capacité de créer et de contrôler le feu. Cela lui permet d'attacker avec une grande puissance et de se défendre contre les ennemis.",
   },
@@ -41,7 +41,7 @@ export const DEVIL_FRUIT_TEMPLATES_DATA = [
     types: ['DARK'],
     hpBonus: -5,
     combatBonus: 35,
-    path: buildDevilFruitPath('yami'),
+    path: buildDevilFruitPath('yami-yami-no-mi'),
     description:
       "Le Yami Yami no Mi est un fruit du démon de type Logia qui permet à son utilisateur de manipuler les ténèbres. Il peut absorber tout ce qui l'entoure, attaques comme matière, et annuler les pouvoirs des autres fruits du démon par simple contact — au prix d'une vulnérabilité accrue aux dégâts qu'il subit.",
   },
@@ -50,7 +50,7 @@ export const DEVIL_FRUIT_TEMPLATES_DATA = [
     types: ['STEEL', 'ELECTRIC'],
     hpBonus: 0,
     combatBonus: 28,
-    path: buildDevilFruitPath('jiki'),
+    path: buildDevilFruitPath('jiki-jiki-no-mi'),
     description:
       'Le Jiki Jiki no Mi est un fruit du démon de type Paramecia qui confère à son utilisateur le contrôle du magnétisme. Il peut attirer ou repousser tout métal sur de longues distances, assemblant des amas de ferraille en armes massives ou détournant les projectiles ennemis.',
   },
@@ -59,7 +59,7 @@ export const DEVIL_FRUIT_TEMPLATES_DATA = [
     types: ['PSYCHIC'],
     hpBonus: 10,
     combatBonus: 30,
-    path: buildDevilFruitPath('ope'),
+    path: buildDevilFruitPath('ope-ope-no-mi'),
     description:
       "Le Ope Ope no Mi est un fruit du démon de type Paramecia, surnommé le fruit ultime. Il permet de créer une « Room », un espace sphérique dans lequel l'utilisateur manipule à sa guise tout ce qui s'y trouve : trancher, déplacer, échanger ou opérer sans causer de blessure mortelle.",
   },
@@ -68,7 +68,7 @@ export const DEVIL_FRUIT_TEMPLATES_DATA = [
     types: [],
     hpBonus: 0,
     combatBonus: 8,
-    path: buildDevilFruitPath('sube'),
+    path: buildDevilFruitPath('sube-sube-no-mi'),
     description:
       "Le Sube Sube no Mi est un fruit du démon de type Paramecia qui rend la peau de son utilisateur parfaitement lisse. Tout glisse dessus sans y laisser de prise : coups, projectiles, et même les sentiments d'autrui.",
   },
