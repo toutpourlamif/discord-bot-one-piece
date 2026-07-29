@@ -8,7 +8,7 @@ import { OnboardingPendingError } from './errors.js';
 import * as onboardingService from './services/index.js';
 import { getStep } from './step-registry.js';
 import { buildOnboardingCompletedView } from './views/build-onboarding-completed-view.js';
-import { buildOnboardingView } from './views/build-onboarding-view.js';
+import { buildNextButtonRow, buildOnboardingView, DEFAULT_SCENE_BUTTON_LABEL } from './views/build-onboarding-view.js';
 
 type GateArgs = { ctx: CommandContext; command: Command };
 
@@ -27,21 +27,23 @@ export async function interceptOnboardingCommand({ ctx, command }: GateArgs): Pr
   const matchesExpectedCommand = getCommandKeywords(command).includes(step.expects) && (step.matchesArgs?.(ctx.args) ?? true);
   if (!matchesExpectedCommand) throw new OnboardingPendingError(step.reminder(ctx.guild, step.command));
 
-  const result = await db.transaction(async (tx) => {
+  const reply = await db.transaction(async (tx) => {
     const locked = await playerRepository.findByIdOrThrow(playerId, tx, { forUpdate: true });
     if (locked.onboardingStep !== stepId)
       throw new OnboardingPendingError(viewForStep({ stepId: locked.onboardingStep, language, guild: ctx.guild, ownerDiscordId }));
     // `run` doit avancer dans la même tx que le lock/recheck ci-dessus, sinon retaper la commande avant le clic
     // "Continuer" relance `run` (ex: double encyclopédie).
-    const reply = await step.run(playerId, tx);
-    const { nextStep } = await onboardingService.advanceOnboarding(playerId, tx);
-    return { reply, nextStep };
+    const result = await step.run(playerId, tx);
+    await onboardingService.advanceOnboarding(playerId, tx);
+    return result;
   });
 
-  const followUp = viewForStep({ stepId: result.nextStep, language, guild: ctx.guild, ownerDiscordId });
+  // Le bouton garde volontairement l'ANCIEN stepId : au clic, onb-next constate que ce n'est plus le step
+  // courant (déjà avancé) et se contente de re-render la vue suivante — même mécanisme que la révélation de
+  // conséquence des scenes (onAdvance). Le résultat de la mission reste ainsi un message autonome.
   await ctx.message.reply({
-    embeds: [...result.reply.embeds, ...followUp.embeds],
-    components: [...result.reply.components, ...followUp.components],
+    embeds: reply.embeds,
+    components: [buildNextButtonRow({ stepId, label: DEFAULT_SCENE_BUTTON_LABEL, ownerDiscordId })],
   });
   return true;
 }
