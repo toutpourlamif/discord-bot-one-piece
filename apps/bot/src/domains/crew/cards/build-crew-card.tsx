@@ -11,7 +11,7 @@ const CELL_COLOR = '#1b1e2b';
 
 export async function buildCrewCard(crew: Array<Character>): Promise<Buffer> {
   const members = crew.slice(0, MAX_PORTRAITS);
-  const portraits = await Promise.all(members.map(async (member) => (member.imageUrl ? loadAssetDataUri(member.imageUrl) : null)));
+  const portraits = await Promise.all(members.map(async (member) => (member.path ? loadAssetDataUri(`${member.path}/info.webp`) : null)));
 
   const width = members.length * CELL_WIDTH + (members.length + 1) * BAND_WIDTH;
   const height = CELL_HEIGHT + 2 * BAND_WIDTH;

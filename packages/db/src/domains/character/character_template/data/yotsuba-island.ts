@@ -8,7 +8,7 @@ export const YOTSUBA_ISLAND_DATA: Array<CharacterTemplateSeed> = [
     combat: 12,
     race: 'HUMAN',
     rarity: 'D',
-    imageUrl: 'characters/yotsuba-island/alvida/info.webp',
+    path: 'characters/yotsuba-island/alvida',
     // TODO: trouver une vraie desc
     description: 'CERTIFIÉE GROSSE VACHE (après elle devient skinny tkt)',
   },

@@ -7,7 +7,7 @@ export const FAKE_STRAW_HATS_DATA: Array<CharacterTemplateSeed> = [
     combat: 12,
     race: 'HUMAN',
     rarity: 'D',
-    imageUrl: 'characters/fake-straw-hats/demalo-black.webp',
+    path: 'characters/fake-straw-hats/demalo-black',
     description: 'Le futur roi des pirates (ou pas..)',
   },
   {
@@ -16,7 +16,7 @@ export const FAKE_STRAW_HATS_DATA: Array<CharacterTemplateSeed> = [
     combat: 11,
     race: 'HUMAN',
     rarity: 'D',
-    imageUrl: 'characters/fake-straw-hats/manjaro.webp',
+    path: 'characters/fake-straw-hats/manjaro',
     description: 'Épéiste à trois sabres sans en maîtriser un seul.',
   },
   {
@@ -25,7 +25,7 @@ export const FAKE_STRAW_HATS_DATA: Array<CharacterTemplateSeed> = [
     combat: 7,
     race: 'HUMAN',
     rarity: 'D',
-    imageUrl: 'characters/fake-straw-hats/cocoa.webp',
+    path: 'characters/fake-straw-hats/cocoa',
     description: "Archéologue autoproclamée qui sait lire les Hiéroglyphes (ah c'est pas les bons pictogrammes?..)",
   },
   {
@@ -34,7 +34,7 @@ export const FAKE_STRAW_HATS_DATA: Array<CharacterTemplateSeed> = [
     combat: 8,
     race: 'HUMAN',
     rarity: 'D',
-    imageUrl: 'characters/fake-straw-hats/mounblutain.webp',
+    path: 'characters/fake-straw-hats/mounblutain',
     description: "Le tireur le moins précis de Grand Line, on raconte qu'il est capable de rater une cible à bout portant",
   },
   // TODO: Ajouter drip, chocolat nora gitsune

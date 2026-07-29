@@ -7,7 +7,7 @@ export const LOGUETOWN_DATA: Array<CharacterTemplateSeed> = [
     combat: 12,
     race: 'HUMAN',
     rarity: 'C',
-    imageUrl: 'characters/loguetown/alvida-skinny/info.webp',
+    path: 'characters/loguetown/alvida-skinny',
     devilFruitName: 'Sube Sube no Mi',
     // TODO: Trouver une bonne desc
     description: 'Skinny de quoi toi',

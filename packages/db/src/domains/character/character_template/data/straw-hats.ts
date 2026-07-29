@@ -8,7 +8,7 @@ export const STRAW_HATS_DATA: Array<CharacterTemplateSeed> = [
     combat: 69,
     race: 'HUMAN',
     rarity: 'A',
-    imageUrl: 'characters/straw-hats/nico-robin.webp',
+    path: 'characters/straw-hats/nico-robin',
     description: 'Archéologue de renom capable de déchiffrer les Ponéglyphes avec aise',
   },
 ];

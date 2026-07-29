@@ -47,7 +47,7 @@ const KOBY_YOUNG: DialogueSpeaker = { name: 'Koby', path: 'characters/marines/ko
 
 function getCaptainSpeaker(ctx: GeneratorContext): DialogueSpeaker {
   const captain = ctx.crew.members.find((member) => member.isCaptain)!;
-  return { name: captain.name, path: captain.imageUrl ?? '' };
+  return { name: captain.name, path: captain.path ?? '' };
 }
 
 function resolveEncounter(): Resolution {

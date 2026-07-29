@@ -22,8 +22,8 @@ export function buildDevilFruitInfoEmbed(fruit: DevilFruitTemplate): EmbedBuilde
       { name: 'Combat', value: formatDfBonus(fruit.combatBonus), inline: true },
     );
 
-  if (fruit.imageUrl) {
-    embed.setImage(buildAssetUrl(fruit.imageUrl));
+  if (fruit.path) {
+    embed.setImage(buildAssetUrl(`${fruit.path}/info.webp`));
   }
 
   return embed;

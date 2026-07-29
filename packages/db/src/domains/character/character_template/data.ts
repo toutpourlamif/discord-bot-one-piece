@@ -5,8 +5,8 @@ import { STRAW_HATS_DATA } from './data/straw-hats.js';
 import { SYRUP_VILLAGE_DATA } from './data/syrup-village.js';
 import type { CharacterTemplateSeed } from './data/types.js';
 import { YOTSUBA_ISLAND_DATA } from './data/yotsuba-island.js';
-function buildCharacterImageUrl(crew: string, slug: string): string {
-  return `characters/${crew}/${slug}/info.webp`;
+function buildCharacterPath(crew: string, slug: string): string {
+  return `characters/${crew}/${slug}`;
 }
 
 // TODO: supprimer/modifier en prod
@@ -18,7 +18,7 @@ export const CHARACTER_TEMPLATES_DATA: Array<CharacterTemplateSeed> = [
     combat: 10,
     race: 'HUMAN',
     skills: ['CONQUERORS_HAKI'],
-    imageUrl: null,
+    path: null,
     devilFruitName: 'Gomu Gomu no Mi',
     description: 'Homme ÉLastique qui adore le bezelouf',
     captainCombatMultiplier: 1.3,
@@ -28,7 +28,7 @@ export const CHARACTER_TEMPLATES_DATA: Array<CharacterTemplateSeed> = [
     hp: 10,
     combat: 10,
     race: 'HUMAN',
-    imageUrl: null,
+    path: null,
     description: 'épéiste avec des origine dz',
   },
   {
@@ -37,7 +37,7 @@ export const CHARACTER_TEMPLATES_DATA: Array<CharacterTemplateSeed> = [
     combat: 10,
     race: 'HUMAN',
     skills: ['CONQUERORS_HAKI'],
-    imageUrl: null,
+    path: null,
     description: 'rouqin boosté',
   },
   // TODO: ajouter les fichiers WebP correspondants dans assets/characters avant merge.
@@ -47,7 +47,7 @@ export const CHARACTER_TEMPLATES_DATA: Array<CharacterTemplateSeed> = [
     combat: 30,
     race: 'HUMAN',
     rarity: 'S',
-    imageUrl: 'characters/dracule-mihawk.webp',
+    path: 'characters/dracule-mihawk',
     description: 'Le plus grand épéiste du monde, calme et impitoyable.',
   },
   {
@@ -56,7 +56,7 @@ export const CHARACTER_TEMPLATES_DATA: Array<CharacterTemplateSeed> = [
     combat: 24,
     race: 'HUMAN',
     rarity: 'B',
-    imageUrl: 'characters/crocodile.webp',
+    path: 'characters/crocodile',
     description: "Ancien Grand Corsaire, stratège froid et maître d'Alabasta.",
   },
   {
@@ -65,7 +65,7 @@ export const CHARACTER_TEMPLATES_DATA: Array<CharacterTemplateSeed> = [
     combat: 20,
     race: 'HUMAN',
     rarity: 'C',
-    imageUrl: 'characters/smoker.webp',
+    path: 'characters/smoker',
     description: 'Marine obstiné qui poursuit les pirates sans relâche.',
   },
   {
@@ -74,7 +74,7 @@ export const CHARACTER_TEMPLATES_DATA: Array<CharacterTemplateSeed> = [
     combat: 15,
     race: 'HUMAN',
     rarity: 'D',
-    imageUrl: null,
+    path: null,
     description: "Chef pirate de l'East Blue, dangereux surtout par son arsenal.",
   },
   {
@@ -84,7 +84,7 @@ export const CHARACTER_TEMPLATES_DATA: Array<CharacterTemplateSeed> = [
     race: 'HUMAN',
     rarity: 'A',
     skills: ['CONQUERORS_HAKI'],
-    imageUrl: buildCharacterImageUrl('whitebeard-pirates', 'portgas-d-ace'),
+    path: buildCharacterPath('whitebeard-pirates', 'portgas-d-ace'),
     devilFruitName: 'Mera Mera no Mi',
     description: 'Commandant de la 2e flotte de Barbe Blanche, frère de Luffy et fils du légendaire Gol D. Roger.',
   },
@@ -94,7 +94,7 @@ export const CHARACTER_TEMPLATES_DATA: Array<CharacterTemplateSeed> = [
     combat: 28,
     race: 'HUMAN',
     rarity: 'S',
-    imageUrl: buildCharacterImageUrl('blackbeard-pirates', 'marshall-d-teach'),
+    path: buildCharacterPath('blackbeard-pirates', 'marshall-d-teach'),
     devilFruitName: 'Yami Yami no Mi',
     description: 'Capitaine des Pirates de Barbe Noire, seul homme connu à porter deux fruits du démon.',
   },
@@ -105,7 +105,7 @@ export const CHARACTER_TEMPLATES_DATA: Array<CharacterTemplateSeed> = [
     race: 'HUMAN',
     rarity: 'A',
     skills: ['CONQUERORS_HAKI'],
-    imageUrl: buildCharacterImageUrl('kid-pirates', 'eustass-kid'),
+    path: buildCharacterPath('kid-pirates', 'eustass-kid'),
     devilFruitName: 'Jiki Jiki no Mi',
     description: 'Capitaine des Pirates de Kid, Supernova brutal qui plie le métal à sa volonté.',
   },
@@ -115,7 +115,7 @@ export const CHARACTER_TEMPLATES_DATA: Array<CharacterTemplateSeed> = [
     combat: 23,
     race: 'HUMAN',
     rarity: 'B',
-    imageUrl: buildCharacterImageUrl('beasts-pirates', 'basil-hawkins'),
+    path: buildCharacterPath('beasts-pirates', 'basil-hawkins'),
     description: "Le Mage, Supernova énigmatique qui lit l'avenir dans ses cartes de tarot.",
   },
   ...FAKE_STRAW_HATS_DATA,
