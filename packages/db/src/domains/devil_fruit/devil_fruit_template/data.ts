@@ -10,7 +10,7 @@ export const DEVIL_FRUIT_TEMPLATES_DATA = [
     types: [],
     hpBonus: 0,
     combatBonus: 20,
-    path: 'devil-fruits/gomu-gomu-no-mi',
+    path: buildDevilFruitPath('gomu-gomu-no-mi'),
     description:
       "Le Gomu Gomu no Mi est un fruit du démon de type Paramecia qui confère à son utilisateur la capacité de transformer son corps en caoutchouc. Cela lui permet d'étirer, de gonfler et de rebondir de manière élastique, offrant une grande résistance aux attaques physiques et la capacité d'effectuer des mouvements uniques en combat.",
   },
@@ -28,7 +28,7 @@ export const DEVIL_FRUIT_TEMPLATES_DATA = [
     types: ['ICE'],
     hpBonus: 0,
     combatBonus: 25,
-    path: 'devil-fruits/hie-hie-no-mi',
+    path: buildDevilFruitPath('hie-hie-no-mi'),
   },
   {
     name: 'Magu Magu no Mi',
