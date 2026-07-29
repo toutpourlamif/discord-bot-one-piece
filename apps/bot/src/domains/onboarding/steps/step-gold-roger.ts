@@ -26,7 +26,7 @@ const GOLD_ROGER_SCENES: ReadonlyArray<GoldRogerScene> = [
     text: 'Et alors qu’il marchait vers sa propre **mort**.',
     assetPath: 'onboarding/gold-roger/climbs-stairs.webp',
   },
-  { id: 'gold-roger-blade-view', text: 'Il avait tout d’un **roi**, fier et digne.', assetPath: 'onboarding/gold-roger/blade-view.webp' },
+  { id: 'gold-roger-blade-view', text: 'Il avait tout d’un **Roi** fier et digne.', assetPath: 'onboarding/gold-roger/blade-view.webp' },
   {
     id: 'gold-roger-accepts-fate',
     text: '« La **passion** et les **rêves** sont comme le temps... » *lança-t-il.*',
