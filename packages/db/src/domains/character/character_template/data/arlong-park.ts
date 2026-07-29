@@ -1,3 +1,4 @@
+import { buildCharacterPath } from './build-character-path.js';
 import type { CharacterTemplateSeed } from './types.js';
 
 export const ARLONG_PARK_DATA: Array<CharacterTemplateSeed> = [
@@ -9,7 +10,7 @@ export const ARLONG_PARK_DATA: Array<CharacterTemplateSeed> = [
     types: ['WATER', 'FIGHTING'],
     race: 'FISHMAN',
     rarity: 'D',
-    imageUrl: 'characters/arlong-park/arlong/info.webp',
+    path: buildCharacterPath('arlong-park', 'arlong'),
     description: 'Homme poisson sans foi ni loi. Truand connu de tous, terrorise East blue.',
   },
 ];

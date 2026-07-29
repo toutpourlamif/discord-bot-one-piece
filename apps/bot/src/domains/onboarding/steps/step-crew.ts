@@ -1,22 +1,21 @@
-import type { SupportedLanguage, Transaction } from '@one-piece/db';
+import type { Guild, Transaction } from '@one-piece/db';
 import type { EmbedBuilder } from 'discord.js';
 
-import { buildCommandHint } from '../../../discord/command-names.js';
 import { InternalError } from '../../../discord/errors.js';
-import type { View } from '../../../discord/types.js';
-import { buildDialogueEmbed, buildOpEmbed, type DialogueSpeaker } from '../../../discord/utils/index.js';
+import type { Command, View } from '../../../discord/types.js';
+import { buildDialogueEmbed, buildOpEmbed, getFormattedCommand, type DialogueSpeaker } from '../../../discord/utils/index.js';
 import { buildAssetUrl } from '../../../shared/build-asset-url.js';
 import * as characterRepository from '../../character/repository.js';
 import { crewCommand } from '../../crew/commands/crew.js';
 import * as crewRepository from '../../crew/repository.js';
 import type { OnboardingStep } from '../scenario.js';
 
-const KOBY: DialogueSpeaker = { name: 'Koby', path: 'characters/marines/koby-young', emotions: ['happy', 'crying', 'scared'] };
+const KOBY: DialogueSpeaker = { name: 'Koby', path: 'characters/dawn/koby-young', emotions: ['happy', 'crying', 'scared'] };
 
 export const crewSteps: ReadonlyArray<OnboardingStep> = [
   { id: 'crew-koby-encounter', type: 'scene', embed: buildCrewKobyEncounterEmbed },
   { id: 'crew-koby-offer', type: 'scene', embed: buildCrewKobyOfferEmbed },
-  { id: 'crew-mission', type: 'mission', expects: 'crew', run: runCrewMission, reminder: buildCrewMissionReminder },
+  { id: 'crew-mission', type: 'mission', expects: 'crew', command: crewCommand, run: runCrewMission, reminder: buildCrewMissionReminder },
 ];
 
 function buildCrewKobyEncounterEmbed(): EmbedBuilder {
@@ -41,12 +40,12 @@ export async function runCrewMission(playerId: number, tx: Transaction): Promise
   };
 }
 
-export function buildCrewMissionReminder(prefix: string, language: SupportedLanguage): View {
+export function buildCrewMissionReminder(guild: Guild, command: Command): View {
   return {
     embeds: [
       buildOpEmbed('info')
         .setTitle("Koby te regarde, plein d'espoir.")
-        .setDescription(`Accueille-le à bord.\n\n\`${buildCommandHint(prefix, crewCommand, language)}\``),
+        .setDescription(`Accueille-le à bord.\n\n\`${getFormattedCommand(guild, command)}\``),
     ],
     components: [],
   };

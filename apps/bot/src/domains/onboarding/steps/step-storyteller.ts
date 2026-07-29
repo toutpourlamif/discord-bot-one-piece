@@ -17,10 +17,10 @@ import type { SceneStep } from '../scenario.js';
 
 // TODO: placeholder — swap for the storyteller's real assets once available (borrowing Zoro's in the meantime).
 // Même personnage : inconnu pendant qu'il narre le passé, puis révélé une fois qu'on le rencontre sur la place.
-const MYSTERIOUS_MAN: DialogueSpeaker = { name: 'Un Homme Mystérieux', path: 'characters/yotsuba-island/roronoa-zoro' };
+const MYSTERIOUS_MAN: DialogueSpeaker = { name: 'Un Homme Mystérieux', path: 'characters/yotsuba/roronoa-zoro' };
 export const STORYTELLER: DialogueSpeaker = {
   name: 'Le vieux conteur',
-  path: 'characters/yotsuba-island/roronoa-zoro',
+  path: 'characters/yotsuba/roronoa-zoro',
   emotions: ['scared', 'default'],
 };
 

@@ -39,7 +39,7 @@ export async function seedCharacter(db: Db) {
       set: {
         hp: sql`excluded.hp`,
         combat: sql`excluded.combat`,
-        imageUrl: sql`excluded.image_url`,
+        path: sql`excluded.path`,
         devilFruitTemplateId: sql`excluded.devil_fruit_template_id`,
         types: sql`excluded.types`,
       },

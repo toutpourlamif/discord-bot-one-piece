@@ -1,9 +1,8 @@
-import type { SupportedLanguage, Transaction } from '@one-piece/db';
+import type { Guild, Transaction } from '@one-piece/db';
 import type { EmbedBuilder } from 'discord.js';
 
-import { buildCommandHint } from '../../../discord/command-names.js';
-import type { View } from '../../../discord/types.js';
-import { buildItemObtainedEmbed, buildOpEmbed } from '../../../discord/utils/index.js';
+import type { Command, View } from '../../../discord/types.js';
+import { buildItemObtainedEmbed, buildOpEmbed, getFormattedCommand } from '../../../discord/utils/index.js';
 import { inventaireCommand } from '../../resource/commands/inventaire.js';
 import * as resourceRepository from '../../resource/repository.js';
 import type { OnboardingStep } from '../scenario.js';
@@ -12,7 +11,14 @@ export const inventorySteps: ReadonlyArray<OnboardingStep> = [
   { id: 'boat-gifted', type: 'scene', embed: buildBoatGiftedEmbed },
   { id: 'boat-departure', type: 'scene', embed: buildBoatDepartureEmbed },
   { id: 'boat-search-supplies', type: 'scene', embed: buildBoatSearchSuppliesEmbed },
-  { id: 'inventory-mission', type: 'mission', expects: 'inventaire', run: runInventoryMission, reminder: buildInventoryMissionReminder },
+  {
+    id: 'inventory-mission',
+    type: 'mission',
+    expects: 'inventaire',
+    command: inventaireCommand,
+    run: runInventoryMission,
+    reminder: buildInventoryMissionReminder,
+  },
 ];
 
 function buildBoatGiftedEmbed(): EmbedBuilder {
@@ -32,12 +38,12 @@ export async function runInventoryMission(playerId: number, tx: Transaction): Pr
   return { embeds: [buildItemObtainedEmbed('Canne à pêche', 1)], components: [] };
 }
 
-export function buildInventoryMissionReminder(prefix: string, language: SupportedLanguage): View {
+export function buildInventoryMissionReminder(guild: Guild, command: Command): View {
   return {
     embeds: [
       buildOpEmbed('info')
         .setTitle("Qu'as-tu trouvé ?")
-        .setDescription(`Vérifie ce que tu as ramené.\n\n\`${buildCommandHint(prefix, inventaireCommand, language)}\``),
+        .setDescription(`Vérifie ce que tu as ramené.\n\n\`${getFormattedCommand(guild, command)}\``),
     ],
     components: [],
   };

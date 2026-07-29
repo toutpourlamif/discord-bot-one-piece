@@ -1,8 +1,11 @@
-import { type OnboardingStepId, type SupportedLanguage, type Transaction } from '@one-piece/db';
+import type { Guild, OnboardingStepId, Transaction } from '@one-piece/db';
 import type { ActionRowBuilder, ButtonBuilder, EmbedBuilder } from 'discord.js';
 
-import type { View } from '../../discord/types.js';
+import type { Command, View } from '../../discord/types.js';
+import { infoCommand } from '../_info/commands/info.js';
+import { fishingCommand } from '../fishing/commands/fishing.js';
 
+import { introCommand } from './commands/intro.js';
 import { buildAfterFishEmbed } from './steps/step-after-fish.js';
 import { crewSteps } from './steps/step-crew.js';
 import { buildFishReminder, runFishStep } from './steps/step-fish.js';
@@ -33,14 +36,15 @@ export type MissionStep = {
   expects: string;
   /** Au-delà du nom de commande, valide les args tapés (ex: `!info oro jackson`). Absent = tous les args passent. */
   matchesArgs?: (args: Array<string>) => boolean;
+  command: Command;
   run: (playerId: number, tx: Transaction) => Promise<View> | View;
-  reminder: (prefix: string, language: SupportedLanguage) => View;
+  reminder: (guild: Guild, command: Command) => View;
 };
 
 export type OnboardingStep = SceneStep | MissionStep;
 
 export const ONBOARDING_SCENARIO: ReadonlyArray<OnboardingStep> = [
-  { id: 'intro', type: 'mission', expects: 'intro', run: runKickoff, reminder: buildKickoffReminder },
+  { id: 'intro', type: 'mission', expects: 'intro', command: introCommand, run: runKickoff, reminder: buildKickoffReminder },
   ...goldRogerSteps,
   ...storytellerSteps,
   {
@@ -48,11 +52,12 @@ export const ONBOARDING_SCENARIO: ReadonlyArray<OnboardingStep> = [
     type: 'mission',
     expects: 'info',
     matchesArgs: matchesOroJacksonQuery,
+    command: infoCommand,
     run: runInfoMission,
     reminder: buildInfoMissionReminder,
   },
   ...crewSteps,
   ...inventorySteps,
-  { id: 'fish-mission', type: 'mission', expects: 'fish', run: runFishStep, reminder: buildFishReminder },
+  { id: 'fish-mission', type: 'mission', expects: 'fish', command: fishingCommand, run: runFishStep, reminder: buildFishReminder },
   { id: 'after-fish', type: 'scene', embed: buildAfterFishEmbed },
 ];

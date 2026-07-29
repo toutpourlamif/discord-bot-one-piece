@@ -1,7 +1,7 @@
 import { sql } from 'drizzle-orm';
 import { index, integer, pgTable, serial, text, varchar } from 'drizzle-orm/pg-core';
 
-import { buildImageUrlColumn, buildPokemonTypesColumn, buildRarityColumn, buildTimestampColumns } from '../../../shared/columns/index.js';
+import { buildPathColumn, buildPokemonTypesColumn, buildRarityColumn, buildTimestampColumns } from '../../../shared/columns/index.js';
 
 export const devilFruitTemplate = pgTable(
   'devil_fruit_template',
@@ -12,7 +12,7 @@ export const devilFruitTemplate = pgTable(
     hpBonus: integer('hp_bonus').notNull().default(0),
     combatBonus: integer('combat_bonus').notNull().default(0),
     ...buildRarityColumn(),
-    ...buildImageUrlColumn(),
+    ...buildPathColumn(),
     description: text('description'),
     ...buildTimestampColumns(),
   },

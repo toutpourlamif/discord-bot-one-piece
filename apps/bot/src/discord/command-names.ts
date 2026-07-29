@@ -13,11 +13,6 @@ export function getCommandDisplayNameByLanguage(command: Command, language: Supp
   return command.names[language];
 }
 
-/** Hint `{prefix}{nom localisé}` (ex: `!info`) — à utiliser plutôt que de concaténer le prefix à la main. */
-export function buildCommandHint(prefix: string, command: Command, language: SupportedLanguage): string {
-  return `${prefix}${getCommandDisplayNameByLanguage(command, language)}`;
-}
-
 /** Tous les mots qui déclenchent une commande (noms + alias, toutes langues), dédupliqués. */
 export function getCommandKeywords(command: Command): Array<string> {
   return uniq(getAllKeywordsOfCommand(command).map((keyword) => keyword.value));

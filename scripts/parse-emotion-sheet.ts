@@ -774,7 +774,7 @@ function buildPage(): string {
       <form id="form">
         <label>
           Personnage
-          <input id="character" list="characters" required placeholder="whitebeard-pirates/portgas-d-ace" />
+          <input id="character" list="characters" required placeholder="alabasta/portgas-d-ace" />
           <datalist id="characters"></datalist>
         </label>
         <label>

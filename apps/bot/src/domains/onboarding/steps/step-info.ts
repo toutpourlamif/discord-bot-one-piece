@@ -1,9 +1,7 @@
-import type { SupportedLanguage } from '@one-piece/db';
+import type { Guild } from '@one-piece/db';
 
-import { buildCommandHint } from '../../../discord/command-names.js';
-import type { View } from '../../../discord/types.js';
-import { buildDialogueEmbed, buildOpEmbed } from '../../../discord/utils/index.js';
-import { infoCommand } from '../../_info/commands/info.js';
+import type { Command, View } from '../../../discord/types.js';
+import { buildDialogueEmbed, buildOpEmbed, getFormattedCommand } from '../../../discord/utils/index.js';
 
 import { STORYTELLER } from './step-storyteller.js';
 
@@ -23,12 +21,12 @@ export function runInfoMission(): View {
   };
 }
 
-export function buildInfoMissionReminder(prefix: string, language: SupportedLanguage): View {
+export function buildInfoMissionReminder(guild: Guild, command: Command): View {
   return {
     embeds: [
       buildDialogueEmbed(
         STORYTELLER,
-        `Tiens, tu sais sur quel bateau naviguait Gold Roger ?\nCherche dans l'**Encyclopédie**.\n\n\`${buildCommandHint(prefix, infoCommand, language)} oro jackson\``,
+        `Tiens, tu sais sur quel bateau naviguait Gold Roger ?\nCherche dans l'**Encyclopédie**.\n\n\`${getFormattedCommand(guild, command)} oro jackson\``,
         { customVerb: 'vous demande' },
       ),
     ],

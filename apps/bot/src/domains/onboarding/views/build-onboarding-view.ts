@@ -1,4 +1,4 @@
-import type { OnboardingStepId, SupportedLanguage } from '@one-piece/db';
+import type { Guild, OnboardingStepId } from '@one-piece/db';
 import { ActionRowBuilder, ButtonBuilder, ButtonStyle } from 'discord.js';
 
 import type { View } from '../../../discord/types.js';
@@ -8,12 +8,12 @@ import { getStep } from '../step-registry.js';
 
 export const DEFAULT_SCENE_BUTTON_LABEL = 'Continuer';
 
-type BuildOnboardingViewParams = { stepId: OnboardingStepId; prefix: string; language: SupportedLanguage; ownerDiscordId: string };
+type BuildOnboardingViewParams = { stepId: OnboardingStepId; guild: Guild; ownerDiscordId: string };
 
-export function buildOnboardingView({ stepId, prefix, language, ownerDiscordId }: BuildOnboardingViewParams): View {
+export function buildOnboardingView({ stepId, guild, ownerDiscordId }: BuildOnboardingViewParams): View {
   const step = getStep(stepId);
 
-  if (step.type === 'mission') return step.reminder(prefix, language);
+  if (step.type === 'mission') return step.reminder(guild, step.command);
 
   return {
     embeds: [step.embed()],

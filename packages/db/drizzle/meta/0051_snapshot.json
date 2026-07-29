@@ -1,5 +1,5 @@
 {
-  "id": "cea83185-649c-46f4-8c32-e16e43141e1d",
+  "id": "124c7c3b-d921-490e-8c41-0e61c5723e69",
   "prevId": "23c4468d-a826-4b9f-bed7-aa7cf4a7faef",
   "version": "7",
   "dialect": "postgresql",
@@ -257,8 +257,8 @@
           "notNull": true,
           "default": "'{}'::pokemon_type[]"
         },
-        "image_url": {
-          "name": "image_url",
+        "path": {
+          "name": "path",
           "type": "text",
           "primaryKey": false,
           "notNull": false
@@ -493,8 +493,8 @@
           "notNull": true,
           "default": "'D'"
         },
-        "image_url": {
-          "name": "image_url",
+        "path": {
+          "name": "path",
           "type": "text",
           "primaryKey": false,
           "notNull": false
@@ -1191,8 +1191,8 @@
           "notNull": true,
           "default": "'D'"
         },
-        "image_url": {
-          "name": "image_url",
+        "path": {
+          "name": "path",
           "type": "text",
           "primaryKey": false,
           "notNull": false
@@ -1407,32 +1407,6 @@
       "schema": "public",
       "values": [
         "intro",
-        "gold-roger-distant-march",
-        "gold-roger-close-march",
-        "gold-roger-chained-hands",
-        "gold-roger-climbs-stairs",
-        "gold-roger-blade-view",
-        "gold-roger-accepts-fate",
-        "gold-roger-blades-rise",
-        "gold-roger-blade-view-behind",
-        "gold-roger-crowd-reaction",
-        "gold-roger-laughs",
-        "gold-roger-treasure-reveal",
-        "gold-roger-legacy-begins",
-        "gold-roger-pirate-era",
-        "storyteller-square",
-        "storyteller-turns-to-you",
-        "storyteller-question",
-        "storyteller-coin-flip",
-        "storyteller-encyclopedia",
-        "info-mission",
-        "crew-koby-encounter",
-        "crew-koby-offer",
-        "crew-mission",
-        "boat-gifted",
-        "boat-departure",
-        "boat-search-supplies",
-        "inventory-mission",
         "fish-mission",
         "after-fish"
       ]
