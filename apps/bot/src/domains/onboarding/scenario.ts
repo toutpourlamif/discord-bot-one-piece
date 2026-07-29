@@ -25,7 +25,10 @@ export type SceneStep = {
   /**
    * Effet de bord déclenché par le clic "Continuer" (ex: octroi d'item), exécuté dans la même tx que l'avancement.
    * Peut renvoyer un écran de conséquence (ex: "objet obtenu") affiché avant le step suivant — non persisté en DB,
-   * donc jamais revisitable et jamais rejoué si on retape la commande d'onboarding après coup.
+   * donc jamais revisitable en retapant la commande d'onboarding (qui ne fait que re-render le step courant, sans
+   * jamais rappeler onAdvance). Un reclic sur un bouton "Continuer" périmé (ex: après un timeout Discord) est lui
+   * protégé par le lock + recheck de `onboardingNextButtonHandler` : onAdvance ne s'exécute que si le step n'a pas
+   * déjà avancé.
    */
   onAdvance?: (playerId: number, tx: Transaction) => Promise<View | undefined> | View | undefined;
 };
