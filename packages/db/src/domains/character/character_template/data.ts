@@ -1,6 +1,7 @@
 import { ALABASTA_DATA } from './data/alabasta.js';
 import { ARLONG_PARK_DATA } from './data/arlong-park.js';
 import { BARATIE_DATA } from './data/baratie.js';
+import { DAWN_DATA } from './data/dawn.js';
 import { JAYA_DATA } from './data/jaya.js';
 import { LOGUETOWN_DATA } from './data/loguetown.js';
 import { SABAODY_DATA } from './data/sabaody.js';
@@ -39,6 +40,7 @@ export const CHARACTER_TEMPLATES_DATA: Array<CharacterTemplateSeed> = [
     path: null,
     description: 'rouqin boosté',
   },
+  ...DAWN_DATA,
   ...ALABASTA_DATA,
   ...BARATIE_DATA,
   ...JAYA_DATA,

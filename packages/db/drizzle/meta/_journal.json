@@ -365,6 +365,13 @@
       "when": 1785314007901,
       "tag": "0051_rename-image-url-to-path",
       "breakpoints": true
+    },
+    {
+      "idx": 52,
+      "version": "7",
+      "when": 1785323224544,
+      "tag": "0052_add_onboarding_gold_roger_arc",
+      "breakpoints": true
     }
   ]
 }

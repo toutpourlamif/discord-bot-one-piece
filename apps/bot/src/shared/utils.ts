@@ -9,3 +9,8 @@ export function truncate(value: string, max: number): string {
 export function wrapInCodeBlock(value: string, lang = ''): string {
   return `\`\`\`${lang}\n${value}\n\`\`\``;
 }
+
+/** Retourne n (`count`) marques invisibles suivies d'un espace, pour simuler une indentation dans un embed (car Discord enleve les espaces en début de ligne). */
+export function buildInvisibleIndent(count: number): string {
+  return '‎ '.repeat(count);
+}
