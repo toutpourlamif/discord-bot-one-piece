@@ -14,8 +14,8 @@ export function buildResourceInfoEmbed(template: ResourceTemplate): EmbedBuilder
     embed.setDescription(template.description);
   }
 
-  if (template.imageUrl) {
-    embed.setImage(buildAssetUrl(template.imageUrl));
+  if (template.path) {
+    embed.setImage(buildAssetUrl(`${template.path}/info.webp`));
   }
 
   return embed;

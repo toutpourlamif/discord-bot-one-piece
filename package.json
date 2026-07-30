@@ -28,6 +28,8 @@
     "pes": "pnpm parse-emotion-sheet",
     "parse-emotion-sheet": "tsx scripts/parse-emotion-sheet.ts",
     "images:optimize": "tsx scripts/optimize-staged-images.ts",
+    "uabu": "pnpm update-assets-base-url",
+    "update-assets-base-url": "tsx scripts/update-assets-base-url.ts",
     "prepare": "husky"
   },
   "lint-staged": {

@@ -75,3 +75,7 @@ export async function setLastProcessedBucketId(playerId: number, bucketId: numbe
 export async function setOnboardingStep(playerId: number, step: OnboardingStepId | null, client: DbOrTransaction = db): Promise<void> {
   await client.update(player).set({ onboardingStep: step }).where(eq(player.id, playerId));
 }
+
+export async function setTravelEtaBucket(playerId: number, bucketId: number, client: DbOrTransaction = db): Promise<void> {
+  await client.update(player).set({ travelEtaBucket: bucketId }).where(eq(player.id, playerId));
+}

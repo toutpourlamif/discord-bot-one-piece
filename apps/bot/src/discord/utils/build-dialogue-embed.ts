@@ -15,13 +15,20 @@ export type DialogueSpeaker = {
 
 type DialogueEmotion = 'default' | 'happy' | 'crying' | 'scared' | 'laughing' | 'thinking' | 'angry';
 
-type BuildDialogueEmbedOptions = { emotion?: DialogueEmotion; variant?: EmbedVariant; verb?: DialogueVerb };
+type BuildDialogueEmbedOptions = {
+  emotion?: DialogueEmotion;
+  variant?: EmbedVariant;
+  verb?: DialogueVerb;
+  /** Permet d'overwrite les verbes prédéfinis */
+  customVerb?: string;
+};
 
 export function buildDialogueEmbed(speaker: DialogueSpeaker, text: string, options: BuildDialogueEmbedOptions = {}): EmbedBuilder {
   const emotion = resolveEmotion(speaker, options.emotion);
   const imageUrl = buildAssetUrl(`${speaker.path}/dialogue-${emotion}.webp`);
   const iconURL = buildAssetUrl(`${speaker.path}/dialogue-default.webp`);
-  const name = `${speaker.name} ${DIALOGUE_VERBS[options.verb ?? 'say']} :`;
+  const verb = options.customVerb ?? DIALOGUE_VERBS[options.verb ?? 'say'];
+  const name = `${speaker.name} ${verb} :`;
   return buildOpEmbed(options.variant).setAuthor({ name, iconURL }).setThumbnail(imageUrl).setDescription(text);
 }
 

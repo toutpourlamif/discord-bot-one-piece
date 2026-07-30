@@ -27,23 +27,23 @@ assets/
 Il y a deux choses à garder synchro **à la main** :
 
 1. **Les fichiers** dans le repo, sous `/assets/...` (ex: `/assets/devil-fruits/gomu-gomu-no-mi/info.webp`). À chaque push sur `main`, Cloudflare Pages publie le contenu de ce dossier sur un domaine public.
-2. **La colonne `image_url`** en DB, qui contient le chemin **relatif** du dossier de l'asset (ex: `devil-fruits/gomu-gomu-no-mi`). C'est nous qui l'écrivons via les seeds ou des migrations de données.
+2. **La colonne `path`** en DB, qui contient le chemin **relatif** du dossier de l'asset (ex: `devil-fruits/gomu-gomu-no-mi`). C'est nous qui l'écrivons via les seeds ou des migrations de données.
 
-Si tu ajoutes des images dans `/assets` mais que tu oublies d'updater l'`image_url` correspondant en DB, l'embed n'affichera rien. L'inverse pareil : un `image_url` qui pointe vers un dossier qui n'existe pas dans `/assets`, Discord renverra une image cassée.
+Si tu ajoutes des images dans `/assets` mais que tu oublies d'updater le `path` correspondant en DB, l'embed n'affichera rien. L'inverse pareil : un `path` qui pointe vers un dossier qui n'existe pas dans `/assets`, Discord renverra une image cassée.
 
 ## Comment c'est utilisé en code
 
-Quand on rend un embed, on lit l'`imageUrl` de la row, on le passe à `buildAssetUrl`, on récupère une URL absolue :
+Quand on rend un embed, on lit le `path` de la row, on le passe à `buildAssetUrl`, on récupère une URL absolue :
 
 ```ts
 import { buildAssetUrl } from '../../shared/build-asset-url.js';
 
-if (template.imageUrl) {
-  embed.setThumbnail(buildAssetUrl(template.imageUrl));
+if (template.path) {
+  embed.setThumbnail(buildAssetUrl(`${template.path}/info.webp`));
 }
 ```
 
-`buildAssetUrl(template.imageUrl)` concatène simplement la base URL (configurée dans `apps/bot/.env.local`) avec le chemin :
+`buildAssetUrl(...)` concatène simplement la base URL (configurée dans `apps/bot/.env.local`) avec le chemin :
 
 ```
 ASSETS_BASE_URL  +  '/'  +  'devil-fruits/gomu-gomu-no-mi.webp'
@@ -77,7 +77,7 @@ L'URL est construite **au runtime**, pas au build. Avantage : on peut pointer ve
 
 - Un asset = un dossier qui contient forcément `info.webp` + d'autres trucs selon le contexte (icon.webp, avatar.webp etc)
 - Les fichiers dans `/assets` ET la valeur en DB sont **deux choses séparées** qu'on garde synchro à la main
-- En code : `setImage(buildAssetUrl(\`${template.imageUrl}/info.webp\`))`, jamais d'URL en dur
+- En code : `setImage(buildAssetUrl(\`${template.path}/info.webp\`))`, jamais d'URL en dur
 - En DB : on stocke le chemin relatif du **dossier** (`devil-fruits/gomu-gomu-no-mi`), pas l'URL complète ni le `.webp` final
 - Toujours du WebP : 256² pour thumbnail, 1024² pour setImage, 128² pour icon, < 800 KB pour un animé
 
