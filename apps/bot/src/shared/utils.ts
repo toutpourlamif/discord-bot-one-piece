@@ -14,3 +14,8 @@ export function wrapInCodeBlock(value: string, lang = ''): string {
 export function buildInvisibleIndent(count: number): string {
   return '‎ '.repeat(count);
 }
+
+/** Attend `ms` millisecondes. Utilisé pour rythmer une révélation progressive (ex: Épreuve de Volonté). */
+export async function sleep(ms: number): Promise<void> {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}

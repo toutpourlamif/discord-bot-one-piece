@@ -1,3 +1,5 @@
+import { ETERNAL_POSE_RESOURCES } from './data/eternal-poses.js';
+
 type ResourceSeed = { readonly name: string; readonly path: string | null; readonly description?: string };
 
 export const RESOURCE_TEMPLATES_DATA = [
@@ -35,10 +37,7 @@ export const RESOURCE_TEMPLATES_DATA = [
   { name: 'Cola', path: null },
   { name: 'Résine', path: null },
   { name: 'Log Pose', path: null },
-  { name: 'Eternal Pose - Whisky Peak', path: null },
-  { name: 'Eternal Pose - Little Garden', path: null },
-  { name: 'Eternal Pose - Drum', path: null },
-  { name: 'Eternal Pose - Alabasta', path: null },
+  ...ETERNAL_POSE_RESOURCES,
   { name: 'Mother Flame', path: null },
 ] as const satisfies ReadonlyArray<ResourceSeed>;
 
