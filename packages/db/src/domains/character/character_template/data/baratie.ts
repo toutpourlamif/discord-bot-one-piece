@@ -17,7 +17,8 @@ export const BARATIE_DATA: Array<CharacterTemplateSeed> = [
     combat: 15,
     race: 'HUMAN',
     rarity: 'D',
-    path: null,
-    description: "Chef pirate de l'East Blue, dangereux surtout par son arsenal.",
+    types: ['STEEL'],
+    path: buildCharacterPath('baratie', 'don-krieg'),
+    description: "Chef pirate d'East Blue, dangereux surtout par son arsenal.",
   },
 ];
