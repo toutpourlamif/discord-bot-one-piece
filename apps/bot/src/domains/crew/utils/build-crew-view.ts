@@ -50,8 +50,8 @@ export async function buildCrewView(
     embed.setTitle(getCrewDisplayName(player));
     embed.setDescription(`${memberList}${remainingText}`);
     const captain = crew.find((character) => character.isCaptain);
-    if (captain?.imageUrl) {
-      embed.setThumbnail(buildAssetUrl(captain.imageUrl));
+    if (captain?.path) {
+      embed.setThumbnail(buildAssetUrl(`${captain.path}/info.webp`));
     }
     if (crew.length > 0) attachImage({ embed, files, image: await buildCrewCard(crew) });
   } else {

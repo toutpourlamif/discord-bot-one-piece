@@ -44,3 +44,15 @@ L'évolution remplace l'instance du personnage par celle désignée par `nextEvo
 Le joueur stocke ses personnages dans sa **réserve**. La taille de la réserve est **limitée et dépend du navire** (voir domaine `ship`) — un navire plus grand permet d'en garder plus à bord.
 
 Seul un sous-ensemble est **actif** (prend part aux events, combats) — ça, c'est la responsabilité du domaine Équipage (`crew`). Les autres personnages attendent dans la réserve.
+
+## Épreuve de Volonté (Trial of Will)
+
+Avant de rejoindre l'équipage, un personnage recrutable peut poser ses propres conditions : c'est l'**Épreuve de Volonté**. Une épreuve est une liste de **critères** (`apps/bot/src/domains/character/trial-of-will/`), chacun portant une condition (`condition: (context) => boolean`), un poids, et un texte de succès/d'échec narratif.
+
+Le total des poids obtenus n'est **pas comparé à un seuil fixe** : il sert de **probabilité de réussite**, saturée à 100% (`min(percentage, 100) / 100`). Le total maximal atteignable dépend de chaque définition, pas d'une règle globale : un personnage difficile à convaincre peut plafonner à 30 (30% de chances même en validant tous les critères), tandis qu'un personnage facile peut monter à 400 ou 1000 (quelques critères suffisent à garantir la réussite). C'est le principal levier pour doser la difficulté de recrutement d'un personnage.
+
+L'exécution est **entièrement synchrone** : le contexte (réserve, équipage, inventaire) est construit une fois, tous les critères sont évalués immédiatement, et le résultat est connu avant tout affichage Discord. L'animation (révélation critère par critère, avec délai) est une couche purement présentationnelle (`character/discord/play-trial-of-will-animation.ts`) qui rejoue un résultat déjà tranché.
+
+Ajouter un personnage recrutable ne nécessite qu'une nouvelle définition dans `trial-of-will/definitions/` — le moteur (`trial-of-will/service.ts`, `predicates.ts`) n'est jamais modifié. Le **retry/cooldown après un échec est hors scope du moteur** : c'est à l'appelant (un event, la taverne) de décider s'il autorise une nouvelle tentative.
+
+Le point d'entrée actuel est une commande `_dev` de démo (`!épreuvedevolonté <nom>`, alias `!ev`) — le câblage dans la taverne (section "Recruter", encore un stub) et le remplacement du recrutement scripté de l'onboarding restent des chantiers séparés.

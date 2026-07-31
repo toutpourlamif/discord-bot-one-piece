@@ -4,7 +4,7 @@ import { defineIsland } from '../../utils/define-island.js';
 // TODO: dialogues du tavernier de Dawn (le dossier a un sheet.webp mais pas encore de dialogue-*.webp)
 const DAWN_TAVERN_KEEPER: TavernKeeper = {
   name: 'Koby',
-  assetPath: 'characters/marines/koby-young',
+  assetPath: 'characters/dawn/koby-young',
   // TODO: vraies répliques d'accueil de Koby
   greetingLines: ['Bienvenue à la taverne, moussaillon !', "Installe-toi, qu'est-ce que je te sers ?", 'Weeee bg bien ?'],
 };

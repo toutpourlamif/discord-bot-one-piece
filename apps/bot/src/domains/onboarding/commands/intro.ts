@@ -4,6 +4,7 @@ import { translations } from '../translations.js';
 
 export const introCommand: Command = {
   names: { fr: 'intro', en: 'intro' },
+  aliases: { fr: ['ob'], en: ['ob'] },
   requiresSynchronization: false,
   async handler({ guild, message }) {
     await message.reply({

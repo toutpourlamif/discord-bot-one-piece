@@ -14,7 +14,7 @@ export const translations = {
     en: 'Fair winds, pirate.',
   },
   onboardingCompletedDescription: {
-    fr: 'Ton aventure commence vraiment maintenant.',
+    fr: 'Ta vraie aventure commence ici.',
     en: 'Your adventure truly begins now.',
   },
 } satisfies Translations;

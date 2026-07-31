@@ -1,34 +1,44 @@
-type ResourceSeed = { readonly name: string; readonly imageUrl: string | null; readonly description?: string };
+import { ETERNAL_POSE_RESOURCES } from './data/eternal-poses.js';
+
+type ResourceSeed = { readonly name: string; readonly path: string | null; readonly description?: string };
 
 export const RESOURCE_TEMPLATES_DATA = [
   // TODO: Voir si on ajoute une ressource par rapport à l'Arbre de mille ans
   {
+    name: 'Encyclopédie de Gold Roger',
+    path: null,
+    description: 'Le journal de bord de Gold Roger, où il a détaillé tout son voyage sur Grand Line.',
+    // TODO: Ajouter invendable
+  },
+  {
+    name: 'Canne à pêche',
+    path: null,
+    // TODO: ajouter invendable
+  },
+  {
     name: 'Bois',
-    imageUrl: null,
+    path: null,
   },
   {
     name: `Bois d'Adam`,
-    imageUrl: null,
+    path: null,
     description: 'Le bois le plus résistant et précieux du monde, sa vente est illégale, on ne le trouve que sur le marché noir.',
   },
-  { name: `Bois d'Ève`, imageUrl: null },
+  { name: `Bois d'Ève`, path: null },
   {
     name: 'Fer',
-    imageUrl: null,
+    path: null,
   },
-  { name: 'Granit Marin', imageUrl: null },
-  { name: 'Wootz', imageUrl: null },
-  { name: `Minerai d'Eau de Vie`, imageUrl: null },
-  { name: 'Wapométal', imageUrl: null },
-  { name: 'Tissu', imageUrl: null },
-  { name: 'Cola', imageUrl: null },
-  { name: 'Résine', imageUrl: null },
-  { name: 'Log Pose', imageUrl: null },
-  { name: 'Eternal Pose - Whisky Peak', imageUrl: null },
-  { name: 'Eternal Pose - Little Garden', imageUrl: null },
-  { name: 'Eternal Pose - Drum', imageUrl: null },
-  { name: 'Eternal Pose - Alabasta', imageUrl: null },
-  { name: 'Mother Flame', imageUrl: null },
+  { name: 'Granit Marin', path: null },
+  { name: 'Wootz', path: null },
+  { name: `Minerai d'Eau de Vie`, path: null },
+  { name: 'Wapométal', path: null },
+  { name: 'Tissu', path: null },
+  { name: 'Cola', path: null },
+  { name: 'Résine', path: null },
+  { name: 'Log Pose', path: null },
+  ...ETERNAL_POSE_RESOURCES,
+  { name: 'Mother Flame', path: null },
 ] as const satisfies ReadonlyArray<ResourceSeed>;
 
 export type ResourceName = (typeof RESOURCE_TEMPLATES_DATA)[number]['name'];

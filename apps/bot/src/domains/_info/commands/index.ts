@@ -5,5 +5,4 @@ import { infoCommand } from './info.js';
 export const infoCommands: Array<Command> = [infoCommand].map((cmd) => ({
   ...cmd,
   requiresSynchronization: false,
-  requiresOnboardingFinished: false,
 }));
