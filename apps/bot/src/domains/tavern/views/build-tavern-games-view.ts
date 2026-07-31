@@ -25,7 +25,7 @@ export function buildTavernGamesView({ tavernConfig, ownerDiscordId, playerId }:
     return { embeds: [emptyEmbed], components: [backRow] };
   }
 
-  const embed = buildDialogueEmbed(dialogueSpeaker, 'À quel jeu veux-tu jouer ?');
+  const embed = buildDialogueEmbed(dialogueSpeaker, 'À quel jeu veux-tu jouer ?', { emotion: 'thinking' });
   const tavernGameButtons = tavernGames.map((tavernGame) => buildTavernGameButton(tavernGame, ownerDiscordId, playerId));
   const tavernGamesRow = new ActionRowBuilder<ButtonBuilder>().addComponents(...tavernGameButtons);
 

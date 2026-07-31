@@ -16,7 +16,7 @@ export function buildBetModal(ownerDiscordId: string, playerId: number): ModalBu
     .setStringSelectMenuComponent(
       new StringSelectMenuBuilder()
         .setCustomId(COIN_SIDE_FIELD_ID)
-        .setPlaceholder('Pile')
+        .setPlaceholder('Je mise sur ...')
         .setMinValues(1)
         .setMaxValues(1)
         .addOptions(coinSideOptions),

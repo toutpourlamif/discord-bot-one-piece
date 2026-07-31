@@ -8,7 +8,7 @@ export function parsePositiveBet(raw: string): bigint {
   if (!/^\d+$/.test(trimmedValue)) throw new ValidationError('Mise invalide : entre un nombre entier de berries.');
 
   const betAmount = BigInt(trimmedValue);
-  if (betAmount <= 0n) throw new ValidationError('La mise doit être supérieure à 0.');
+  if (betAmount <= 0n) throw new ValidationError('La mise doit être supérieure à 0 berry.');
 
   return betAmount;
 }

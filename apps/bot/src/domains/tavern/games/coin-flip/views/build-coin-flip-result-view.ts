@@ -1,5 +1,6 @@
 import type { TavernKeeper } from '@one-piece/db';
 import { ActionRowBuilder, ButtonBuilder, ButtonStyle } from 'discord.js';
+import sample from 'lodash/sample.js';
 
 import type { View } from '../../../../../discord/types.js';
 import { buildCustomId, buildDialogueEmbed } from '../../../../../discord/utils/index.js';
@@ -16,18 +17,22 @@ type BuildCoinFlipResultViewParams = {
   playerId: number;
 };
 
-// TODO: vraies répliques du tavernier + angry a ajouté
+// TODO: vraies répliques du tavernier
 const KEEPER_WIN_REACTION = 'Rrah… la chance était avec toi cette fois. Profites-en.';
 const KEEPER_LOSS_REACTION = 'Hahaha ! La maison gagne toujours, mon petit.';
+
+/** Le barkeeper perd (le joueur gagne) : réaction dépitée, tirée au sort parmi ces émotions. */
+const BARKEEPER_LOSS_EMOTIONS = ['scared', 'angry', 'crying'] as const;
 
 export function buildCoinFlipResultView({ outcome, tavernKeeper, ownerDiscordId, playerId }: BuildCoinFlipResultViewParams): View {
   const dialogueSpeaker = buildTavernKeeperDialogueSpeaker(tavernKeeper);
   const keeperReaction = outcome.hasWon ? KEEPER_WIN_REACTION : KEEPER_LOSS_REACTION;
-  const reactionText = `La pièce retombe sur **${formatSide(outcome.revealedSide)}**.\n${keeperReaction}`;
-
   const balanceDeltaLabel = outcome.hasWon ? `+${formatBerry(outcome.balanceDelta)}` : `-${formatBerry(-outcome.balanceDelta)}`;
-  const embed = buildDialogueEmbed(dialogueSpeaker, reactionText, { emotion: outcome.hasWon ? 'happy' : 'angry' }).setFooter({
-    text: `Nouveau solde : ${formatBerry(outcome.newBalance)} (${balanceDeltaLabel})`,
+  const reactionText = `La pièce retombe sur **${formatSide(outcome.revealedSide)}** *(${balanceDeltaLabel})*.\n${keeperReaction}`;
+
+  const keeperEmotion = outcome.hasWon ? sample(BARKEEPER_LOSS_EMOTIONS) : 'happy';
+  const embed = buildDialogueEmbed(dialogueSpeaker, reactionText, { emotion: keeperEmotion }).setFooter({
+    text: `Nouveau solde : ${formatBerry(outcome.newBalance)}`,
   });
 
   const replayButton = new ButtonBuilder()
@@ -37,7 +42,7 @@ export function buildCoinFlipResultView({ outcome, tavernKeeper, ownerDiscordId,
     .setStyle(ButtonStyle.Primary);
   const backButton = new ButtonBuilder()
     .setCustomId(buildCustomId(TAVERN_SECTION_BUTTON_NAME, ownerDiscordId, playerId, 'games'))
-    .setLabel(TAVERN_SECTIONS.games.label)
+    .setLabel('Voir les autres jeux')
     .setEmoji(TAVERN_SECTIONS.games.emoji)
     .setStyle(ButtonStyle.Secondary);
 
