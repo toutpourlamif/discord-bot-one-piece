@@ -23,10 +23,10 @@ const KEEPER_LOSS_REACTION = 'Hahaha ! La maison gagne toujours, mon petit.';
 export function buildCoinFlipResultView({ outcome, tavernKeeper, ownerDiscordId, playerId }: BuildCoinFlipResultViewParams): View {
   const dialogueSpeaker = buildTavernKeeperDialogueSpeaker(tavernKeeper);
   const keeperReaction = outcome.hasWon ? KEEPER_WIN_REACTION : KEEPER_LOSS_REACTION;
-  const reactionText = `La pièce retombe sur **${formatSide(outcome.revealedSide)}**. ${keeperReaction}`;
+  const reactionText = `La pièce retombe sur **${formatSide(outcome.revealedSide)}**.\n${keeperReaction}`;
 
   const balanceDeltaLabel = outcome.hasWon ? `+${formatBerry(outcome.balanceDelta)}` : `-${formatBerry(-outcome.balanceDelta)}`;
-  const embed = buildDialogueEmbed(dialogueSpeaker, reactionText, { emotion: outcome.hasWon ? 'angry' : 'happy' }).setFooter({
+  const embed = buildDialogueEmbed(dialogueSpeaker, reactionText, { emotion: outcome.hasWon ? 'happy' : 'angry' }).setFooter({
     text: `Nouveau solde : ${formatBerry(outcome.newBalance)} (${balanceDeltaLabel})`,
   });
 

@@ -14,7 +14,8 @@ export const COIN_SIDE_FIELD_ID = 'coin-side';
 /** 0.48 car la maison l'emporte toujours =) */
 export const WIN_PROBABILITY = 0.48;
 
-export const MULTIPLIER_IF_WIN = 2n;
+/** Multiplicateur appliqué à la mise pour obtenir le payout total (mise incluse) en cas de victoire. */
+export const PAYOUT_MULTIPLIER = 2n;
 
 /** Animation générique (tous taverniers) du jet de pièce, jouée entre le choix et la révélation. */
 export const COIN_FLIP_THROW_ANIMATION = {
