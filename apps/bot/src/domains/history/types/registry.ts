@@ -5,6 +5,7 @@ import type { NavigationLog } from './navigation.js';
 import type { OnboardingLog } from './onboarding.js';
 import type { PlayerLog } from './player.js';
 import type { ShipLog } from './ship.js';
+import type { TavernLog } from './tavern.js';
 
 // TODO: MIGRER TOUS LES types de log en CAMEL CASE aulieu de SNAKE CASE
-export type Log = CrewLog | DevLog | PlayerLog | FishingLog | ShipLog | NavigationLog | OnboardingLog;
+export type Log = CrewLog | DevLog | PlayerLog | FishingLog | ShipLog | NavigationLog | OnboardingLog | TavernLog;

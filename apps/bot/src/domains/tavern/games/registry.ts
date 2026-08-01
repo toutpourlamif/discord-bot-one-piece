@@ -2,10 +2,10 @@ import type { TavernActivityType } from '@one-piece/db';
 
 import { buildRegistry } from '../../../shared/build-registry.js';
 
+import { coinFlipGame } from './coin-flip/index.js';
 import type { TavernGame } from './types.js';
 
-// TODO: enregistrer Pile ou Face (#421)
-export const TAVERN_GAMES: Array<TavernGame> = [];
+export const TAVERN_GAMES: Array<TavernGame> = [coinFlipGame];
 
 const tavernGameRegistry = buildRegistry(TAVERN_GAMES, (tavernGame) => tavernGame.id);
 

@@ -9,7 +9,7 @@ export type DialogueSpeaker = {
   name: string;
   /** Dossier de l'asset du perso, on y trouve à l'intérieur les `dialogue-${emotion}.webp`. */
   path: string;
-  /** Variantes en plus de `default` que ce perso possède réellement (sert au fallback). */
+  /** Restreint les émotions affichables à cette liste (sinon fallback `default`). Omis = toutes autorisées. */
   emotions?: Array<DialogueEmotion>;
 };
 
@@ -42,5 +42,6 @@ type DialogueVerb = keyof typeof DIALOGUE_VERBS;
 
 function resolveEmotion(speaker: DialogueSpeaker, requested?: DialogueEmotion): DialogueEmotion {
   if (!requested || requested === 'default') return 'default';
-  return speaker.emotions?.includes(requested) ? requested : 'default';
+  if (!speaker.emotions) return requested;
+  return speaker.emotions.includes(requested) ? requested : 'default';
 }
