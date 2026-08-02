@@ -19,7 +19,7 @@ export const DAWN_DATA: Array<CharacterTemplateSeed> = [
     types: ['NORMAL'],
     race: 'HUMAN',
     rarity: 'D',
-    path: 'characters/dawn-island/woop-slap',
+    path: 'characters/dawn/woop-slap',
     description: `Maire aimé du village de Fuschia, c'est un vieux de la vieille qui n'a pas peur de critiquer les pirates`,
   },
 ];
