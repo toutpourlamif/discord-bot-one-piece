@@ -1,4 +1,11 @@
-type ResourceSeed = { readonly name: string; readonly path: string | null; readonly description?: string; readonly isQuestItem?: boolean };
+import { ETERNAL_POSE_RESOURCES } from './data/eternal-poses.js';
+
+export type ResourceSeed = {
+  readonly name: string;
+  readonly path: string | null;
+  readonly description?: string;
+  readonly isQuestItem?: boolean;
+};
 
 export const RESOURCE_TEMPLATES_DATA = [
   // TODO: Voir si on ajoute une ressource par rapport à l'Arbre de mille ans
@@ -7,13 +14,12 @@ export const RESOURCE_TEMPLATES_DATA = [
     path: null,
     description: 'Le journal de bord de Gold Roger, où il a détaillé tout son voyage sur Grand Line.',
     isQuestItem: true,
-    // TODO: Ajouter invendable
   },
   {
     name: 'Canne à pêche',
     path: null,
+    description: "Une canne à pêche toute simple, offerte par un vieux marin au début de l'aventure.",
     isQuestItem: true,
-    // TODO: ajouter invendable
   },
   {
     name: 'Bois',
@@ -37,12 +43,9 @@ export const RESOURCE_TEMPLATES_DATA = [
   { name: 'Tissu', path: null },
   { name: 'Cola', path: null },
   { name: 'Résine', path: null },
-  { name: 'Log Pose', path: null, isQuestItem: true },
-  { name: 'Eternal Pose - Whisky Peak', path: null, isQuestItem: true },
-  { name: 'Eternal Pose - Little Garden', path: null, isQuestItem: true },
-  { name: 'Eternal Pose - Drum', path: null, isQuestItem: true },
-  { name: 'Eternal Pose - Alabasta', path: null, isQuestItem: true },
-  { name: 'Mother Flame', path: null, isQuestItem: true },
+  { name: 'Log Pose', path: null },
+  ...ETERNAL_POSE_RESOURCES,
+  { name: 'Mother Flame', path: null },
 ] as const satisfies ReadonlyArray<ResourceSeed>;
 
 export type ResourceName = (typeof RESOURCE_TEMPLATES_DATA)[number]['name'];
