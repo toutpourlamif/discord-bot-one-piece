@@ -22,8 +22,8 @@ export function buildCharacterInfoEmbed(template: CharacterTemplateWithDevilFrui
       { name: 'Types', value: formatTypes(types), inline: true },
     );
 
-  if (template.imageUrl) {
-    embed.setImage(buildAssetUrl(template.imageUrl));
+  if (template.path) {
+    embed.setImage(buildAssetUrl(`${template.path}/info.webp`));
   }
 
   if (template.description !== null) {

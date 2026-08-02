@@ -1,7 +1,7 @@
 import { sql } from 'drizzle-orm';
 import { index, integer, pgTable, serial, uniqueIndex, varchar, text, real } from 'drizzle-orm/pg-core';
 
-import { buildImageUrlColumn, buildPokemonTypesColumn, buildRarityColumn, buildTimestampColumns } from '../../../shared/columns/index.js';
+import { buildPathColumn, buildPokemonTypesColumn, buildRarityColumn, buildTimestampColumns } from '../../../shared/columns/index.js';
 import { devilFruitTemplate } from '../../devil_fruit/devil_fruit_template/schema.js';
 import { player } from '../../player/schema.js';
 import { characterRaceEnum } from '../enum.js';
@@ -28,8 +28,7 @@ export const characterTemplate = pgTable(
 
     race: characterRaceEnum('race').notNull(),
     ...buildPokemonTypesColumn(),
-    // TODO: rename ImageUrl en path plutôt car mainteant on stocke tout dans un dossier
-    ...buildImageUrlColumn(),
+    ...buildPathColumn(),
     ...buildTimestampColumns(),
 
     skills: characterSkillEnum('skills')

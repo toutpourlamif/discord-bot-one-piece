@@ -37,6 +37,7 @@ Bot Discord autour de l'univers One Piece. Le joueur recrute un équipage, amél
 - **Short guards inline** : `if (cond) return …;`, `if (cond) throw …;`, etc. tiennent sur **une ligne sans accolades**. Pas d'ESLint `curly`.
 - **YAGNI** (_You Aren't Gonna Need It_) : on n'ajoute pas une feature, une dep, un helper, un validator tant qu'un code actuel ne l'utilise pas. Pas d'abstractions spéculatives — 3 lignes similaires valent mieux qu'un helper prématuré.
 - **Lisibilité = priorité MÉGA importante.** Toujours nommer variables/fonctions/types pour que le sens soit évident sans lire l'implémentation (`shipKey`, pas `key` ; `updatedShip`, pas `updated`). Pas de `data`/`tmp`/`res`/lettres seules (sauf index de boucle triviaux). Découper agressivement, au niveau macro (petites fonctions/fichiers bien nommés) **et** local (extraire des consts intermédiaires nommées plutôt qu'imbriquer/chaîner des expressions illisibles). On optimise pour le prochain lecteur, pas pour le nombre de lignes.
+- **Toujours le nom le plus explicite**, même pour un local trivial : on préfère systématiquement la forme complète à l'abrégé (`trimmedValue`, pas `trimmed` ; `betAmount`, pas `bet` ; `updatedShip`, pas `updated`). Dans le doute, on rallonge.
 - **Types Drizzle inférés depuis les tables** : le schéma Drizzle est la source de vérité de la DB. Ne pas réécrire à la main le type d'une ligne : utiliser `$inferSelect` pour une ligne lue en base. Pour un objet à insérer, utiliser `$inferInsert` et le suffixe `Insert`.
   ```ts
   export type Ship = typeof ship.$inferSelect;

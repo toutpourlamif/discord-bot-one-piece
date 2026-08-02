@@ -9,3 +9,13 @@ export function truncate(value: string, max: number): string {
 export function wrapInCodeBlock(value: string, lang = ''): string {
   return `\`\`\`${lang}\n${value}\n\`\`\``;
 }
+
+/** Retourne n (`count`) marques invisibles suivies d'un espace, pour simuler une indentation dans un embed (car Discord enleve les espaces en début de ligne). */
+export function buildInvisibleIndent(count: number): string {
+  return '‎ '.repeat(count);
+}
+
+/** Attend `ms` millisecondes. Utilisé pour rythmer une révélation progressive (ex: Épreuve de Volonté). */
+export async function sleep(ms: number): Promise<void> {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}

@@ -16,14 +16,12 @@ export async function runFishStep(playerId: number, tx: Transaction): Promise<Vi
   };
 }
 
-export function buildFishReminder(guild: Guild, fishingCommand: Command): View {
+export function buildFishReminder(guild: Guild, command: Command): View {
   return {
     embeds: [
       buildOpEmbed('info')
         .setTitle("Un vieux marin t'attend sur le ponton.")
-        .setDescription(
-          `« Avant de prendre la mer, mousse, tu vas apprendre à pêcher. Tape ${getFormattedCommand(guild, fishingCommand)}. »`,
-        ),
+        .setDescription(`« Avant de prendre la mer, mousse, tu vas apprendre à pêcher. Tape ${getFormattedCommand(guild, command)}. »`),
     ],
     components: [],
   };

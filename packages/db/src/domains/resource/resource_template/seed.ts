@@ -13,7 +13,7 @@ export async function seedResources(db: Db) {
     .onConflictDoUpdate({
       target: resourceTemplate.name,
       set: {
-        imageUrl: sql`excluded.image_url`,
+        path: sql`excluded.path`,
         description: sql`excluded.description`,
       },
     });

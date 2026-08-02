@@ -16,7 +16,7 @@ export async function seedDevilFruits(db: Db) {
         types: sql`excluded.types`,
         hpBonus: sql`excluded.hp_bonus`,
         combatBonus: sql`excluded.combat_bonus`,
-        imageUrl: sql`excluded.image_url`,
+        path: sql`excluded.path`,
       },
     });
   logSeed(devilFruitTemplate, DEVIL_FRUIT_TEMPLATES_DATA);
