@@ -3,12 +3,12 @@ import type { WipeHistoryForPlayerResult, WipeHistoryMode } from '../../history/
 
 export function buildWipeHistoryMessage(
   playerName: string,
-  kind: string | undefined,
+  type: string | undefined,
   mode: WipeHistoryMode,
   { wipedHistoryCount, remainingPendingEventCount }: WipeHistoryForPlayerResult,
 ): string {
-  const kindLabel = kind ? ` \`${kind}\`` : '';
-  const lines = [`**${playerName}** — ${describeWipe(wipedHistoryCount, mode, kindLabel)}`];
+  const typeLabel = type ? ` \`${type}\`` : '';
+  const lines = [`**${playerName}** — ${describeWipe(wipedHistoryCount, mode, typeLabel)}`];
 
   if (remainingPendingEventCount > 0) {
     lines.push(`⚠️ ${pluralize(remainingPendingEventCount, 'event_instance pending restant', 'event_instance pending restants')}.`);
@@ -17,8 +17,8 @@ export function buildWipeHistoryMessage(
   return lines.join('\n');
 }
 
-function describeWipe(count: number, mode: WipeHistoryMode, kindLabel: string): string {
-  if (count === 0) return `aucune entrée${kindLabel} à supprimer.`;
-  if (mode === 'last') return `dernière entrée${kindLabel} supprimée.`;
-  return `${pluralize(count, `entrée${kindLabel} supprimée`, `entrées${kindLabel} supprimées`)}.`;
+function describeWipe(count: number, mode: WipeHistoryMode, typeLabel: string): string {
+  if (count === 0) return `aucune entrée${typeLabel} à supprimer.`;
+  if (mode === 'last') return `dernière entrée${typeLabel} supprimée.`;
+  return `${pluralize(count, `entrée${typeLabel} supprimée`, `entrées${typeLabel} supprimées`)}.`;
 }

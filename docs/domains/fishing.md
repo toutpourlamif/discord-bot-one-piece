@@ -8,24 +8,27 @@ C'est la voie des joueurs pressés pour grappiller des bonus entre deux `!recap`
 
 ## Résultats possibles d'un lancer
 
-Un lancer tire dans une table de loot pondérée. Les issues possibles :
+Un lancer tire dans une table de loot pondérée. Issues actives dans cette itération :
 
-| Résultat             | Détail                                                                         |
-| -------------------- | ------------------------------------------------------------------------------ |
-| Rien                 | Le lancer ne donne rien — issue normale, pas une erreur                        |
-| `resource`           | Matériau de craft ou poisson consommable/vendable (voir `resource`, `economy`) |
-| Berry                | Gain direct (voir `economy`)                                                   |
-| Event déclenché      | Le lancer provoque un event qui s'enchaîne (voir `event`)                      |
-| Avancée `main_story` | Trouvaille scénarisée : carte tombée à l'eau, fragment d'artefact `STORY`…     |
-| `character` (rare)   | Typiquement un **Homme-Poisson** qui rejoint la réserve (voir `character`)     |
+| Résultat   | Détail                                                                                                    |
+| ---------- | --------------------------------------------------------------------------------------------------------- |
+| Rien       | Le lancer ne donne rien — issue normale, pas une erreur                                                   |
+| `resource` | Matériau de craft générique, tiré parmi `resource_template WHERE is_quest_item = false` (voir `resource`) |
+| Berry      | Gain direct, montant aléatoire (voir `economy`)                                                           |
 
-La table de loot et ses pondérations sont à la charge du domaine `fishing`.
+Pondérations et montants configurés dans `apps/bot/src/domains/fishing/constants.ts`.
+
+Hors scope de cette itération (voir roadmap) :
+
+| Résultat             | Détail                                                                     |
+| -------------------- | -------------------------------------------------------------------------- |
+| Event déclenché      | Le lancer provoque un event qui s'enchaîne (voir `event`)                  |
+| Avancée `main_story` | Trouvaille scénarisée : carte tombée à l'eau, fragment d'artefact `STORY`… |
+| `character` (rare)   | Typiquement un **Homme-Poisson** qui rejoint la réserve (voir `character`) |
 
 ## Cadence
 
-Un **cooldown** limite le spam entre deux lancers.
-
-<!-- TODO: définir la durée exacte du cooldown et d'éventuels quotas -->
+On a **10 lancers par heure** maximum. Le compteur est reset à chaque heure pile, ex: 14h00, 15h00… On le calcule depuis l'history du joueur
 
 ## Prérequis
 
@@ -41,7 +44,9 @@ Pendant l'onboarding, un PNJ du tutoriel remet au joueur une **Canne à pêche**
 
 ## Amélioration via module navire
 
-Pour booster la pêche (taux de loot, raretés accessibles, cooldown…), le joueur améliore un **module dédié du navire** : **Poste de pêche** — nom technique `fishing_post` (voir `ship`).
+<!-- Hors scope de cette itération — le module `fishing_post` n'existe pas encore dans `SHIP_MODULE_KEYS`. -->
+
+Pour booster la pêche (taux de loot, raretés accessibles, quota…), le joueur améliore un **module dédié du navire** : **Poste de pêche** — nom technique `fishing_post` (voir `ship`).
 
 Contrairement aux autres modules qui se montent avec des ressources **génériques** (bois, fer, présence d'un charpentier…), le Poste de pêche coûte des **ressources spécifiques** créées pour lui, une par palier de niveau.
 
@@ -57,6 +62,8 @@ Ces ressources spécifiques vivent dans `resource` comme n'importe quel matéria
 Aucun personnage de l'équipage n'intervient dans le calcul d'un lancer (pas de stat « pêche » côté `character` / `crew`). La pêche est une action purement joueur.
 
 ## Intégration main story
+
+<!-- Hors scope de cette itération — voir roadmap. -->
 
 Les déclencheurs scénaristiques sont modélisés côté `event` (catégories `main_story` / `side_quest`). Trois patterns typiques :
 

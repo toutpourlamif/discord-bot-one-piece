@@ -22,6 +22,11 @@ export async function listAllTemplates(): Promise<Array<ResourceTemplate>> {
   return db.select().from(resourceTemplate);
 }
 
+/** Ressources éligibles aux systèmes de loot génériques — exclut les items narratifs/spéciaux (`isQuestItem`). */
+export async function listNonQuestTemplates(client: DbOrTransaction = db): Promise<Array<ResourceTemplate>> {
+  return client.select().from(resourceTemplate).where(eq(resourceTemplate.isQuestItem, false));
+}
+
 type AddResourceParams = {
   playerId: number;
   name: ResourceName;
