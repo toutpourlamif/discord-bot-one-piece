@@ -39,6 +39,10 @@ Deux usages exclusifs :
 - **Consommé** par un personnage qui n'en porte aucun — action définitive qui lie le fruit au personnage (voir `devil_fruit`).
 - **Revendu** à un marchand (voir `economy`).
 
+## Item de quête (`isQuestItem`)
+
+Un `resource_template` peut porter le flag `isQuestItem` (colonne `is_quest_item`, défaut `false`). C'es pour les items de l'histoire, ou spéciaux (ex: `Canne à pêche`, `Encyclopédie de Gold Roger`), navigation (`Log Pose`, `Eternal Pose`)
+
 ## Stockage
 
 | Type          | Table                  | Compte dans la capacité de la cale ? |

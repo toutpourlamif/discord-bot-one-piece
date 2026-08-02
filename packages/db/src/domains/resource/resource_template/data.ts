@@ -1,6 +1,11 @@
 import { ETERNAL_POSE_RESOURCES } from './data/eternal-poses.js';
 
-type ResourceSeed = { readonly name: string; readonly path: string | null; readonly description?: string };
+export type ResourceSeed = {
+  readonly name: string;
+  readonly path: string | null;
+  readonly description?: string;
+  readonly isQuestItem?: boolean;
+};
 
 export const RESOURCE_TEMPLATES_DATA = [
   // TODO: Voir si on ajoute une ressource par rapport à l'Arbre de mille ans
@@ -8,12 +13,13 @@ export const RESOURCE_TEMPLATES_DATA = [
     name: 'Encyclopédie de Gold Roger',
     path: null,
     description: 'Le journal de bord de Gold Roger, où il a détaillé tout son voyage sur Grand Line.',
-    // TODO: Ajouter invendable
+    isQuestItem: true,
   },
   {
     name: 'Canne à pêche',
     path: null,
-    // TODO: ajouter invendable
+    description: "Une canne à pêche toute simple, offerte par un vieux marin au début de l'aventure.",
+    isQuestItem: true,
   },
   {
     name: 'Bois',
@@ -23,8 +29,9 @@ export const RESOURCE_TEMPLATES_DATA = [
     name: `Bois d'Adam`,
     path: null,
     description: 'Le bois le plus résistant et précieux du monde, sa vente est illégale, on ne le trouve que sur le marché noir.',
+    isQuestItem: true,
   },
-  { name: `Bois d'Ève`, path: null },
+  { name: `Bois d'Ève`, path: null, isQuestItem: true },
   {
     name: 'Fer',
     path: null,

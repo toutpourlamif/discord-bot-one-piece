@@ -1,7 +1,7 @@
 import { buildOpEmbed } from '../../../../discord/utils/build-op-embed.js';
 import { inBuckets } from '../../engine/bucket.js';
+import { getRandomIntBetween } from '../../engine/rng.js';
 import type { GeneratorContext, InteractiveGenerator, Resolution, Rng } from '../../types.js';
-import { getRandomIntBetween } from '../utils.js';
 
 export const barrelFound: InteractiveGenerator = {
   key: 'barrelFound',

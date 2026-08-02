@@ -15,6 +15,7 @@ export async function seedResources(db: Db) {
       set: {
         path: sql`excluded.path`,
         description: sql`excluded.description`,
+        isQuestItem: sql`excluded.is_quest_item`,
       },
     });
 

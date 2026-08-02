@@ -372,6 +372,13 @@
       "when": 1785323224544,
       "tag": "0052_add_onboarding_gold_roger_arc",
       "breakpoints": true
+    },
+    {
+      "idx": 53,
+      "version": "7",
+      "when": 1785671667735,
+      "tag": "0053_add-resource-template-is-quest-item",
+      "breakpoints": true
     }
   ]
 }
