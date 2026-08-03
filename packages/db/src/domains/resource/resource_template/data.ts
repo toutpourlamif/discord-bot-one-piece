@@ -58,6 +58,12 @@ export const RESOURCE_TEMPLATES_DATA = [
     description: `Copie d'un Ponéglyphe Antique, lisez le et rassemblez les 9 pour découvrir la Véritable Histoire.`,
     isQuestItem: true,
   }, // TODO: Voir si on implémente le systeme de vol etc = isQuestItem: false
+  {
+    name: 'Rio Ponéglyphe',
+    path: null,
+    description: `Vous avez rassemblé tous les Ponéglyphes... lisez l'Histoire, à vos risques et péril.`,
+    isQuestItem: true,
+  },
 ] as const satisfies ReadonlyArray<ResourceSeed>;
 
 export type ResourceName = (typeof RESOURCE_TEMPLATES_DATA)[number]['name'];
