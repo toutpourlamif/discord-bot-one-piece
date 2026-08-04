@@ -1,4 +1,5 @@
 import { ETERNAL_POSE_RESOURCES } from './data/eternal-poses.js';
+import { PONEGLYPH_RESOURCES } from './data/poneglyph.js';
 
 export type ResourceSeed = {
   readonly name: string;
@@ -46,6 +47,7 @@ export const RESOURCE_TEMPLATES_DATA = [
   { name: 'Log Pose', path: null },
   ...ETERNAL_POSE_RESOURCES,
   { name: 'Mother Flame', path: null },
+  ...PONEGLYPH_RESOURCES,
 ] as const satisfies ReadonlyArray<ResourceSeed>;
 
 export type ResourceName = (typeof RESOURCE_TEMPLATES_DATA)[number]['name'];
