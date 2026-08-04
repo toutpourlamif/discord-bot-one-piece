@@ -2,10 +2,10 @@ import type { Guild, Transaction } from '@one-piece/db';
 
 import type { Command, View } from '../../../discord/types.js';
 import { buildOpEmbed, getFormattedCommand } from '../../../discord/utils/index.js';
-import { runFishingAttempt } from '../../fishing/service.js';
+import { runFirstFishingCatch } from '../../fishing/services/index.js';
 
 export async function runFishStep(playerId: number, tx: Transaction): Promise<View> {
-  const result = await runFishingAttempt(playerId, tx);
+  const result = await runFirstFishingCatch(playerId, tx);
   return {
     embeds: [
       buildOpEmbed()

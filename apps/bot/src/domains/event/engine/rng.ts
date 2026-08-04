@@ -84,3 +84,8 @@ export function pickRandom<T>(rng: Rng, items: Array<T> | Readonly<Array<T>>): T
   if (items.length === 0) throw new Error('pickRandom: items is empty');
   return items[Math.floor(rng.next() * items.length)]!;
 }
+
+/** Entier dans [min, max] (bornes incluses) tiré depuis le rng fourni. */
+export function getRandomIntBetween(rng: Rng, min: number, max: number): number {
+  return Math.floor(rng.next() * (max - min + 1)) + min;
+}

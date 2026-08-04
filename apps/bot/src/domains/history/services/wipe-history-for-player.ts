@@ -9,7 +9,7 @@ export type WipeHistoryMode = 'last' | 'all';
 type WipeHistoryForPlayerArgs = {
   targetPlayerId: number;
   actorPlayerId: number;
-  kind?: string;
+  type?: string;
   mode: WipeHistoryMode;
 };
 
@@ -21,15 +21,15 @@ export type WipeHistoryForPlayerResult = {
 export async function wipeHistoryForPlayer({
   targetPlayerId,
   actorPlayerId,
-  kind,
+  type,
   mode,
 }: WipeHistoryForPlayerArgs): Promise<WipeHistoryForPlayerResult> {
-  // `kind` peut être dotté (`seagullFlyby.outcomeX`) ; pour compter les pending events
+  // `type` peut être dotté (`seagullFlyby.outcomeX`) ; pour compter les pending events
   // on a besoin de la clé du générateur (`seagullFlyby`), pas du suffixe.
-  const eventKey = kind ? findGeneratorByHistoryKindOrThrow(kind).key : undefined;
+  const eventKey = type ? findGeneratorByHistoryKindOrThrow(type).key : undefined;
 
   return db.transaction(async (tx) => {
-    const wipedHistoryCount = await wipeRows({ targetPlayerId, kind, mode }, tx);
+    const wipedHistoryCount = await wipeRows({ targetPlayerId, type, mode }, tx);
     const remainingPendingEventCount = await eventRepository.countPendingEventsForPlayer(targetPlayerId, {
       eventKey,
       client: tx,
@@ -39,7 +39,7 @@ export async function wipeHistoryForPlayer({
       type: 'dev.historyReset',
       actorPlayerId,
       target: { type: 'player', id: targetPlayerId },
-      payload: { wipedCount: wipedHistoryCount, remainingPendingEventCount, kind, mode },
+      payload: { wipedCount: wipedHistoryCount, remainingPendingEventCount, wipedType: type, mode },
       client: tx,
     });
 
@@ -49,16 +49,16 @@ export async function wipeHistoryForPlayer({
 
 type WipeRowsArgs = {
   targetPlayerId: number;
-  kind?: string;
+  type?: string;
   mode: WipeHistoryMode;
 };
 
-async function wipeRows({ targetPlayerId, kind, mode }: WipeRowsArgs, tx: DbOrTransaction): Promise<number> {
+async function wipeRows({ targetPlayerId, type, mode }: WipeRowsArgs, tx: DbOrTransaction): Promise<number> {
   if (mode === 'all') {
-    return historyRepository.deleteForPlayer(targetPlayerId, { kind, client: tx });
+    return historyRepository.deleteForPlayer(targetPlayerId, { type, client: tx });
   }
 
-  const lastId = await historyRepository.findLastIdForPlayer(targetPlayerId, { kind, client: tx });
-  if (lastId === null) return 0;
-  return historyRepository.deleteById(lastId, tx);
+  const last = await historyRepository.findLastForPlayer(targetPlayerId, { type, client: tx });
+  if (last === null) return 0;
+  return historyRepository.deleteById(last.id, tx);
 }

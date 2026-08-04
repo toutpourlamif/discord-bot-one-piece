@@ -15,7 +15,7 @@ async function handle(interaction: ButtonInteraction, args: Array<string>): Prom
 
   const targetPlayerId = parseIntegerArg(args[1]);
   const mode = parseWipeMode(args[2]);
-  const kind = args[3] ?? undefined;
+  const type = args[3] ?? undefined;
 
   await interaction.deferUpdate();
 
@@ -24,12 +24,12 @@ async function handle(interaction: ButtonInteraction, args: Array<string>): Prom
   const result = await historyService.wipeHistoryForPlayer({
     targetPlayerId: targetPlayer.id,
     actorPlayerId: actorPlayer.id,
-    kind,
+    type,
     mode,
   });
 
   await editReply(interaction, {
-    embeds: [buildOpEmbed('success').setDescription(buildWipeHistoryMessage(targetPlayer.name, kind, mode, result))],
+    embeds: [buildOpEmbed('success').setDescription(buildWipeHistoryMessage(targetPlayer.name, type, mode, result))],
     components: [],
   });
 }

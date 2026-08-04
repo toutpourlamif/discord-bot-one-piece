@@ -1,9 +1,11 @@
+import type { ResourceSeed } from '../data.js';
+
 export const ETERNAL_POSE_RESOURCES = [
-  { name: 'Eternal Pose - Whisky Peak', path: null },
-  { name: 'Eternal Pose - Little Garden', path: null },
-  { name: 'Eternal Pose - Drum', path: null },
-  { name: 'Eternal Pose - Alabasta', path: null },
-] as const;
+  { name: 'Eternal Pose - Whisky Peak', path: null, isQuestItem: true },
+  { name: 'Eternal Pose - Little Garden', path: null, isQuestItem: true },
+  { name: 'Eternal Pose - Drum', path: null, isQuestItem: true },
+  { name: 'Eternal Pose - Alabasta', path: null, isQuestItem: true },
+] as const satisfies ReadonlyArray<ResourceSeed>;
 
 export type EternalPoseName = (typeof ETERNAL_POSE_RESOURCES)[number]['name'];
 

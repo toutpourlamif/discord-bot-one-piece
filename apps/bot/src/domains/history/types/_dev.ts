@@ -3,7 +3,7 @@ export type DevWipeHistoryLog = {
   payload: {
     wipedCount: number;
     remainingPendingEventCount?: number;
-    kind?: string;
+    wipedType?: string;
     mode?: 'last' | 'all';
   };
 };

@@ -21,15 +21,15 @@ export const wipeHistoryCommand: Command = {
   aliases: { fr: ['eh'], en: ['wh'] },
   async handler(ctx) {
     const { targetPlayer, rest } = await resolveTargetPlayer(ctx);
-    const { mode, kind } = parseWipeHistoryArgs(rest);
+    const { mode, type } = parseWipeHistoryArgs(rest);
 
-    const customId = buildCustomId(CONFIRM_WIPE_HISTORY_BUTTON_NAME, ctx.message.author.id, targetPlayer.id, mode, kind ?? '');
+    const customId = buildCustomId(CONFIRM_WIPE_HISTORY_BUTTON_NAME, ctx.message.author.id, targetPlayer.id, mode, type ?? '');
 
     await ctx.message.reply({
       embeds: [
         buildOpEmbed('warn')
           .setTitle("Confirmer la suppression de l'historique ?")
-          .setDescription(buildConfirmMessage(targetPlayer.name, mode, kind)),
+          .setDescription(buildConfirmMessage(targetPlayer.name, mode, type)),
       ],
       components: [
         new ActionRowBuilder<ButtonBuilder>().addComponents(
@@ -42,27 +42,27 @@ export const wipeHistoryCommand: Command = {
 };
 
 type ParsedWipeHistoryArgs = {
-  kind?: string;
+  type?: string;
   mode: WipeHistoryMode;
 };
 
 function parseWipeHistoryArgs(args: Array<string>): ParsedWipeHistoryArgs {
   if (args.length === 0 || args.length > 2) throwWipeHistoryUsage();
 
-  const [rawMode, kind] = args;
+  const [rawMode, type] = args;
   if (rawMode !== 'last' && rawMode !== 'all') throwWipeHistoryUsage();
 
-  if (kind) findGeneratorByHistoryKindOrThrow(kind);
-  return { mode: rawMode, kind };
+  if (type) findGeneratorByHistoryKindOrThrow(type);
+  return { mode: rawMode, type };
 }
 
 function throwWipeHistoryUsage(): never {
   throw new ValidationError(WIPE_HISTORY_USAGE);
 }
 
-function buildConfirmMessage(playerName: string, mode: WipeHistoryMode, kind: string | undefined): string {
-  const kindLabel = kind ? ` \`${kind}\`` : '';
-  if (mode === 'last') return `Supprimer la **dernière entrée**${kindLabel} de **${playerName}** ?`;
-  const scope = kind ? `\`${kind}\`` : "tout l'historique";
+function buildConfirmMessage(playerName: string, mode: WipeHistoryMode, type: string | undefined): string {
+  const typeLabel = type ? ` \`${type}\`` : '';
+  if (mode === 'last') return `Supprimer la **dernière entrée**${typeLabel} de **${playerName}** ?`;
+  const scope = type ? `\`${type}\`` : "tout l'historique";
   return `Vider **${scope}** de **${playerName}** ?`;
 }
