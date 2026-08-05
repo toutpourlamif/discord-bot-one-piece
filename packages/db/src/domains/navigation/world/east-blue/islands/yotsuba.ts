@@ -6,6 +6,5 @@ export const YOTSUBA = defineIsland({
   entrySubZone: 'shells_town',
   subZones: {
     shells_town: 'Shells Town',
-    shimotsuki_village: 'Village Shimotsuki',
   },
 });

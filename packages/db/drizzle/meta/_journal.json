@@ -379,6 +379,13 @@
       "when": 1785671667735,
       "tag": "0053_add-resource-template-is-quest-item",
       "breakpoints": true
+    },
+    {
+      "idx": 54,
+      "version": "7",
+      "when": 1785939603372,
+      "tag": "0054_remove_shimotsuki_village",
+      "breakpoints": true
     }
   ]
 }
