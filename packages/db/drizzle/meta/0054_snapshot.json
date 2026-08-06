@@ -1,5 +1,5 @@
 {
-  "id": "e6348e56-700f-4332-a6a4-80b669399713",
+  "id": "42b0d047-6fc3-4835-85e5-5439490f06cb",
   "prevId": "5b8a04e0-2329-48ac-997c-77ac30101b05",
   "version": "7",
   "dialect": "postgresql",
@@ -935,8 +935,8 @@
           "notNull": true,
           "default": 0
         },
-        "gentillesse": {
-          "name": "gentillesse",
+        "volonte": {
+          "name": "volonte",
           "type": "integer",
           "primaryKey": false,
           "notNull": true,

@@ -25,7 +25,7 @@ export const player = pgTable('player', {
   // Stats bipolaires -100/+100 (contrôlées côté app), cf PLAYER_STAT_KEYS
   intelligence: integer('intelligence').notNull().default(0),
   charisme: integer('charisme').notNull().default(0),
-  gentillesse: integer('gentillesse').notNull().default(0),
+  volonte: integer('volonte').notNull().default(0),
   audace: integer('audace').notNull().default(0),
   karma: integer('karma').notNull().default(0),
 
@@ -52,6 +52,6 @@ export const player = pgTable('player', {
 
 export type Player = typeof player.$inferSelect;
 
-export const PLAYER_STAT_KEYS = ['karma', 'intelligence', 'charisme', 'gentillesse', 'audace'] as const;
+export const PLAYER_STAT_KEYS = ['karma', 'intelligence', 'charisme', 'volonte', 'audace'] as const;
 
 export type PlayerStatKey = (typeof PLAYER_STAT_KEYS)[number];

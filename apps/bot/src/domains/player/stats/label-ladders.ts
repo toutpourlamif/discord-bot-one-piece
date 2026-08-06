@@ -18,9 +18,9 @@ export const STAT_LABEL_LADDERS: Record<PlayerStatKey, StatLabelLadder> = {
     negative: ['Effacé', 'Maladroit', 'Agaçant', 'Repoussant', 'Détesté'],
     positive: ['Sympathique', 'Charismatique', 'Captivant', 'Admiré', 'Légendaire'],
   },
-  gentillesse: {
-    negative: ['Froid', 'Distant', 'Dur', 'Impitoyable', 'Cruel'],
-    positive: ['Aimable', 'Généreux', 'Bienveillant', 'Dévoué', 'Altruiste'],
+  volonte: {
+    negative: ['Influençable', 'Versatile', 'Capricieux', 'Faible', 'Soumis'],
+    positive: ['Volontaire', 'Déterminé', 'Tenace', 'Inflexible', 'Indomptable'],
   },
   audace: {
     negative: ['Hésitant', 'Timide', 'Craintif', 'Peureux', 'Lâche'],

@@ -11,7 +11,7 @@ const STAT_FIELD_NAMES: Record<PlayerStatKey, string> = {
   karma: '⚖️ Karma',
   intelligence: '🧠 Intelligence',
   charisme: '✨ Charisme',
-  gentillesse: '💗 Gentillesse',
+  volonte: '🔱 Volonté',
   audace: '🔥 Audace',
 };
 
