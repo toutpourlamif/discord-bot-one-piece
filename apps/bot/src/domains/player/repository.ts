@@ -79,3 +79,7 @@ export async function setOnboardingStep(playerId: number, step: OnboardingStepId
 export async function setTravelEtaBucket(playerId: number, bucketId: number, client: DbOrTransaction = db): Promise<void> {
   await client.update(player).set({ travelEtaBucket: bucketId }).where(eq(player.id, playerId));
 }
+
+// TODO: ce fichier regroupe encore toutes les fonctions repository dans un seul fichier — les nouvelles fonctions
+// vivent désormais dans leur propre fichier (cf adjustStat dans stats/adjust-stat.ts), à terme séparer aussi celles-ci.
+export { adjustStat } from './stats/index.js';

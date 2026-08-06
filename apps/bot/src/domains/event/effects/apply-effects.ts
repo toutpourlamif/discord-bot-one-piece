@@ -9,6 +9,7 @@ import { completeTravel } from '../../navigation/services/complete-travel.js';
 import { startTravel } from '../../navigation/services/start-travel.js';
 import { updateTravelTarget } from '../../navigation/services/update-travel-target.js';
 import { getEntrySubZone } from '../../navigation/utils/index.js';
+import * as playerRepository from '../../player/repository.js';
 import * as resourceRepository from '../../resource/repository.js';
 import type { GeneratorContext } from '../types.js';
 
@@ -96,6 +97,11 @@ export async function applyEffects(effects: Array<EventEffect>, ctx: GeneratorCo
         const template = await characterRepository.findTemplateByName(effect.templateName, tx);
         if (!template) throw new NotFoundError(`Personnage introuvable : ${effect.templateName}.`);
         await characterRepository.createCharacterInstance(ctx.player.id, template.id, tx);
+        break;
+      }
+      case 'changeStat': {
+        const updatedPlayer = await playerRepository.adjustStat(ctx.player.id, effect.stat, effect.amount, tx);
+        ctx.player[effect.stat] = updatedPlayer[effect.stat];
         break;
       }
     }

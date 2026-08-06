@@ -1,7 +1,10 @@
+import type { Player } from '@one-piece/db';
+
 import type { Inventory } from '../../resource/types.js';
 import type { Character } from '../types.js';
 
 export type TrialOfWillContext = {
+  player: Player;
   crew: Array<Character>;
   reserve: Array<Character>;
   inventory: Inventory;

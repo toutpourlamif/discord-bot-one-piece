@@ -1,6 +1,7 @@
 import { NotFoundError } from '../../../discord/errors.js';
 import { embarkCharacter } from '../../crew/services/index.js';
 import { isInCrewFilter } from '../../crew/utils/is-in-crew-filter.js';
+import * as playerRepository from '../../player/repository.js';
 import * as resourceRepository from '../../resource/repository.js';
 import * as characterRepository from '../repository.js';
 import { trialOfWillDefinitions } from '../trial-of-will/definitions/registry.js';
@@ -26,12 +27,14 @@ export async function tryRecruitViaTrialOfWill(playerId: number, characterTempla
 }
 
 async function buildTrialOfWillContext(playerId: number): Promise<TrialOfWillContext> {
-  const [characters, inventory] = await Promise.all([
+  const [player, characters, inventory] = await Promise.all([
+    playerRepository.findByIdOrThrow(playerId),
     characterRepository.getCharactersByPlayerId(playerId),
     resourceRepository.getInventory(playerId),
   ]);
 
   return {
+    player,
     crew: characters.filter(isInCrewFilter),
     reserve: characters.filter((character) => !isInCrewFilter(character)),
     inventory,

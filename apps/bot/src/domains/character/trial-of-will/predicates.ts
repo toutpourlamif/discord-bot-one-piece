@@ -1,4 +1,4 @@
-import type { ResourceName } from '@one-piece/db';
+import type { PlayerStatKey, ResourceName } from '@one-piece/db';
 
 import type { TrialOfWillContext } from './types.js';
 
@@ -18,4 +18,8 @@ export function hasCharacterInReserveOrCrew(characterTemplateName: string): (con
 
 export function hasCrewSizeAtLeast(minimumSize: number): (context: TrialOfWillContext) => boolean {
   return (context) => context.crew.length >= minimumSize;
+}
+
+export function hasStatAtLeast(statKey: PlayerStatKey, minimumValue: number): (context: TrialOfWillContext) => boolean {
+  return (context) => context.player[statKey] >= minimumValue;
 }
