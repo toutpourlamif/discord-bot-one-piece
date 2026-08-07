@@ -16,7 +16,13 @@ export const arrivalByIsland: Record<Island, PassiveGenerator> = {
   satsuruzo: buildArrivalGenerator('satsuruzo', TEMPLATE_ARRIVAL),
   dawn: buildArrivalGenerator('dawn', TEMPLATE_ARRIVAL),
   goat: buildArrivalGenerator('goat', TEMPLATE_ARRIVAL),
-  yotsuba: buildArrivalGenerator('yotsuba', TEMPLATE_ARRIVAL),
+  yotsuba: buildArrivalGenerator('yotsuba', {
+    text: 'Vous êtes arrivés à destination : Shells Town',
+    imageUrl: buildAssetUrl('events/arrival/yotsuba.webp'),
+    description:
+      'Des drapeaux de la Marine à chaque coin de rue, des avis de recherche placardés partout — les habitants baissent les yeux à votre passage.',
+    color: EMBED_COLORS.default,
+  }),
   mirrorball: buildArrivalGenerator('mirrorball', TEMPLATE_ARRIVAL),
   nagagutsu: buildArrivalGenerator('nagagutsu', TEMPLATE_ARRIVAL),
   organ: buildArrivalGenerator('organ', TEMPLATE_ARRIVAL),
