@@ -12,4 +12,14 @@ export const DAWN_DATA: Array<CharacterTemplateSeed> = [
     path: buildCharacterPath('dawn', 'koby-young'),
     description: 'Jeune marine paumé, recruté sur les quais de Dawn Island.',
   },
+  {
+    name: 'Woop Slap',
+    hp: 10,
+    combat: 10,
+    types: ['NORMAL'],
+    race: 'HUMAN',
+    rarity: 'D',
+    path: 'characters/dawn/woop-slap',
+    description: `Maire aimé du village de Fuschia, c'est un vieux de la vieille qui n'a pas peur de critiquer les pirates`,
+  },
 ];
