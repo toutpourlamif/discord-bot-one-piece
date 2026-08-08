@@ -386,6 +386,13 @@
       "when": 1785939603372,
       "tag": "0054_remove_shimotsuki_village",
       "breakpoints": true
+    },
+    {
+      "idx": 55,
+      "version": "7",
+      "when": 1786190014758,
+      "tag": "0055_add_player_stats",
+      "breakpoints": true
     }
   ]
 }
