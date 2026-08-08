@@ -20,6 +20,7 @@ import { setBucketCommand } from './set-bucket.js';
 import { setEtaCommand } from './set-eta.js';
 import { setOnboardingStepCommand } from './set-onboarding-step.js';
 import { setShipTemplateCommand } from './set-ship-template.js';
+import { setStatCommand } from './set-stat.js';
 import { showHistoryCommand } from './show-history.js';
 import { skipOnboardingCommand } from './skip-onboarding.js';
 import { trialOfWillCommand } from './trial-of-will.js';
@@ -53,5 +54,6 @@ export const devCommands = [
   setOnboardingStepCommand,
   setBucketCommand,
   setEtaCommand,
+  setStatCommand,
   trialOfWillCommand,
 ].map((cmd) => ({ ...cmd, requiresOpAdmin: true, requiresSynchronization: false, requiresOnboardingFinished: false }));

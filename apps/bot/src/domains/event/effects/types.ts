@@ -1,4 +1,4 @@
-import type { Edge, ResourceName, Sea, SubZone } from '@one-piece/db';
+import type { Edge, PlayerStatKey, ResourceName, Sea, SubZone } from '@one-piece/db';
 
 import type { TravelOutcome } from '../../navigation/types.js';
 
@@ -10,4 +10,5 @@ export type EventEffect =
   | { type: 'updateTravelTarget'; newEdge: Edge; newEtaBucket: number }
   | { type: 'changeSubZone'; targetSubZone: SubZone }
   | { type: 'addResource'; name: ResourceName; quantity: number }
-  | { type: 'addCharacter'; templateName: string };
+  | { type: 'addCharacter'; templateName: string }
+  | { type: 'changeStat'; stat: PlayerStatKey; amount: number };

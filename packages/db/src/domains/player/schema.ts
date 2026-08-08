@@ -19,10 +19,15 @@ export const player = pgTable('player', {
     .notNull()
     .references(() => guild.id),
 
-  // Karma interne : -1000 à +1000 (contrôlé côté app)
-  karma: integer('karma').notNull().default(0),
-  // CrewMorale interne : -100/+100 (contrôlé côté app)
+  // TODO: SUPPRIMER crewMorale
   crewMorale: integer('crew_morale').notNull().default(0),
+
+  // Stats bipolaires -100/+100 (contrôlées côté app), cf PLAYER_STAT_KEYS
+  intelligence: integer('intelligence').notNull().default(0),
+  charisme: integer('charisme').notNull().default(0),
+  volonte: integer('volonte').notNull().default(0),
+  audace: integer('audace').notNull().default(0),
+  karma: integer('karma').notNull().default(0),
 
   name: varchar('name', { length: MAX_CHARACTER_NAME_LENGTH }).notNull(),
   crewName: varchar('crew_name', { length: MAX_CREW_NAME_LENGTH }),
@@ -46,3 +51,7 @@ export const player = pgTable('player', {
 });
 
 export type Player = typeof player.$inferSelect;
+
+export const PLAYER_STAT_KEYS = ['karma', 'intelligence', 'charisme', 'volonte', 'audace'] as const;
+
+export type PlayerStatKey = (typeof PLAYER_STAT_KEYS)[number];
