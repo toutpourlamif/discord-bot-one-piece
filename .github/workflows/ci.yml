@@ -35,3 +35,27 @@ jobs:
         run: pnpm --filter @one-piece/bot smoke-test
         env:
           DISCORD_TOKEN: ${{ secrets.DISCORD_TOKEN_CI }}
+
+  db-reset:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: lts/*
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - name: Démarrer Postgres
+        run: docker compose up -d
+      - name: Attendre que Postgres soit prêt
+        run: |
+          for i in $(seq 1 30); do
+            docker exec one-piece-db pg_isready -U one_piece && exit 0
+            sleep 1
+          done
+          echo "Postgres n'a pas démarré à temps" && exit 1
+      - name: Configurer DATABASE_URL
+        run: echo "DATABASE_URL=postgres://one_piece:one_piece@localhost:5434/one_piece" > packages/db/.env.local
+      - run: pnpm db:reset
