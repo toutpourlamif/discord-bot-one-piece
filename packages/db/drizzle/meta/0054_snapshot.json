@@ -1,5 +1,5 @@
 {
-  "id": "42b0d047-6fc3-4835-85e5-5439490f06cb",
+  "id": "b26745e6-2ad5-4284-bd84-449a7e88c813",
   "prevId": "5b8a04e0-2329-48ac-997c-77ac30101b05",
   "version": "7",
   "dialect": "postgresql",
@@ -914,43 +914,15 @@
           "primaryKey": false,
           "notNull": true
         },
-        "crew_morale": {
-          "name": "crew_morale",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true,
-          "default": 0
-        },
-        "intelligence": {
-          "name": "intelligence",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true,
-          "default": 0
-        },
-        "charisme": {
-          "name": "charisme",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true,
-          "default": 0
-        },
-        "volonte": {
-          "name": "volonte",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true,
-          "default": 0
-        },
-        "audace": {
-          "name": "audace",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true,
-          "default": 0
-        },
         "karma": {
           "name": "karma",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "default": 0
+        },
+        "crew_morale": {
+          "name": "crew_morale",
           "type": "integer",
           "primaryKey": false,
           "notNull": true,
@@ -1522,7 +1494,6 @@
         "foosha_village",
         "goat_coast",
         "shells_town",
-        "shimotsuki_village",
         "mirrorball_coast",
         "nagagutsu_port",
         "orange_town",
